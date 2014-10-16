@@ -1,0 +1,18 @@
+<html>
+<h1>Note</h1>
+<p>
+<strong>To use this package you need to have the Mysql .net connector (Mysql.Data.dll)</strong><br/>
+The version of you choice will be loaded dynamically at run time. <br/>
+This dynamic loading means that it's enough that the Mysql.Data.dll file is present in the same directory as <br/> Simple.Data.Mysql.Mysql40.dll at runtime. You don't have to take a dependency on the connector if you don't want to.<br/>
+</p>
+<p>
+The easiest way to get the connector is to install one of the available Mysql.Data packages from Nuget.<br/>
+Run <strong>Install-Package Mysql.Data</strong> to get the latest version.<br/>
+(This will however add a reference to your project)<br/>
+<em>Note that the latest version of Mysql.Data to support Mysql 4.0 is 5.1.7.0, this version is available on Nuget</em>
+</p>
+<p>
+The decision not to add a hard dependency on the Mysql.Data nuget package was made  <br/>
+to enable users to use the connector that is most compatible with the Mysql Server version in their environment. 
+</p>
+</html>

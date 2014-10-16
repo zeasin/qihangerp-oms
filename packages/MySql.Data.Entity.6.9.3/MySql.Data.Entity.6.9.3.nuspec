@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>MySql.Data.Entity</id>
+    <version>6.9.3</version>
+    <authors>Oracle</authors>
+    <owners>Oracle</owners>
+    <licenseUrl>http://www.gnu.org/licenses/old-licenses/gpl-2.0.html</licenseUrl>
+    <projectUrl>http://dev.mysql.com/downloads/</projectUrl>
+    <iconUrl>http://www.mysql.com/common/logos/logo-mysql-170x115.png</iconUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>Entity Framework 6.0 supported</description>
+    <releaseNotes>Review Readme.txt for details.</releaseNotes>
+    <copyright>Copyright 2014</copyright>
+    <tags>MySql MySql.Data.Entity Connector/NET EntityFramework</tags>
+    <dependencies>
+      <dependency id="MySql.Data" version="6.9.3" />
+      <dependency id="EntityFramework" version="6.0.0" />
+    </dependencies>
+  </metadata>
+</package>
