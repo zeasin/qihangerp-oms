@@ -13,6 +13,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrmContrast.EF", "OrmContra
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrmContrast.Entity", "OrmContrast.Entity\OrmContrast.Entity.csproj", "{E48139E6-E3B2-40F2-A415-5544F318CA82}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OC.MVC", "OC.MVC\OC.MVC.csproj", "{B7748A79-E12A-476F-9FC7-EC37D4870423}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OC.Nancy", "OC.Nancy\OC.Nancy.csproj", "{B68106AB-D602-4E22-8234-3B78E64B1FDA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +43,14 @@ Global
 		{E48139E6-E3B2-40F2-A415-5544F318CA82}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E48139E6-E3B2-40F2-A415-5544F318CA82}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E48139E6-E3B2-40F2-A415-5544F318CA82}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7748A79-E12A-476F-9FC7-EC37D4870423}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7748A79-E12A-476F-9FC7-EC37D4870423}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7748A79-E12A-476F-9FC7-EC37D4870423}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7748A79-E12A-476F-9FC7-EC37D4870423}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B68106AB-D602-4E22-8234-3B78E64B1FDA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B68106AB-D602-4E22-8234-3B78E64B1FDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B68106AB-D602-4E22-8234-3B78E64B1FDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B68106AB-D602-4E22-8234-3B78E64B1FDA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
