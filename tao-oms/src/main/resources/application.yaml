@@ -1,0 +1,14 @@
+spring:
+  cloud:
+    nacos:
+      serverAddr: 127.0.0.1:8848
+      discovery:
+        server-addr: 127.0.0.1:8848
+  config:
+    import:
+      - nacos:qihang-oms.yaml?refresh=true
+  application:
+    name: tao-oms
+
+server:
+  port: 8081
