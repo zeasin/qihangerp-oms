@@ -12,6 +12,7 @@
   <modules>
     <module>tao-oms</module>
       <module>oms-api</module>
+    <module>oms-core</module>
   </modules>
 
   <properties>
