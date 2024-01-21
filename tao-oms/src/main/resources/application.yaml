@@ -9,6 +9,17 @@ spring:
       - nacos:qihang-oms.yaml?refresh=true
   application:
     name: tao-oms
+  security:
+    user:
+      name: admin
+      password: password
+    basic:
+      enabled: true
+
+# 授权规则
+security:
+  rules:
+    - pattern: /api/**   # 定义需要授权的URL模式
 
 server:
   port: 8081
