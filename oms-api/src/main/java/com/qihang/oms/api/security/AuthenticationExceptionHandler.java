@@ -1,4 +1,4 @@
-package com.qihang.oms.api.config;
+package com.qihang.oms.api.security;
 
 import com.alibaba.fastjson2.JSON;
 import jakarta.servlet.ServletException;

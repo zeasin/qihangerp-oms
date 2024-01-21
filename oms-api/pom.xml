@@ -119,7 +119,18 @@
             <artifactId>jjwt</artifactId>
             <version>0.9.1</version>
         </dependency>
-<!--        <dependency>-->
+        <!-- 解析客户端操作系统、浏览器等 -->
+        <dependency>
+            <groupId>eu.bitwalker</groupId>
+            <artifactId>UserAgentUtils</artifactId>
+            <version>1.21</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-config</artifactId>
+            <version>6.0.1</version>
+        </dependency>
+        <!--        <dependency>-->
 <!--            <groupId>com.qihang</groupId>-->
 <!--            <artifactId>oms-core</artifactId>-->
 <!--            <version>1.0</version>-->

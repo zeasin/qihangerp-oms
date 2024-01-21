@@ -27,4 +27,9 @@ public class HomeController {
     public String feign() {
         return echoService.echo();
     }
+
+    @GetMapping(value = "/home")
+    public String home(){
+        return "home";
+    }
 }

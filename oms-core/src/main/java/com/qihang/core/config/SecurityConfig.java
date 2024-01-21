@@ -47,9 +47,7 @@
 //                // 基于token，所以不需要session
 //                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 //                // 过滤请求
-//                .authorizeRequests(authz -> authz
-//                        .requestMatchers(URL_WHITELIST).permitAll() // 允许访问无需认证的路径
-//                        .anyRequest().authenticated())
+//                .authorizeRequests()
 //                .formLogin(form -> form.
 //                        loginProcessingUrl("/login")
 //                        .usernameParameter("username")

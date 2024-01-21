@@ -1,6 +1,7 @@
 package com.qihang.oms.api.config;
 
 
+import com.qihang.oms.api.utils.FastJson2JsonRedisSerializer;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
