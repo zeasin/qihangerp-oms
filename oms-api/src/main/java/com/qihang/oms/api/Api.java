@@ -16,7 +16,7 @@ import org.springframework.web.client.RestTemplate;
  *
  */
 @EnableFeignClients(basePackages = "com.qihang.oms.api")
-//@EnableDiscoveryClient
+@EnableDiscoveryClient
 @ComponentScan(basePackages={"com.qihang"})
 @SpringBootApplication
 public class Api

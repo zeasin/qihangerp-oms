@@ -1,4 +1,3 @@
-
 spring:
   cloud:
     loadbalancer:
@@ -8,6 +7,12 @@ spring:
       serverAddr: 127.0.0.1:8848
       discovery:
         server-addr: 127.0.0.1:8848
+        usename: nacos
+        passowrd: nacos
+#    gateway:
+#      discovery:
+#        locator:
+#          enabled: true # gateway 可以从 nacos 发现微服务
   config:
     import:
       - nacos:qihang-oms.yaml?refresh=true
@@ -15,6 +20,7 @@ spring:
     name: oms-api
 server:
   port: 8082
+
 
 #mybatis-plus:
 #  mapper-locations: classpath*:mapper/**/*Mapper.xml

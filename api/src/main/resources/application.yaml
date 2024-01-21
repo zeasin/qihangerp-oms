@@ -1,0 +1,24 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-service
+
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+        username: nacos
+        password: nacos
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: tao_oms_route
+          uri: lb://tao-oms  # lb 表示从 nacos 中按照名称获取微服务,并遵循负载均衡策略，user-service 对应用户微服务应用名
+          predicates:
+            - Path=/tao-api/**  # 使用断言
+          filters:
+            - StripPrefix=1       # 使用过滤器

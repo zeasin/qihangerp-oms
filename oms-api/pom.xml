@@ -83,7 +83,7 @@
         </dependency>
 <!--        <dependency>-->
 <!--            <groupId>org.springframework.cloud</groupId>-->
-<!--            <artifactId>spring-cloud-loadbalancer</artifactId>-->
+<!--            <artifactId>spring-cloud-starter-gateway</artifactId>-->
 <!--            <version>4.0.0</version>-->
 <!--        </dependency>-->
        <dependency>
