@@ -9,14 +9,16 @@
 ### 1、后端
 + jdk：17
 + SpringBoot：3.0.2
+  + spring-boot-starter-security 
 + SpringCloudAlibaba：2022.0.0.0
+  + Nacos
+  + SpringCloud Gateway
 
 ### 2、前端
 + vue2 + elementUI
 
 ### 3、存储
-+ MySQL8数据库
-+ minio文件存储
++ MySQL8
 
 ### 4、中间件
 + Redis：7.x（缓存：在线用户、字典、系统配置）
@@ -24,11 +26,17 @@
 
 
 
-## 安装教程
+## 运行教程
+### 1、运行后端
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+1.  启动Nacos
+2.  启动MySQL
+3.  启动Redis
+
+### 2、运行前端
++ 进入`oms-vue`文件夹
++ 运行`npm install` 
++ 运行`npm run dev`
 
 ## 使用说明
 
