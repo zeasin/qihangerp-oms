@@ -13,11 +13,11 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 //@EnableWebSecurity
 @EnableDiscoveryClient
 @SpringBootApplication(exclude = { DataSourceAutoConfiguration.class })
-public class TaoOmsApplication
+public class TaoApi
 {
     public static void main( String[] args )
     {
         System.out.println( "Hello World!" );
-        SpringApplication.run(TaoOmsApplication.class, args);
+        SpringApplication.run(TaoApi.class, args);
     }
 }

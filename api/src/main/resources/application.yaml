@@ -20,10 +20,10 @@ spring:
         locator:
           enabled: true
       routes:
-        - id: tao_oms_route
-          uri: lb://tao-oms
+        - id: tao_api_route
+          uri: lb://tao-api
           predicates:
-            - Path=/api/tao-service/**
+            - Path=/api/tao-api/**
           filters:
             - StripPrefix=2
         - id: oms_api_route

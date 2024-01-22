@@ -8,7 +8,7 @@ spring:
     import:
       - nacos:qihang-oms.yaml?refresh=true
   application:
-    name: tao-oms
+    name: tao-api
   security:
     user:
       name: admin

@@ -9,10 +9,10 @@
         <relativePath/>
     </parent>
 
-    <artifactId>tao-oms</artifactId>
+    <artifactId>tao-api</artifactId>
     <packaging>jar</packaging>
 
-    <name>tao-oms</name>
+    <name>tao-api</name>
     <url>http://maven.apache.org</url>
 
     <properties>

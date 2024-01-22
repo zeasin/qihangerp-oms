@@ -10,9 +10,8 @@
   <name>qihang-oms</name>
   <url>http://maven.apache.org</url>
   <modules>
-    <module>tao-oms</module>
-      <module>oms-api</module>
-    <module>oms-core</module>
+    <module>tao-api</module>
+    <module>oms-api</module>
     <module>api</module>
   </modules>
 
