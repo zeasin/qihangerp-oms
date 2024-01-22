@@ -1,13 +1,12 @@
 server:
   port: 8080
-
 spring:
   application:
     name: api-service
-  security:
-    user:
-      name: admin
-      password: password
+#  security:
+#    user:
+#      name: admin
+#      password: password
     basic:
       enabled: true
   cloud:
@@ -22,11 +21,20 @@ spring:
           enabled: true
       routes:
         - id: tao_oms_route
-          uri: lb://tao-oms  # lb 表示从 nacos 中按照名称获取微服务,并遵循负载均衡策略，user-service 对应用户微服务应用名
+          uri: lb://tao-oms
           predicates:
-            - Path=/tao-service/**  # 使用断言
+            - Path=/api/tao-service/**
           filters:
-            - StripPrefix=1       # 使用过滤器
+            - StripPrefix=2
+        - id: oms_api_route
+          uri: lb://oms-api
+          predicates:
+            - Path=/api/oms-api/**
+          filters:
+            - StripPrefix=2
+#            - TokenFilter
+#      default-filters:
+#        - TokenFilter
 #            - name: Security   # 添加安全过滤器
 #              args:
 #                springSecurityFilterChain: # 配置Spring Security过滤器链

@@ -41,9 +41,16 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException
     {
-        String token = request.getHeader(TOKEN_HEADER);
+//        String token = exchange.getRequest().getHeaders().getFirst(TOKEN_HEADER);
+        String token = request.getHeader("Authorization");
+
         log.info("intercept " + request.getRequestURI());
         log.info("token: " + token);
+        if(request.getRequestURI().equals("/login")){
+            // 登录页面，放行
+            chain.doFilter(request, response);
+            return;
+        }
         LoginUser loginUser = tokenService.getLoginUser(request);
         if (loginUser !=null )
         {
@@ -51,6 +58,9 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginUser, null, loginUser.getAuthorities());
             authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+        }else {
+            fallback(" 授权过期！",response);
+            return;
         }
         chain.doFilter(request, response);
     }

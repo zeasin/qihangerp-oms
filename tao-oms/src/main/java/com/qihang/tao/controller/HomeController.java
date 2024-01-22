@@ -1,5 +1,6 @@
 package com.qihang.tao.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +17,9 @@ public class HomeController {
     private String serverName;
 
     @GetMapping(value = "/test/na")
-    public String get() {
+    public String get(HttpServletRequest request) {
+        String token = request.getHeader("Authorization");
+        System.out.println("tao-api token:"+token);
         return serverName;
     }
 

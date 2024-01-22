@@ -10,8 +10,8 @@ import java.util.Collection;
  * TODO
  *
  * @Description
- * @Author laizhenghua
- * @Date 2023/6/29 22:49
+ * @Author
+ * @Date
  **/
 public class SecurityUser implements UserDetails {
     private SysUser userEntity;
