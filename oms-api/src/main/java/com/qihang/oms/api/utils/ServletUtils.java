@@ -1,7 +1,7 @@
 package com.qihang.oms.api.utils;
 
 
-import com.qihang.oms.api.common.Constants;
+import com.qihang.oms.api.constant.Constants;
 import com.qihang.oms.api.common.Convert;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.http.HttpServletRequest;

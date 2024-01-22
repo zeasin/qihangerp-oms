@@ -1,6 +1,6 @@
 package com.qihang.oms.api.utils.http;
 
-import com.qihang.oms.api.common.Constants;
+import com.qihang.oms.api.constant.Constants;
 import com.qihang.oms.api.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

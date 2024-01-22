@@ -2,6 +2,8 @@ package com.qihang.oms.api.service;
 
 import com.alibaba.cloud.commons.lang.StringUtils;
 import com.qihang.oms.api.config.RedisCache;
+import com.qihang.oms.api.constant.CacheConstants;
+import com.qihang.oms.api.constant.Constants;
 import com.qihang.oms.api.domain.LoginUser;
 import com.qihang.oms.api.utils.IdUtils;
 import com.qihang.oms.api.utils.ServletUtils;
@@ -64,7 +66,7 @@ public class TokenService
             {
                 Claims claims = parseToken(token);
                 // 解析对应的权限以及用户信息
-                String uuid = (String) claims.get("login_user_key");
+                String uuid = (String) claims.get(Constants.LOGIN_USER_KEY);
                 String userKey = getTokenKey(uuid);
                 LoginUser user = redisCache.getCacheObject(userKey);
                 return user;
@@ -113,7 +115,7 @@ public class TokenService
         refreshToken(loginUser);
 
         Map<String, Object> claims = new HashMap<>();
-        claims.put("login_user_key", token);
+        claims.put(Constants.LOGIN_USER_KEY, token);
         return createToken(claims);
     }
 
@@ -211,16 +213,15 @@ public class TokenService
     private String getToken(HttpServletRequest request)
     {
         String token = request.getHeader("Authorization");
-//        if (StringUtils.isNotEmpty(token) && token.startsWith(Constants.TOKEN_PREFIX))
-//        {
-//            token = token.replace(Constants.TOKEN_PREFIX, "");
-//        }
+        if (StringUtils.isNotEmpty(token) && token.startsWith(Constants.TOKEN_PREFIX))
+        {
+            token = token.replace(Constants.TOKEN_PREFIX, "");
+        }
         return token;
     }
 
     private String getTokenKey(String uuid)
     {
-//        return CacheConstants.LOGIN_TOKEN_KEY + uuid;
-        return uuid;
+        return CacheConstants.LOGIN_TOKEN_KEY + uuid;
     }
 }

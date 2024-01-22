@@ -1,4 +1,4 @@
-package com.qihang.oms.api.common;
+package com.qihang.oms.api.constant;
 
 import io.jsonwebtoken.Claims;
 

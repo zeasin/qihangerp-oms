@@ -2,7 +2,7 @@ package com.qihang.oms.api.utils.ip;
 
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
-import com.qihang.oms.api.common.Constants;
+import com.qihang.oms.api.constant.Constants;
 import com.qihang.oms.api.utils.http.HttpUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
