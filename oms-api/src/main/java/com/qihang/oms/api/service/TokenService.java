@@ -1,8 +1,13 @@
-package com.qihang.oms.api.security;
+package com.qihang.oms.api.service;
 
 import com.alibaba.cloud.commons.lang.StringUtils;
 import com.qihang.oms.api.config.RedisCache;
+import com.qihang.oms.api.domain.LoginUser;
 import com.qihang.oms.api.utils.IdUtils;
+import com.qihang.oms.api.utils.ServletUtils;
+import com.qihang.oms.api.utils.ip.AddressUtils;
+import com.qihang.oms.api.utils.ip.IpUtils;
+import eu.bitwalker.useragentutils.UserAgent;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -28,7 +33,7 @@ public class TokenService
     private String header;
 
     // 令牌秘钥
-    @Value("${token.secret:'abcdefghijklmnopqrstuvwxyz'}")
+    @Value("${token.secret:'abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijkrstuvwxyzabcdefghijklmnopqrstuvwxyz'}")
     private String secret;
 
     // 令牌有效期（默认30分钟）
@@ -149,12 +154,12 @@ public class TokenService
      */
     public void setUserAgent(LoginUser loginUser)
     {
-//        UserAgent userAgent = UserAgent.parseUserAgentString(ServletUtils.getRequest().getHeader("User-Agent"));
-//        String ip = IpUtils.getIpAddr();
-//        loginUser.setIpaddr(ip);
-//        loginUser.setLoginLocation(AddressUtils.getRealAddressByIP(ip));
-//        loginUser.setBrowser(userAgent.getBrowser().getName());
-//        loginUser.setOs(userAgent.getOperatingSystem().getName());
+        UserAgent userAgent = UserAgent.parseUserAgentString(ServletUtils.getRequest().getHeader("User-Agent"));
+        String ip = IpUtils.getIpAddr();
+        loginUser.setIpaddr(ip);
+        loginUser.setLoginLocation(AddressUtils.getRealAddressByIP(ip));
+        loginUser.setBrowser(userAgent.getBrowser().getName());
+        loginUser.setOs(userAgent.getOperatingSystem().getName());
     }
 
     /**

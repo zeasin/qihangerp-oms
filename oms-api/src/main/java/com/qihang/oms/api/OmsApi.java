@@ -1,5 +1,6 @@
 package com.qihang.oms.api;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
@@ -15,7 +16,8 @@ import org.springframework.web.client.RestTemplate;
  */
 @EnableFeignClients(basePackages = "com.qihang.oms.api")
 @EnableDiscoveryClient
-@ComponentScan(basePackages={"com.qihang"})
+//@ComponentScan(basePackages={"com.qihang"})
+@MapperScan("com.qihang.oms.api.mapper")
 @SpringBootApplication
 public class OmsApi
 {

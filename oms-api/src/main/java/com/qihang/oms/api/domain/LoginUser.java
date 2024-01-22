@@ -1,4 +1,4 @@
-package com.qihang.oms.api.security;
+package com.qihang.oms.api.domain;
 
 import com.alibaba.fastjson2.annotation.JSONField;
 import com.qihang.oms.api.domain.SysUser;

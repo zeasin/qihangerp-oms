@@ -8,7 +8,7 @@ import java.util.Date;
  * 
  * @author qihang
  */
-public class SysUser
+public class SysUser extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 

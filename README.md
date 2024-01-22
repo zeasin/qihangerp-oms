@@ -13,6 +13,7 @@
 + SpringCloudAlibaba：2022.0.0.0
   + Nacos
   + SpringCloud Gateway
+  + spring-cloud-starter-loadbalancer
 
 ### 2、前端
 + vue2 + elementUI
