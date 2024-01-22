@@ -29,8 +29,8 @@ import java.util.concurrent.TimeUnit;
 public class TokenService
 {
     // 令牌自定义标识
-    @Value("${token.header:'Authorization'}")
-    private String header;
+//    @Value("${token.header:'Authorization'}")
+//    private String header;
 
     // 令牌秘钥
     @Value("${token.secret:'abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijkrstuvwxyzabcdefghijklmnopqrstuvwxyz'}")
@@ -210,7 +210,7 @@ public class TokenService
      */
     private String getToken(HttpServletRequest request)
     {
-        String token = request.getHeader(header);
+        String token = request.getHeader("Authorization");
 //        if (StringUtils.isNotEmpty(token) && token.startsWith(Constants.TOKEN_PREFIX))
 //        {
 //            token = token.replace(Constants.TOKEN_PREFIX, "");
