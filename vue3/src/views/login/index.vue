@@ -108,7 +108,7 @@
         </el-button>
 
         <!-- 账号密码提示 -->
-        <div class="mt-10 text-sm">
+        <div class="mt-10 text-sm" v-if="false">
           <span>{{ $t("login.username") }}: admin</span>
           <span class="ml-4"> {{ $t("login.password") }}: 123456</span>
         </div>
@@ -121,7 +121,7 @@
       v-show="useAppStore().device == 'desktop'"
     >
       <p>
-        Copyright © 2021 - 2024 youlai.tech All Rights Reserved. 有来技术
+        Copyright © 2021 - 2024 youlai.tech All Rights Reserved. 启航电商
         版权所有
       </p>
       <p>皖ICP备20006496号-3</p>
@@ -142,7 +142,7 @@ import { useAppStore } from "@/store/modules/app";
 
 // API依赖
 import { LocationQuery, LocationQueryValue, useRoute } from "vue-router";
-import { getCaptchaApi } from "@/api/auth";
+
 import { LoginData } from "@/api/auth/types";
 
 const settingsStore = useSettingsStore();
@@ -182,7 +182,7 @@ const loginFormRef = ref(ElForm); // 登录表单ref
 
 const loginData = ref<LoginData>({
   username: "admin",
-  password: "123456",
+  password: "admin123",
 });
 
 const { t } = useI18n();
@@ -231,12 +231,12 @@ function checkCapslock(e: any) {
 /**
  * 获取验证码
  */
-function getCaptcha() {
-  getCaptchaApi().then(({ data }) => {
-    loginData.value.captchaKey = data.captchaKey;
-    captchaBase64.value = data.captchaBase64;
-  });
-}
+// function getCaptcha() {
+//   getCaptchaApi().then(({ data }) => {
+//     loginData.value.captchaKey = data.captchaKey;
+//     captchaBase64.value = data.captchaBase64;
+//   });
+// }
 /**
  * 根据组件大小调整验证码图片高度
  */
@@ -289,7 +289,7 @@ function handleLogin() {
 }
 
 onMounted(() => {
-  getCaptcha();
+  // getCaptcha();
 
   // 主题初始化
   const theme = useSettingsStore().theme;

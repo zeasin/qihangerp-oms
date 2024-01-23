@@ -1,6 +1,6 @@
 <!--
   多图上传组件
-  @author: youlaitech
+  @author:
   @date 2022/11/20
 -->
 
