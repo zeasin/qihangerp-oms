@@ -1,7 +1,7 @@
 # 启航电商OMS订单处理系统
 
 ## 介绍
-启航电商OMS订单处理系统是一套为中小电商企业构建的一套简单实用的第三方平台订单处理系统，本项目后端采用SpringCloudAlibaba 微服务架构，前端采用Vue2开发。
+启航电商OMS订单处理系统是一套为中小电商企业构建的一套简单实用的第三方平台订单处理系统，本项目后端采用SpringCloudAlibaba 微服务架构，前端采用Vue3开发。
 
 本系统支持多平台订单、售后、发货等接口对接，包括：淘宝、拼多多、抖店、快手小店、小红书等。
 
@@ -16,7 +16,7 @@
   + spring-cloud-starter-loadbalancer
 
 ### 2、前端
-+ vue2 + elementUI
++ vue3 + element
 
 ### 3、存储
 + MySQL8
@@ -58,9 +58,11 @@ oms项目公用基础微服务，主要功能包括：用户登录、注销授�
 3.  启动Redis
 
 ### 2、运行前端
-+ 进入`oms-vue`文件夹
-+ 运行`npm install` 
-+ 运行`npm run dev`
++ Nodejs版本：v20.11.0
++ 进入`vue3`文件夹
++ 安装pnpm：`npm install pnpm -g`
++ 运行`pnpm install` 
++ 运行`pnpm run dev`
 
 ## 使用说明
 
