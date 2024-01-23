@@ -70,7 +70,7 @@
         </el-tooltip>
 
         <!-- 验证码 -->
-        <el-form-item prop="captchaCode">
+        <el-form-item prop="captchaCode" v-if="false">
           <span class="p-2">
             <svg-icon icon-class="captcha" />
           </span>
