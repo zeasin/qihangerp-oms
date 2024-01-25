@@ -15,11 +15,11 @@ export function loginApi(data: LoginData): AxiosPromise<LoginResult> {
   formData.append("captchaKey", data.captchaKey || "");
   formData.append("captchaCode", data.captchaCode || "");
   return request({
-    url: "/api/v1/auth/login",
+    url: "/api/oms-api/login",
     method: "post",
     data: formData,
     headers: {
-      "Content-Type": "multipart/form-data",
+      // "Content-Type": "multipart/form-data",
     },
   });
 }
@@ -29,7 +29,7 @@ export function loginApi(data: LoginData): AxiosPromise<LoginResult> {
  */
 export function logoutApi() {
   return request({
-    url: "/api/v1/auth/logout",
+    url: "/api/oms-api/logout",
     method: "delete",
   });
 }

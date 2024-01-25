@@ -18,7 +18,10 @@ public class HomeController {
     private RedisTemplate<String,String> redisTemplate;
     @Resource
     private EchoService echoService;
-
+    @GetMapping("/")
+    public String home(){
+        return "{'code':0,'msg':'请通过api访问'}";
+    }
     @GetMapping(value = "/echo-rest")
     public String rest() {
         return restTemplate.getForObject("http://tao-oms/test/na", String.class);
@@ -28,8 +31,4 @@ public class HomeController {
         return echoService.echo();
     }
 
-    @GetMapping(value = "/home")
-    public String home(){
-        return "home";
-    }
 }

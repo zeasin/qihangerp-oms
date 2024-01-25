@@ -121,7 +121,7 @@
       v-show="useAppStore().device == 'desktop'"
     >
       <p>
-        Copyright © 2021 - 2024 youlai.tech All Rights Reserved. 启航电商
+        Copyright © 2021 - 2024 qihangec.tech All Rights Reserved. 启航电商
         版权所有
       </p>
       <p>皖ICP备20006496号-3</p>
@@ -261,6 +261,7 @@ function handleLogin() {
       userStore
         .login(loginData.value)
         .then(() => {
+          console.log("登录成功")
           const query: LocationQuery = route.query;
 
           const redirect = (query.redirect as LocationQueryValue) ?? "/";
@@ -277,9 +278,10 @@ function handleLogin() {
 
           router.push({ path: redirect, query: otherQueryParams });
         })
-        .catch(() => {
+        .catch((res) => {
+          console.log("登录失败",res)
           // 验证失败，重新生成验证码
-          getCaptcha();
+          // getCaptcha();
         })
         .finally(() => {
           loading.value = false;

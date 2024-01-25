@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class HomeController {
-    @GetMapping("/test/22")
+    @GetMapping("/")
     public String home(){
-        return "hello world";
+        return "{'code':0,'msg':'请通过api访问'}";
     }
 
     @Value(value = "${zhijian.name:1}")

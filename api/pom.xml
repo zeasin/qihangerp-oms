@@ -47,7 +47,14 @@
             <artifactId>spring-cloud-starter-gateway</artifactId>
             <version>4.0.0</version>
         </dependency>
-<!--        <dependency>-->
+        <!-- https://mvnrepository.com/artifact/com.alibaba.cloud/spring-cloud-starter-alibaba-sentinel -->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>
+            <version>${spring-cloud-alibaba.version}</version>
+        </dependency>
+
+        <!--        <dependency>-->
 <!--            <groupId>org.springframework.security</groupId>-->
 <!--            <artifactId>spring-security-config</artifactId>-->
 <!--        </dependency>-->

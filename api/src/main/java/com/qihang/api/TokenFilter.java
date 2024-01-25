@@ -20,7 +20,10 @@ public class TokenFilter implements GlobalFilter, Ordered {
         System.out.println("Token:"+token);
         String url = exchange.getRequest().getURI().getPath();
         System.out.println("intercept " + url);
-
+        if(url.equals("/api/oms-api/login")){
+            // 登录页面 放行
+            return chain.filter(exchange);
+        }
         // TODO: 统一鉴权处理
         if(!StringUtils.hasText(token)){
             exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
