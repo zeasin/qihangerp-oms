@@ -51,18 +51,24 @@ oms项目公用基础微服务，主要功能包括：用户登录、注销授�
 小红书开放平台接口api
 
 ## 运行教程
-### 1、运行后端
+### 1、运行环境所需
 
 1.  启动Nacos
 2.  启动MySQL
 3.  启动Redis
 
-### 2、运行前端
+### 2、启动服务
+1.  启动业务微服务（tao-api、jd-api、pdd-api等平台接口api微服务）
+2.  启动oms-api
+3.  启动微服务网关（api）
+
+### 3、运行前端
 + Nodejs版本：v20.11.0
 + 进入`vue3`文件夹
 + 安装pnpm：`npm install pnpm -g`
 + 运行`pnpm install` 
 + 运行`pnpm run dev`
++ 浏览网页`http://localhost:3000`
 
 ## 使用说明
 
