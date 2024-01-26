@@ -7,7 +7,7 @@ public class MenusDetailVo {
     private String icon;
     private Boolean hidden;
     private String[] roles;
-    private Boolean keepAlive;
+//    private Boolean keepAlive;
 
     public String getTitle() {
         return title;
@@ -41,11 +41,11 @@ public class MenusDetailVo {
         this.roles = roles;
     }
 
-    public Boolean getKeepAlive() {
-        return keepAlive;
-    }
-
-    public void setKeepAlive(Boolean keepAlive) {
-        this.keepAlive = keepAlive;
-    }
+//    public Boolean getKeepAlive() {
+//        return keepAlive;
+//    }
+//
+//    public void setKeepAlive(Boolean keepAlive) {
+//        this.keepAlive = keepAlive;
+//    }
 }
