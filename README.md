@@ -74,9 +74,19 @@ oms项目公用基础微服务，主要功能包括：
 + 运行`pnpm run dev`
 + 浏览网页`http://localhost:3000`
 
-## 使用说明
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+
+💖 如果觉得有用记得点 Star⭐
+
+
+欢迎一起交流！
+
+
+
+## 捐献作者
+作者为兼职做开源,平时还需要工作,如果帮到了您可以请作者吃个盒饭(目前还希望接收大家的捐献可以搭建一个演示环境！)
+
+
+<img src="./weixinzhifu.jpg" width="300px" />
+<img src="./zhifubao.jpg" width="300px" />
 
