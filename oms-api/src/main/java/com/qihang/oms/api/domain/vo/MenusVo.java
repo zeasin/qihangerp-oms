@@ -8,7 +8,25 @@ public class MenusVo {
     private String redirect;
     private String name;
     private MenusDetailVo meta;
+    private Long parentId;
+    private Long id;
     private List<MenusVo> children;
+
+    public Long getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(Long parentId) {
+        this.parentId = parentId;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getPath() {
         return path;

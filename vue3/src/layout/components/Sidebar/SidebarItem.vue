@@ -114,7 +114,7 @@ function resolvePath(routePath: string) {
     <el-sub-menu v-else :index="resolvePath(item.path)" teleported>
       <template #title>
         <item
-          v-if="item.meta"
+          v-if="item"
           :icon="item.meta && item.meta.icon"
           :title="item.meta.title"
         />

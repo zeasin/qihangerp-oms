@@ -23,6 +23,7 @@ const hasPermission = (roles: string[], route: RouteRecordRaw) => {
     return roles.some((role) => {
       if (route.meta?.roles) {
         return route.meta.roles.includes(role);
+        // return true;
       }
     });
   }
@@ -38,9 +39,10 @@ const hasPermission = (roles: string[], route: RouteRecordRaw) => {
  */
 const filterAsyncRoutes = (routes: RouteRecordRaw[], roles: string[]) => {
   const asyncRoutes: RouteRecordRaw[] = [];
-
+// debugger
   routes.forEach((route) => {
     const tmpRoute = { ...route }; // ES6扩展运算符复制新对象
+    console.log(tmpRoute)
     if (!route.name) {
       tmpRoute.name = route.path;
     }
@@ -88,6 +90,9 @@ export const usePermissionStore = defineStore("permission", () => {
       // 接口获取所有路由
       listRoutes()
         .then(({ data: asyncRoutes }) => {
+          console.log("menus");
+          console.log(roles);
+          console.log(asyncRoutes);
           // 根据角色获取有访问权限的路由
           const accessedRoutes = filterAsyncRoutes(asyncRoutes, roles);
           setRoutes(accessedRoutes);
