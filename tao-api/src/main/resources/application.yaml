@@ -23,3 +23,10 @@ security:
 
 server:
   port: 8081
+
+
+mybatis-plus:
+  mapper-locations: classpath*:mapper/**/*Mapper.xml
+  type-aliases-package: com.qihang.tao.domain;com.qihang.tao.mapper
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl # 开启sql日志
