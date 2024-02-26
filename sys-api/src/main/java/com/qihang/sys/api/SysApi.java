@@ -27,9 +27,9 @@ public class SysApi
         SpringApplication.run(SysApi.class, args);
     }
 
-//    @Bean
-//    @LoadBalanced
-//    public RestTemplate restTemplate() {
-//        return new RestTemplate();
-//    }
+    @Bean
+    @LoadBalanced
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
+    }
 }
