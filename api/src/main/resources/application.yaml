@@ -26,10 +26,10 @@ spring:
             - Path=/api/tao-api/**
           filters:
             - StripPrefix=2
-        - id: oms_api_route
-          uri: lb://oms-api
+        - id: sys_api_route
+          uri: lb://sys-api
           predicates:
-            - Path=/api/oms-api/**
+            - Path=/api/sys-api/**
           filters:
             - StripPrefix=2
 #            - TokenFilter

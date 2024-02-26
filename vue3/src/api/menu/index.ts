@@ -7,7 +7,7 @@ import { MenuQuery, MenuVO, MenuForm } from "./types";
  */
 export function listRoutes() {
   return request({
-    url: "/api/oms-api/menus/routes",
+    url: "/api/sys-api/menus/routes",
     method: "get",
   });
 }

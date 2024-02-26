@@ -15,7 +15,7 @@ public class Api
 {
     public static void main( String[] args )
     {
-        System.out.println( "Hello World! Api" );
+        System.out.println( "Hello api! " );
         SpringApplication.run(Api.class, args);
     }
 
