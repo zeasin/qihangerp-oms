@@ -12,6 +12,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
  *
  */
 //@EnableWebSecurity
+@MapperScan("com.qihang.tao.mapper")
 @EnableDiscoveryClient
 @SpringBootApplication
 public class TaoApi

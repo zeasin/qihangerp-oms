@@ -1,5 +1,5 @@
 const defaultSettings: AppSettings = {
-  title: "启航电商OMS" +
+  title: "启航电商OMS系统" +
     "",
   version: "v2.8.2",
   showSettings: true,
