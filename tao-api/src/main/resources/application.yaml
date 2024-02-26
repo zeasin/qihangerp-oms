@@ -27,6 +27,6 @@ server:
 
 mybatis-plus:
   mapper-locations: classpath*:mapper/**/*Mapper.xml
-  type-aliases-package: com.qihang.tao.domain;com.qihang.tao.mapper
+  type-aliases-package: com.qihang.tao.domain;com.qihang.security.entity;
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl # 开启sql日志

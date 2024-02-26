@@ -13,9 +13,10 @@ import org.springframework.context.annotation.ComponentScan;
  *
  */
 //@EnableWebSecurity
-@MapperScan("com.qihang.tao.mapper")
+
 @EnableDiscoveryClient
 @ComponentScan(basePackages={"com.qihang"})
+@MapperScan("com.qihang.tao.mapper")
 @SpringBootApplication
 public class TaoApi
 {
