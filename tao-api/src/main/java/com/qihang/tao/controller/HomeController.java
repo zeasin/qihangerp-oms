@@ -25,7 +25,7 @@ HomeController {
     public String get(HttpServletRequest request) {
         String token = request.getHeader("Authorization");
         System.out.println("tao-api token:"+token);
-
+        //https://open.taobao.com/v2/doc?spm=a219a.15212433.0.0.6aca669aUe3Kme#/abilityToOpen?treeId=780&docType=1&docId=102635
         TaoGoods taoGoods = goodsMapper.selectById(1L);
 
         return serverName;
