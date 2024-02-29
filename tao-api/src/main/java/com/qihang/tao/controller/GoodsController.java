@@ -2,6 +2,7 @@ package com.qihang.tao.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.qihang.tao.common.ApiResult;
 import com.qihang.tao.common.PageQuery;
 import com.qihang.tao.common.PageResult;
 import com.qihang.tao.domain.TaoGoods;
@@ -20,7 +21,7 @@ import java.util.List;
 public class GoodsController {
     private final TaoGoodsService goodsService;
     @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public PageResult<TaoGoods> goodsList(TaoGoodsBo bo, PageQuery pageQuery) {
+    public ApiResult<PageResult<TaoGoods>> goodsList(TaoGoodsBo bo, PageQuery pageQuery) {
         PageResult<TaoGoods> result = goodsService.queryPageList(bo, pageQuery);
 
 //        try {
@@ -29,6 +30,11 @@ public class GoodsController {
 //        }catch (Exception ex){
 //            return new ApiResult<>(EnumResultVo.Fail.getIndex(),EnumResultVo.Fail.getName()+ex.getMessage());
 //        }
-        return result;
+          ApiResult<PageResult<TaoGoods>> r = new ApiResult<>();
+          r.setCode(result.getCode());
+          r.setMsg(result.getMsg());
+          r.setData(result);
+//        return result;
+        return r;
     }
 }

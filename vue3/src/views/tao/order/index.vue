@@ -5,15 +5,15 @@ defineOptions({
   inheritAttrs: false,
 });
 
-import { MenuQuery, MenuForm, MenuVO } from "@/api/menu/types";
+import { OrderQuery, OrderVo, ResultVo } from "@/api/taoOrder/types";
 import {
-  listMenus,
   getMenuForm,
   getMenuOptions,
   addMenu,
   deleteMenu,
   updateMenu,
 } from "@/api/menu";
+import { listOrder } from "@/api/taoOrder";
 
 import { MenuTypeEnum } from "@/enums/MenuTypeEnum";
 
@@ -29,8 +29,8 @@ const dialog = reactive({
   visible: false,
 });
 
-const queryParams = reactive<MenuQuery>({});
-const menuList = ref<MenuVO[]>([]);
+const queryParams = reactive<OrderQuery>({});
+const menuList = ref<any>();
 
 const menuOptions = ref<OptionType[]>([]);
 
@@ -67,13 +67,15 @@ const menuCacheData = reactive({
 function handleQuery() {
   // 重置父组件
   loading.value = true;
-  listMenus(queryParams)
+  listOrder(queryParams)
     .then(({ data }) => {
-      menuList.value = data;
+      console.log('查询结果：',data)
+      menuList.value = data.records;
     })
     .then(() => {
       loading.value = false;
     });
+
 }
 
 /** 重置查询 */
@@ -246,7 +248,7 @@ onMounted(() => {
         <el-table-column label="菜单名称" min-width="200">
           <template #default="scope">
             <svg-icon :icon-class="scope.row.icon" />
-            {{ scope.row.name }}
+            {{ scope.row.id }}
           </template>
         </el-table-column>
 
