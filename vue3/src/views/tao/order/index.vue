@@ -96,24 +96,19 @@ function onRowClick(row: MenuVO) {
  * @param menuId 菜单ID
  */
 function openDialog(parentId?: number, menuId?: number) {
-  getMenuOptions()
-    .then(({ data }) => {
-      menuOptions.value = [{ value: 0, label: "顶级菜单", children: data }];
-    })
-    .then(() => {
-      dialog.visible = true;
-      if (menuId) {
-        dialog.title = "编辑菜单";
-        getMenuForm(menuId).then(({ data }) => {
-          Object.assign(formData, data);
-          menuCacheData.type = data.type;
-          menuCacheData.path = data.path ?? "";
-        });
-      } else {
-        dialog.title = "新增菜单";
-        formData.parentId = parentId;
-      }
+  dialog.visible = true;
+  if (menuId) {
+    dialog.title = "编辑菜单";
+    getMenuForm(menuId).then(({data}) => {
+      Object.assign(formData, data);
+      menuCacheData.type = data.type;
+      menuCacheData.path = data.path ?? "";
     });
+  } else {
+    dialog.title = "新增菜单";
+    formData.parentId = parentId;
+  }
+
 }
 
 /** 菜单类型切换事件处理 */
