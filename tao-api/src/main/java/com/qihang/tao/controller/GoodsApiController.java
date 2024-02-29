@@ -1,6 +1,13 @@
 //package com.qihang.tao.controller;
 //
+//import com.qihang.tao.common.ApiResult;
+//import org.springframework.util.StringUtils;
+//import org.springframework.web.bind.annotation.RequestBody;
+//import org.springframework.web.bind.annotation.RequestMapping;
+//import org.springframework.web.bind.annotation.RequestMethod;
 //import org.springframework.web.bind.annotation.RestController;
+//
+//import java.util.Map;
 //
 //@RestController
 //public class GoodsApiController {
@@ -19,7 +26,7 @@
 //    }
 //     */
 //    @RequestMapping(value = "/pull_goods", method = RequestMethod.POST)
-//    public ApiResult<Integer> getOrderList(@RequestBody DataRow reqData, HttpServletRequest request) throws Exception {
+//    public ApiResult<Integer> getOrderList(@RequestBody DataRow reqData) throws Exception {
 //        String startDate = reqData.getString("startTime");
 //        String endDate = reqData.getString("endTime");
 //        Integer shopId=reqData.getInt("shopId");

@@ -11,7 +11,7 @@
  Target Server Version : 80032
  File Encoding         : 65001
 
- Date: 29/02/2024 16:03:40
+ Date: 29/02/2024 20:37:45
 */
 
 SET NAMES utf8mb4;
@@ -87,7 +87,7 @@ CREATE TABLE `sys_platform`  (
 -- ----------------------------
 -- Records of sys_platform
 -- ----------------------------
-INSERT INTO `sys_platform` VALUES (1, '天猫', 'TMALL', NULL, NULL);
+INSERT INTO `sys_platform` VALUES (1, '天猫', 'TMALL', '12175777', '368dbbd183a77d551735be13f59bbcda');
 INSERT INTO `sys_platform` VALUES (2, '京东', 'JD', NULL, NULL);
 INSERT INTO `sys_platform` VALUES (3, '抖店', 'DOUDIAN', NULL, NULL);
 INSERT INTO `sys_platform` VALUES (4, '拼多多', 'PDD', NULL, NULL);
@@ -120,7 +120,7 @@ CREATE TABLE `sys_shop`  (
 -- ----------------------------
 -- Records of sys_shop
 -- ----------------------------
-INSERT INTO `sys_shop` VALUES (1, '天猫旗舰店', 1, '', 98, 1, 0, '', 2200787809358, '31014100', '7b0769269b0c0ca88949791c14eb3a5c', '610140071d1070a37cecea89f1c1f3d6e5d19bf4b58dd942200787809358', NULL, NULL, NULL, NULL, 'http://gw.api.taobao.com/router/rest');
+INSERT INTO `sys_shop` VALUES (1, '天猫旗舰店', 1, '', 98, 1, 0, '', 59972781, '31014100', '7b0769269b0c0ca88949791c14eb3a5c', '610140071d1070a37cecea89f1c1f3d6e5d19bf4b58dd942200787809358', NULL, NULL, NULL, NULL, 'http://gw.api.taobao.com/router/rest');
 INSERT INTO `sys_shop` VALUES (2, '京东旗舰店', 2, NULL, 9, 0, 0, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO `sys_shop` VALUES (3, '抖音旗舰店', 3, 'http://openapi.jinritemai.com', 87, 1, 1653672695, NULL, 4463798, '7249607407477720636', '36a12497-fb9d-4b54-8cd1-fd1617346687', '', NULL, NULL, NULL, NULL, '2');
 INSERT INTO `sys_shop` VALUES (5, '拼多多旗舰店', 4, NULL, 99, 1, 1680698886, 'pdd10006159121', 100061591, NULL, NULL, '87f8044d2a5f45a489aa3a952785b0d35e61788a', NULL, NULL, NULL, NULL, NULL);
@@ -2660,7 +2660,7 @@ CREATE TABLE `tao_order`  (
   `point_fee` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '买家使用积分,下单时生成，且一直不变。格式:100;单位:个.',
   `real_point_fee` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '买家实际使用积分（扣除部分退款使用的积分），交易完成后生成（交易成功或关闭），交易未完成时该字段值为0。格式:100;单位:个',
   `buyer_obtain_point_fee` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '买家获得积分,返点的积分。格式:100;单位:个。返点的积分要交易成功之后才能获得。',
-  `receivingTime` datetime(0) DEFAULT NULL COMMENT '收货时间，这里返回的是完全收货时间',
+  `receiving_time` datetime(0) DEFAULT NULL COMMENT '收货时间，这里返回的是完全收货时间',
   `status` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT '' COMMENT '交易状态。可选值: * TRADE_NO_CREATE_PAY(没有创建支付宝交易) * WAIT_BUYER_PAY(等待买家付款) * SELLER_CONSIGNED_PART(卖家部分发货) * WAIT_SELLER_SEND_GOODS(等待卖家发货,即:买家已付款) * WAIT_BUYER_CONFIRM_GOODS(等待买家确认收货,即:卖家已发货) * TRADE_BUYER_SIGNED(买家已签收,货到付款专用) * TRADE_FINISHED(交易成功) * TRADE_CLOSED(付款以后用户退款成功，交易自动关闭) * TRADE_CLOSED_BY_TAOBAO(付款以前，卖家或买家主动关闭交易) * PAY_PENDING(国际信用卡支付付款确认中) * WAIT_PRE_AUTH_CONFIRM(0元购合约中) * PAID_FORBID_CONSIGN(拼团中订单或者发货强管控的订单，已付款但禁止发货)',
   `trade_memo` varchar(2000) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL COMMENT '交易备注。',
   `erp_send_company` varchar(20) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL COMMENT 'erp发货快递公司',
