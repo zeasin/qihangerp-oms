@@ -70,8 +70,8 @@ oms项目系统微服务，主要功能包括：
 3.  启动Redis
 
 ### 2、启动服务
-1.  启动业务微服务（tao-api、jd-api、pdd-api等平台接口api微服务）
-2.  启动oms-api
+1.  启动业务微服务（tao-api、jd-api等平台接口api微服务）
+2.  启动sys-api(系统api)
 3.  启动微服务网关（api）
 
 ### 3、运行前端
