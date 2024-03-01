@@ -66,12 +66,12 @@ public class TaoGoodsSku implements Serializable {
     /**
      * sku创建日期 时间格式：yyyy-MM-dd HH:mm:ss
      */
-    private Date created;
+    private String created;
 
     /**
      * sku最后修改日期 时间格式：yyyy-MM-dd HH:mm:ss
      */
-    private Date modified;
+    private String modified;
 
     /**
      * sku状态。	normal
@@ -262,28 +262,28 @@ public class TaoGoodsSku implements Serializable {
     /**
      * sku创建日期 时间格式：yyyy-MM-dd HH:mm:ss
      */
-    public Date getCreated() {
+    public String getCreated() {
         return created;
     }
 
     /**
      * sku创建日期 时间格式：yyyy-MM-dd HH:mm:ss
      */
-    public void setCreated(Date created) {
+    public void setCreated(String created) {
         this.created = created;
     }
 
     /**
      * sku最后修改日期 时间格式：yyyy-MM-dd HH:mm:ss
      */
-    public Date getModified() {
+    public String getModified() {
         return modified;
     }
 
     /**
      * sku最后修改日期 时间格式：yyyy-MM-dd HH:mm:ss
      */
-    public void setModified(Date modified) {
+    public void setModified(String modified) {
         this.modified = modified;
     }
 

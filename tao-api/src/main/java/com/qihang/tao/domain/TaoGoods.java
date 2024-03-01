@@ -1,7 +1,10 @@
 package com.qihang.tao.domain;
 
+import com.baomidou.mybatisplus.annotation.TableField;
+
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 
@@ -168,7 +171,18 @@ public class TaoGoods implements Serializable {
      */
     private Date createTime;
 
+    @TableField(exist = false)
+    private List<TaoGoodsSku> skus;
+
     private static final long serialVersionUID = 1L;
+
+    public List<TaoGoodsSku> getSkus() {
+        return skus;
+    }
+
+    public void setSkus(List<TaoGoodsSku> skus) {
+        this.skus = skus;
+    }
 
     /**
      * 

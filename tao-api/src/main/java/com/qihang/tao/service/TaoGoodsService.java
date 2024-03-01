@@ -13,4 +13,6 @@ import com.qihang.tao.domain.bo.TaoGoodsBo;
 */
 public interface TaoGoodsService extends IService<TaoGoods> {
     PageResult<TaoGoods> queryPageList(TaoGoodsBo bo, PageQuery pageQuery);
+
+    int saveAndUpdateGoods(Integer shopId,TaoGoods goods);
 }
