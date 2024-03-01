@@ -9,5 +9,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 * @createDate 2024-02-29 19:01:45
 */
 public interface TaoRefundService extends IService<TaoRefund> {
-
+    int saveAndUpdateRefund(Integer shopId,TaoRefund refund);
 }

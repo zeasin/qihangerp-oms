@@ -32,8 +32,6 @@ public class TaoOrderServiceImpl extends ServiceImpl<TaoOrderMapper, TaoOrder>
     @Override
     public ResultVo<Integer> saveOrder(Integer shopId, TaoOrder order) {
         try {
-
-
             List<TaoOrder> taoOrders = mapper.selectList(new LambdaQueryWrapper<TaoOrder>().eq(TaoOrder::getTid, order.getTid()));
             if (taoOrders != null && taoOrders.size() > 0) {
                 // 存在，修改
@@ -74,6 +72,7 @@ public class TaoOrderServiceImpl extends ServiceImpl<TaoOrderMapper, TaoOrder>
                 return new ResultVo<>(EnumResultVo.DataExist, "订单已经存在，更新成功");
             } else {
                 // 不存在，新增
+                order.setShopId(shopId);
                 order.setCreateTime(new Date());
                 mapper.insert(order);
                 // 添加item

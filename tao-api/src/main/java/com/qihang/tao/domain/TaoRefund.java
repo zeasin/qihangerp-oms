@@ -161,7 +161,7 @@ public class TaoRefund implements Serializable {
     /**
      * 退款说明
      */
-    private String desc;
+    private String desc1;
 
     /**
      * 物流公司
@@ -659,15 +659,15 @@ outer_sku_id	String	123	123
     /**
      * 退款说明
      */
-    public String getDesc() {
-        return desc;
+    public String getDesc1() {
+        return desc1;
     }
 
     /**
      * 退款说明
      */
-    public void setDesc(String desc) {
-        this.desc = desc;
+    public void setDesc1(String desc) {
+        this.desc1 = desc;
     }
 
     /**
@@ -906,7 +906,7 @@ outer_sku_id	String	123	123
             && (this.getReason() == null ? other.getReason() == null : this.getReason().equals(other.getReason()))
             && (this.getRefundPhase() == null ? other.getRefundPhase() == null : this.getRefundPhase().equals(other.getRefundPhase()))
             && (this.getShippingType() == null ? other.getShippingType() == null : this.getShippingType().equals(other.getShippingType()))
-            && (this.getDesc() == null ? other.getDesc() == null : this.getDesc().equals(other.getDesc()))
+            && (this.getDesc1() == null ? other.getDesc1() == null : this.getDesc1().equals(other.getDesc1()))
             && (this.getCompanyName() == null ? other.getCompanyName() == null : this.getCompanyName().equals(other.getCompanyName()))
             && (this.getSid() == null ? other.getSid() == null : this.getSid().equals(other.getSid()))
             && (this.getSendTime() == null ? other.getSendTime() == null : this.getSendTime().equals(other.getSendTime()))
@@ -956,7 +956,7 @@ outer_sku_id	String	123	123
         result = prime * result + ((getReason() == null) ? 0 : getReason().hashCode());
         result = prime * result + ((getRefundPhase() == null) ? 0 : getRefundPhase().hashCode());
         result = prime * result + ((getShippingType() == null) ? 0 : getShippingType().hashCode());
-        result = prime * result + ((getDesc() == null) ? 0 : getDesc().hashCode());
+        result = prime * result + ((getDesc1() == null) ? 0 : getDesc1().hashCode());
         result = prime * result + ((getCompanyName() == null) ? 0 : getCompanyName().hashCode());
         result = prime * result + ((getSid() == null) ? 0 : getSid().hashCode());
         result = prime * result + ((getSendTime() == null) ? 0 : getSendTime().hashCode());
@@ -1009,7 +1009,7 @@ outer_sku_id	String	123	123
         sb.append(", reason=").append(reason);
         sb.append(", refundPhase=").append(refundPhase);
         sb.append(", shippingType=").append(shippingType);
-        sb.append(", desc=").append(desc);
+        sb.append(", desc1=").append(desc1);
         sb.append(", companyName=").append(companyName);
         sb.append(", sid=").append(sid);
         sb.append(", sendTime=").append(sendTime);
