@@ -1,8 +1,11 @@
 package com.qihang.tao.domain;
 
+import com.baomidou.mybatisplus.annotation.TableField;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 淘宝订单表
@@ -217,7 +220,7 @@ public class TaoOrder implements Serializable {
     /**
      * 收货时间，这里返回的是完全收货时间
      */
-    private Date receivingtime;
+    private Date receivingTime;
 
     /**
      * 交易状态。可选值: * TRADE_NO_CREATE_PAY(没有创建支付宝交易) * WAIT_BUYER_PAY(等待买家付款) * SELLER_CONSIGNED_PART(卖家部分发货) * WAIT_SELLER_SEND_GOODS(等待卖家发货,即:买家已付款) * WAIT_BUYER_CONFIRM_GOODS(等待买家确认收货,即:卖家已发货) * TRADE_BUYER_SIGNED(买家已签收,货到付款专用) * TRADE_FINISHED(交易成功) * TRADE_CLOSED(付款以后用户退款成功，交易自动关闭) * TRADE_CLOSED_BY_TAOBAO(付款以前，卖家或买家主动关闭交易) * PAY_PENDING(国际信用卡支付付款确认中) * WAIT_PRE_AUTH_CONFIRM(0元购合约中) * PAID_FORBID_CONSIGN(拼团中订单或者发货强管控的订单，已付款但禁止发货)
@@ -382,7 +385,25 @@ public class TaoOrder implements Serializable {
     /**
      * 订单的运费险，单位为元
      */
-    private Double yfxFee;
+    private String yfxFee;
+    private String hasYfx;
+    private String sid;
+
+    public String getHasYfx() {
+        return hasYfx;
+    }
+
+    public void setHasYfx(String hasYfx) {
+        this.hasYfx = hasYfx;
+    }
+
+    public String getSid() {
+        return sid;
+    }
+
+    public void setSid(String sid) {
+        this.sid = sid;
+    }
 
     /**
      * 订单将在此时间前发出，主要用于预售订单
@@ -394,7 +415,18 @@ public class TaoOrder implements Serializable {
      */
     private String isPartConsign;
 
+    @TableField(exist = false)
+    private List<TaoOrderItem> items;
+
     private static final long serialVersionUID = 1L;
+
+    public List<TaoOrderItem> getItems() {
+        return items;
+    }
+
+    public void setItems(List<TaoOrderItem> items) {
+        this.items = items;
+    }
 
     /**
      * 主键id
@@ -973,15 +1005,15 @@ public class TaoOrder implements Serializable {
     /**
      * 收货时间，这里返回的是完全收货时间
      */
-    public Date getReceivingtime() {
-        return receivingtime;
+    public Date getReceivingTime() {
+        return receivingTime;
     }
 
     /**
      * 收货时间，这里返回的是完全收货时间
      */
-    public void setReceivingtime(Date receivingtime) {
-        this.receivingtime = receivingtime;
+    public void setReceivingTime(Date receivingTime) {
+        this.receivingTime = receivingTime;
     }
 
     /**
@@ -1435,14 +1467,14 @@ public class TaoOrder implements Serializable {
     /**
      * 订单的运费险，单位为元
      */
-    public Double getYfxFee() {
+    public String getYfxFee() {
         return yfxFee;
     }
 
     /**
      * 订单的运费险，单位为元
      */
-    public void setYfxFee(Double yfxFee) {
+    public void setYfxFee(String yfxFee) {
         this.yfxFee = yfxFee;
     }
 
@@ -1527,7 +1559,7 @@ public class TaoOrder implements Serializable {
             && (this.getPointFee() == null ? other.getPointFee() == null : this.getPointFee().equals(other.getPointFee()))
             && (this.getRealPointFee() == null ? other.getRealPointFee() == null : this.getRealPointFee().equals(other.getRealPointFee()))
             && (this.getBuyerObtainPointFee() == null ? other.getBuyerObtainPointFee() == null : this.getBuyerObtainPointFee().equals(other.getBuyerObtainPointFee()))
-            && (this.getReceivingtime() == null ? other.getReceivingtime() == null : this.getReceivingtime().equals(other.getReceivingtime()))
+            && (this.getReceivingTime() == null ? other.getReceivingTime() == null : this.getReceivingTime().equals(other.getReceivingTime()))
             && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
             && (this.getTradeMemo() == null ? other.getTradeMemo() == null : this.getTradeMemo().equals(other.getTradeMemo()))
             && (this.getErpSendCompany() == null ? other.getErpSendCompany() == null : this.getErpSendCompany().equals(other.getErpSendCompany()))
@@ -1610,7 +1642,7 @@ public class TaoOrder implements Serializable {
         result = prime * result + ((getPointFee() == null) ? 0 : getPointFee().hashCode());
         result = prime * result + ((getRealPointFee() == null) ? 0 : getRealPointFee().hashCode());
         result = prime * result + ((getBuyerObtainPointFee() == null) ? 0 : getBuyerObtainPointFee().hashCode());
-        result = prime * result + ((getReceivingtime() == null) ? 0 : getReceivingtime().hashCode());
+        result = prime * result + ((getReceivingTime() == null) ? 0 : getReceivingTime().hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
         result = prime * result + ((getTradeMemo() == null) ? 0 : getTradeMemo().hashCode());
         result = prime * result + ((getErpSendCompany() == null) ? 0 : getErpSendCompany().hashCode());
@@ -1696,7 +1728,7 @@ public class TaoOrder implements Serializable {
         sb.append(", pointFee=").append(pointFee);
         sb.append(", realPointFee=").append(realPointFee);
         sb.append(", buyerObtainPointFee=").append(buyerObtainPointFee);
-        sb.append(", receivingtime=").append(receivingtime);
+        sb.append(", receivingtime=").append(receivingTime);
         sb.append(", status=").append(status);
         sb.append(", tradeMemo=").append(tradeMemo);
         sb.append(", erpSendCompany=").append(erpSendCompany);

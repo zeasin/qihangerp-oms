@@ -77,7 +77,7 @@ public class TaoOrderItem implements Serializable {
     /**
      * 商品的最小库存单位Sku的id.可以通过taobao.item.sku.get获取详细的Sku信息天猫的SKUID
      */
-    private Long skuId;
+    private String skuId;
 
     /**
      * 商家外部编码(可与商家外部系统对接)。
@@ -109,10 +109,6 @@ public class TaoOrderItem implements Serializable {
      */
     private Integer num;
 
-    /**
-     * 订单快照URL
-     */
-    private String snapshotUrl;
 
     /**
      * 订单超时到期时间。格式:yyyy-MM-dd HH:mm:ss
@@ -167,7 +163,7 @@ public class TaoOrderItem implements Serializable {
     /**
      * 子订单发货时间，当卖家对订单进行了多次发货，子订单的发货时间和主订单的发货时间可能不一样了，那么就需要以子订单的时间为准。（没有进行多次发货的订单，主订单的发货时间和子订单的发货时间都一样）
      */
-    private Date consignTime;
+    private String consignTime;
 
     /**
      * 子订单的运送方式（卖家对订单进行多次发货之后，一个主订单下的子订单的运送方式可能不同，用order.shipping_type来区分子订单的运送方式）
@@ -405,14 +401,14 @@ PAY_PENDING(国际信用卡支付付款确认中)
     /**
      * 商品的最小库存单位Sku的id.可以通过taobao.item.sku.get获取详细的Sku信息天猫的SKUID
      */
-    public Long getSkuId() {
+    public String getSkuId() {
         return skuId;
     }
 
     /**
      * 商品的最小库存单位Sku的id.可以通过taobao.item.sku.get获取详细的Sku信息天猫的SKUID
      */
-    public void setSkuId(Long skuId) {
+    public void setSkuId(String skuId) {
         this.skuId = skuId;
     }
 
@@ -498,20 +494,6 @@ PAY_PENDING(国际信用卡支付付款确认中)
      */
     public void setNum(Integer num) {
         this.num = num;
-    }
-
-    /**
-     * 订单快照URL
-     */
-    public String getSnapshotUrl() {
-        return snapshotUrl;
-    }
-
-    /**
-     * 订单快照URL
-     */
-    public void setSnapshotUrl(String snapshotUrl) {
-        this.snapshotUrl = snapshotUrl;
     }
 
     /**
@@ -657,14 +639,14 @@ PAY_PENDING(国际信用卡支付付款确认中)
     /**
      * 子订单发货时间，当卖家对订单进行了多次发货，子订单的发货时间和主订单的发货时间可能不一样了，那么就需要以子订单的时间为准。（没有进行多次发货的订单，主订单的发货时间和子订单的发货时间都一样）
      */
-    public Date getConsignTime() {
+    public String getConsignTime() {
         return consignTime;
     }
 
     /**
      * 子订单发货时间，当卖家对订单进行了多次发货，子订单的发货时间和主订单的发货时间可能不一样了，那么就需要以子订单的时间为准。（没有进行多次发货的订单，主订单的发货时间和子订单的发货时间都一样）
      */
-    public void setConsignTime(Date consignTime) {
+    public void setConsignTime(String consignTime) {
         this.consignTime = consignTime;
     }
 
@@ -830,7 +812,6 @@ PAY_PENDING(国际信用卡支付付款确认中)
             && (this.getItemMealId() == null ? other.getItemMealId() == null : this.getItemMealId().equals(other.getItemMealId()))
             && (this.getItemMealName() == null ? other.getItemMealName() == null : this.getItemMealName().equals(other.getItemMealName()))
             && (this.getNum() == null ? other.getNum() == null : this.getNum().equals(other.getNum()))
-            && (this.getSnapshotUrl() == null ? other.getSnapshotUrl() == null : this.getSnapshotUrl().equals(other.getSnapshotUrl()))
             && (this.getTimeoutActionTime() == null ? other.getTimeoutActionTime() == null : this.getTimeoutActionTime().equals(other.getTimeoutActionTime()))
             && (this.getItemMemo() == null ? other.getItemMemo() == null : this.getItemMemo().equals(other.getItemMemo()))
             && (this.getBuyerRate() == null ? other.getBuyerRate() == null : this.getBuyerRate().equals(other.getBuyerRate()))
@@ -876,7 +857,6 @@ PAY_PENDING(国际信用卡支付付款确认中)
         result = prime * result + ((getItemMealId() == null) ? 0 : getItemMealId().hashCode());
         result = prime * result + ((getItemMealName() == null) ? 0 : getItemMealName().hashCode());
         result = prime * result + ((getNum() == null) ? 0 : getNum().hashCode());
-        result = prime * result + ((getSnapshotUrl() == null) ? 0 : getSnapshotUrl().hashCode());
         result = prime * result + ((getTimeoutActionTime() == null) ? 0 : getTimeoutActionTime().hashCode());
         result = prime * result + ((getItemMemo() == null) ? 0 : getItemMemo().hashCode());
         result = prime * result + ((getBuyerRate() == null) ? 0 : getBuyerRate().hashCode());
@@ -925,7 +905,6 @@ PAY_PENDING(国际信用卡支付付款确认中)
         sb.append(", itemMealId=").append(itemMealId);
         sb.append(", itemMealName=").append(itemMealName);
         sb.append(", num=").append(num);
-        sb.append(", snapshotUrl=").append(snapshotUrl);
         sb.append(", timeoutActionTime=").append(timeoutActionTime);
         sb.append(", itemMemo=").append(itemMemo);
         sb.append(", buyerRate=").append(buyerRate);

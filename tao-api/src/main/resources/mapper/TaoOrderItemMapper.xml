@@ -25,7 +25,6 @@
             <result property="itemMealId" column="item_meal_id" jdbcType="VARCHAR"/>
             <result property="itemMealName" column="item_meal_name" jdbcType="VARCHAR"/>
             <result property="num" column="num" jdbcType="INTEGER"/>
-            <result property="snapshotUrl" column="snapshot_url" jdbcType="VARCHAR"/>
             <result property="timeoutActionTime" column="timeout_action_time" jdbcType="TIMESTAMP"/>
             <result property="itemMemo" column="item_memo" jdbcType="VARCHAR"/>
             <result property="buyerRate" column="buyer_rate" jdbcType="VARCHAR"/>
@@ -54,7 +53,7 @@
         title,pic_path,price,
         num_iid,sku_id,outer_iid,
         outer_sku_id,sku_properties_name,item_meal_id,
-        item_meal_name,num,snapshot_url,
+        item_meal_name,num,
         timeout_action_time,item_memo,buyer_rate,
         seller_rate,seller_type,cid,
         is_oversold,end_time,order_from,

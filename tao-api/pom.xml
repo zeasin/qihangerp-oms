@@ -143,9 +143,11 @@
         <dependency>
             <groupId>taobao</groupId>
             <artifactId>taobao-sdk</artifactId>
-            <version>0.20200820</version>
+            <version>0.20240301</version>
+<!--            <version>0.20200820</version>-->
             <scope>system</scope>
-            <systemPath>${project.basedir}/libs/taobao-sdk-0.20200820.jar</systemPath>
+<!--            <systemPath>${project.basedir}/libs/taobao-sdk-0.20200820.jar</systemPath>-->
+            <systemPath>${project.basedir}/libs/taobao-sdk-0.20240301.jar</systemPath>
         </dependency>
     </dependencies>
     <dependencyManagement>
