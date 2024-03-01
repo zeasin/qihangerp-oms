@@ -11,7 +11,7 @@
  Target Server Version : 80032
  File Encoding         : 65001
 
- Date: 01/03/2024 18:47:38
+ Date: 01/03/2024 19:24:01
 */
 
 SET NAMES utf8mb4;
@@ -88,7 +88,7 @@ CREATE TABLE `sys_platform`  (
 -- Records of sys_platform
 -- ----------------------------
 INSERT INTO `sys_platform` VALUES (1, '天猫', 'TMALL', '12175777', '368dbbd183a77d551735be13f59bbcda');
-INSERT INTO `sys_platform` VALUES (2, '京东', 'JD', NULL, NULL);
+INSERT INTO `sys_platform` VALUES (2, '京东', 'JD', 'FB4CC3688E6F9065D4FF510A53BB60FF', '40e8c8b2427f4e6db8f4a39af27d719e');
 INSERT INTO `sys_platform` VALUES (3, '抖店', 'DOUDIAN', NULL, NULL);
 INSERT INTO `sys_platform` VALUES (4, '拼多多', 'PDD', NULL, NULL);
 

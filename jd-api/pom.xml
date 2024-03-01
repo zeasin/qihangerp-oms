@@ -1,20 +1,18 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.0.2</version>
-        <relativePath/>
+        <groupId>com.qihang</groupId>
+        <artifactId>qihang-oms</artifactId>
+        <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>tao-api</artifactId>
+    <groupId>com.qihang.jd</groupId>
+    <artifactId>jd-api</artifactId>
     <packaging>jar</packaging>
 
-    <name>tao-api</name>
+    <name>jd-api</name>
     <url>http://maven.apache.org</url>
-
     <properties>
         <java.version>17</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -52,87 +50,20 @@
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.boot</groupId>-->
-<!--            <artifactId>spring-boot-starter-security</artifactId>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.boot</groupId>-->
-<!--            <artifactId>spring-boot-starter-data-redis</artifactId>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>com.alibaba.fastjson2</groupId>-->
-<!--            <artifactId>fastjson2</artifactId>-->
-<!--            <version>2.0.43</version>-->
-<!--        </dependency>-->
-<!--        &lt;!&ndash; Token生成与解析&ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>io.jsonwebtoken</groupId>-->
-<!--            <artifactId>jjwt-api</artifactId>-->
-<!--            <version>${jwt.version}</version>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>io.jsonwebtoken</groupId>-->
-<!--            <artifactId>jjwt-impl</artifactId>-->
-<!--            <version>${jwt.version}</version>-->
-<!--            <scope>runtime</scope>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>io.jsonwebtoken</groupId>-->
-<!--            <artifactId>jjwt-jackson</artifactId>-->
-<!--            <version>${jwt.version}</version>-->
-<!--            <scope>runtime</scope>-->
-<!--        </dependency>-->
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.33</version>
-        </dependency>
-<!--        <dependency>-->
-<!--            <groupId>com.alibaba</groupId>-->
-<!--            <artifactId>druid-spring-boot-starter</artifactId>-->
-<!--            <version>1.2.21</version>-->
-<!--        </dependency>-->
-<!--        &lt;!&ndash; https://mvnrepository.com/artifact/com.baomidou/mybatis-plus-spring-boot3-starter &ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>com.baomidou</groupId>-->
-<!--            <artifactId>mybatis-plus-spring-boot3-starter</artifactId>-->
-<!--            <version>3.5.5</version>-->
-<!--        </dependency>-->
-<!--                <dependency>-->
-<!--                    <groupId>com.baomidou</groupId>-->
-<!--                    <artifactId>mybatis-plus-boot-starter</artifactId>-->
-<!--                    <version>3.5.3</version>-->
-<!--                </dependency>-->
-        <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
-            <version>3.5.5</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>3.12.0</version>
-        </dependency>
         <dependency>
             <groupId>com.qihang</groupId>
             <artifactId>security</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.18.30</version>
-            <scope>provided</scope>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.33</version>
         </dependency>
         <dependency>
-            <groupId>taobao</groupId>
-            <artifactId>taobao-sdk</artifactId>
-            <version>0.20240301</version>
-<!--            <version>0.20200820</version>-->
-            <scope>system</scope>
-<!--            <systemPath>${project.basedir}/libs/taobao-sdk-0.20200820.jar</systemPath>-->
-            <systemPath>${project.basedir}/libs/taobao-sdk-0.20240301.jar</systemPath>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
+            <version>3.5.5</version>
         </dependency>
     </dependencies>
     <dependencyManagement>
