@@ -10,30 +10,7 @@
 后续计划推出订单打单（电子面单打印）功能。
 
 
-## 二、软件架构
-### 1、后端
-+ jdk：17
-+ SpringBoot：3.0.2
-  + spring-boot-starter-security 
-+ SpringCloudAlibaba：2022.0.0.0
-  + Nacos
-  + SpringCloud Gateway
-  + spring-cloud-starter-loadbalancer
-
-### 2、前端
-+ vue3 + element
-
-### 3、存储
-+ MySQL8
-
-### 4、中间件
-+ Redis：7.x（缓存：在线用户、字典、系统配置）
-+ Nacos：2.2.0（配置中心、注册中心）
-+ Sentinel（分布式流量治理组件）
-
-  `java -Dserver.port=8888 -Dcsp.sentinel.dashboard.server=localhost:8888 -Dproject.name=sentinel-dashboard -jar sentinel-dashboard.jar`
-
-## 三、主体功能
+## 二、主体功能
 
 ### 1、订单管理
 + 从平台同步订单
@@ -60,21 +37,49 @@
   + 发货地址库
   + 发货物流公司库
 
-## 四、项目说明
-### 1、项目结构
-#### 1.1 core
+## 三、软件架构
+### 1、开发环境级组件
+#### 1.1 开发环境
++ Jdk：17
++ Nodejs：v20.11.0
+
+#### 1.2 项目组件
+##### 后端核心组件
++ SpringBoot：3.0.2
+  + spring-boot-starter-security
++ SpringCloudAlibaba：2022.0.0.0
+  + Nacos
+  + SpringCloud Gateway
+  + spring-cloud-starter-loadbalancer
+
+##### 前端框架及组件
++ vue3 
++ element-plus
+
+#### 1.3、存储及中间件
+
++ MySQL8
++ Redis：7.x（缓存：在线用户、字典、系统配置）
++ Nacos：2.2.0（配置中心、注册中心）
++ Sentinel（分布式流量治理组件）
+
+  `java -Dserver.port=8888 -Dcsp.sentinel.dashboard.server=localhost:8888 -Dproject.name=sentinel-dashboard -jar sentinel-dashboard.jar`
+
+
+### 2、项目结构
+#### 2.1 core
 项目公共模块包括：
 
 + `common`:公共类型
 
 + `security`:公共权限验证模块
 
-#### 1.2 api
+#### 2.2 api
 网关项目，负责微服务接口转发，前端统一通过网关调用其他微服务接口；
 
 采用`gateway`进行api分发，引入Sentinel进行流量治理。
 
-#### 1.3 sys-api
+#### 2.3 sys-api
 oms项目系统微服务，主要功能包括：
 
 + 用户
@@ -82,32 +87,32 @@ oms项目系统微服务，主要功能包括：
 + 菜单
 + 公共配置
 
-#### 1.4 tao-api
+#### 2.4 tao-api
 淘宝开放平台接口api
 
-#### 1.5 jd-api
+#### 2.5 jd-api
 京东开放平台接口api
 
-#### 1.6 dou-api
+#### 2.6 dou-api
 抖店开放平台接口api
 
-#### 1.7 pdd-api
+#### 2.7 pdd-api
 拼多多开放平台接口api
 
-### 2、运行环境
-#### 2.1、配置环境
+### 3、运行说明
+#### 3.1、启动环境
 
 1. 启动MySQL8
 2. 启动Redis7
 3. 启动Sentinel1.8.7控制台
 4. 启动Nacos2.2.0
 
-#### 2.2、启动服务(项目)
+#### 3.2、启动服务(项目)
 1.  启动业务微服务（tao-api、jd-api等平台接口api微服务）
 2.  启动sys-api(系统api)
 3.  启动微服务网关（api）
 
-#### 2.3、运行前端
+#### 3.3、运行前端
 + Nodejs版本：v20.11.0
 + 进入`vue3`文件夹
 + 安装pnpm：`npm install pnpm -g`
@@ -115,18 +120,19 @@ oms项目系统微服务，主要功能包括：
 + 运行`pnpm run dev`
 + 浏览网页`http://localhost:3000`
 
-### 3、项目部署
+### 4、项目部署
 
-#### 3.1 打包
+#### 4.1 打包
 
-#### 后端打包
+##### 后端打包
+`mvn clean package`
 
-#### 前端打包
+##### 前端打包
+`pnpm run build:prod`
 
+
+#### 4.2 Nginx配置
 ```
-# 项目打包
-pnpm run build:prod
-
 # 上传文件至远程服务器
 将打包生成在 `dist` 目录下的文件拷贝至 `/usr/share/nginx/html` 目录
 
@@ -144,8 +150,6 @@ server {
 	}
 }
 ```
-#### 3.2 Nginx配置
-
 
 
 ## 捐献作者
