@@ -24,6 +24,8 @@
 ### 4、中间件
 + Redis：7.x（缓存：在线用户、字典、系统配置）
 + Nacos：2.2.0（配置中心、注册中心）
++ Sentinel（分布式流量治理组件）
+  `java -Dserver.port=8888 -Dcsp.sentinel.dashboard.server=localhost:8888 -Dproject.name=sentinel-dashboard -jar sentinel-dashboard.jar`
 
 ## 项目说明
 ### core

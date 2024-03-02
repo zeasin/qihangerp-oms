@@ -15,6 +15,9 @@ spring:
         server-addr: 127.0.0.1:8848
 #        username: nacos
 #        password: nacos
+    sentinel:
+      transport:
+        dashboard: 127.0.0.1:8888 # sentinel控制台地址
     gateway:
       discovery:
         locator:
