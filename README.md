@@ -3,7 +3,7 @@
 ## 介绍
 启航电商OMS订单处理系统是一套为中小电商企业构建的一套简单实用的第三方平台订单处理系统，本项目后端采用SpringCloudAlibaba 微服务架构，前端采用Vue3开发。
 
-本系统支持多平台订单、售后、发货等接口对接，包括：淘宝、拼多多、抖店、快手小店、小红书等。
+本系统支持多平台订单、售后、发货等接口对接，包括：淘宝、京东、拼多多、抖店，后续计划支出快手商城、小红书等。
 
 ## 软件架构
 ### 1、后端
@@ -25,6 +25,7 @@
 + Redis：7.x（缓存：在线用户、字典、系统配置）
 + Nacos：2.2.0（配置中心、注册中心）
 + Sentinel（分布式流量治理组件）
+
   `java -Dserver.port=8888 -Dcsp.sentinel.dashboard.server=localhost:8888 -Dproject.name=sentinel-dashboard -jar sentinel-dashboard.jar`
 
 ## 项目说明
@@ -49,8 +50,7 @@ oms项目系统微服务，主要功能包括：
 ### tao-api
 淘宝开放平台接口api
 
-### pdd-api
-拼多多开放平台接口api
+
 
 ### jd-api
 京东开放平台接口api
@@ -58,20 +58,21 @@ oms项目系统微服务，主要功能包括：
 ### dou-api
 抖店开放平台接口api
 
-### kuai-api
-快手小店开放平台接口api
+### pdd-api
+拼多多开放平台接口api
 
-### xhs-api
-小红书开放平台接口api
+
 
 ## 运行教程
 ### 1、运行环境所需
 
-1.  启动Nacos
-2.  启动MySQL
-3.  启动Redis
 
-### 2、启动服务
+1. 启动MySQL
+2. 启动Redis
+3. 启动Sentinel控制台
+4. 启动Nacos
+
+### 2、启动服务(项目)
 1.  启动业务微服务（tao-api、jd-api等平台接口api微服务）
 2.  启动sys-api(系统api)
 3.  启动微服务网关（api）
@@ -85,6 +86,12 @@ oms项目系统微服务，主要功能包括：
 + 浏览网页`http://localhost:3000`
 
 ## 项目部署
+
+### 打包
+
+#### 后端打包
+
+#### 前端打包
 
 ```
 # 项目打包
