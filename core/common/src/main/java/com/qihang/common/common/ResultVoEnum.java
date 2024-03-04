@@ -6,11 +6,11 @@ package com.qihang.common.common;
  * @author qlp
  * @date 2019-04-10 10:31
  */
-public enum EnumResultVo {
+public enum ResultVoEnum {
     SUCCESS("成功", 0),
     NotFound("NotFound", 404),//没有找到
     Unable("Unable", 403),//无法处理
-    NotLogin("未登录", 400),//未登录
+//    NotLogin("未登录", 400),//未登录
     Cancelled("Cancelled", 401),//已经取消的
     StateError("StateError", 402),//状态错误
     Locking("Locking", 405),//锁定，不能操作
@@ -22,21 +22,21 @@ public enum EnumResultVo {
     HasAssociatedData("存在关联数据", 501),//存在关联数据
     Exist("已存在相同的数据", 502),//已存在相同的数据
     SystemException("系统异常", 505),//系统异常
-    TokenFail("token过期", 1401),//ali token过期
+//    TokenFail("token过期", 1401),//ali token过期
     Fail("失败", 1000);
 
     private String name;
     private int index;
 
     // 构造方法
-    private EnumResultVo(String name, int index) {
+    private ResultVoEnum(String name, int index) {
         this.name = name;
         this.index = index;
     }
 
     // 普通方法
     public static String getName(int index) {
-        for (EnumResultVo c : EnumResultVo.values()) {
+        for (ResultVoEnum c : ResultVoEnum.values()) {
             if (c.getIndex() == index) {
                 return c.name;
             }

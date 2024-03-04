@@ -2,14 +2,13 @@ package com.qihang.tao.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.qihang.common.common.EnumResultVo;
+import com.qihang.common.common.ResultVoEnum;
 import com.qihang.tao.domain.TaoRefund;
 import com.qihang.tao.service.TaoRefundService;
 import com.qihang.tao.mapper.TaoRefundMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import javax.crypto.Mac;
 import java.util.Date;
 import java.util.List;
 
@@ -36,7 +35,7 @@ public class TaoRefundServiceImpl extends ServiceImpl<TaoRefundMapper, TaoRefund
             update.setEndTime(refund.getEndTime());
             update.setUpdateTime(new Date());
             mapper.updateById(update);
-            return EnumResultVo.DataExist.getIndex();
+            return ResultVoEnum.DataExist.getIndex();
         }else{
             refund.setShopId(shopId);
             refund.setCreateTime(new Date());

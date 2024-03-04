@@ -1,7 +1,7 @@
 package com.qihang.tao.controller;
 
 import com.qihang.common.common.ApiResult;
-import com.qihang.common.common.EnumResultVo;
+import com.qihang.common.common.ResultVoEnum;
 import com.qihang.common.enums.HttpStatus;
 import com.qihang.tao.api.ApiCommon;
 //import com.qihang.tao.api.ApiResult;
@@ -74,11 +74,11 @@ public class OrderApiController {
         for (var order : upResult.getList()) {
             //插入订单数据
             var result = orderService.saveOrder(req.getShopId(), order);
-            if (result.getCode() == EnumResultVo.DataExist.getIndex()) {
+            if (result.getCode() == ResultVoEnum.DataExist.getIndex()) {
                 //已经存在
                 log.info("/**************主动更新tao订单：开始更新数据库：" + order.getId() + "存在、更新****************/");
                 hasExistOrder++;
-            } else if (result.getCode() == EnumResultVo.SUCCESS.getIndex()) {
+            } else if (result.getCode() == ResultVoEnum.SUCCESS.getIndex()) {
                 log.info("/**************主动更新tao订单：开始更新数据库：" + order.getId() + "不存在、新增****************/");
                 insertSuccess++;
             } else {
@@ -170,11 +170,11 @@ public class OrderApiController {
 
             //插入订单数据
             var result = orderService.saveOrder(req.getShopId(), order);
-            if (result.getCode() == EnumResultVo.DataExist.getIndex()) {
+            if (result.getCode() == ResultVoEnum.DataExist.getIndex()) {
                 //已经存在
                 log.info("/**************主动更新tao订单：开始更新数据库：" + order.getId() + "存在、更新****************/");
                 hasExistOrder++;
-            } else if (result.getCode() == EnumResultVo.SUCCESS.getIndex()) {
+            } else if (result.getCode() == ResultVoEnum.SUCCESS.getIndex()) {
                 log.info("/**************主动更新tao订单：开始更新数据库：" + order.getId() + "不存在、新增****************/");
                 insertSuccess++;
             } else {
@@ -194,11 +194,11 @@ public class OrderApiController {
             for (var order : upResult1.getList()) {
                 //插入订单数据
                 var result = orderService.saveOrder(req.getShopId(), order);
-                if (result.getCode() == EnumResultVo.DataExist.getIndex()) {
+                if (result.getCode() == ResultVoEnum.DataExist.getIndex()) {
                     //已经存在
                     log.info("/**************主动更新tao订单：开始更新数据库：" + order.getId() + "存在、更新****************/");
                     hasExistOrder++;
-                } else if (result.getCode() == EnumResultVo.SUCCESS.getIndex()) {
+                } else if (result.getCode() == ResultVoEnum.SUCCESS.getIndex()) {
                     log.info("/**************主动更新tao订单：开始更新数据库：" + order.getId() + "不存在、新增****************/");
                     insertSuccess++;
                 } else {

@@ -1,24 +1,18 @@
 package com.qihang.tao.controller;
 
 import com.qihang.common.common.ApiResult;
-import com.qihang.common.common.EnumResultVo;
+import com.qihang.common.common.ResultVoEnum;
 import com.qihang.common.enums.HttpStatus;
 import com.qihang.tao.api.ApiCommon;
 import com.qihang.tao.api.GoodsApiHelper;
-import com.qihang.tao.api.OrderApiHelper;
 import com.qihang.tao.common.TaoRequest;
 import com.qihang.tao.domain.TaoGoods;
-import com.qihang.tao.domain.TaoOrder;
 import com.qihang.tao.service.TaoGoodsService;
 import lombok.AllArgsConstructor;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
-import java.util.Map;
 
 @RequestMapping("/goods")
 @RestController
@@ -66,10 +60,10 @@ public class GoodsApiController {
 
         for (var goods:listApiResult.getList()) {
             int result = goodsService.saveAndUpdateGoods(req.getShopId(), goods);
-            if (result == EnumResultVo.DataExist.getIndex()) {
+            if (result == ResultVoEnum.DataExist.getIndex()) {
                 //已经存在
                 hasExistOrder++;
-            } else if (result == EnumResultVo.SUCCESS.getIndex()) {
+            } else if (result == ResultVoEnum.SUCCESS.getIndex()) {
                 insertSuccess++;
             }else {
                 totalError++;
@@ -85,10 +79,10 @@ public class GoodsApiController {
             //循环插入订单数据到数据库
             for (var goods:listApiResult.getList()) {
                 int result = goodsService.saveAndUpdateGoods(req.getShopId(), goods);
-                if (result == EnumResultVo.DataExist.getIndex()) {
+                if (result == ResultVoEnum.DataExist.getIndex()) {
                     //已经存在
                     hasExistOrder++;
-                } else if (result == EnumResultVo.SUCCESS.getIndex()) {
+                } else if (result == ResultVoEnum.SUCCESS.getIndex()) {
                     insertSuccess++;
                 }else {
                     totalError++;

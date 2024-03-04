@@ -3,7 +3,7 @@ package com.qihang.tao.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.qihang.common.common.EnumResultVo;
+import com.qihang.common.common.ResultVoEnum;
 import com.qihang.tao.common.PageQuery;
 import com.qihang.tao.common.PageResult;
 import com.qihang.tao.domain.TaoGoods;
@@ -60,7 +60,7 @@ public class TaoGoodsServiceImpl extends ServiceImpl<TaoGoodsMapper, TaoGoods>
                     skuMapper.insert(sku);
                 }
             }
-            return EnumResultVo.DataExist.getIndex();
+            return ResultVoEnum.DataExist.getIndex();
         }else {
             // 不存在，新增
             goods.setShopId(shopId);

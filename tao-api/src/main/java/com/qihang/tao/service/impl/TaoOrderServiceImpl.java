@@ -2,7 +2,7 @@ package com.qihang.tao.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.qihang.common.common.EnumResultVo;
+import com.qihang.common.common.ResultVoEnum;
 import com.qihang.common.common.ResultVo;
 import com.qihang.tao.domain.TaoOrder;
 import com.qihang.tao.domain.TaoOrderItem;
@@ -69,7 +69,7 @@ public class TaoOrderServiceImpl extends ServiceImpl<TaoOrderMapper, TaoOrder>
                         itemMapper.insert(item);
                     }
                 }
-                return new ResultVo<>(EnumResultVo.DataExist, "订单已经存在，更新成功");
+                return new ResultVo<>(ResultVoEnum.DataExist, "订单已经存在，更新成功");
             } else {
                 // 不存在，新增
                 order.setShopId(shopId);
@@ -79,11 +79,11 @@ public class TaoOrderServiceImpl extends ServiceImpl<TaoOrderMapper, TaoOrder>
                 for (var item : order.getItems()) {
                     itemMapper.insert(item);
                 }
-                return new ResultVo<>(EnumResultVo.SUCCESS, "SUCCESS");
+                return new ResultVo<>(ResultVoEnum.SUCCESS, "SUCCESS");
             }
         } catch (Exception e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            return new ResultVo<>(EnumResultVo.SystemException, "系统异常：" + e.getMessage());
+            return new ResultVo<>(ResultVoEnum.SystemException, "系统异常：" + e.getMessage());
         }
     }
 }

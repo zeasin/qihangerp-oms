@@ -15,23 +15,23 @@ public class ResultVo<T> {
     public ResultVo() {
     }
 
-    public ResultVo(EnumResultVo result) {
+    public ResultVo(ResultVoEnum result) {
         this.code = result.getIndex();
         this.msg = result.getName();
     }
 
-    public ResultVo(EnumResultVo result, String msg, T data) {
+    public ResultVo(ResultVoEnum result, String msg, T data) {
         this.code = result.getIndex();
         this.msg = msg;
         this.data = data;
     }
 
-    public ResultVo(EnumResultVo result, String msg) {
+    public ResultVo(ResultVoEnum result, String msg) {
         this.code = result.getIndex();
         this.msg = msg;
     }
 
-    public ResultVo(EnumResultVo result, T data) {
+    public ResultVo(ResultVoEnum result, T data) {
         this.code = result.getIndex();
         this.msg = result.getName();
         this.data = data;

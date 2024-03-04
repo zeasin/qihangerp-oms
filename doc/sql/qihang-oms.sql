@@ -11,7 +11,7 @@
  Target Server Version : 80032
  File Encoding         : 65001
 
- Date: 01/03/2024 19:24:01
+ Date: 04/03/2024 19:51:08
 */
 
 SET NAMES utf8mb4;
@@ -77,20 +77,22 @@ INSERT INTO `sys_menu` VALUES (117, '菜单管理', 5, 1, 'menu', 'system/menu/i
 DROP TABLE IF EXISTS `sys_platform`;
 CREATE TABLE `sys_platform`  (
   `id` int(0) NOT NULL,
-  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '平台名',
+  `code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '平台编码',
   `app_key` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `app_secret` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `redirect_uri` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '平台回调uri',
+  `server_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '接口访问地址',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_platform
 -- ----------------------------
-INSERT INTO `sys_platform` VALUES (1, '天猫', 'TMALL', '12175777', '368dbbd183a77d551735be13f59bbcda');
-INSERT INTO `sys_platform` VALUES (2, '京东', 'JD', 'FB4CC3688E6F9065D4FF510A53BB60FF', '40e8c8b2427f4e6db8f4a39af27d719e');
-INSERT INTO `sys_platform` VALUES (3, '抖店', 'DOUDIAN', NULL, NULL);
-INSERT INTO `sys_platform` VALUES (4, '拼多多', 'PDD', NULL, NULL);
+INSERT INTO `sys_platform` VALUES (1, '天猫', 'TMALL', '12175777', '368dbbd183a77d551735be13f59bbcda', NULL, NULL);
+INSERT INTO `sys_platform` VALUES (2, '京东', 'JD', 'FB4CC3688E6F9065D4FF510A53BB60FF', '40e8c8b2427f4e6db8f4a39af27d719e', 'http://www.qumei.com', 'https://api.jd.com/routerjson');
+INSERT INTO `sys_platform` VALUES (3, '抖店', 'DOUDIAN', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_platform` VALUES (4, '拼多多', 'PDD', NULL, NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for sys_shop
@@ -121,7 +123,7 @@ CREATE TABLE `sys_shop`  (
 -- Records of sys_shop
 -- ----------------------------
 INSERT INTO `sys_shop` VALUES (1, '天猫旗舰店', 1, '', 98, 1, 0, '', 59972781, '31014100', '7b0769269b0c0ca88949791c14eb3a5c', '6102522199aaa4a42a2e6be95d0a5e18657c1576ec563a0351855490', NULL, NULL, NULL, NULL, 'http://gw.api.taobao.com/router/rest');
-INSERT INTO `sys_shop` VALUES (2, '京东旗舰店', 2, NULL, 9, 0, 0, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_shop` VALUES (2, '京东旗舰店', 2, NULL, 9, 0, 0, NULL, 0, NULL, NULL, '8abd974c62c34778935b34b5952e6f68izdk', 31535999, NULL, '919b21a3b9d247d08d7701cb8bcc2432ote5', NULL, NULL);
 INSERT INTO `sys_shop` VALUES (3, '抖音旗舰店', 3, 'http://openapi.jinritemai.com', 87, 1, 1653672695, NULL, 4463798, '7249607407477720636', '36a12497-fb9d-4b54-8cd1-fd1617346687', '', NULL, NULL, NULL, NULL, '2');
 INSERT INTO `sys_shop` VALUES (5, '拼多多旗舰店', 4, NULL, 99, 1, 1680698886, 'pdd10006159121', 100061591, NULL, NULL, '87f8044d2a5f45a489aa3a952785b0d35e61788a', NULL, NULL, NULL, NULL, NULL);
 
@@ -155,7 +157,7 @@ CREATE TABLE `sys_user`  (
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES (1, 103, 'admin', '启航oms', '00', '280645618@qq.com', '15888888888', '1', '', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '0', '0', '127.0.0.1', '2024-03-01 18:12:57', 'admin', '2023-08-07 19:31:37', '', '2024-03-01 18:12:57', '管理员');
+INSERT INTO `sys_user` VALUES (1, 103, 'admin', '启航oms', '00', '280645618@qq.com', '15888888888', '1', '', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '0', '0', '127.0.0.1', '2024-03-04 13:16:35', 'admin', '2023-08-07 19:31:37', '', '2024-03-04 13:16:34', '管理员');
 
 -- ----------------------------
 -- Table structure for tao_goods
@@ -195,7 +197,7 @@ CREATE TABLE `tao_goods`  (
   `erp_goods_id` int(0) DEFAULT NULL COMMENT 'erp商品id',
   `create_time` datetime(0) DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 102 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for tao_goods_sku
@@ -222,7 +224,7 @@ CREATE TABLE `tao_goods_sku`  (
   `erp_goods_id` int(0) DEFAULT NULL COMMENT 'erp商品id',
   `create_time` datetime(0) DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2282 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for tao_order
@@ -309,7 +311,7 @@ CREATE TABLE `tao_order`  (
   `is_part_consign` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '是否是多次发货的订单如果卖家对订单进行多次发货，则为true否则为false',
   `sid` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '物流运单号',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 117 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '淘宝订单表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1763461704736792578 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '淘宝订单表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of tao_order
@@ -393,7 +395,7 @@ CREATE TABLE `tao_order_item`  (
   `refund_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '最近退款ID',
   `remark` varchar(500) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 125 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '淘宝订单明细表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1763461704749375490 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '淘宝订单明细表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of tao_order_item
@@ -489,7 +491,7 @@ CREATE TABLE `tao_refund`  (
   `update_by` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '更新人',
   `update_time` datetime(0) DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 30 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '淘宝退款订单表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1763489314208354305 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '淘宝退款订单表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of tao_refund

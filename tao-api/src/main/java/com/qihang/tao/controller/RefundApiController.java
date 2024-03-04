@@ -1,7 +1,7 @@
 package com.qihang.tao.controller;
 
 import com.qihang.common.common.ApiResult;
-import com.qihang.common.common.EnumResultVo;
+import com.qihang.common.common.ResultVoEnum;
 import com.qihang.common.enums.HttpStatus;
 import com.qihang.tao.api.ApiCommon;
 import com.qihang.tao.api.RefundApiHelper;
@@ -9,22 +9,13 @@ import com.qihang.tao.common.TaoRequest;
 import com.qihang.tao.domain.TaoRefund;
 import com.qihang.tao.service.TaoRefundService;
 import com.taobao.api.ApiException;
-import com.taobao.api.DefaultTaobaoClient;
-import com.taobao.api.TaobaoClient;
-import com.taobao.api.request.RefundGetRequest;
-import com.taobao.api.response.RefundGetResponse;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.math.BigDecimal;
 
 @AllArgsConstructor
 @RestController
@@ -82,11 +73,11 @@ public class RefundApiController {
 
             //插入订单数据
             var result = refundService.saveAndUpdateRefund(shopId, refund);
-            if (result == EnumResultVo.DataExist.getIndex()) {
+            if (result == ResultVoEnum.DataExist.getIndex()) {
                 //已经存在
                 log.info("/**************主动更新tao退货订单：开始更新数据库：" + refund.getRefundId() + "存在、更新****************/");
                 hasExistOrder++;
-            } else if (result == EnumResultVo.SUCCESS.getIndex()) {
+            } else if (result == ResultVoEnum.SUCCESS.getIndex()) {
                 log.info("/**************主动更新tao退货订单：开始插入数据库：" + refund.getRefundId() + "不存在、新增****************/");
                 insertSuccess++;
             } else {
