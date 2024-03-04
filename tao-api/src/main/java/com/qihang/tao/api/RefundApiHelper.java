@@ -1,5 +1,7 @@
 package com.qihang.tao.api;
 
+import com.qihang.common.common.ApiResult;
+import com.qihang.common.enums.HttpStatus;
 import com.qihang.common.utils.DateUtils;
 import com.qihang.common.utils.StringUtils;
 import com.qihang.tao.domain.TaoRefund;
@@ -62,10 +64,10 @@ public class RefundApiHelper {
         if (rsp.getRefunds() == null) {
             if (!org.springframework.util.StringUtils.isEmpty(rsp.getErrorCode())) {
                 //接口查询错误
-                return new ApiResult(500, "接口调用错误：" + rsp.getMsg() + rsp.getSubMsg());
+                return ApiResult.build(HttpStatus.ERROR, "接口调用错误：" + rsp.getMsg() + rsp.getSubMsg());
             }
             log.info("========增量拉取退款：无退款,{}==========", LocalDateTime.now());
-            return new ApiResult(0, new ArrayList());
+            return ApiResult.build(0, new ArrayList());
         }
 
         //查到了数据
@@ -99,7 +101,7 @@ public class RefundApiHelper {
                 list.add(refund);
             }
         }
-        return new ApiResult(list.size(), list);
+        return ApiResult.build(list.size(), list);
     }
 
     /**

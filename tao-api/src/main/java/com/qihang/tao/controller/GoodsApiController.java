@@ -1,9 +1,9 @@
 package com.qihang.tao.controller;
 
+import com.qihang.common.common.ApiResult;
 import com.qihang.common.common.EnumResultVo;
 import com.qihang.common.enums.HttpStatus;
 import com.qihang.tao.api.ApiCommon;
-import com.qihang.tao.api.ApiResult;
 import com.qihang.tao.api.GoodsApiHelper;
 import com.qihang.tao.api.OrderApiHelper;
 import com.qihang.tao.common.TaoRequest;
@@ -44,11 +44,11 @@ public class GoodsApiController {
     @RequestMapping(value = "/pull_goods", method = RequestMethod.POST)
     public ApiResult<Integer> pullGoodsList(@RequestBody TaoRequest req) throws Exception {
         if (req.getShopId() == null || req.getShopId() <= 0) {
-            return new ApiResult(HttpStatus.PARAMS_ERROR, "参数错误，没有店铺Id");
+            return ApiResult.build(HttpStatus.PARAMS_ERROR, "参数错误，没有店铺Id");
         }
         var checkResult = apiCommon.checkBefore(req.getShopId());
         if (checkResult.getCode() != HttpStatus.SUCCESS) {
-            return new ApiResult(checkResult.getCode(), checkResult.getMsg());
+            return ApiResult.build(checkResult.getCode(), checkResult.getMsg());
         }
         String sessionKey = checkResult.getData().getAccessToken();
         String url = checkResult.getData().getApiRequestUrl();
@@ -98,8 +98,8 @@ public class GoodsApiController {
         }
 
         String msg = "成功，总共找到：" + listApiResult.getTotalRecords() + "条订单，新增：" + insertSuccess + "条，添加错误：" + totalError + "条，更新：" + hasExistOrder + "条";
-        return new ApiResult<>(EnumResultVo.SUCCESS.getIndex(), msg);
-
+//        return new ApiResult<>(EnumResultVo.SUCCESS.getIndex(), msg);
+        return ApiResult.build(HttpStatus.SUCCESS, msg);
     }
 
 }

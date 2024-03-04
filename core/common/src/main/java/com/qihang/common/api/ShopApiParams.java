@@ -1,4 +1,4 @@
-package com.qihang.tao.controller;
+package com.qihang.common.api;
 
 public class ShopApiParams {
     private String appKey;
@@ -6,6 +6,15 @@ public class ShopApiParams {
     private String accessToken;
     private String apiRequestUrl;
     private String tokenRequestUrl;
+    private String serverUrl;
+
+    public String getServerUrl() {
+        return serverUrl;
+    }
+
+    public void setServerUrl(String serverUrl) {
+        this.serverUrl = serverUrl;
+    }
 
     public String getTokenRequestUrl() {
         return tokenRequestUrl;

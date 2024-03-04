@@ -1,9 +1,10 @@
 package com.qihang.tao.api;
 
+import com.qihang.common.common.ApiResult;
 import com.qihang.common.enums.HttpStatus;
 
 
-import com.qihang.tao.api.ApiResult;
+//import com.qihang.tao.api.ApiResult;
 import com.qihang.tao.api.OrderAssembleHelper;
 import com.qihang.tao.domain.TaoOrder;
 import com.taobao.api.ApiException;
@@ -66,12 +67,14 @@ public class OrderApiHelper {
 //        System.out.println(rsp.getBody());
         if(StringUtils.hasText(rsp.getErrorCode())){
             if(rsp.getErrorCode().equals("27")){
-                return new ApiResult(HttpStatus.UNAUTHORIZED, "Token已过期，请重新授权");
+//                return new ApiResult(HttpStatus.UNAUTHORIZED, "Token已过期，请重新授权");
+                return ApiResult.build(HttpStatus.UNAUTHORIZED, "Token已过期，请重新授权");
             }
         }
         if (rsp.getTrades() == null) {
             //接口查询错误
-            return new ApiResult(500, "接口调用错误：" + rsp.getMsg() + rsp.getSubMsg());
+//            return new ApiResult(500, "接口调用错误：" + rsp.getMsg() + rsp.getSubMsg());
+            return ApiResult.build(HttpStatus.ERROR, "接口调用错误：" + rsp.getMsg() + rsp.getSubMsg());
         }
 
         //组合的订单列表
@@ -103,7 +106,8 @@ public class OrderApiHelper {
             }
         }
 
-        return new ApiResult(rsp.getTotalResults().intValue(), orderList);
+//        return new ApiResult(rsp.getTotalResults().intValue(), orderList);
+        return  ApiResult.build(rsp.getTotalResults().intValue(), orderList);
     }
 
 
@@ -145,10 +149,12 @@ public class OrderApiHelper {
         if (rsp.getTrades() == null) {
             if (!StringUtils.isEmpty(rsp.getErrorCode())) {
                 //接口查询错误
-                return new ApiResult(500, "接口调用错误：" + rsp.getMsg() + rsp.getSubMsg());
+//                return new ApiResult(500, "接口调用错误：" + rsp.getMsg() + rsp.getSubMsg());
+                return ApiResult.build(HttpStatus.ERROR,"接口调用错误：" + rsp.getMsg() + rsp.getSubMsg());
             }
             log.info("========增量拉取订单：无订单,{}==========",LocalDateTime.now());
-            return new ApiResult(0, new ArrayList());
+//            return new ApiResult(0, new ArrayList());
+            return ApiResult.build(0,new ArrayList<>());
         }
 
         //组合的订单列表
@@ -169,7 +175,8 @@ public class OrderApiHelper {
                 orderList.add(OrderAssembleHelper.assembleOrder(trade));
             }
         }
-        return new ApiResult(orderList.size(), orderList);
+//        return new ApiResult(orderList.size(), orderList);
+        return ApiResult.build(orderList.size(),orderList);
     }
 
    }

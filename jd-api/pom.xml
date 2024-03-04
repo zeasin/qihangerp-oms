@@ -1,12 +1,17 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+<!--    <parent>-->
+<!--        <groupId>com.qihang</groupId>-->
+<!--        <artifactId>qihang-oms</artifactId>-->
+<!--        <version>1.0-SNAPSHOT</version>-->
+<!--    </parent>-->
     <parent>
-        <groupId>com.qihang</groupId>
-        <artifactId>qihang-oms</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.0.2</version>
+        <relativePath/>
     </parent>
-
     <groupId>com.qihang.jd</groupId>
     <artifactId>jd-api</artifactId>
     <packaging>jar</packaging>
@@ -76,6 +81,12 @@
             <groupId>org.codehaus.jackson</groupId>
             <artifactId>jackson-mapper-asl</artifactId>
             <version>1.9.13</version> <!-- jd-sdk依赖 -->
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.30</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
     <dependencyManagement>

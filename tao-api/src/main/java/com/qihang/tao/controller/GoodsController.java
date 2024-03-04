@@ -2,7 +2,7 @@ package com.qihang.tao.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.qihang.tao.common.ApiResult;
+import com.qihang.common.common.ApiResult;
 import com.qihang.tao.common.PageQuery;
 import com.qihang.tao.common.PageResult;
 import com.qihang.tao.domain.TaoGoods;

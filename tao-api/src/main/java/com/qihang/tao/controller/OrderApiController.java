@@ -1,23 +1,18 @@
 package com.qihang.tao.controller;
 
+import com.qihang.common.common.ApiResult;
 import com.qihang.common.common.EnumResultVo;
 import com.qihang.common.enums.HttpStatus;
 import com.qihang.tao.api.ApiCommon;
-import com.qihang.tao.api.ApiResult;
+//import com.qihang.tao.api.ApiResult;
 import com.qihang.tao.api.OrderApiHelper;
-import com.qihang.tao.common.EnumShopType;
-import com.qihang.tao.common.ServerConfig;
 import com.qihang.tao.common.TaoRequest;
-import com.qihang.tao.domain.SysPlatform;
 import com.qihang.tao.domain.TaoOrder;
-import com.qihang.tao.service.SysPlatformService;
-import com.qihang.tao.service.SysShopService;
 import com.qihang.tao.service.TaoOrderService;
 import com.taobao.api.ApiException;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -41,14 +36,14 @@ public class OrderApiController {
      */
     @GetMapping("/pull_order_tao")
     @ResponseBody
-    public com.qihang.tao.common.ApiResult<Object> pullIncrementOrder(TaoRequest req) throws ApiException {
+    public ApiResult<Object> pullIncrementOrder(TaoRequest req) throws ApiException {
         log.info("/**************增量拉取tao订单****************/");
         if (req.getShopId() == null || req.getShopId() <= 0) {
-            return com.qihang.tao.common.ApiResult.build(HttpStatus.PARAMS_ERROR, "参数错误，没有店铺Id");
+            return ApiResult.build(HttpStatus.PARAMS_ERROR, "参数错误，没有店铺Id");
         }
         var checkResult = apiCommon.checkBefore(req.getShopId());
         if (checkResult.getCode() != HttpStatus.SUCCESS) {
-            return com.qihang.tao.common.ApiResult.build(checkResult.getCode(), checkResult.getMsg(),checkResult.getData());
+            return ApiResult.build(checkResult.getCode(), checkResult.getMsg(),checkResult.getData());
         }
         String sessionKey = checkResult.getData().getAccessToken();
         String url = checkResult.getData().getApiRequestUrl();
@@ -62,12 +57,12 @@ public class OrderApiController {
         //第一次获取
         ApiResult<TaoOrder> upResult = OrderApiHelper.pullIncrementOrder(pageIndex, pageSize, url, appKey, appSecret, sessionKey);
 
-        if (upResult.getCode().intValue() != 0) {
+        if (upResult.getCode() != 0) {
             log.info("/**************主动更新tao订单：第一次获取结果失败：" + upResult.getMsg() + "****************/");
-            if(upResult.getCode().intValue() == HttpStatus.UNAUTHORIZED){
-                return com.qihang.tao.common.ApiResult.build(HttpStatus.UNAUTHORIZED, "Token已过期，请重新授权",checkResult.getData());
+            if(upResult.getCode() == HttpStatus.UNAUTHORIZED){
+                return ApiResult.build(HttpStatus.UNAUTHORIZED, "Token已过期，请重新授权",checkResult.getData());
             }
-            return com.qihang.tao.common.ApiResult.build(HttpStatus.SYSTEM_EXCEPTION, upResult.getMsg());
+            return ApiResult.build(HttpStatus.SYSTEM_EXCEPTION, upResult.getMsg());
         }
 
         log.info("/**************主动更新tao订单：第一次获取结果：总记录数" + upResult.getTotalRecords() + "****************/");
@@ -94,7 +89,7 @@ public class OrderApiController {
 
         String msg = "成功，总共找到：" + upResult.getTotalRecords() + "条订单，新增：" + insertSuccess + "条，添加错误：" + totalError + "条，更新：" + hasExistOrder + "条";
         log.info("/**************主动更新tao订单：END：" + msg + "****************/");
-        return com.qihang.tao.common.ApiResult.build(HttpStatus.SUCCESS, msg);
+        return ApiResult.build(HttpStatus.SUCCESS, msg);
     }
 
     /**
@@ -106,14 +101,14 @@ public class OrderApiController {
      */
     @GetMapping("/pull_order_tao_all")
     @ResponseBody
-    public com.qihang.tao.common.ApiResult<Object> orderPull(TaoRequest req) throws ApiException {
+    public ApiResult<Object> orderPull(TaoRequest req) throws ApiException {
         log.info("/**************主动更新tao订单****************/");
         if (req.getShopId() == null || req.getShopId() <= 0) {
-            return com.qihang.tao.common.ApiResult.build(HttpStatus.PARAMS_ERROR, "参数错误，没有店铺Id");
+            return ApiResult.build(HttpStatus.PARAMS_ERROR, "参数错误，没有店铺Id");
         }
         var checkResult = apiCommon.checkBefore(req.getShopId());
         if (checkResult.getCode() != HttpStatus.SUCCESS) {
-            return com.qihang.tao.common.ApiResult.build(checkResult.getCode(), checkResult.getMsg(),checkResult.getData());
+            return ApiResult.build(checkResult.getCode(), checkResult.getMsg(),checkResult.getData());
         }
         String sessionKey = checkResult.getData().getAccessToken();
         String url = checkResult.getData().getApiRequestUrl();
@@ -157,12 +152,12 @@ public class OrderApiController {
         //第一次获取
         ApiResult<TaoOrder> upResult = OrderApiHelper.pullOrder(pageIndex, pageSize, url, appKey, appSecret, sessionKey);
 
-        if (upResult.getCode().intValue() != 0) {
+        if (upResult.getCode() != 0) {
             log.info("/**************主动更新tao订单：第一次获取结果失败：" + upResult.getMsg() + "****************/");
-            if(upResult.getCode().intValue() == HttpStatus.UNAUTHORIZED){
-                return com.qihang.tao.common.ApiResult.build(HttpStatus.UNAUTHORIZED, "Token已过期，请重新授权",checkResult.getData());
+            if(upResult.getCode() == HttpStatus.UNAUTHORIZED){
+                return ApiResult.build(HttpStatus.UNAUTHORIZED, "Token已过期，请重新授权",checkResult.getData());
             }
-            return com.qihang.tao.common.ApiResult.build(HttpStatus.SYSTEM_EXCEPTION, upResult.getMsg());
+            return ApiResult.build(HttpStatus.SYSTEM_EXCEPTION, upResult.getMsg());
         }
 
         log.info("/**************主动更新tao订单：第一次获取结果：总记录数" + upResult.getTotalRecords() + "****************/");
@@ -215,7 +210,7 @@ public class OrderApiController {
         }
         String msg = "成功，总共找到：" + upResult.getTotalRecords() + "条订单，新增：" + insertSuccess + "条，添加错误：" + totalError + "条，更新：" + hasExistOrder + "条";
         log.info("/**************主动更新tao订单：END：" + msg + "****************/");
-        return com.qihang.tao.common.ApiResult.build(HttpStatus.SUCCESS, msg);
+        return ApiResult.build(HttpStatus.SUCCESS, msg);
 
     }
 

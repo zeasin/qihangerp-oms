@@ -1,9 +1,9 @@
 package com.qihang.tao.controller;
 
+import com.qihang.common.common.ApiResult;
 import com.qihang.common.common.EnumResultVo;
 import com.qihang.common.enums.HttpStatus;
 import com.qihang.tao.api.ApiCommon;
-import com.qihang.tao.api.ApiResult;
 import com.qihang.tao.api.RefundApiHelper;
 import com.qihang.tao.common.TaoRequest;
 import com.qihang.tao.domain.TaoRefund;
@@ -44,13 +44,14 @@ public class RefundApiController {
     public ApiResult<String> refundOrderPull(@RequestBody TaoRequest taoRequest) throws ApiException {
         log.info("/**************主动更新tao退货订单****************/");
         if (taoRequest.getShopId() == null || taoRequest.getShopId() <= 0) {
-            return new ApiResult<>(EnumResultVo.ParamsError.getIndex(), "参数错误，没有店铺Id");
+//            return new ApiResult<>(EnumResultVo.ParamsError.getIndex(), "参数错误，没有店铺Id");
+            return ApiResult.build(HttpStatus.PARAMS_ERROR,  "参数错误，没有店铺Id");
         }
         Integer shopId = taoRequest.getShopId();
         var checkResult = apiCommon.checkBefore(shopId);
 
         if (checkResult.getCode() != HttpStatus.SUCCESS) {
-            return new ApiResult<>(checkResult.getCode(), checkResult.getMsg());
+            return ApiResult.build(checkResult.getCode(), checkResult.getMsg());
         }
 
         String sessionKey = checkResult.getData().getAccessToken();
@@ -65,9 +66,10 @@ public class RefundApiController {
         //第一次获取
         ApiResult<TaoRefund> upResult = RefundApiHelper.pullRefund(pageIndex, pageSize, url, appKey, appSecret, sessionKey);
 
-        if (upResult.getCode().intValue() != 0) {
+        if (upResult.getCode() != 0) {
             log.info("/**************主动更新tao退货订单：第一次获取结果失败：" + upResult.getMsg() + "****************/");
-            return new ApiResult<>(EnumResultVo.SystemException.getIndex(), upResult.getMsg());
+//            return new ApiResult<>(EnumResultVo.SystemException.getIndex(), upResult.getMsg());
+            return ApiResult.build(HttpStatus.ERROR ,upResult.getMsg());
         }
 
         log.info("/**************主动更新tao退货订单：第一次获取结果：总记录数" + upResult.getTotalRecords() + "****************/");
@@ -95,7 +97,8 @@ public class RefundApiController {
 
         String msg = "成功，总共找到：" + upResult.getTotalRecords() + "条订单，新增：" + insertSuccess + "条，添加错误：" + totalError + "条，更新：" + hasExistOrder + "条";
         log.info("/**************主动更新tao订单：END：" + msg + "****************/");
-        return new ApiResult<>(EnumResultVo.SUCCESS.getIndex(), msg);
+//        return new ApiResult<>(EnumResultVo.SUCCESS.getIndex(), msg);
+        return ApiResult.build(HttpStatus.SUCCESS, msg);
     }
 
     /**

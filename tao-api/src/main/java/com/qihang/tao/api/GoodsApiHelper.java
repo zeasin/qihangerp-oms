@@ -1,5 +1,6 @@
 package com.qihang.tao.api;
 
+import com.qihang.common.common.ApiResult;
 import com.qihang.tao.domain.TaoGoods;
 import com.qihang.tao.domain.TaoGoodsSku;
 import com.qihang.tao.domain.TaoOrder;
@@ -33,7 +34,7 @@ public class GoodsApiHelper {
         req.setPageSize(pageSize);
         ItemsOnsaleGetResponse rsp = client.execute(req, sessionKey);
         if (rsp.getItems() == null) {
-            return new ApiResult(0, new ArrayList());
+            return ApiResult.build(0, new ArrayList());
         }
         List<TaoGoods> goodsList = new ArrayList<>();
         for (Item item : rsp.getItems()) {
@@ -64,7 +65,7 @@ public class GoodsApiHelper {
             goods.setSkus(pullSku(client, sessionKey, item.getNumIid()));
             goodsList.add(goods);
         }
-        return new ApiResult(rsp.getTotalResults().intValue(), goodsList);
+        return ApiResult.build(rsp.getTotalResults().intValue(), goodsList);
     }
 
     private static List<TaoGoodsSku> pullSku(TaobaoClient client, String sessionKey, Long numIid) {
