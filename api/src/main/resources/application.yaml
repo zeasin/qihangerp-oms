@@ -29,6 +29,12 @@ spring:
             - Path=/api/tao-api/**
           filters:
             - StripPrefix=2
+        - id: jd_api_route
+          uri: lb://jd-api
+          predicates:
+            - Path=/api/jd-api/**
+          filters:
+            - StripPrefix=2
         - id: sys_api_route
           uri: lb://sys-api
           predicates:
