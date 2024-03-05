@@ -25,8 +25,8 @@ import org.springframework.web.bind.annotation.RestController;
 @AllArgsConstructor
 public class OrderApiController {
     private final ApiCommon apiCommon;
-    @RequestMapping(value = "/pull_order", method = RequestMethod.POST)
-    public Object pullGoodsList(@RequestBody PullRequest params) throws Exception {
+    @RequestMapping(value = "/pull_list", method = RequestMethod.POST)
+    public Object pullList(@RequestBody PullRequest params) throws Exception {
         if (params.getShopId() == null || params.getShopId() <= 0) {
 //            return ApiResul new ApiResult(HttpStatus.PARAMS_ERROR, "参数错误，没有店铺Id");
             return ApiResult.build(HttpStatus.PARAMS_ERROR, "参数错误，没有店铺Id");
@@ -57,15 +57,19 @@ public class OrderApiController {
 //        PopOrderSearchResponse response=client.execute(request);
 //        System.out.println(response);
 
+        //https://open.jd.com/home/home/#/doc/api?apiCateId=55&apiId=2388&apiName=jingdong.pop.order.enSearch
         PopOrderEnSearchRequest request =new PopOrderEnSearchRequest();
-        request.setStartDate("2020-04-04 00:20:35");
-        request.setEndDate("2020-04-04 00:20:35");
-        request.setOrderState("21");
+        request.setStartDate("2024-02-06 00:20:35");
+        request.setEndDate("2024-03-05 15:20:35");
+        request.setOrderState("WAIT_GOODS_RECEIVE_CONFIRM");
 //        request.setOptionalFields("orderId,venderId");
 //        request.setSourceId("JOS");
-        request.setOptionalFields("itemInfoList,orderId,isShipmenttype,scDT,idSopShipmenttype,orderStartTime,consigneeInfo");
+        request.setOptionalFields("venderId,orderId,orderType,payType,orderTotalPrice,orderSellerPrice,orderPayment,freightPrice,sellerDiscount,orderState" +
+                ",orderStateRemark,deliveryType,invoiceCode,orderRemark,orderStartTime,orderEndTime,venderRemark,balanceUsed,pin,returnOrder,paymentConfirmTime,waybill,logisticsId,modified" +
+                ",directParentOrderId,parentOrderId,orderSource,storeOrder,realPin,open_id,open_id_buyer" +
+                ",invoiceInfo,invoiceEasyInfo,itemInfoList,isShipmenttype,scDT,idSopShipmenttype,orderStartTime,consigneeInfo,orderMarkDesc");
         request.setPage("1");
-        request.setPageSize("10");
+        request.setPageSize("100");
         request.setSortType(1);
         request.setDateType(0);
         PopOrderEnSearchResponse response=client.execute(request);
@@ -73,3 +77,5 @@ public class OrderApiController {
         return response;
     }
 }
+
+

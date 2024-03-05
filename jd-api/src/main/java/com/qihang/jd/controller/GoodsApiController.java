@@ -29,8 +29,8 @@ import org.springframework.web.bind.annotation.RestController;
 @AllArgsConstructor
 public class GoodsApiController {
     private final String SERVER_URL = "https://api.jd.com/routerjson";
-    @RequestMapping(value = "/pull_goods", method = RequestMethod.POST)
-    public Object pullGoodsList() throws Exception {
+    @RequestMapping(value = "/pull_list", method = RequestMethod.POST)
+    public Object pullList() throws Exception {
         String accessToken = "8abd974c62c34778935b34b5952e6f68izdk";
         String appKey="FB4CC3688E6F9065D4FF510A53BB60FF";
         String appSecret="40e8c8b2427f4e6db8f4a39af27d719e";
@@ -62,16 +62,17 @@ public class GoodsApiController {
 
         //https://open.jd.com/home/home/#/doc/api?apiCateId=48&apiId=1587&apiName=jingdong.ware.read.searchWare4Valid
         WareReadSearchWare4ValidRequest request=new WareReadSearchWare4ValidRequest();
-
-        request.setSearchField("[title]");
+        request.setField("jdPrice,wareId,title,spuId,images,shopId,itemNum,outerId,logo");
+        request.setWareStatusValue("8");
+//        request.setSearchField("[title]");
 
         WareReadSearchWare4ValidResponse response=client.execute(request);
 
         //https://open.jd.com/home/home/#/doc/api?apiCateId=48&apiId=1227&apiName=jingdong.sku.read.searchSkuList
         SkuReadSearchSkuListRequest request1=new SkuReadSearchSkuListRequest();
 
-        request1.setWareId("10223753529");
-        request1.setField("skuId,categoryId,stockNum,wareTitle");
+//        request1.setWareId("10223753529");
+        request1.setField("skuId,categoryId,stockNum,wareTitle,status,multiCateProps,outerId,jdPrice,logo,skuName,parentId,modified,created,saleAttrs,imgTag,currencySpuId");
         SkuReadSearchSkuListResponse response1=client.execute(request1);
         System.out.println(response1);
 //        SpuGetModelOrItemNumListRequest  request=new SpuGetModelOrItemNumListRequest();
@@ -87,21 +88,21 @@ public class GoodsApiController {
 //        request.setUserAgent("zhangsan");
 //        SpuGetModelOrItemNumListResponse response=client.execute(request);
 
-        //https://open.jd.com/home/home/#/doc/api?apiCateId=71&apiId=307&apiName=jingdong.pop.afs.refundapply.querylist
-        PopAfsRefundapplyQuerylistRequest request2=new PopAfsRefundapplyQuerylistRequest();
-//        request2.setStatus("1");
-//        request2.setId("111");
-//        request2.setOrderId("1234");
-//        request2.setBuyerId("abc");
-//        request2.setBuyerName("abc");
-//        request2.setApplyTimeStart("2023-12-01 16:11:40");
-//        request2.setApplyTimeEnd("2023-12-31 16:11:40");
-//        request2.setCheckTimeStart("2023-12-01 16:11:40");
-//        request2.setCheckTimeEnd("2023-12-31 16:11:40");
-        request2.setPageIndex(1);
-        request2.setPageSize(10);
-        PopAfsRefundapplyQuerylistResponse response2=client.execute(request2);
-        System.out.println(request2);
+//        //https://open.jd.com/home/home/#/doc/api?apiCateId=71&apiId=307&apiName=jingdong.pop.afs.refundapply.querylist
+//        PopAfsRefundapplyQuerylistRequest request2=new PopAfsRefundapplyQuerylistRequest();
+////        request2.setStatus("1");
+////        request2.setId("111");
+////        request2.setOrderId("1234");
+////        request2.setBuyerId("abc");
+////        request2.setBuyerName("abc");
+////        request2.setApplyTimeStart("2023-12-01 16:11:40");
+////        request2.setApplyTimeEnd("2023-12-31 16:11:40");
+////        request2.setCheckTimeStart("2023-12-01 16:11:40");
+////        request2.setCheckTimeEnd("2023-12-31 16:11:40");
+//        request2.setPageIndex(1);
+//        request2.setPageSize(10);
+//        PopAfsRefundapplyQuerylistResponse response2=client.execute(request2);
+//        System.out.println(request2);
 
 //        PopAfsRefundapplyQuerybyidRequest request3=new PopAfsRefundapplyQuerybyidRequest();
 //        request3.setRaId(23454754437L);
