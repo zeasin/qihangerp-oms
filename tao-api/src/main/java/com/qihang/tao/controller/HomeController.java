@@ -28,7 +28,7 @@ HomeController {
         //https://open.taobao.com/v2/doc?spm=a219a.15212433.0.0.6aca669aUe3Kme#/abilityToOpen?treeId=780&docType=1&docId=102635
         TaoGoods taoGoods = goodsMapper.selectById(1L);
 
-        return serverName;
+        return "serverName";
     }
 
 }

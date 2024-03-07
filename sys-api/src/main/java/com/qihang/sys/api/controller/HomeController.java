@@ -1,6 +1,6 @@
 package com.qihang.sys.api.controller;
 
-import com.qihang.sys.api.service.EchoService;
+import com.qihang.sys.api.feign.EchoService;
 import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
