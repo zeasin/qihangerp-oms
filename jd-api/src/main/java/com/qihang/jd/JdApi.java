@@ -20,4 +20,11 @@ public class JdApi
         System.out.println( "Hello jd-api!" );
         SpringApplication.run(JdApi.class, args);
     }
+
+    /**
+     * redis消息监听器容器
+     */
+
+
+
 }

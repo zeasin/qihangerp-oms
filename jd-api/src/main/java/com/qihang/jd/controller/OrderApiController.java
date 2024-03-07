@@ -3,17 +3,13 @@ package com.qihang.jd.controller;
 import com.jd.open.api.sdk.DefaultJdClient;
 import com.jd.open.api.sdk.JdClient;
 import com.jd.open.api.sdk.request.order.PopOrderEnSearchRequest;
-import com.jd.open.api.sdk.request.refundapply.PopAfsRefundapplyQuerylistRequest;
-import com.jd.open.api.sdk.request.ware.SkuReadSearchSkuListRequest;
-import com.jd.open.api.sdk.request.ware.WareReadSearchWare4ValidRequest;
 import com.jd.open.api.sdk.response.order.PopOrderEnSearchResponse;
-import com.jd.open.api.sdk.response.refundapply.PopAfsRefundapplyQuerylistResponse;
-import com.jd.open.api.sdk.response.ware.SkuReadSearchSkuListResponse;
-import com.jd.open.api.sdk.response.ware.WareReadSearchWare4ValidResponse;
 import com.qihang.common.common.ApiResult;
 import com.qihang.common.enums.HttpStatus;
 import com.qihang.jd.common.ApiCommon;
 import com.qihang.jd.common.PullRequest;
+import com.qihang.jd.mq.MqMessage;
+import com.qihang.jd.mq.MqUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,8 +21,14 @@ import org.springframework.web.bind.annotation.RestController;
 @AllArgsConstructor
 public class OrderApiController {
     private final ApiCommon apiCommon;
+//    private final RedisCache redisCache;
+    private final MqUtils mqUtils;
+
+
     @RequestMapping(value = "/pull_list", method = RequestMethod.POST)
     public Object pullList(@RequestBody PullRequest params) throws Exception {
+//        Object cacheObject = redisCache.getCacheObject("jdorder");
+
         if (params.getShopId() == null || params.getShopId() <= 0) {
 //            return ApiResul new ApiResult(HttpStatus.PARAMS_ERROR, "参数错误，没有店铺Id");
             return ApiResult.build(HttpStatus.PARAMS_ERROR, "参数错误，没有店铺Id");
@@ -61,7 +63,9 @@ public class OrderApiController {
         PopOrderEnSearchRequest request =new PopOrderEnSearchRequest();
         request.setStartDate("2024-02-06 00:20:35");
         request.setEndDate("2024-03-05 15:20:35");
-        request.setOrderState("WAIT_GOODS_RECEIVE_CONFIRM");
+//        request.setOrderState("WAIT_SELLER_STOCK_OUT,WAIT_GOODS_RECEIVE_CONFIRM,WAIT_SELLER_DELIVERY,PAUSE,FINISHED_L,TRADE_CANCELED,LOCKED,POP_ORDER_PAUSE");
+        request.setOrderState("");
+//        request.setOrderState("ALL");
 //        request.setOptionalFields("orderId,venderId");
 //        request.setSourceId("JOS");
         request.setOptionalFields("venderId,orderId,orderType,payType,orderTotalPrice,orderSellerPrice,orderPayment,freightPrice,sellerDiscount,orderState" +
@@ -73,7 +77,8 @@ public class OrderApiController {
         request.setSortType(1);
         request.setDateType(0);
         PopOrderEnSearchResponse response=client.execute(request);
-
+        MqMessage mqVo = MqMessage.build(1,"52332555000");
+        mqUtils.sendApiMessage(mqVo);
         return response;
     }
 }
