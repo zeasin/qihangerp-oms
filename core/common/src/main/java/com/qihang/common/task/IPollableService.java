@@ -1,4 +1,4 @@
-package com.qihang.sys.api.task.service;
+package com.qihang.common.task;
 
 public interface IPollableService {
     /**
