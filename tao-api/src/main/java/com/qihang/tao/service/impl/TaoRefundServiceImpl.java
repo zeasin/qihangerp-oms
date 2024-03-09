@@ -40,7 +40,7 @@ public class TaoRefundServiceImpl extends ServiceImpl<TaoRefundMapper, TaoRefund
             refund.setShopId(shopId);
             refund.setCreateTime(new Date());
             mapper.insert(refund);
-            return 0;
+            return ResultVoEnum.SUCCESS.getIndex();
         }
 
     }

@@ -140,6 +140,17 @@ public class OOrderServiceImpl extends ServiceImpl<OOrderMapper, OOrder>
         }
         return null;
     }
+
+    @Override
+    public ResultVo<Integer> taoOrderMessage(String orderId) {
+        log.info("Tao订单消息处理"+orderId);
+//        List<JdOrder> jdOrders = jdOrderMapper.selectList(new LambdaQueryWrapper<JdOrder>().eq(JdOrder::getOrderId, orderId));
+//        if(jdOrders == null || jdOrders.size() == 0) {
+//            // 没有找到订单信息
+//            return new ResultVo<>(ResultVoEnum.NotFound,"没有找到TAO订单："+orderId);
+//        }
+        return null;
+    }
 }
 
 

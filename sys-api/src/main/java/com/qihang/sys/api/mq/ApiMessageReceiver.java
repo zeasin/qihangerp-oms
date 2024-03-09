@@ -35,10 +35,10 @@ public class ApiMessageReceiver implements MessageListener {
      */
     @Override
     public void onMessage(Message message, byte[] pattern) {
-        RedisSerializer<String> valueSerializer = redisTemplate.getStringSerializer();
-        String deserialize = valueSerializer.deserialize(message.getBody());
+//        RedisSerializer<String> valueSerializer = redisTemplate.getStringSerializer();
+//        String deserialize = valueSerializer.deserialize(message.getBody());
         //message 和 deserialize 都能拿到msg
-        logger.info("Received <" + message + ">");
+//        logger.info("Received <" + message + ">");
 //        System.out.println("deserialize = " + deserialize);
         String messageContent = new String(message.getBody());
         MqMessage vo = JSON.parseObject(messageContent, MqMessage.class);
@@ -47,10 +47,13 @@ public class ApiMessageReceiver implements MessageListener {
 
         if(vo.getMqType() == MqType.ORDER_MESSAGE){
             // 有新订单，插入新订单到shop_order
-            logger.info("订单消息AAAAAAA");
+            logger.info("订单消息"+messageContent);
             OOrderService orderService = SpringUtils.getBean(OOrderService.class);
-            if(vo.getShopType().getIndex() == EnumShopType.JD.getIndex())
-            orderService.jdOrderMessage(vo.getKeyId());
+            if(vo.getShopType().getIndex() == EnumShopType.JD.getIndex()) {
+                orderService.jdOrderMessage(vo.getKeyId());
+            }else if(vo.getShopType().getIndex() == EnumShopType.TAO.getIndex()) {
+                orderService.taoOrderMessage(vo.getKeyId());
+            }
         }
     }
 }

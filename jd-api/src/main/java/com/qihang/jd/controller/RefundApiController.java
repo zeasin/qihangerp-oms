@@ -50,7 +50,7 @@ public class RefundApiController {
 //        request2.setCheckTimeStart("2023-12-01 16:11:40");
 //        request2.setCheckTimeEnd("2023-12-31 16:11:40");
         request2.setPageIndex(1);
-        request2.setPageSize(10);
+        request2.setPageSize(100);
         PopAfsRefundapplyQuerylistResponse response2=client.execute(request2);
         System.out.println(request2);
         return response2;

@@ -13,4 +13,5 @@ import java.util.List;
 */
 public interface OOrderService extends IService<OOrder> {
     ResultVo<Integer> jdOrderMessage(String orderId);
+    ResultVo<Integer> taoOrderMessage(String orderId);
 }
