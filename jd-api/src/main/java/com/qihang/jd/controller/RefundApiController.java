@@ -6,8 +6,8 @@ import com.jd.open.api.sdk.request.refundapply.PopAfsRefundapplyQuerylistRequest
 import com.jd.open.api.sdk.response.refundapply.PopAfsRefundapplyQuerylistResponse;
 import com.qihang.common.common.ApiResult;
 import com.qihang.common.enums.HttpStatus;
-import com.qihang.jd.common.ApiCommon;
-import com.qihang.jd.common.PullRequest;
+import com.qihang.jd.openApi.ApiCommon;
+import com.qihang.jd.openApi.PullRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

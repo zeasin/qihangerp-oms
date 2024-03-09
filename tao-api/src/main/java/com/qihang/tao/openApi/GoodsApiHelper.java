@@ -1,9 +1,8 @@
-package com.qihang.tao.api;
+package com.qihang.tao.openApi;
 
 import com.qihang.common.common.ApiResult;
 import com.qihang.tao.domain.TaoGoods;
 import com.qihang.tao.domain.TaoGoodsSku;
-import com.qihang.tao.domain.TaoOrder;
 import com.taobao.api.ApiException;
 import com.taobao.api.DefaultTaobaoClient;
 import com.taobao.api.TaobaoClient;

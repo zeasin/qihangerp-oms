@@ -83,6 +83,7 @@
             <artifactId>jackson-mapper-asl</artifactId>
             <version>1.9.13</version> <!-- jd-sdk依赖 -->
         </dependency>
+
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>

@@ -1,19 +1,16 @@
-package com.qihang.tao.api;
+package com.qihang.tao.openApi;
 
 import com.qihang.common.common.ApiResult;
 import com.qihang.common.enums.HttpStatus;
 
 
 //import com.qihang.tao.api.ApiResult;
-import com.qihang.tao.api.OrderAssembleHelper;
 import com.qihang.tao.domain.TaoOrder;
 import com.taobao.api.ApiException;
 import com.taobao.api.DefaultTaobaoClient;
 import com.taobao.api.TaobaoClient;
-import com.taobao.api.request.TopOaidDecryptRequest;
 import com.taobao.api.request.TradesSoldGetRequest;
 import com.taobao.api.request.TradesSoldIncrementGetRequest;
-import com.taobao.api.response.TopOaidDecryptResponse;
 import com.taobao.api.response.TradesSoldGetResponse;
 import com.taobao.api.response.TradesSoldIncrementGetResponse;
 import org.slf4j.Logger;
@@ -21,7 +18,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;

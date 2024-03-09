@@ -1,4 +1,4 @@
-package com.qihang.jd.mq;
+package com.qihang.common.mq;
 
 import lombok.AllArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;

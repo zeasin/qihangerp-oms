@@ -1,9 +1,8 @@
-package com.qihang.tao.api;
+package com.qihang.tao.openApi;
 
 import com.qihang.tao.domain.TaoOrder;
 import com.qihang.tao.domain.TaoOrderItem;
 import com.taobao.api.domain.Trade;
-import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

@@ -1,20 +1,25 @@
 package com.qihang.jd.controller;
 
-import com.jd.open.api.sdk.DefaultJdClient;
-import com.jd.open.api.sdk.JdClient;
-import com.jd.open.api.sdk.request.order.PopOrderEnSearchRequest;
-import com.jd.open.api.sdk.response.order.PopOrderEnSearchResponse;
 import com.qihang.common.common.ApiResult;
+import com.qihang.common.common.ResultVoEnum;
+import com.qihang.common.enums.EnumShopType;
 import com.qihang.common.enums.HttpStatus;
-import com.qihang.jd.common.ApiCommon;
-import com.qihang.jd.common.PullRequest;
-import com.qihang.jd.mq.MqMessage;
-import com.qihang.jd.mq.MqUtils;
+import com.qihang.common.mq.MqType;
+import com.qihang.jd.domain.JdOrder;
+import com.qihang.jd.openApi.ApiCommon;
+import com.qihang.jd.openApi.OrderApiHelper;
+import com.qihang.jd.openApi.PullRequest;
+import com.qihang.common.mq.MqMessage;
+import com.qihang.common.mq.MqUtils;
+import com.qihang.jd.service.JdOrderService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RequestMapping("/order")
 @RestController
@@ -23,6 +28,7 @@ public class OrderApiController {
     private final ApiCommon apiCommon;
 //    private final RedisCache redisCache;
     private final MqUtils mqUtils;
+    private final JdOrderService orderService;
 
 
     @RequestMapping(value = "/pull_list", method = RequestMethod.POST)
@@ -41,45 +47,27 @@ public class OrderApiController {
         String serverUrl = checkResult.getData().getServerUrl();
         String appKey = checkResult.getData().getAppKey();
         String appSecret = checkResult.getData().getAppSecret();
-//        String accessToken = "8abd974c62c34778935b34b5952e6f68izdk";
-//        String appKey="FB4CC3688E6F9065D4FF510A53BB60FF";
-//        String appSecret="40e8c8b2427f4e6db8f4a39af27d719e";
-
-        JdClient client=new DefaultJdClient(serverUrl,accessToken,appKey,appSecret);
-        //https://open.jd.com/home/home/#/doc/api?apiCateId=55&apiId=4246&apiName=jingdong.pop.order.search
-//        PopOrderSearchRequest request=new PopOrderSearchRequest();
-//        request.setStartDate("2024-2-14 10:00:00");
-//        request.setEndDate("2024-3-4 12:00:00");
-//        request.setOrderState("TRADE_CANCELED");
-//        request.setOptionalFields("itemInfoList,orderId,isShipmenttype,scDT,idSopShipmenttype,orderStartTime,consigneeInfo");
-//        request.setPage("1");
-//        request.setPageSize("20");
-//        request.setSortType(1);
-//        request.setDateType(0);
-//        PopOrderSearchResponse response=client.execute(request);
-//        System.out.println(response);
-
-        //https://open.jd.com/home/home/#/doc/api?apiCateId=55&apiId=2388&apiName=jingdong.pop.order.enSearch
-        PopOrderEnSearchRequest request =new PopOrderEnSearchRequest();
-        request.setStartDate("2024-02-06 00:20:35");
-        request.setEndDate("2024-03-05 15:20:35");
-//        request.setOrderState("WAIT_SELLER_STOCK_OUT,WAIT_GOODS_RECEIVE_CONFIRM,WAIT_SELLER_DELIVERY,PAUSE,FINISHED_L,TRADE_CANCELED,LOCKED,POP_ORDER_PAUSE");
-        request.setOrderState("");
-//        request.setOrderState("ALL");
-//        request.setOptionalFields("orderId,venderId");
-//        request.setSourceId("JOS");
-        request.setOptionalFields("venderId,orderId,orderType,payType,orderTotalPrice,orderSellerPrice,orderPayment,freightPrice,sellerDiscount,orderState" +
-                ",orderStateRemark,deliveryType,invoiceCode,orderRemark,orderStartTime,orderEndTime,venderRemark,balanceUsed,pin,returnOrder,paymentConfirmTime,waybill,logisticsId,modified" +
-                ",directParentOrderId,parentOrderId,orderSource,storeOrder,realPin,open_id,open_id_buyer" +
-                ",invoiceInfo,invoiceEasyInfo,itemInfoList,isShipmenttype,scDT,idSopShipmenttype,orderStartTime,consigneeInfo,orderMarkDesc");
-        request.setPage("1");
-        request.setPageSize("100");
-        request.setSortType(1);
-        request.setDateType(0);
-        PopOrderEnSearchResponse response=client.execute(request);
-        MqMessage mqVo = MqMessage.build(1,"52332555000");
-        mqUtils.sendApiMessage(mqVo);
-        return response;
+        //第一次获取
+        ApiResult<JdOrder> upResult = OrderApiHelper.pullOrder(1L,100L,serverUrl,appKey,appSecret,accessToken);
+        int insertSuccess = 0;//新增成功的订单
+        int totalError = 0;
+        int hasExistOrder = 0;//已存在的订单数
+        //循环插入订单数据到数据库
+        for (var order : upResult.getList()) {
+            //插入订单数据
+            var result = orderService.saveOrder(params.getShopId(), order);
+            if (result.getCode() == ResultVoEnum.DataExist.getIndex()) {
+                //已经存在
+                hasExistOrder++;
+                mqUtils.sendApiMessage(MqMessage.build(EnumShopType.JD,MqType.ORDER_MESSAGE,order.getOrderId()));
+            } else if (result.getCode() == ResultVoEnum.SUCCESS.getIndex()) {
+                insertSuccess++;
+                mqUtils.sendApiMessage(MqMessage.build(EnumShopType.JD,MqType.ORDER_MESSAGE,order.getOrderId()));
+            } else {
+                totalError++;
+            }
+        }
+        return upResult;
     }
 }
 

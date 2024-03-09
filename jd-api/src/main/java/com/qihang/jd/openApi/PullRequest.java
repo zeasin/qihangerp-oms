@@ -1,4 +1,4 @@
-package com.qihang.jd.common;
+package com.qihang.jd.openApi;
 
 import lombok.Data;
 

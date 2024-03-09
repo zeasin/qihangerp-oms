@@ -1,8 +1,11 @@
 package com.qihang.jd.controller;
 
+import com.alibaba.fastjson2.JSON;
 import com.jd.open.api.sdk.DefaultJdClient;
 import com.jd.open.api.sdk.JdClient;
 import com.jd.open.api.sdk.JdException;
+import com.jd.open.api.sdk.domain.ware.SkuReadService.response.searchSkuList.Sku;
+import com.jd.open.api.sdk.domain.ware.WareReadService.response.searchWare4Valid.Ware;
 import com.jd.open.api.sdk.request.order.OrderGetRequest;
 import com.jd.open.api.sdk.request.order.PopOrderEnSearchRequest;
 import com.jd.open.api.sdk.request.order.PopOrderSearchRequest;
@@ -17,24 +20,49 @@ import com.jd.open.api.sdk.response.refundapply.PopAfsRefundapplyQuerybyidRespon
 import com.jd.open.api.sdk.response.refundapply.PopAfsRefundapplyQuerylistResponse;
 import com.jd.open.api.sdk.response.ware.SkuReadSearchSkuListResponse;
 import com.jd.open.api.sdk.response.ware.WareReadSearchWare4ValidResponse;
+import com.qihang.common.common.ApiResult;
+import com.qihang.common.common.ResultVo;
 import com.qihang.common.enums.HttpStatus;
+import com.qihang.jd.domain.JdGoods;
+import com.qihang.jd.domain.JdGoodsSku;
+import com.qihang.jd.openApi.ApiCommon;
+import com.qihang.jd.openApi.PullRequest;
+import com.qihang.jd.service.JdGoodsService;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RequestMapping("/goods")
 @RestController
 @AllArgsConstructor
 public class GoodsApiController {
-    private final String SERVER_URL = "https://api.jd.com/routerjson";
+    private final ApiCommon apiCommon;
+    private final JdGoodsService goodsService;
     @RequestMapping(value = "/pull_list", method = RequestMethod.POST)
-    public Object pullList() throws Exception {
-        String accessToken = "8abd974c62c34778935b34b5952e6f68izdk";
-        String appKey="FB4CC3688E6F9065D4FF510A53BB60FF";
-        String appSecret="40e8c8b2427f4e6db8f4a39af27d719e";
-        JdClient client=new DefaultJdClient(SERVER_URL,accessToken,appKey,appSecret);
+    public Object pullList(@RequestBody PullRequest params) throws Exception {
+        if (params.getShopId() == null || params.getShopId() <= 0) {
+//            return ApiResul new ApiResult(HttpStatus.PARAMS_ERROR, "参数错误，没有店铺Id");
+            return ApiResult.build(HttpStatus.PARAMS_ERROR, "参数错误，没有店铺Id");
+        }
+        var checkResult = apiCommon.checkBefore(params.getShopId());
+        if (checkResult.getCode() != HttpStatus.SUCCESS) {
+            return ApiResult.build(checkResult.getCode(), checkResult.getMsg(), checkResult.getData());
+        }
+        String accessToken = checkResult.getData().getAccessToken();
+        String serverUrl = checkResult.getData().getServerUrl();
+        String appKey = checkResult.getData().getAppKey();
+        String appSecret = checkResult.getData().getAppSecret();
+
+//        String accessToken = "8abd974c62c34778935b34b5952e6f68izdk";
+//        String appKey="FB4CC3688E6F9065D4FF510A53BB60FF";
+//        String appSecret="40e8c8b2427f4e6db8f4a39af27d719e";
+        JdClient client=new DefaultJdClient(serverUrl,accessToken,appKey,appSecret);
         //https://open.jd.com/home/home/#/doc/api?apiCateId=55&apiId=4246&apiName=jingdong.pop.order.search
 //        PopOrderSearchRequest request=new PopOrderSearchRequest();
 //        request.setStartDate("2024-2-14 10:00:00");
@@ -62,19 +90,42 @@ public class GoodsApiController {
 
         //https://open.jd.com/home/home/#/doc/api?apiCateId=48&apiId=1587&apiName=jingdong.ware.read.searchWare4Valid
         WareReadSearchWare4ValidRequest request=new WareReadSearchWare4ValidRequest();
-        request.setField("jdPrice,wareId,title,spuId,images,shopId,itemNum,outerId,logo");
+        request.setField("jdPrice,wareId,title,spuId,images,itemNum,outerId,logo,weight,width,height,length,modified,created,offlineTime,onlineTime,mobileDesc,afterSales,marketPrice,costPrice,brandName,stockNum,sellPoint,afterSaleDesc,categoryId");
         request.setWareStatusValue("8");
-//        request.setSearchField("[title]");
-
+        request.setPageNo(1);
+        request.setPageSize(100);
         WareReadSearchWare4ValidResponse response=client.execute(request);
+        if(response != null && response.getPage()!= null && response.getPage().getData()!=null){
+            for (var ware: response.getPage().getData()){
+                JdGoods jdGoods = new JdGoods();
+                BeanUtils.copyProperties(ware,jdGoods);
+                List<JdGoodsSku> skuList = new ArrayList<>();
+                // 获取sku
+                SkuReadSearchSkuListRequest request1=new SkuReadSearchSkuListRequest();
+                request1.setWareId(ware.getWareId().toString());
+                request1.setField("skuId,categoryId,stockNum,wareTitle,status,multiCateProps,outerId,jdPrice,logo,skuName,parentId,modified,created,saleAttrs,imgTag,currencySpuId");
+                SkuReadSearchSkuListResponse response1=client.execute(request1);
+//                System.out.println(response1);
+                if(response1 != null && response1.getPage()!= null && response1.getPage().getData()!=null){
+                    for(var s : response1.getPage().getData()){
+                        JdGoodsSku sku = new JdGoodsSku();
+                        BeanUtils.copyProperties(s,sku);
+                        sku.setSaleAttrs(JSON.toJSONString(s.getSaleAttrs()));
+                        skuList.add(sku);
+                    }
+                }
+                jdGoods.setSkuList(skuList);
+                ResultVo<Integer> integerResultVo = goodsService.saveGoods(params.getShopId(),jdGoods);
+            }
+        }
 
         //https://open.jd.com/home/home/#/doc/api?apiCateId=48&apiId=1227&apiName=jingdong.sku.read.searchSkuList
-        SkuReadSearchSkuListRequest request1=new SkuReadSearchSkuListRequest();
+//        SkuReadSearchSkuListRequest request1=new SkuReadSearchSkuListRequest();
 
 //        request1.setWareId("10223753529");
-        request1.setField("skuId,categoryId,stockNum,wareTitle,status,multiCateProps,outerId,jdPrice,logo,skuName,parentId,modified,created,saleAttrs,imgTag,currencySpuId");
-        SkuReadSearchSkuListResponse response1=client.execute(request1);
-        System.out.println(response1);
+//        request1.setField("skuId,categoryId,stockNum,wareTitle,status,multiCateProps,outerId,jdPrice,logo,skuName,parentId,modified,created,saleAttrs,imgTag,currencySpuId");
+//        SkuReadSearchSkuListResponse response1=client.execute(request1);
+//        System.out.println(response1);
 //        SpuGetModelOrItemNumListRequest  request=new SpuGetModelOrItemNumListRequest();
 //        request.setUniqueCodeType(1);
 //        request.setCategoryId(1233);
