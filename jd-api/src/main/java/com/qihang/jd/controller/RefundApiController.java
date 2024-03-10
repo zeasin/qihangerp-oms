@@ -4,8 +4,10 @@ import com.jd.open.api.sdk.DefaultJdClient;
 import com.jd.open.api.sdk.JdClient;
 import com.jd.open.api.sdk.request.refundapply.PopAfsRefundapplyQuerylistRequest;
 import com.jd.open.api.sdk.request.shangjiashouhou.AscQueryListRequest;
+import com.jd.open.api.sdk.request.shangjiashouhou.AscSyncListRequest;
 import com.jd.open.api.sdk.response.refundapply.PopAfsRefundapplyQuerylistResponse;
 import com.jd.open.api.sdk.response.shangjiashouhou.AscQueryListResponse;
+import com.jd.open.api.sdk.response.shangjiashouhou.AscSyncListResponse;
 import com.qihang.common.common.ApiResult;
 import com.qihang.common.common.ResultVoEnum;
 import com.qihang.common.enums.EnumShopType;
@@ -146,6 +148,21 @@ public class RefundApiController {
         String startTimeStr = startTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         String endTimeStr = endTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         JdClient client = new DefaultJdClient(serverUrl, accessToken, appKey, appSecret);
+
+        // 用于更新状态
+        // https://open.jd.com/home/home/#/doc/api?apiCateId=241&apiId=2171&apiName=jingdong.asc.sync.list
+        AscSyncListRequest request1=new AscSyncListRequest();
+        request1.setBuId(sellerId);
+        request1.setOperatePin("testPin");
+        request1.setOperateNick("testPin");
+        request1.setUpdateTimeBegin(Date.from(startTime.atZone( ZoneId.systemDefault()).toInstant()));
+        request1.setUpdateTimeEnd(Date.from(endTime.atZone( ZoneId.systemDefault()).toInstant()));
+        request1.setPageNumber(1);
+        request1.setPageSize(10);
+        AscSyncListResponse response1=client.execute(request1);
+
+
+
         // https://open.jd.com/home/home/#/doc/api?apiCateId=241&apiId=2136&apiName=jingdong.asc.query.list
         AscQueryListRequest request=new AscQueryListRequest();
         request.setBuId(sellerId);
