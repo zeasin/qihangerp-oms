@@ -63,6 +63,7 @@ public class ApiCommon {
         params.setTokenRequestUrl(platform.getRedirectUri());
         params.setApiRequestUrl(shop.getApiRequestUrl());
         params.setServerUrl(platform.getServerUrl());
+        params.setSellerId(shop.getSellerId().toString());
         if (!StringUtils.hasText(shop.getAccessToken())) {
 
             return ApiResult.build(HttpStatus.UNAUTHORIZED, "Token已过期，请重新授权", params);

@@ -87,6 +87,7 @@ public class OOrderServiceImpl extends ServiceImpl<OOrderMapper, OOrder>
                 for (var item : jdOrderItems) {
                     OOrderItem orderItem = new OOrderItem();
                     orderItem.setOrderId(insert.getId());
+                    orderItem.setSubOrderNum(item.getId().toString());
                     // TODO：这里将订单商品skuid转换成erp系统的skuid
                     Long erpGoodsId = 0L;
                     Long erpSkuId = 0L;
@@ -99,8 +100,11 @@ public class OOrderServiceImpl extends ServiceImpl<OOrderMapper, OOrder>
                         orderItem.setGoodsSpec(jdGoodsSkus.get(0).getSkuName());
                         orderItem.setSkuNum(jdGoodsSkus.get(0).getOuterId());
                     }
-                    orderItem.setGoodsId(erpGoodsId);
-                    orderItem.setSkuId(erpSkuId);
+                    orderItem.setSkuId(item.getSkuId());
+                    orderItem.setErpGoodsId(erpGoodsId);
+                    orderItem.setErpSkuId(erpSkuId);
+//                    orderItem.setGoodsId(erpGoodsId);
+//                    orderItem.setSkuId(erpSkuId);
                     orderItem.setGoodsTitle(item.getSkuName());
                     orderItem.setGoodsPrice(StringUtils.isEmpty(item.getJdPrice())?0.0:Double.parseDouble(item.getJdPrice()));
                     Integer quantity = StringUtils.isEmpty(item.getItemTotal())?0: Integer.parseInt(item.getItemTotal());
