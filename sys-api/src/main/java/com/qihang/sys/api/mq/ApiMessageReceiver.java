@@ -8,6 +8,7 @@ import com.qihang.common.mq.MqType;
 import com.qihang.common.utils.SpringUtils;
 import com.qihang.sys.api.mapper.OOrderMapper;
 import com.qihang.sys.api.service.OOrderService;
+import com.qihang.sys.api.service.ORefundService;
 import jakarta.annotation.Resource;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
@@ -54,6 +55,10 @@ public class ApiMessageReceiver implements MessageListener {
             }else if(vo.getShopType().getIndex() == EnumShopType.TAO.getIndex()) {
                 orderService.taoOrderMessage(vo.getKeyId());
             }
+        }else if(vo.getMqType() == MqType.REFUND_MESSAGE){
+            logger.info("退款消息"+messageContent);
+            ORefundService refundService = SpringUtils.getBean(ORefundService.class);
+            refundService.jdRefundMessage(vo.getKeyId());
         }
     }
 }

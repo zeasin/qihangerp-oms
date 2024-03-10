@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qihang.sys.api.mapper.JdRefundMapper">
+
+    <resultMap id="BaseResultMap" type="com.qihang.sys.api.domain.JdRefund">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="shopId" column="shop_id" jdbcType="INTEGER"/>
+            <result property="refundId" column="refund_id" jdbcType="VARCHAR"/>
+            <result property="buyerId" column="buyer_id" jdbcType="VARCHAR"/>
+            <result property="buyerName" column="buyer_name" jdbcType="VARCHAR"/>
+            <result property="checkTime" column="check_time" jdbcType="VARCHAR"/>
+            <result property="applyTime" column="apply_time" jdbcType="VARCHAR"/>
+            <result property="applyRefundSum" column="apply_refund_sum" jdbcType="VARCHAR"/>
+            <result property="status" column="status" jdbcType="VARCHAR"/>
+            <result property="checkUsername" column="check_username" jdbcType="VARCHAR"/>
+            <result property="orderId" column="order_id" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,shop_id,refund_id,
+        buyer_id,buyer_name,check_time,
+        apply_time,apply_refund_sum,status,
+        check_username,order_id
+    </sql>
+</mapper>

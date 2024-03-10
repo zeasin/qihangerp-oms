@@ -25,9 +25,11 @@ import com.qihang.common.common.ResultVo;
 import com.qihang.common.enums.HttpStatus;
 import com.qihang.jd.domain.JdGoods;
 import com.qihang.jd.domain.JdGoodsSku;
+import com.qihang.jd.domain.SysShopPullLogs;
 import com.qihang.jd.openApi.ApiCommon;
 import com.qihang.jd.openApi.PullRequest;
 import com.qihang.jd.service.JdGoodsService;
+import com.qihang.jd.service.SysShopPullLogsService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -36,6 +38,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @RequestMapping("/goods")
@@ -44,12 +47,16 @@ import java.util.List;
 public class GoodsApiController {
     private final ApiCommon apiCommon;
     private final JdGoodsService goodsService;
+    private final SysShopPullLogsService pullLogsService;
+
     @RequestMapping(value = "/pull_list", method = RequestMethod.POST)
     public Object pullList(@RequestBody PullRequest params) throws Exception {
         if (params.getShopId() == null || params.getShopId() <= 0) {
 //            return ApiResul new ApiResult(HttpStatus.PARAMS_ERROR, "参数错误，没有店铺Id");
             return ApiResult.build(HttpStatus.PARAMS_ERROR, "参数错误，没有店铺Id");
         }
+        Date currDateTime = new Date();
+        long startTime = System.currentTimeMillis();
         var checkResult = apiCommon.checkBefore(params.getShopId());
         if (checkResult.getCode() != HttpStatus.SUCCESS) {
             return ApiResult.build(checkResult.getCode(), checkResult.getMsg(), checkResult.getData());
@@ -95,6 +102,7 @@ public class GoodsApiController {
         request.setPageNo(1);
         request.setPageSize(100);
         WareReadSearchWare4ValidResponse response=client.execute(request);
+        int successTotal = 0;
         if(response != null && response.getPage()!= null && response.getPage().getData()!=null){
             for (var ware: response.getPage().getData()){
                 JdGoods jdGoods = new JdGoods();
@@ -115,9 +123,21 @@ public class GoodsApiController {
                     }
                 }
                 jdGoods.setSkuList(skuList);
-                ResultVo<Integer> integerResultVo = goodsService.saveGoods(params.getShopId(),jdGoods);
+                goodsService.saveGoods(params.getShopId(),jdGoods);
+                successTotal++;
             }
+
         }
+
+        SysShopPullLogs logs = new SysShopPullLogs();
+        logs.setShopId(params.getShopId());
+        logs.setPullType("GOODS");
+        logs.setPullWay("主动拉取");
+        logs.setPullParams("{WareStatusValue:8,PageNo:1,PageSize:100}");
+        logs.setPullResult("{successTotal:"+successTotal+"}");
+        logs.setPullTime(currDateTime);
+        logs.setDuration(System.currentTimeMillis() - startTime);
+        pullLogsService.save(logs);
 
         //https://open.jd.com/home/home/#/doc/api?apiCateId=48&apiId=1227&apiName=jingdong.sku.read.searchSkuList
 //        SkuReadSearchSkuListRequest request1=new SkuReadSearchSkuListRequest();

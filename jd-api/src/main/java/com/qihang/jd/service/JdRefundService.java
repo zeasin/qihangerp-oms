@@ -1,5 +1,7 @@
 package com.qihang.jd.service;
 
+import com.qihang.common.common.ResultVo;
+import com.qihang.jd.domain.JdOrder;
 import com.qihang.jd.domain.JdRefund;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -9,5 +11,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 * @createDate 2024-03-09 11:29:59
 */
 public interface JdRefundService extends IService<JdRefund> {
-
+    ResultVo<Integer> saveRefund(Integer shopId, JdRefund refund);
 }

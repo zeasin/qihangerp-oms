@@ -15,6 +15,7 @@ import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
@@ -33,12 +34,16 @@ public class OrderApiHelper {
      * @param accessToken
      * @return
      */
-    public static ApiResult<JdOrder> pullOrder(Long pageNo, Long pageSize, String serverUrl, String appKey, String appSecret, String accessToken) throws Exception {
-        log.info("=======开始全量拉取订单{}=========",LocalDateTime.now());
+    public static ApiResult<JdOrder> pullOrder(LocalDateTime startTime,LocalDateTime endTime,Long pageNo, Long pageSize, String serverUrl, String appKey, String appSecret, String accessToken) throws Exception {
+        String startTimeStr = startTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        String endTimeStr = endTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+
+        log.info("=======开始全量JD拉取订单{}，参数日期：{}-{}=========",LocalDateTime.now(),startTimeStr,endTimeStr);
+
         JdClient client=new DefaultJdClient(serverUrl,accessToken,appKey,appSecret);
         PopOrderEnSearchRequest request =new PopOrderEnSearchRequest();
-        request.setStartDate("2024-02-06 00:20:35");
-        request.setEndDate("2024-03-05 15:20:35");
+        request.setStartDate(startTimeStr);
+        request.setEndDate(endTimeStr);
 //        request.setOrderState("WAIT_SELLER_STOCK_OUT,WAIT_GOODS_RECEIVE_CONFIRM,WAIT_SELLER_DELIVERY,PAUSE,FINISHED_L,TRADE_CANCELED,LOCKED,POP_ORDER_PAUSE");
 //        request.setOrderState("");
         request.setOrderState("ALL");

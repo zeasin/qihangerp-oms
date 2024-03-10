@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qihang.sys.api.mapper.ORefundMapper">
+
+    <resultMap id="BaseResultMap" type="com.qihang.sys.api.domain.ORefund">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="refundNum" column="refund_num" jdbcType="VARCHAR"/>
+            <result property="refundType" column="refund_type" jdbcType="INTEGER"/>
+            <result property="shopId" column="shop_id" jdbcType="INTEGER"/>
+            <result property="shopType" column="shop_type" jdbcType="INTEGER"/>
+            <result property="orderNum" column="order_num" jdbcType="VARCHAR"/>
+            <result property="orderItemNum" column="order_item_num" jdbcType="VARCHAR"/>
+            <result property="skuId" column="sku_id" jdbcType="BIGINT"/>
+            <result property="erpGoodsId" column="erp_goods_id" jdbcType="BIGINT"/>
+            <result property="erpSkuId" column="erp_sku_id" jdbcType="BIGINT"/>
+            <result property="skuNum" column="sku_num" jdbcType="VARCHAR"/>
+            <result property="goodsName" column="goods_name" jdbcType="VARCHAR"/>
+            <result property="goodsSku" column="goods_sku" jdbcType="VARCHAR"/>
+            <result property="goodsImage" column="goods_image" jdbcType="VARCHAR"/>
+            <result property="quantity" column="quantity" jdbcType="BIGINT"/>
+            <result property="returnLogisticsCompany" column="return_logistics_company" jdbcType="VARCHAR"/>
+            <result property="returnLogisticsCode" column="return_logistics_code" jdbcType="VARCHAR"/>
+            <result property="receiveTime" column="receive_time" jdbcType="TIMESTAMP"/>
+            <result property="remark" column="remark" jdbcType="VARCHAR"/>
+            <result property="contactperson" column="contactPerson" jdbcType="VARCHAR"/>
+            <result property="mobile" column="mobile" jdbcType="VARCHAR"/>
+            <result property="address" column="address" jdbcType="VARCHAR"/>
+            <result property="status" column="status" jdbcType="INTEGER"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
+            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+            <result property="updateBy" column="update_by" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,refund_num,refund_type,
+        shop_id,shop_type,order_num,
+        order_item_num,sku_id,erp_goods_id,
+        erp_sku_id,sku_num,goods_name,
+        goods_sku,goods_image,quantity,
+        return_logistics_company,return_logistics_code,receive_time,
+        remark,contactPerson,mobile,
+        address,status,create_time,
+        create_by,update_time,update_by
+    </sql>
+</mapper>
