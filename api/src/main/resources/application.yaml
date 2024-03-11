@@ -23,6 +23,12 @@ spring:
         locator:
           enabled: true
       routes:
+        - id: oms_api_route
+          uri: lb://oms-api
+          predicates:
+            - Path=/api/oms-api/**
+          filters:
+            - StripPrefix=2
         - id: tao_api_route
           uri: lb://tao-api
           predicates:
@@ -39,6 +45,12 @@ spring:
           uri: lb://sys-api
           predicates:
             - Path=/api/sys-api/**
+          filters:
+            - StripPrefix=2
+        - id: dou_api_route
+          uri: lb://dou-api
+          predicates:
+            - Path=/api/dou-api/**
           filters:
             - StripPrefix=2
 #            - TokenFilter

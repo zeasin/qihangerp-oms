@@ -8,14 +8,14 @@ spring:
     import:
       - nacos:qihang-oms.yaml?refresh=true
   application:
-    name: oms-api
+    name: dou-api
 
 server:
-  port: 8081
+  port: 8085
 
 
 mybatis-plus:
   mapper-locations: classpath*:mapper/**/*Mapper.xml
-  type-aliases-package: com.qihang.oms.domain;com.qihang.security.entity;
+  type-aliases-package: com.qihang.dou.domain;com.qihang.security.entity;
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl # 开启sql日志

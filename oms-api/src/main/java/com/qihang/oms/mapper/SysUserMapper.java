@@ -1,4 +1,4 @@
-package com.qihang.jd.mapper;
+package com.qihang.oms.mapper;
 
 import com.qihang.security.entity.SysUser;
 import org.apache.ibatis.annotations.Mapper;

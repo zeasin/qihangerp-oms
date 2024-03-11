@@ -22,7 +22,7 @@ security:
     - pattern: /api/**   # 定义需要授权的URL模式
 
 server:
-  port: 8081
+  port: 8083
 
 
 mybatis-plus:
