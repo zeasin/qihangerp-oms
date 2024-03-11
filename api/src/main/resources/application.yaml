@@ -53,6 +53,12 @@ spring:
             - Path=/api/dou-api/**
           filters:
             - StripPrefix=2
+        - id: pdd_api_route
+          uri: lb://pdd-api
+          predicates:
+            - Path=/api/pdd-api/**
+          filters:
+            - StripPrefix=2
 #            - TokenFilter
 #      default-filters:
 #        - TokenFilter
