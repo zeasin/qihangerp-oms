@@ -44,17 +44,24 @@ public class ApiMessageReceiver implements MessageListener {
 
         if(vo.getMqType() == MqType.ORDER_MESSAGE){
             // 有新订单，插入新订单到shop_order
-            logger.info("订单消息"+messageContent);
+
             OOrderService orderService = SpringUtils.getBean(OOrderService.class);
             if(vo.getShopType().getIndex() == EnumShopType.JD.getIndex()) {
+                logger.info("订单消息JD"+messageContent);
                 orderService.jdOrderMessage(vo.getKeyId());
             }else if(vo.getShopType().getIndex() == EnumShopType.TAO.getIndex()) {
+                logger.info("订单消息TAO"+messageContent);
                 orderService.taoOrderMessage(vo.getKeyId());
             }
         }else if(vo.getMqType() == MqType.REFUND_MESSAGE){
-            logger.info("退款消息"+messageContent);
             ORefundService refundService = SpringUtils.getBean(ORefundService.class);
-            refundService.jdRefundMessage(vo.getKeyId());
+            if(vo.getShopType().getIndex() == EnumShopType.JD.getIndex()) {
+                logger.info("退款消息JD" + messageContent);
+                refundService.jdRefundMessage(vo.getKeyId());
+            }else if(vo.getShopType().getIndex() == EnumShopType.TAO.getIndex()) {
+                logger.info("退款消息TAO"+messageContent);
+                refundService.taoRefundMessage(vo.getKeyId());
+            }
         }
     }
 }

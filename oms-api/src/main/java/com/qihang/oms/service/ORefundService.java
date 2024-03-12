@@ -12,4 +12,5 @@ import com.qihang.oms.domain.ORefund;
 */
 public interface ORefundService extends IService<ORefund> {
     ResultVo<Integer> jdRefundMessage(String refundId);
+    ResultVo<Integer> taoRefundMessage(String refundId);
 }

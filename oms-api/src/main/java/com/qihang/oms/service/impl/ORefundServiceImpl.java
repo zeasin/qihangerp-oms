@@ -98,6 +98,11 @@ public class ORefundServiceImpl extends ServiceImpl<ORefundMapper, ORefund>
         }
         return null;
     }
+
+    @Override
+    public ResultVo<Integer> taoRefundMessage(String refundId) {
+        return null;
+    }
 }
 
 
