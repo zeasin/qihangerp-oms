@@ -21,12 +21,12 @@ public class HomeController {
         //设置appKey和appSecret，全局设置一次
        String appkey = "7005157746437834253";
        String appSecret = "8104c8b8-9085-4a80-9248-629759b4f1a3";
-//        appkey = "7344938657423296019";
-//        appSecret = "4e704882-832a-42e5-845f-6af991ce0ce2";
+        appkey = "7344938657423296019";
+        appSecret = "4e704882-832a-42e5-845f-6af991ce0ce2";
         GlobalConfig.initAppKey(appkey);
         GlobalConfig.initAppSecret(appSecret);
         //获取access_token方法
-        AccessToken accessToken = AccessTokenBuilder.build(4463798L); //入参为shopId
+        AccessToken accessToken = AccessTokenBuilder.build(90158786L); //入参为shopId 4463798L
 
 
 

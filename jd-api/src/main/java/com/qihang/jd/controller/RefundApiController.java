@@ -65,18 +65,18 @@ public class RefundApiController {
         String appSecret = checkResult.getData().getAppSecret();
         JdClient client = new DefaultJdClient(serverUrl, accessToken, appKey, appSecret);
         //https://open.jd.com/home/home/#/doc/api?apiCateId=71&apiId=307&apiName=jingdong.pop.afs.refundapply.querylist
-        PopAfsRefundapplyQuerylistRequest request2=new PopAfsRefundapplyQuerylistRequest();
+        PopAfsRefundapplyQuerylistRequest request2 = new PopAfsRefundapplyQuerylistRequest();
         request2.setPageIndex(1);
         request2.setPageSize(100);
-        PopAfsRefundapplyQuerylistResponse response2=client.execute(request2);
+        PopAfsRefundapplyQuerylistResponse response2 = client.execute(request2);
 //        System.out.println(request2);
         int hasExist = 0;
         int insertSuccess = 0;
         int totalError = 0;
-        if(response2 != null && response2.getRefundApplyResponse()!=null ){
-            for (var item :response2.getRefundApplyResponse().getResults()){
+        if (response2 != null && response2.getRefundApplyResponse() != null) {
+            for (var item : response2.getRefundApplyResponse().getResults()) {
                 JdRefund refund = new JdRefund();
-                BeanUtils.copyProperties(item,refund);
+                BeanUtils.copyProperties(item, refund);
                 refund.setRefundId(item.getId());
                 refund.setId(null);
                 refund.setShopId(params.getShopId());
@@ -100,7 +100,7 @@ public class RefundApiController {
         logs.setPullType("REFUND");
         logs.setPullWay("主动拉取");
         logs.setPullParams("{PageIndex:1,PageSize:100}");
-        logs.setPullResult("{total:"+insertSuccess+",hasExist:"+hasExist+",totalError:"+totalError+"}");
+        logs.setPullResult("{total:" + insertSuccess + ",hasExist:" + hasExist + ",totalError:" + totalError + "}");
         logs.setPullTime(currDateTime);
         logs.setDuration(System.currentTimeMillis() - beginTime);
         pullLogsService.save(logs);
@@ -109,6 +109,7 @@ public class RefundApiController {
 
     /**
      * 拉取售后数据
+     *
      * @param params
      * @return
      * @throws Exception
@@ -132,15 +133,15 @@ public class RefundApiController {
 
         // 获取最后更新时间
         LocalDateTime startTime = null;
-        LocalDateTime  endTime = null;
+        LocalDateTime endTime = null;
         SysShopPullLasttime lasttime = pullLasttimeService.getLasttimeByShop(params.getShopId(), "REFUND");
-        if(lasttime == null){
+        if (lasttime == null) {
             endTime = LocalDateTime.now();
             startTime = endTime.minusDays(1);
-        }else{
+        } else {
             startTime = lasttime.getLasttime().minusHours(1);//取上次结束一个小时前
             endTime = startTime.plusDays(1);//取24小时
-            if(endTime.isAfter(LocalDateTime.now())){
+            if (endTime.isAfter(LocalDateTime.now())) {
                 endTime = LocalDateTime.now();
             }
         }
@@ -151,27 +152,26 @@ public class RefundApiController {
 
         // 用于更新状态
         // https://open.jd.com/home/home/#/doc/api?apiCateId=241&apiId=2171&apiName=jingdong.asc.sync.list
-        AscSyncListRequest request1=new AscSyncListRequest();
+        AscSyncListRequest request1 = new AscSyncListRequest();
         request1.setBuId(sellerId);
         request1.setOperatePin("testPin");
         request1.setOperateNick("testPin");
-        request1.setUpdateTimeBegin(Date.from(startTime.atZone( ZoneId.systemDefault()).toInstant()));
-        request1.setUpdateTimeEnd(Date.from(endTime.atZone( ZoneId.systemDefault()).toInstant()));
+        request1.setUpdateTimeBegin(Date.from(startTime.atZone(ZoneId.systemDefault()).toInstant()));
+        request1.setUpdateTimeEnd(Date.from(endTime.atZone(ZoneId.systemDefault()).toInstant()));
         request1.setPageNumber(1);
         request1.setPageSize(10);
-        AscSyncListResponse response1=client.execute(request1);
-
+        AscSyncListResponse response1 = client.execute(request1);
 
 
         // https://open.jd.com/home/home/#/doc/api?apiCateId=241&apiId=2136&apiName=jingdong.asc.query.list
-        AscQueryListRequest request=new AscQueryListRequest();
+        AscQueryListRequest request = new AscQueryListRequest();
         request.setBuId(sellerId);
         request.setOperatePin("testPin");
         request.setOperateNick("testPin");
 //        request.setServiceId(123456);
 //        request.setOrderId(123456);
-        request.setApplyTimeBegin( Date.from(startTime.atZone( ZoneId.systemDefault()).toInstant()));
-        request.setApplyTimeEnd(Date.from(endTime.atZone( ZoneId.systemDefault()).toInstant()));
+        request.setApplyTimeBegin(Date.from(startTime.atZone(ZoneId.systemDefault()).toInstant()));
+        request.setApplyTimeEnd(Date.from(endTime.atZone(ZoneId.systemDefault()).toInstant()));
 //        request.setFinishTimeBegin(Date.from(startTime.atZone( ZoneId.systemDefault()).toInstant()));
 //        request.setFinishTimeEnd(Date.from(endTime.atZone( ZoneId.systemDefault()).toInstant()));
 //        request.setVerificationCode("abcd");
@@ -186,31 +186,31 @@ public class RefundApiController {
         request.setPageNumber(1);
         request.setPageSize(100);
 //        request.setExtJsonStr("a");
-        AscQueryListResponse response=client.execute(request);
+        AscQueryListResponse response = client.execute(request);
         int insertSuccess = 0;
         int totalError = 0;
         int hasExist = 0;
-        if(response!=null && response.getPageResult()!=null){
-            if(response.getPageResult().getData()!=null){
-                for (var item : response.getPageResult().getData()){
+        if (response != null && response.getPageResult() != null) {
+            if (response.getPageResult().getData() != null) {
+                for (var item : response.getPageResult().getData()) {
                     JdOrderAfter after = new JdOrderAfter();
-                    BeanUtils.copyProperties(item,after);
+                    BeanUtils.copyProperties(item, after);
                     after.setShopId(params.getShopId());
                     var result = afterService.saveAfter(params.getShopId(), after);
                     if (result.getCode() == ResultVoEnum.DataExist.getIndex()) {
                         //已经存在
                         hasExist++;
-                        mqUtils.sendApiMessage(MqMessage.build(EnumShopType.JD, MqType.REFUND_MESSAGE,item.getApplyId().toString()));
+                        mqUtils.sendApiMessage(MqMessage.build(EnumShopType.JD, MqType.REFUND_MESSAGE, item.getApplyId().toString()));
                     } else if (result.getCode() == ResultVoEnum.SUCCESS.getIndex()) {
                         insertSuccess++;
-                        mqUtils.sendApiMessage(MqMessage.build(EnumShopType.JD,MqType.REFUND_MESSAGE,item.getApplyId().toString()));
+                        mqUtils.sendApiMessage(MqMessage.build(EnumShopType.JD, MqType.REFUND_MESSAGE, item.getApplyId().toString()));
                     } else {
                         totalError++;
                     }
                 }
             }
         }
-        if(lasttime == null){
+        if (lasttime == null) {
             // 新增
             SysShopPullLasttime insertLasttime = new SysShopPullLasttime();
             insertLasttime.setShopId(params.getShopId());
@@ -219,7 +219,7 @@ public class RefundApiController {
             insertLasttime.setPullType("REFUND");
             pullLasttimeService.save(insertLasttime);
 
-        }else {
+        } else {
             // 修改
             SysShopPullLasttime updateLasttime = new SysShopPullLasttime();
             updateLasttime.setId(lasttime.getId());
@@ -231,8 +231,73 @@ public class RefundApiController {
         logs.setShopId(params.getShopId());
         logs.setPullType("REFUND");
         logs.setPullWay("主动拉取");
-        logs.setPullParams("{ApplyTimeBegin:"+startTimeStr+",ApplyTimeEnd:"+endTimeStr+",PageIndex:1,PageSize:100}");
-        logs.setPullResult("{total:"+insertSuccess+",hasExist:"+hasExist+",totalError:"+totalError+"}");
+        logs.setPullParams("{ApplyTimeBegin:" + startTimeStr + ",ApplyTimeEnd:" + endTimeStr + ",PageIndex:1,PageSize:100}");
+        logs.setPullResult("{total:" + insertSuccess + ",hasExist:" + hasExist + ",totalError:" + totalError + "}");
+        logs.setPullTime(currDateTime);
+        logs.setDuration(System.currentTimeMillis() - beginTime);
+        pullLogsService.save(logs);
+//        mqUtils.sendApiMessage(MqMessage.build(EnumShopType.JD, MqType.REFUND_MESSAGE,item.getId()));
+        return response;
+    }
+
+    @RequestMapping(value = "/pull_update_status", method = RequestMethod.POST)
+    public Object pullUpdateStatus(@RequestBody PullRequest params) throws Exception {
+        if (params.getShopId() == null || params.getShopId() <= 0) {
+            return ApiResult.build(HttpStatus.PARAMS_ERROR, "参数错误，没有店铺Id");
+        }
+        Date currDateTime = new Date();
+        long beginTime = System.currentTimeMillis();
+        var checkResult = apiCommon.checkBefore(params.getShopId());
+        if (checkResult.getCode() != HttpStatus.SUCCESS) {
+            return ApiResult.build(checkResult.getCode(), checkResult.getMsg(), checkResult.getData());
+        }
+        String accessToken = checkResult.getData().getAccessToken();
+        String serverUrl = checkResult.getData().getServerUrl();
+        String appKey = checkResult.getData().getAppKey();
+        String appSecret = checkResult.getData().getAppSecret();
+        String sellerId = checkResult.getData().getSellerId();
+
+        // 取24小时内的数据
+        LocalDateTime endTime = LocalDateTime.now();
+        LocalDateTime startTime = endTime.minusDays(1);
+
+
+        String startTimeStr = startTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        String endTimeStr = endTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        JdClient client = new DefaultJdClient(serverUrl, accessToken, appKey, appSecret);
+
+        // 用于更新状态
+        // https://open.jd.com/home/home/#/doc/api?apiCateId=241&apiId=2171&apiName=jingdong.asc.sync.list
+        AscSyncListRequest request1 = new AscSyncListRequest();
+        request1.setBuId(sellerId);
+        request1.setOperatePin("testPin");
+        request1.setOperateNick("testPin");
+        request1.setUpdateTimeBegin(Date.from(startTime.atZone(ZoneId.systemDefault()).toInstant()));
+        request1.setUpdateTimeEnd(Date.from(endTime.atZone(ZoneId.systemDefault()).toInstant()));
+        request1.setPageNumber(1);
+        request1.setPageSize(100);
+        AscSyncListResponse response = client.execute(request1);
+        if (response != null && response.getPageResult() != null) {
+            if (response.getPageResult().getData() != null) {
+                for (var item : response.getPageResult().getData()) {
+                    JdOrderAfter after = new JdOrderAfter();
+                    BeanUtils.copyProperties(item, after);
+                    after.setShopId(params.getShopId());
+                    var result = afterService.updateAfterStatusByServiceId(after);
+                    if (result.getCode() == ResultVoEnum.SUCCESS.getIndex()) {
+                        // 更新成功，发送通知
+                        mqUtils.sendApiMessage(MqMessage.build(EnumShopType.JD, MqType.REFUND_MESSAGE,result.getData().toString()));
+                    }
+                }
+            }
+        }
+
+        SysShopPullLogs logs = new SysShopPullLogs();
+        logs.setShopId(params.getShopId());
+        logs.setPullType("REFUND");
+        logs.setPullWay("主动更新状态");
+        logs.setPullParams("{ApplyTimeBegin:" + startTimeStr + ",ApplyTimeEnd:" + endTimeStr + ",PageIndex:1,PageSize:100}");
+        logs.setPullResult("{total:,hasExist: ,totalError: }");
         logs.setPullTime(currDateTime);
         logs.setDuration(System.currentTimeMillis() - beginTime);
         pullLogsService.save(logs);

@@ -57,6 +57,20 @@ public class JdOrderAfterServiceImpl extends ServiceImpl<JdOrderAfterMapper, JdO
            return new ResultVo<>(ResultVoEnum.SystemException, "系统异常：" + e.getMessage());
        }
     }
+
+    @Override
+    public ResultVo<Long> updateAfterStatusByServiceId(JdOrderAfter after) {
+        List<JdOrderAfter> jdOrderAfters = mapper.selectList(new LambdaQueryWrapper<JdOrderAfter>().eq(JdOrderAfter::getServiceId, after.getServiceId()));
+        if (jdOrderAfters != null && jdOrderAfters.size() > 0) {
+            // 存在，修改
+            JdOrderAfter update = new JdOrderAfter();
+            update.setId(jdOrderAfters.get(0).getId());
+            update.setServiceStatus(after.getServiceStatus());
+            mapper.updateById(update);
+            return new ResultVo<>(ResultVoEnum.SUCCESS, "SUCCESS",update.getId());
+        }
+        return new ResultVo<>(ResultVoEnum.NotFound, "没有找到退款数据");
+    }
 }
 
 

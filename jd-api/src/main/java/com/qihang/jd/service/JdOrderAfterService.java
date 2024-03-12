@@ -11,4 +11,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface JdOrderAfterService extends IService<JdOrderAfter> {
     ResultVo<Integer> saveAfter(Integer shopId,JdOrderAfter after);
+    ResultVo<Long> updateAfterStatusByServiceId(JdOrderAfter after);
 }
