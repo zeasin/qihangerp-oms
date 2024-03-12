@@ -1,6 +1,7 @@
 package com.qihang.tao.domain;
 
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.util.Date;
 
 /**
@@ -91,12 +92,12 @@ public class TaoGoodsSku implements Serializable {
     /**
      * erp商品SKUid
      */
-    private Integer erpGoodsSkuId;
+    private Long erpGoodsSkuId;
 
     /**
      * erp商品id
      */
-    private Integer erpGoodsId;
+    private Long erpGoodsId;
 
     /**
      * 创建时间
@@ -332,28 +333,28 @@ public class TaoGoodsSku implements Serializable {
     /**
      * erp商品SKUid
      */
-    public Integer getErpGoodsSkuId() {
+    public Long getErpGoodsSkuId() {
         return erpGoodsSkuId;
     }
 
     /**
      * erp商品SKUid
      */
-    public void setErpGoodsSkuId(Integer erpGoodsSkuId) {
+    public void setErpGoodsSkuId(Long erpGoodsSkuId) {
         this.erpGoodsSkuId = erpGoodsSkuId;
     }
 
     /**
      * erp商品id
      */
-    public Integer getErpGoodsId() {
+    public Long getErpGoodsId() {
         return erpGoodsId;
     }
 
     /**
      * erp商品id
      */
-    public void setErpGoodsId(Integer erpGoodsId) {
+    public void setErpGoodsId(Long erpGoodsId) {
         this.erpGoodsId = erpGoodsId;
     }
 

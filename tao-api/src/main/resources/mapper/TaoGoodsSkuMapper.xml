@@ -21,8 +21,8 @@
             <result property="status" column="status" jdbcType="VARCHAR"/>
             <result property="skuSpecId" column="sku_spec_id" jdbcType="VARCHAR"/>
             <result property="barcode" column="barcode" jdbcType="VARCHAR"/>
-            <result property="erpGoodsSkuId" column="erp_goods_sku_id" jdbcType="INTEGER"/>
-            <result property="erpGoodsId" column="erp_goods_id" jdbcType="INTEGER"/>
+            <result property="erpGoodsSkuId" column="erp_goods_sku_id" jdbcType="BIGINT"/>
+            <result property="erpGoodsId" column="erp_goods_id" jdbcType="BIGINT"/>
             <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
     </resultMap>
 

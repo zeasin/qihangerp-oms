@@ -2,7 +2,11 @@ package com.qihang.tao.controller;
 
 import com.qihang.common.common.ApiResult;
 import com.qihang.common.common.ResultVoEnum;
+import com.qihang.common.enums.EnumShopType;
 import com.qihang.common.enums.HttpStatus;
+import com.qihang.common.mq.MqMessage;
+import com.qihang.common.mq.MqType;
+import com.qihang.common.mq.MqUtils;
 import com.qihang.tao.openApi.ApiCommon;
 //import com.qihang.tao.api.ApiResult;
 import com.qihang.tao.openApi.OrderApiHelper;
@@ -26,6 +30,7 @@ public class OrderApiController {
 
     private final TaoOrderService orderService;
     private final ApiCommon apiCommon;
+    private final MqUtils mqUtils;
 
 
     /**
@@ -77,9 +82,11 @@ public class OrderApiController {
             if (result.getCode() == ResultVoEnum.DataExist.getIndex()) {
                 //已经存在
                 log.info("/**************主动更新tao订单：开始更新数据库：" + order.getId() + "存在、更新****************/");
+                mqUtils.sendApiMessage(MqMessage.build(EnumShopType.TAO, MqType.ORDER_MESSAGE,order.getTid().toString()));
                 hasExistOrder++;
             } else if (result.getCode() == ResultVoEnum.SUCCESS.getIndex()) {
                 log.info("/**************主动更新tao订单：开始更新数据库：" + order.getId() + "不存在、新增****************/");
+                mqUtils.sendApiMessage(MqMessage.build(EnumShopType.TAO,MqType.ORDER_MESSAGE,order.getTid().toString()));
                 insertSuccess++;
             } else {
                 log.info("/**************主动更新tao订单：开始更新数据库：" + order.getId() + "报错****************/");

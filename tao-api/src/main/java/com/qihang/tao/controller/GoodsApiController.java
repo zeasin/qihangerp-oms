@@ -50,7 +50,7 @@ public class GoodsApiController {
         String appSecret = checkResult.getData().getAppSecret();
 
         Long pageIndex = 1L;
-        Long pageSize = 40L;
+        Long pageSize = 100L;
 
         ApiResult<TaoGoods> listApiResult = GoodsApiHelper.pullGoods(pageIndex, pageSize, url, appKey, appSecret, sessionKey);
 

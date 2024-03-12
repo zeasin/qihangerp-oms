@@ -4,11 +4,14 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.qihang.common.common.ResultVoEnum;
+import com.qihang.common.utils.StringUtils;
 import com.qihang.tao.common.PageQuery;
 import com.qihang.tao.common.PageResult;
+import com.qihang.tao.domain.OGoodsSku;
 import com.qihang.tao.domain.TaoGoods;
 import com.qihang.tao.domain.TaoGoodsSku;
 import com.qihang.tao.domain.bo.TaoGoodsBo;
+import com.qihang.tao.mapper.OGoodsSkuMapper;
 import com.qihang.tao.mapper.TaoGoodsSkuMapper;
 import com.qihang.tao.service.TaoGoodsService;
 import com.qihang.tao.mapper.TaoGoodsMapper;
@@ -31,6 +34,7 @@ public class TaoGoodsServiceImpl extends ServiceImpl<TaoGoodsMapper, TaoGoods>
 
     private final TaoGoodsMapper mapper;
     private final TaoGoodsSkuMapper skuMapper;
+    private final OGoodsSkuMapper goodsSkuMapper;
 
     @Override
     public PageResult<TaoGoods> queryPageList(TaoGoodsBo bo, PageQuery pageQuery) {
@@ -57,6 +61,14 @@ public class TaoGoodsServiceImpl extends ServiceImpl<TaoGoodsMapper, TaoGoods>
             if(goods.getSkus()!=null) {
                 for (var sku : goods.getSkus()) {
                     sku.setTaoGoodsId(goods.getId());
+                    // 根据OuterId查找ERP系统中的skuid
+                    if(StringUtils.isNotEmpty(sku.getOuterId())) {
+                        List<OGoodsSku> oGoodsSkus = goodsSkuMapper.selectList(new LambdaQueryWrapper<OGoodsSku>().eq(OGoodsSku::getSkuNum, sku.getOuterId()));
+                        if(oGoodsSkus!=null && !oGoodsSkus.isEmpty()){
+                            sku.setErpGoodsId(oGoodsSkus.get(0).getErpGoodsId());
+                            sku.setErpGoodsSkuId(oGoodsSkus.get(0).getErpSkuId());
+                        }
+                    }
                     skuMapper.insert(sku);
                 }
             }
@@ -70,6 +82,15 @@ public class TaoGoodsServiceImpl extends ServiceImpl<TaoGoodsMapper, TaoGoods>
             if(goods.getSkus()!=null) {
                 for (var sku : goods.getSkus()) {
                     sku.setTaoGoodsId(goods.getId());
+                    // 根据OuterId查找ERP系统中的skuid
+                    if(StringUtils.isNotEmpty(sku.getOuterId())) {
+                        List<OGoodsSku> oGoodsSkus = goodsSkuMapper.selectList(new LambdaQueryWrapper<OGoodsSku>().eq(OGoodsSku::getSkuNum, sku.getOuterId()));
+                        if(oGoodsSkus!=null && !oGoodsSkus.isEmpty()){
+                            sku.setErpGoodsId(oGoodsSkus.get(0).getErpGoodsId());
+                            sku.setErpGoodsSkuId(oGoodsSkus.get(0).getErpSkuId());
+                        }
+                    }
+
                     skuMapper.insert(sku);
                 }
             }
