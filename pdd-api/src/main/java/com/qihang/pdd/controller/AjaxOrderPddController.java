@@ -16,12 +16,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @AllArgsConstructor
-@RequestMapping("/pdd_api")
+@RequestMapping("/order")
 @RestController
 public class AjaxOrderPddController {
     private static Logger log = LoggerFactory.getLogger(AjaxOrderPddController.class);
@@ -41,8 +42,8 @@ public class AjaxOrderPddController {
      * @return
      * @throws Exception
      */
-    @RequestMapping(value = "/order/pull_order", method = RequestMethod.GET)
-    public ApiResult<Object> getOrderList(OpenApiRequest reqData)
+    @RequestMapping(value = "/pull_order", method = RequestMethod.POST)
+    public ApiResult<Object> getOrderList(@RequestBody OpenApiRequest reqData)
             throws Exception {
         Integer updType = reqData.getUpdType();//更新类型0拉取新订单1更新订单
         String startDate = reqData.getStartDate();//reqData.getString("startTime");
@@ -54,7 +55,7 @@ public class AjaxOrderPddController {
         if (shop.getType() != EnumShopType.PDD.getIndex()) {
             return ApiResult.build(HttpStatus.PARAMS_ERROR, "参数错误，店铺不是PDD店铺");
         }
-        SysPlatform platform = platformService.selectById(EnumShopType.JD.getIndex());
+        SysPlatform platform = platformService.selectById(EnumShopType.PDD.getIndex());
 
         if(!StringUtils.hasText(platform.getAppKey())) {
             return ApiResult.build(HttpStatus.PARAMS_ERROR, "平台配置错误，没有找到AppKey");
@@ -108,16 +109,16 @@ public class AjaxOrderPddController {
         if (!StringUtils.isEmpty(startTime_))
             startTime = DateUtil.dateTimeToStamp(startTime_).longValue();*/
 
-        if (!StringUtils.isEmpty(startDate)) {
-            // 选择了开始日期,从开始时间直接循环更新到结束时间,如果选择的时间大于数据库订单最后的时间，那么就用数据库的订单时间
-            Long startTimeTmp = DateUtil.dateTimeToStamp(startDate).longValue();
-            if (startTimeTmp < startTime)
-                startTime = startTimeTmp;
-
-            // 如果选择的结束时间不为空，就用选择的时间
-            if (!StringUtils.isEmpty(endDate))
-                endTime = DateUtil.dateTimeToStamp(endDate).longValue();
-        }
+//        if (!StringUtils.isEmpty(startDate)) {
+//            // 选择了开始日期,从开始时间直接循环更新到结束时间,如果选择的时间大于数据库订单最后的时间，那么就用数据库的订单时间
+//            Long startTimeTmp = DateUtil.dateTimeToStamp(startDate).longValue();
+//            if (startTimeTmp < startTime)
+//                startTime = startTimeTmp;
+//
+//            // 如果选择的结束时间不为空，就用选择的时间
+//            if (!StringUtils.isEmpty(endDate))
+//                endTime = DateUtil.dateTimeToStamp(endDate).longValue();
+//        }
 
         /*
          * if (StringUtils.isEmpty(startDate)) { //没有选择开始日期 var pullOrderLog =
@@ -134,8 +135,7 @@ public class AjaxOrderPddController {
         long forSize = (kaishidaojiesu % (60 * 60 * 24) == 0) ? kaishidaojiesu / (60 * 60 * 24)
                 : kaishidaojiesu / (60 * 60 * 24) + 1;// 计算需要循环的次数
 
-        log.info("开始循环更新拼多多订单。开始时间：" + DateUtil.unixTimeStampToDate(startTime) + "结束时间："
-                + DateUtil.unixTimeStampToDate(endTime) + "总共循环" + forSize);
+//        log.info("开始循环更新拼多多订单。开始时间：" + DateUtil.unixTimeStampToDate(startTime) + "结束时间：" + DateUtil.unixTimeStampToDate(endTime) + "总共循环" + forSize);
         int updCount = 0;
         int insertCount = 0;
         int failCount = 0;
@@ -149,11 +149,9 @@ public class AjaxOrderPddController {
                 endTime1 = endTime;
             int pageIndex = 1;
 
-            result = this.pullPddOrder(appKey, appSercet, accessToken, pageIndex, pageSize, startTime1, endTime1,
-                    shopId);
+            result = this.pullPddOrder(params.getAppKey(),params.getAppSecret(), accessToken, pageIndex, pageSize, startTime1, endTime1, shop.getSellerId());
             pageIndex++;
-            log.info("开始循环" + i + "。开始时间：" + DateUtil.unixTimeStampToDate(startTime1) + "结束时间："
-                    + DateUtil.unixTimeStampToDate(endTime1) + "。");
+//            log.info("开始循环" + i + "。开始时间：" + DateUtil.unixTimeStampToDate(startTime1) + "结束时间：" + DateUtil.unixTimeStampToDate(endTime1) + "。");
             // log.info("开始更新第"+pageIndex+"页");
             if (result.getCode() == 0) {
                 updCount += result.getData().getUpdCount();
@@ -161,36 +159,35 @@ public class AjaxOrderPddController {
                 failCount += result.getData().getFailCount();
                 // log.info("查询到数据:"+result.getData().getTotalRecords());
             } else if (result.getCode() > 0)
-                return new ApiResult<>(result.getCode(), result.getMsg());
+                return ApiResult.build(result.getCode(), result.getMsg());
             // 计算总页数
             int totalPage = (result.getData().getTotalRecords() % pageSize == 0)
                     ? result.getData().getTotalRecords() / pageSize
                     : (result.getData().getTotalRecords() / pageSize) + 1;
             log.info("开始循环" + i + "。查询到" + result.getData().getTotalRecords() + "条数据，总共：" + totalPage + "页");
-            while (pageIndex <= totalPage) {
-
-                // log.info("开始更新第"+pageIndex+"页");
-                // log.info("查询到数据:"+result.getData().getTotalRecords());
-                result = this.pullPddOrder(appKey, appSercet, accessToken, pageIndex, pageSize, startTime1,
-                        endTime1, shopId);
-                if (result.getCode() == 0) {
-                    updCount += result.getData().getUpdCount();
-                    insertCount += result.getData().getAddCount();
-                    failCount += result.getData().getFailCount();
-                }
-                pageIndex++;
-            }
+//            while (pageIndex <= totalPage) {
+//
+//                // log.info("开始更新第"+pageIndex+"页");
+//                // log.info("查询到数据:"+result.getData().getTotalRecords());
+//                result = this.pullPddOrder(appKey, appSercet, accessToken, pageIndex, pageSize, startTime1, endTime1, shopId);
+//                if (result.getCode() == 0) {
+//                    updCount += result.getData().getUpdCount();
+//                    insertCount += result.getData().getAddCount();
+//                    failCount += result.getData().getFailCount();
+//                }
+//                pageIndex++;
+//            }
             // pageIndex = 1;
 
         }
 
-        ErpSalesPullCountResp resp = new ErpSalesPullCountResp();// 返回结果
-        resp.setStartTime(DateUtil.unixTimeStampToDate(startTime));
-        resp.setEndTime(DateUtil.unixTimeStampToDate(endTime));
-        resp.setAddCount(insertCount);
-        resp.setFailCount(failCount);
-        resp.setUpdCount(updCount);
-        log.info("更新完成，结果：" + JsonUtil.transferToJson(resp));
+//        ErpSalesPullCountResp resp = new ErpSalesPullCountResp();// 返回结果
+//        resp.setStartTime(DateUtil.unixTimeStampToDate(startTime));
+//        resp.setEndTime(DateUtil.unixTimeStampToDate(endTime));
+//        resp.setAddCount(insertCount);
+//        resp.setFailCount(failCount);
+//        resp.setUpdCount(updCount);
+//        log.info("更新完成，结果：" + JsonUtil.transferToJson(resp));
         /*
          * try { //添加更新日志 salesOrderService.addErpSalesPullOrderLog(startTime, endTime,
          * shopId, result.getData().getAddCount(), result.getData().getFailCount(),
@@ -198,9 +195,9 @@ public class AjaxOrderPddController {
          * log.info("添加更新日志错误"); }
          */
         if (result.getCode() == 0)
-            return new ApiResult<>(EnumResultVo.SUCCESS.getIndex(), "SUCCESS", resp);
+            return ApiResult.build(HttpStatus.SUCCESS, "SUCCESS");
         else
-            return new ApiResult<>(result.getCode(), result.getMsg());
+            return ApiResult.build(result.getCode(), result.getMsg());
     }
 
     /**
@@ -229,17 +226,17 @@ public class AjaxOrderPddController {
         pddOrderListGetRequest.setPageSize(pageSize);
 
         ErpSalesPullCountResp resp = new ErpSalesPullCountResp();
-        resp.setStartTime(DateUtil.unixTimeStampToDate(startTime));
-        resp.setEndTime(DateUtil.unixTimeStampToDate(endTime));
+        resp.setStartTime("2024-03-03 00:00:00");
+        resp.setEndTime("2024-03-13 23:00:00");
 
         Integer addCount = 0, updCount = 0, failCount = 0;
         log.info("开始更新第" + pageNo + "页。。。。。。。");
         PddOrderListGetResponse pddOrderListGetResponse = client.syncInvoke(pddOrderListGetRequest, accessToken);
         if (pddOrderListGetResponse.getErrorResponse() != null) {
             if (pddOrderListGetResponse.getErrorResponse().getErrorCode().intValue() == 10019) {
-                return new ApiResult<>(EnumResultVo.TokenFail.getIndex(), "Token过期");
+                return ApiResult.build(HttpStatus.UNAUTHORIZED, "Token过期");
             } else
-                return new ApiResult<>(EnumResultVo.SystemException.getIndex(),
+                return ApiResult.build(HttpStatus.ERROR,
                         "接口调用失败：" + pddOrderListGetResponse.getErrorResponse().getErrorMsg());
         } else {
             // 获取到了数据
@@ -250,9 +247,9 @@ public class AjaxOrderPddController {
                     // if(item.getOrderSn().equals("210629-025663970220736")){
                     // String s= item.getOrderSn();
                     // }
-                    PddOrder pddEntity = new PddOrder();
+                    /*PddOrder pddEntity = new PddOrder();
 
-                    /*pddEntity.setBuyer_memo(item.getBuyerMemo());
+                    pddEntity.setBuyer_memo(item.getBuyerMemo());
                     pddEntity.setCapital_free_discount(item.getCapitalFreeDiscount());
                     pddEntity.setCity(item.getCity());
                     pddEntity.setConfirm_status(item.getConfirmStatus());
@@ -339,7 +336,7 @@ public class AjaxOrderPddController {
             } else
                 resp.setTotalRecords(0);
         }
-        return new ApiResult<>(EnumResultVo.SUCCESS.getIndex(), "SUCCESS", resp);
+        return ApiResult.build(HttpStatus.SUCCESS, "SUCCESS", resp);
     }
 
 
