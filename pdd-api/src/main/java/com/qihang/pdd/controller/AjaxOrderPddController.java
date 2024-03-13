@@ -63,9 +63,9 @@ public class AjaxOrderPddController {
         if(!StringUtils.hasText(platform.getAppSecret())) {
             return ApiResult.build(HttpStatus.PARAMS_ERROR, "第三方平台配置错误，没有找到AppSercet");
         }
-//        if(!StringUtils.hasText(platform.getRedirectUri())) {
-//            return ApiResult.build(HttpStatus.PARAMS_ERROR, "第三方平台配置错误，没有找到RedirectUri");
-//        }
+        if(!StringUtils.hasText(platform.getRedirectUri())) {
+            return ApiResult.build(HttpStatus.PARAMS_ERROR, "第三方平台配置错误，没有找到RedirectUri");
+        }
 //        if(!StringUtils.hasText(platform.getServerUrl())) {
 //            return ApiResult.build(HttpStatus.PARAMS_ERROR, "第三方平台配置错误，没有找到ServerUrl");
 //        }

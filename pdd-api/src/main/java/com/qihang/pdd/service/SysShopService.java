@@ -11,5 +11,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface SysShopService extends IService<SysShop> {
     SysShop selectShopById(Integer shopId);
 
-    void updateSessionKey(Integer shopId,String sessionKey);
+    void updateSessionKey(Integer shopId,String sessionKey,String refreshToken);
 }
