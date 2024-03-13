@@ -6,6 +6,7 @@ import com.pdd.pop.sdk.http.PopHttpClient;
 import com.pdd.pop.sdk.http.api.pop.request.PddOrderListGetRequest;
 import com.pdd.pop.sdk.http.api.pop.response.PddOrderListGetResponse;
 import com.qihang.common.common.ApiResult;
+import com.qihang.pdd.service.SysShopService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +19,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class AjaxOrderPddController {
     private static Logger log = LoggerFactory.getLogger(AjaxOrderPddController.class);
+//    @Autowired
+//    private ServerConfig serverConfig;
     @Autowired
-    private ServerConfig serverConfig;
-    @Autowired
-    private IShopService shopService;
-    @Autowired
-    private IPddOrderService pddOrderService;
+    private SysShopService shopService;
+//    @Autowired
+//    private IPddOrderService pddOrderService;
 
     /**
      * 接口拉取订单
@@ -34,16 +35,15 @@ public class AjaxOrderPddController {
      * @throws Exception
      */
     @RequestMapping(value = "/order/pull_order", method = RequestMethod.GET)
-    public ApiResult<Object> getOrderList(DouRequest reqData)
+    public ApiResult<Object> getOrderList(OpenApiRequest reqData)
             throws Exception {
         Integer updType = reqData.getUpdType();//更新类型0拉取新订单1更新订单
         String startDate = reqData.getStartDate();//reqData.getString("startTime");
         String endDate = reqData.getEndDate();//reqData.getString("endTime");
 
-        Long shopId = reqData.getShopId();// 拼多多shopId
-        var shop = shopService.selectShopById(shopId);
+        var shop = shopService.selectShopById(reqData.getShopId());
         if(shop == null) return new ApiResult<>(EnumResultVo.Fail.getIndex(), "店铺不存在！");
-        String appKey = shop.getAppkey();
+        String appKey = shop.getAppKey();
         String appSercet = shop.getAppSercet();
         if(!StringUtils.hasText(appKey) || !StringUtils.hasText(appSercet)) return new ApiResult<>(EnumResultVo.Fail.getIndex(), "参数错误：请设置appkey和serecet");
 
