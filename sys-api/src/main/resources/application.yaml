@@ -12,12 +12,14 @@ spring:
       nacos:
         enabled: true
     nacos:
-      serverAddr: 127.0.0.1:8848
+#      serverAddr: 127.0.0.1:8848
       discovery:
         server-addr: 127.0.0.1:8848
         usename: nacos
         passowrd: nacos
-#    gateway:
+      config:
+        server-addr: 127.0.0.1:8848
+  #    gateway:
 #      discovery:
 #        locator:
 #          enabled: true # gateway 可以从 nacos 发现微服务
