@@ -11,7 +11,7 @@
  Target Server Version : 80200
  File Encoding         : 65001
 
- Date: 12/03/2024 21:19:29
+ Date: 13/03/2024 22:10:48
 */
 
 SET NAMES utf8mb4;
@@ -1460,8 +1460,8 @@ CREATE TABLE `sys_platform`  (
 -- ----------------------------
 INSERT INTO `sys_platform` VALUES (1, '天猫', 'TMALL', '12175777', '368dbbd183a77d551735be13f59bbcda', NULL, NULL);
 INSERT INTO `sys_platform` VALUES (2, '京东', 'JD', 'FB4CC3688E6F9065D4FF510A53BB60FF', '40e8c8b2427f4e6db8f4a39af27d719e', 'http://www.qumei.com', 'https://api.jd.com/routerjson');
-INSERT INTO `sys_platform` VALUES (3, '抖店', 'DOUDIAN', NULL, NULL, NULL, NULL);
-INSERT INTO `sys_platform` VALUES (4, '拼多多', 'PDD', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_platform` VALUES (3, '抖店', 'DOUDIAN', '7344938657423296019', '4e704882-832a-42e5-845f-6af991ce0ce2', NULL, NULL);
+INSERT INTO `sys_platform` VALUES (4, '拼多多', 'PDD', 'b92194d1af904c8a86a2c9eff6f9bfb0', '8da714f8dcbfb12d3972626ef8acfc0737aacecb', NULL, NULL);
 
 -- ----------------------------
 -- Table structure for sys_shop
@@ -1492,7 +1492,7 @@ CREATE TABLE `sys_shop`  (
 -- Records of sys_shop
 -- ----------------------------
 INSERT INTO `sys_shop` VALUES (1, '天猫旗舰店', 1, '', 98, 1, 0, '', 59972781, '31014100', '7b0769269b0c0ca88949791c14eb3a5c', '6102522199aaa4a42a2e6be95d0a5e18657c1576ec563a0351855490', NULL, NULL, NULL, NULL, 'http://gw.api.taobao.com/router/rest');
-INSERT INTO `sys_shop` VALUES (2, '京东旗舰店', 2, NULL, 9, 0, 0, NULL, 10706, NULL, NULL, '8abd974c62c34778935b34b5952e6f68izdk', 31535999, NULL, '919b21a3b9d247d08d7701cb8bcc2432ote5', NULL, NULL);
+INSERT INTO `sys_shop` VALUES (2, '京东旗舰店', 2, NULL, 9, 1, 0, NULL, 10706, NULL, NULL, '8abd974c62c34778935b34b5952e6f68izdk', 31535999, NULL, '919b21a3b9d247d08d7701cb8bcc2432ote5', NULL, NULL);
 INSERT INTO `sys_shop` VALUES (3, '抖音旗舰店', 3, 'http://openapi.jinritemai.com', 87, 1, 1653672695, NULL, 0, '7249607407477720636', '36a12497-fb9d-4b54-8cd1-fd1617346687', '', NULL, NULL, NULL, NULL, '2');
 INSERT INTO `sys_shop` VALUES (5, '拼多多旗舰店', 4, NULL, 99, 1, 1680698886, 'pdd10006159121', 100061591, NULL, NULL, '87f8044d2a5f45a489aa3a952785b0d35e61788a', NULL, NULL, NULL, NULL, NULL);
 
@@ -1594,7 +1594,7 @@ CREATE TABLE `sys_user`  (
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES (1, 103, 'admin', '启航oms', '00', '280645618@qq.com', '15888888888', '1', '', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '0', '0', '127.0.0.1', '2024-03-12 19:46:22', 'admin', '2023-08-07 19:31:37', '', '2024-03-12 19:46:22', '管理员');
+INSERT INTO `sys_user` VALUES (1, 103, 'admin', '启航oms', '00', '280645618@qq.com', '15888888888', '1', '', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '0', '0', '127.0.0.1', '2024-03-13 21:39:53', 'admin', '2023-08-07 19:31:37', '', '2024-03-13 21:39:52', '管理员');
 
 -- ----------------------------
 -- Table structure for tao_goods
@@ -1634,7 +1634,7 @@ CREATE TABLE `tao_goods`  (
   `erp_goods_id` int NULL DEFAULT NULL COMMENT 'erp商品id',
   `create_time` datetime NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1766460238728384523 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1767527429259173890 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of tao_goods
@@ -1711,7 +1711,7 @@ CREATE TABLE `tao_goods_sku`  (
   `erp_goods_id` bigint NULL DEFAULT NULL COMMENT 'erp商品id',
   `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1766460812739858435 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1767527445017174020 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of tao_goods_sku
