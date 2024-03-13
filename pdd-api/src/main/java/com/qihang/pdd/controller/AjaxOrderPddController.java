@@ -6,7 +6,12 @@ import com.pdd.pop.sdk.http.PopHttpClient;
 import com.pdd.pop.sdk.http.api.pop.request.PddOrderListGetRequest;
 import com.pdd.pop.sdk.http.api.pop.response.PddOrderListGetResponse;
 import com.qihang.common.common.ApiResult;
+import com.qihang.common.enums.EnumShopType;
+import com.qihang.common.enums.HttpStatus;
+import com.qihang.pdd.domain.SysPlatform;
+import com.qihang.pdd.service.SysPlatformService;
 import com.qihang.pdd.service.SysShopService;
+import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,14 +20,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+@AllArgsConstructor
 @RequestMapping("/pdd_api")
 @RestController
 public class AjaxOrderPddController {
     private static Logger log = LoggerFactory.getLogger(AjaxOrderPddController.class);
 //    @Autowired
 //    private ServerConfig serverConfig;
-    @Autowired
-    private SysShopService shopService;
+
+    private final SysShopService shopService;
+    private final SysPlatformService platformService;
 //    @Autowired
 //    private IPddOrderService pddOrderService;
 
@@ -42,31 +49,53 @@ public class AjaxOrderPddController {
         String endDate = reqData.getEndDate();//reqData.getString("endTime");
 
         var shop = shopService.selectShopById(reqData.getShopId());
-        if(shop == null) return new ApiResult<>(EnumResultVo.Fail.getIndex(), "店铺不存在！");
-        String appKey = shop.getAppKey();
-        String appSercet = shop.getAppSercet();
-        if(!StringUtils.hasText(appKey) || !StringUtils.hasText(appSercet)) return new ApiResult<>(EnumResultVo.Fail.getIndex(), "参数错误：请设置appkey和serecet");
+        if(shop == null) return ApiResult.build(HttpStatus.PARAMS_ERROR, "店铺不存在！");
+
+        if (shop.getType() != EnumShopType.PDD.getIndex()) {
+            return ApiResult.build(HttpStatus.PARAMS_ERROR, "参数错误，店铺不是PDD店铺");
+        }
+        SysPlatform platform = platformService.selectById(EnumShopType.JD.getIndex());
+
+        if(!StringUtils.hasText(platform.getAppKey())) {
+            return ApiResult.build(HttpStatus.PARAMS_ERROR, "平台配置错误，没有找到AppKey");
+        }
+        if(!StringUtils.hasText(platform.getAppSecret())) {
+            return ApiResult.build(HttpStatus.PARAMS_ERROR, "第三方平台配置错误，没有找到AppSercet");
+        }
+//        if(!StringUtils.hasText(platform.getRedirectUri())) {
+//            return ApiResult.build(HttpStatus.PARAMS_ERROR, "第三方平台配置错误，没有找到RedirectUri");
+//        }
+//        if(!StringUtils.hasText(platform.getServerUrl())) {
+//            return ApiResult.build(HttpStatus.PARAMS_ERROR, "第三方平台配置错误，没有找到ServerUrl");
+//        }
+
+//        String appKey = shop.getAppKey();
+//        String appSercet = shop.getAppSercet();
+//        if(!StringUtils.hasText(appKey) || !StringUtils.hasText(appSercet)) return new ApiResult<>(EnumResultVo.Fail.getIndex(), "参数错误：请设置appkey和serecet");
 
 //        String clientId = DataConfigObject.getInstance().getPddClientId();
 //        String clientSecret = DataConfigObject.getInstance().getPddClientSecret();
 //        var shop = shopService.getShop(shopId);
         // var settingEntity = thirdSettingService.getEntity(shop.getType());
         ShopApiParams params = new ShopApiParams();
-        params.setAppKey(shop.getAppkey());
-        params.setAppSecret(shop.getAppSercet());
-        params.setAccessToken(shop.getSessionKey());
-        params.setTokenRequestUrl(serverConfig.getUrl()+"/pdd_api2/oauth");
+        params.setAppKey(platform.getAppKey());
+        params.setAppSecret(platform.getAppSecret());
+        params.setAccessToken(shop.getAccessToken());
+        params.setTokenRequestUrl("http://localhost:3000/pdd_api2/oauth");
         params.setApiRequestUrl(shop.getApiRequestUrl());
 
-        String accessToken = shop.getSessionKey();
-        if(!StringUtils.hasText(accessToken)) return new ApiResult<>(EnumResultVo.TokenFail.getIndex(), "参数错误：accessToken为空",params);
+        String accessToken = params.getAccessToken();
+        if(!StringUtils.hasText(accessToken)) {
+            return ApiResult.build(HttpStatus.PARAMS_ERROR, "参数错误：accessToken为空");
+        }
+//        if(!StringUtils.hasText(accessToken)) return new ApiResult<>(EnumResultVo.TokenFail.getIndex(), "参数错误：accessToken为空",params);
         // 获取店铺信息，判断店铺是否一致
-        var shopResult = PddApiUtils.getShopInfo(appKey, appSercet, accessToken);
-        if (shopResult.getCode() != EnumResultVo.SUCCESS.getIndex())
-            return new ApiResult<>(shopResult.getCode(), shopResult.getMsg(),params);
+        var shopResult = PddApiUtils.getShopInfo(params.getAppKey(), params.getAppSecret(), accessToken);
+        if (shopResult.getCode() != HttpStatus.SUCCESS)
+            return ApiResult.build(shopResult.getCode(), shopResult.getMsg(),params);
 
-        if (shopResult.getData().getMallId().longValue() != shop.getSellerUserId().longValue()) {
-            return new ApiResult<>(EnumResultVo.TokenFail.getIndex(), "该店铺不是授权店铺",params);
+        if (shopResult.getData().getMallId().longValue() != shop.getSellerId().longValue()) {
+            return ApiResult.build(HttpStatus.UNAUTHORIZED, "该店铺不是授权店铺",params);
         }
 
         ApiResult<ErpSalesPullCountResp> result = null;// 返回结果

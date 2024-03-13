@@ -35,7 +35,7 @@ public class ApiCommon {
         }
 
         if (shop.getType() != EnumShopType.JD.getIndex()) {
-            return ApiResult.build(HttpStatus.PARAMS_ERROR, "参数错误，店铺不是淘系店铺");
+            return ApiResult.build(HttpStatus.PARAMS_ERROR, "参数错误，店铺不是JD店铺");
         }
         SysPlatform platform = platformService.selectById(EnumShopType.JD.getIndex());
 

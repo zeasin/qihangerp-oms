@@ -5,8 +5,8 @@ import com.pdd.pop.sdk.http.PopClient;
 import com.pdd.pop.sdk.http.PopHttpClient;
 import com.pdd.pop.sdk.http.api.pop.request.PddMallInfoGetRequest;
 import com.pdd.pop.sdk.http.api.pop.response.PddMallInfoGetResponse;
-import com.qihang.erp.api.common.ApiResult;
-import com.qihang.erp.api.common.EnumResultVo;
+import com.qihang.common.common.ApiResult;
+import com.qihang.common.enums.HttpStatus;
 
 public class PddApiUtils {
     /**
@@ -24,11 +24,11 @@ public class PddApiUtils {
         PddMallInfoGetRequest request = new PddMallInfoGetRequest();
         PddMallInfoGetResponse response = client.syncInvoke(request, accessToken);
         if (response.getErrorResponse() == null) {
-            return new ApiResult<>(EnumResultVo.SUCCESS.getIndex(), "SUCCESS", response.getMallInfoGetResponse());
+            return ApiResult.build(HttpStatus.SUCCESS, "SUCCESS", response.getMallInfoGetResponse());
         } else if (response.getErrorResponse().getErrorCode().intValue() == 10019) {
-            return new ApiResult<>(EnumResultVo.TokenFail.getIndex(), "Token过期");
+            return ApiResult.build(HttpStatus.UNAUTHORIZED, "Token过期");
         }else
-            return new ApiResult<>(EnumResultVo.Fail.getIndex(), "接口调用失败："+response.getErrorResponse().getErrorMsg());
+            return ApiResult.build(HttpStatus.ERROR, "接口调用失败："+response.getErrorResponse().getErrorMsg());
 
     }
 }

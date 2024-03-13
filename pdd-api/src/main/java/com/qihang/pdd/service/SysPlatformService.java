@@ -9,5 +9,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 * @createDate 2024-03-13 17:43:42
 */
 public interface SysPlatformService extends IService<SysPlatform> {
-
+    SysPlatform selectById(Integer id);
 }
