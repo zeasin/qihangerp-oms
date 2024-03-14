@@ -24,6 +24,8 @@ public class PddApiUtils {
         PddMallInfoGetRequest request = new PddMallInfoGetRequest();
         PddMallInfoGetResponse response = client.syncInvoke(request, accessToken);
         if (response.getErrorResponse() == null) {
+            // 刷新一下token
+
             return ApiResult.build(HttpStatus.SUCCESS, "SUCCESS", response.getMallInfoGetResponse());
         } else if (response.getErrorResponse().getErrorCode().intValue() == 10019) {
             return ApiResult.build(HttpStatus.UNAUTHORIZED, "Token过期");

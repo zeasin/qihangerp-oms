@@ -11,7 +11,7 @@
  Target Server Version : 80032
  File Encoding         : 65001
 
- Date: 14/03/2024 16:10:31
+ Date: 14/03/2024 17:05:59
 */
 
 SET NAMES utf8mb4;
@@ -1446,7 +1446,7 @@ CREATE TABLE `sys_shop`  (
 INSERT INTO `sys_shop` VALUES (1, '天猫旗舰店', 1, '', 98, 1, 0, '', 59972781, '31014100', '7b0769269b0c0ca88949791c14eb3a5c', '6102522199aaa4a42a2e6be95d0a5e18657c1576ec563a0351855490', NULL, NULL, NULL, NULL, 'http://gw.api.taobao.com/router/rest');
 INSERT INTO `sys_shop` VALUES (2, '京东旗舰店', 2, NULL, 9, 0, 0, NULL, 10706, NULL, NULL, '8abd974c62c34778935b34b5952e6f68izdk', 31535999, NULL, '919b21a3b9d247d08d7701cb8bcc2432ote5', NULL, NULL);
 INSERT INTO `sys_shop` VALUES (3, '抖音旗舰店', 3, 'http://openapi.jinritemai.com', 87, 1, 1653672695, NULL, 90158786, '7249607407477720636', '36a12497-fb9d-4b54-8cd1-fd1617346687', '', NULL, NULL, NULL, NULL, '2');
-INSERT INTO `sys_shop` VALUES (5, '拼多多旗舰店', 4, NULL, 99, 1, 1680698886, 'pdd10006159121', 430222062, NULL, NULL, '87f8044d2a5f45a489aa3a952785b0d35e61788a', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_shop` VALUES (5, '拼多多旗舰店', 4, NULL, 99, 1, 1680698886, 'pdd43022206254', 430222062, NULL, NULL, 'fbe9ebb468c5444cbcc6bdd6703a33b1d079884d', 84690, 1710404363, 'af81d95e5b9d41daa0e3e81f53e8ef530885256f', NULL, NULL);
 
 -- ----------------------------
 -- Table structure for sys_shop_pull_lasttime
@@ -1546,7 +1546,7 @@ CREATE TABLE `sys_user`  (
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES (1, 103, 'admin', '启航oms', '00', '280645618@qq.com', '15888888888', '1', '', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '0', '0', '127.0.0.1', '2024-03-13 17:18:32', 'admin', '2023-08-07 19:31:37', '', '2024-03-13 18:03:31', '管理员');
+INSERT INTO `sys_user` VALUES (1, 103, 'admin', '启航oms', '00', '280645618@qq.com', '15888888888', '1', '', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '0', '0', '127.0.0.1', '2024-03-14 15:29:43', 'admin', '2023-08-07 19:31:37', '', '2024-03-14 16:14:43', '管理员');
 
 -- ----------------------------
 -- Table structure for tao_goods

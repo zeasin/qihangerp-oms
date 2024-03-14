@@ -24,13 +24,16 @@ public class SysShopServiceImpl extends ServiceImpl<SysShopMapper, SysShop>
     }
 
     @Override
-    public void updateSessionKey(Integer shopId, String sessionKey,String refreshToken) {
+    public void updateSessionKey(Integer shopId, String ownerId, String sessionKey, String refreshToken, Long expiresIn) {
         SysShop shop = new SysShop();
         shop.setId(shopId);
         shop.setAccessToken(sessionKey);
         shop.setRefreshToken(refreshToken);
+        shop.setExpiresIn(expiresIn);
+        shop.setAccessTokenBegin(System.currentTimeMillis() / 1000);
         mapper.updateById(shop);
     }
+
 }
 
 

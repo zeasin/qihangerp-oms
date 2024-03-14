@@ -1,10 +1,14 @@
 package com.qihang.pdd.controller;
 
 import com.pdd.pop.sdk.common.util.JsonUtil;
+import com.pdd.pop.sdk.http.PopAccessTokenClient;
 import com.pdd.pop.sdk.http.PopClient;
 import com.pdd.pop.sdk.http.PopHttpClient;
 import com.pdd.pop.sdk.http.api.pop.request.PddOrderListGetRequest;
+import com.pdd.pop.sdk.http.api.pop.request.PddPopAuthTokenRefreshRequest;
 import com.pdd.pop.sdk.http.api.pop.response.PddOrderListGetResponse;
+import com.pdd.pop.sdk.http.api.pop.response.PddPopAuthTokenRefreshResponse;
+import com.pdd.pop.sdk.http.token.AccessTokenResponse;
 import com.qihang.common.common.ApiResult;
 import com.qihang.common.enums.EnumShopType;
 import com.qihang.common.enums.HttpStatus;
@@ -20,6 +24,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.net.URLEncoder;
 
 @AllArgsConstructor
 @RequestMapping("/order")
@@ -78,12 +84,14 @@ public class AjaxOrderPddController {
 //        String clientSecret = DataConfigObject.getInstance().getPddClientSecret();
 //        var shop = shopService.getShop(shopId);
         // var settingEntity = thirdSettingService.getEntity(shop.getType());
+
         ShopApiParams params = new ShopApiParams();
         params.setAppKey(platform.getAppKey());
         params.setAppSecret(platform.getAppSecret());
         params.setAccessToken(shop.getAccessToken());
         params.setTokenRequestUrl("http://localhost:3000/pdd_api2/oauth");
         params.setApiRequestUrl(shop.getApiRequestUrl());
+        String url = "https://mms.pinduoduo.com/open.html?response_type=code&client_id=" + params.getAppKey() + "&redirect_uri=" + URLEncoder.encode(platform.getRedirectUri());
 
         String accessToken = params.getAccessToken();
         if(!StringUtils.hasText(accessToken)) {
@@ -92,8 +100,34 @@ public class AjaxOrderPddController {
 //        if(!StringUtils.hasText(accessToken)) return new ApiResult<>(EnumResultVo.TokenFail.getIndex(), "参数错误：accessToken为空",params);
         // 获取店铺信息，判断店铺是否一致
         var shopResult = PddApiUtils.getShopInfo(params.getAppKey(), params.getAppSecret(), accessToken);
-        if (shopResult.getCode() != HttpStatus.SUCCESS)
-            return ApiResult.build(shopResult.getCode(), shopResult.getMsg(),params);
+        if (shopResult.getCode() != HttpStatus.SUCCESS) {
+//            if(shopResult.getCode() == HttpStatus.UNAUTHORIZED){
+//                // 生成AccessToken
+//                PopAccessTokenClient accessTokenClient = new PopAccessTokenClient(params.getAppKey(), params.getAppSecret());
+//                String code = "5d78cf7f5eb14e56b4fd08bdc9060eb334723348";
+//                try {
+//                    AccessTokenResponse response = accessTokenClient.generate(code);
+//                    if(response.getErrorResponse()!=null){
+//                        log.info("/***************获取拼多多授权token错误："+response.getErrorResponse().getErrorMsg()+"**************/");
+//                    }else{
+//                        //保存accessToken
+//                        shopService.updateSessionKey(reqData.getShopId(),response.getOwnerId(),response.getAccessToken(),response.getRefreshToken(),response.getExpiresIn().longValue());
+//                    }
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
+            return ApiResult.build(shopResult.getCode(), shopResult.getMsg(), params);
+        }else{
+            // 看看是否需要刷新一下token
+            PopClient client = new PopHttpClient(params.getAppKey(), params.getAppSecret());
+            PddPopAuthTokenRefreshRequest request = new PddPopAuthTokenRefreshRequest();
+            request.setRefreshToken(shop.getRefreshToken());
+            PddPopAuthTokenRefreshResponse response = client.syncInvoke(request);
+            System.out.println(response);
+            //保存accessToken
+            shopService.updateSessionKey(reqData.getShopId(),response.getPopAuthTokenRefreshResponse().getOwnerId(),response.getPopAuthTokenRefreshResponse().getAccessToken(),response.getPopAuthTokenRefreshResponse().getRefreshToken(),response.getPopAuthTokenRefreshResponse().getExpiresIn().longValue());
+        }
 
         if (shopResult.getData().getMallId().longValue() != shop.getSellerId().longValue()) {
             return ApiResult.build(HttpStatus.UNAUTHORIZED, "该店铺不是授权店铺",params);

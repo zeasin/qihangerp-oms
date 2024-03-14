@@ -66,7 +66,7 @@ public class PddOAuthController {
                 System.out.println(shopId +"--token:" + response.getAccessToken()+",thirdId:"+response.getOwnerId()+",shopId:"+shopId);
 
 //                shopService.updateSessionKey(shopId,Long.parseLong(response.getOwnerId()),response.getAccessToken());
-                shopService.updateSessionKey(shopId,response.getAccessToken(),response.getRefreshToken());
+                shopService.updateSessionKey(shopId,response.getOwnerId(),response.getAccessToken(),response.getRefreshToken(),response.getExpiresIn().longValue());
 
 //                thirdSettingService.updateEntity(shopId, response.getAccessToken(), response.getRefreshToken(), response.getExpiresIn(),response.getOwnerId());
                 return "redirect:/pdd/getTokenSuccess?mallId="+response.getOwnerId();
