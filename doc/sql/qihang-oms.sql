@@ -11,7 +11,7 @@
  Target Server Version : 80032
  File Encoding         : 65001
 
- Date: 14/03/2024 17:05:59
+ Date: 14/03/2024 17:31:03
 */
 
 SET NAMES utf8mb4;
@@ -2295,38 +2295,5 @@ INSERT INTO `tao_refund` VALUES (1763489313897975810, '146260491851729431', 'REF
 INSERT INTO `tao_refund` VALUES (1763489314027999234, '146225568320729431', 'REFUND', 1, 2040035126089723194, 2040035126089723194, 0, NULL, 699, 699, NULL, NULL, '2024-03-01 16:40:02', '2024-03-01 16:40:03', '曲美家具官方旗舰店', NULL, 'SUCCESS', 'TRADE_CLOSED', NULL, NULL, NULL, NULL, 'BUYER_NOT_RECEIVED', 0, 641634906618, 1, NULL, '拍错/多拍/不喜欢', 'onsale', NULL, '', NULL, NULL, NULL, NULL, '曲美家居轻奢简约现代床头柜储物双抽床边柜皮质卧室置物储藏柜', '4607887356857|颜色分类:轻奢黄;安装方式:组装', 'AAFlHVMUAAJ_dKyzaDWkciTw', '虽然不变的', NULL, '2024-03-01 16:59:51', NULL, NULL, NULL);
 INSERT INTO `tao_refund` VALUES (1763489314166411265, '146258439944729431', 'REFUND', 1, 2040093409264723194, 2040093409264723194, 0, NULL, 699, 699, NULL, NULL, '2024-03-01 16:37:30', '2024-03-01 16:37:32', '曲美家具官方旗舰店', NULL, 'SUCCESS', 'TRADE_CLOSED', NULL, NULL, NULL, NULL, 'BUYER_NOT_RECEIVED', 0, 641634906618, 1, NULL, '未按约定时间发货', 'onsale', NULL, '', NULL, NULL, NULL, NULL, '曲美家居轻奢简约现代床头柜储物双抽床边柜皮质卧室置物储藏柜', '4607887356857|颜色分类:轻奢黄;安装方式:组装', 'AAFlHVMUAAJ_dKyzaDWkciTw', '虽然不变的', NULL, '2024-03-01 16:59:51', NULL, NULL, NULL);
 INSERT INTO `tao_refund` VALUES (1763489314208354305, '146186942152638745', 'REFUND', 1, 3669992569885634587, 3669992569885634587, 0, NULL, 5385.74, 5385.74, NULL, NULL, '2024-03-01 12:23:14', '2024-03-01 13:03:53', '曲美家具官方旗舰店', NULL, 'SUCCESS', 'TRADE_CLOSED', NULL, NULL, NULL, NULL, 'BUYER_NOT_RECEIVED', 0, 688444892888, 1, NULL, '缺货', 'onsale', NULL, '', NULL, NULL, NULL, NULL, '【狂欢价】曲美家居现代简约轻奢布艺科技布懒人沙发客厅小户型意式羽绒沙发', '5081083851943|颜色分类:浅灰色-多人位右转角', 'AAE0HVMUAAJ_dKyzaDUX1w1-', 'mawenyan0876', NULL, '2024-03-01 16:59:51', NULL, NULL, NULL);
-
--- ----------------------------
--- Table structure for tao_shop
--- ----------------------------
-DROP TABLE IF EXISTS `tao_shop`;
-CREATE TABLE `tao_shop`  (
-  `id` int(0) NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '店铺名',
-  `type` int(0) NOT NULL COMMENT '对应第三方平台Id',
-  `url` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '店铺url',
-  `sort` int(0) NOT NULL DEFAULT 9 COMMENT '排序',
-  `status` int(0) DEFAULT 0 COMMENT '状态（1正常2已删除）',
-  `modify_on` bigint(0) NOT NULL COMMENT '更新时间',
-  `remark` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '描述',
-  `seller_id` bigint(0) NOT NULL DEFAULT 0 COMMENT '第三方平台店铺id，淘宝天猫开放平台使用',
-  `app_key` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT 'Appkey',
-  `app_sercet` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT 'Appsercet',
-  `access_token` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '第三方平台sessionKey（access_token）',
-  `expires_in` bigint(0) DEFAULT NULL COMMENT '到期',
-  `access_token_begin` bigint(0) DEFAULT NULL COMMENT 'access_token开始时间',
-  `refresh_token` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '刷新token',
-  `refresh_token_timeout` bigint(0) DEFAULT NULL COMMENT '刷新token过期时间',
-  `api_request_url` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '请求url',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 23 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '数据中心-店铺' ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of tao_shop
--- ----------------------------
-INSERT INTO `tao_shop` VALUES (1, '天猫旗舰店', 1, '', 98, 1, 0, '', 2200787809358, '31014100', '7b0769269b0c0ca88949791c14eb3a5c', '610140071d1070a37cecea89f1c1f3d6e5d19bf4b58dd942200787809358', NULL, NULL, NULL, NULL, 'http://gw.api.taobao.com/router/rest');
-INSERT INTO `tao_shop` VALUES (2, '京东旗舰店', 2, NULL, 9, 0, 0, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `tao_shop` VALUES (3, '抖音旗舰店', 3, 'http://openapi.jinritemai.com', 87, 1, 1653672695, NULL, 4463798, '7249607407477720636', '36a12497-fb9d-4b54-8cd1-fd1617346687', '', NULL, NULL, NULL, NULL, '2');
-INSERT INTO `tao_shop` VALUES (5, '拼多多旗舰店', 4, NULL, 99, 1, 1680698886, 'pdd10006159121', 100061591, NULL, NULL, '87f8044d2a5f45a489aa3a952785b0d35e61788a', NULL, NULL, NULL, NULL, NULL);
 
 SET FOREIGN_KEY_CHECKS = 1;
