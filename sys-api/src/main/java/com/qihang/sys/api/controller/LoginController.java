@@ -16,19 +16,19 @@ public class LoginController {
     private SysLoginService loginService;
     @Autowired
     private ISysUserService userService;
-    @PostMapping(value = "/login")
-    public AjaxResult login(@RequestBody LoginBody loginBody){
-//        AjaxResult ajax =
-//        SysUser user = userService.selectUserByUserName(loginBody.getUsername());
-        // 生成令牌
-        String token = loginService.login(loginBody.getUsername(), loginBody.getPassword(), loginBody.getCode(),
-                loginBody.getUuid());
-//        ajax.put(Constants.TOKEN, token);
-        Map<String, String> map = new HashMap<>();
-        map.put("accessToken", token);
-        map.put("tokenType","Bearer");
-        return AjaxResult.success(map);
-    }
+//    @PostMapping(value = "/login")
+//    public AjaxResult login(@RequestBody LoginBody loginBody){
+////        AjaxResult ajax =
+////        SysUser user = userService.selectUserByUserName(loginBody.getUsername());
+//        // 生成令牌
+//        String token = loginService.login(loginBody.getUsername(), loginBody.getPassword(), loginBody.getCode(),
+//                loginBody.getUuid());
+////        ajax.put(Constants.TOKEN, token);
+//        Map<String, String> map = new HashMap<>();
+//        map.put("accessToken", token);
+//        map.put("tokenType","Bearer");
+//        return AjaxResult.success(map);
+//    }
 
     //logout
 

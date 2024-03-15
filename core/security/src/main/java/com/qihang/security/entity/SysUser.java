@@ -2,6 +2,7 @@ package com.qihang.security.entity;
 
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * 用户对象 sys_user
@@ -81,6 +82,8 @@ public class SysUser
     {
         this.userId = userId;
     }
+
+
 
     public Long getUserId()
     {

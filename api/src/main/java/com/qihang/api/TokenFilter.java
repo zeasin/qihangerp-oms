@@ -20,7 +20,7 @@ public class TokenFilter implements GlobalFilter, Ordered {
         System.out.println("Token:"+token);
         String url = exchange.getRequest().getURI().getPath();
         System.out.println("intercept " + url);
-        if(url.equals("/api/sys-api/login")){
+        if(url.equals("/api/sys-api/login") || url.equals("/api/sys-api/getInfo") || url.equals("/api/sys-api/logout")){
             // 登录页面 放行
             return chain.filter(exchange);
         }
