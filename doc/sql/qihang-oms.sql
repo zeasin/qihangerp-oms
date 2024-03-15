@@ -11,7 +11,7 @@
  Target Server Version : 80032
  File Encoding         : 65001
 
- Date: 14/03/2024 17:31:03
+ Date: 15/03/2024 11:17:56
 */
 
 SET NAMES utf8mb4;
@@ -1410,10 +1410,10 @@ CREATE TABLE `sys_platform`  (
 -- ----------------------------
 -- Records of sys_platform
 -- ----------------------------
-INSERT INTO `sys_platform` VALUES (1, '天猫', 'TMALL', '12175777', '368dbbd183a77d551735be13f59bbcda', NULL, NULL);
-INSERT INTO `sys_platform` VALUES (2, '京东', 'JD', 'FB4CC3688E6F9065D4FF510A53BB60FF', '40e8c8b2427f4e6db8f4a39af27d719e', 'http://www.qumei.com', 'https://api.jd.com/routerjson');
-INSERT INTO `sys_platform` VALUES (3, '抖店', 'DOUDIAN', '7344938657423296019', '4e704882-832a-42e5-845f-6af991ce0ce2', '', NULL);
-INSERT INTO `sys_platform` VALUES (4, '拼多多', 'PDD', 'b92194d1af904c8a86a2c9eff6f9bfb0', '8da714f8dcbfb12d3972626ef8acfc0737aacecb', 'http://www.qumei.com', NULL);
+INSERT INTO `sys_platform` VALUES (1, '天猫', 'TMALL', '', '', NULL, NULL);
+INSERT INTO `sys_platform` VALUES (2, '京东', 'JD', '', '', '', 'https://api.jd.com/routerjson');
+INSERT INTO `sys_platform` VALUES (3, '抖店', 'DOUDIAN', '', '', '', NULL);
+INSERT INTO `sys_platform` VALUES (4, '拼多多', 'PDD', '', '', '', NULL);
 
 -- ----------------------------
 -- Table structure for sys_shop
