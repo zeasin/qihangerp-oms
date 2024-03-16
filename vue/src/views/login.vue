@@ -1,7 +1,7 @@
 <template>
   <div class="login">
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form">
-      <h3 class="title">启航电商ERP系统</h3>
+      <h3 class="title">启航电商OMS系统</h3>
       <el-form-item prop="username">
         <el-input
           v-model="loginForm.username"
@@ -49,20 +49,17 @@
           <span v-if="!loading">登 录</span>
           <span v-else>登 录 中...</span>
         </el-button>
-        <div style="float: right;" v-if="register">
-          <router-link class="link-type" :to="'/register'">立即注册</router-link>
-        </div>
+
       </el-form-item>
     </el-form>
     <!--  底部  -->
     <div class="el-login-footer">
-      <span>Copyright © 2018-2023 zhijian.vip All Rights Reserved.</span>
+      <span>Copyright © 2023-2024 qihangec.tech All Rights Reserved.</span>
     </div>
   </div>
 </template>
 
 <script>
-import { getCodeImg } from "@/api/login";
 import Cookies from "js-cookie";
 import { encrypt, decrypt } from '@/utils/jsencrypt'
 
@@ -104,19 +101,10 @@ export default {
     }
   },
   created() {
-    // this.getCode(); 
+    // this.getCode();
     this.getCookie();
   },
   methods: {
-    getCode() {
-      getCodeImg().then(res => {
-        this.captchaEnabled = res.captchaEnabled === undefined ? true : res.captchaEnabled;
-        if (this.captchaEnabled) {
-          this.codeUrl = "data:image/gif;base64," + res.img;
-          this.loginForm.uuid = res.uuid;
-        }
-      });
-    },
     getCookie() {
       const username = Cookies.get("username");
       const password = Cookies.get("password");

@@ -35,6 +35,10 @@ public class OOrderServiceImpl extends ServiceImpl<OOrderMapper, OOrder>
     private final JdOrderMapper jdOrderMapper;
     private final JdOrderItemMapper jdOrderItemMapper;
     private final JdGoodsSkuMapper jdGoodsSkuMapper;
+    private final TaoOrderMapper taoOrderMapper;
+    private final TaoOrderItemMapper taoOrderItemMapper;
+    private final TaoGoodsSkuMapper taoGoodsSkuMapper;
+
     @Transactional
     @Override
     public ResultVo<Integer> jdOrderMessage(String orderId) {
@@ -42,7 +46,7 @@ public class OOrderServiceImpl extends ServiceImpl<OOrderMapper, OOrder>
         List<JdOrder> jdOrders = jdOrderMapper.selectList(new LambdaQueryWrapper<JdOrder>().eq(JdOrder::getOrderId, orderId));
         if(jdOrders == null || jdOrders.size() == 0) {
             // 没有找到订单信息
-            return new ResultVo<>(ResultVoEnum.NotFound,"没有找到京东订单："+orderId);
+            return new ResultVo<>(ResultVoEnum.NotFound,"没有找到JD订单："+orderId);
         }
         JdOrder jdOrder = jdOrders.get(0);
 
@@ -147,11 +151,42 @@ public class OOrderServiceImpl extends ServiceImpl<OOrderMapper, OOrder>
     @Override
     public ResultVo<Integer> taoOrderMessage(String orderId) {
         log.info("Tao订单消息处理"+orderId);
-//        List<JdOrder> jdOrders = jdOrderMapper.selectList(new LambdaQueryWrapper<JdOrder>().eq(JdOrder::getOrderId, orderId));
-//        if(jdOrders == null || jdOrders.size() == 0) {
-//            // 没有找到订单信息
-//            return new ResultVo<>(ResultVoEnum.NotFound,"没有找到TAO订单："+orderId);
-//        }
+        List<TaoOrder> taoOrders = taoOrderMapper.selectList(new LambdaQueryWrapper<TaoOrder>().eq(TaoOrder::getTid, orderId));
+
+        if(taoOrders == null || taoOrders.size() == 0) {
+            // 没有找到订单信息
+            return new ResultVo<>(ResultVoEnum.NotFound,"没有找到TAO订单："+orderId);
+        }
+        TaoOrder taoOrder = taoOrders.get(0);
+        List<OOrder> oOrders = orderMapper.selectList(new LambdaQueryWrapper<OOrder>().eq(OOrder::getOrderNum, orderId));
+        if(oOrders == null || oOrders.isEmpty()) {
+            // 新增订单
+            OOrder insert = new OOrder();
+
+            List<TaoOrderItem> taoOrderItems = taoOrderItemMapper.selectList(new LambdaQueryWrapper<TaoOrderItem>().eq(TaoOrderItem::getTid, taoOrder.getTid()));
+            if(taoOrderItems!=null && taoOrderItems.size()>0) {
+                for (var item : taoOrderItems) {
+                    OOrderItem orderItem = new OOrderItem();
+                    orderItem.setOrderId(insert.getId());
+                    orderItem.setSubOrderNum(item.getTid().toString());
+                    // TODO：这里将订单商品skuid转换成erp系统的skuid
+                    Long erpGoodsId = 0L;
+                    Long erpSkuId = 0L;
+
+                    List<TaoGoodsSku> taoGoodsSku = taoGoodsSkuMapper.selectList(new LambdaQueryWrapper<TaoGoodsSku>().eq(TaoGoodsSku::getSkuId, item.getSkuId()));
+                    if (taoGoodsSku != null && !taoGoodsSku.isEmpty()) {
+                        erpGoodsId = taoGoodsSku.get(0).getErpGoodsId();
+                        erpSkuId = taoGoodsSku.get(0).getErpGoodsSkuId();
+//                        orderItem.setGoodsImg(taoGoodsSku.get(0).getLogo());
+//                        orderItem.setGoodsSpec(jdGoodsSkus.get(0).getSkuName());
+                        orderItem.setSkuNum(taoGoodsSku.get(0).getOuterId());
+                    }
+                }
+            }
+
+        }else{
+            // 修改订单 (修改：)
+        }
         return null;
     }
 }

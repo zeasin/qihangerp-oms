@@ -31,6 +31,7 @@ public class TaoOrderServiceImpl extends ServiceImpl<TaoOrderMapper, TaoOrder>
     @Transactional
     @Override
     public ResultVo<Integer> saveOrder(Integer shopId, TaoOrder order) {
+        if(order == null ) return new ResultVo<>(ResultVoEnum.SystemException);
         try {
             List<TaoOrder> taoOrders = mapper.selectList(new LambdaQueryWrapper<TaoOrder>().eq(TaoOrder::getTid, order.getTid()));
             if (taoOrders != null && taoOrders.size() > 0) {

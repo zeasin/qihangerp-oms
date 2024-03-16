@@ -39,9 +39,9 @@ public class OrderApiController {
      * @return
      * @throws ApiException
      */
-    @GetMapping("/pull_order_tao")
+    @PostMapping("/pull_order_tao")
     @ResponseBody
-    public ApiResult<Object> pullIncrementOrder(TaoRequest req) throws ApiException {
+    public ApiResult<Object> pullIncrementOrder(@RequestBody TaoRequest req) throws ApiException {
         log.info("/**************增量拉取tao订单****************/");
         if (req.getShopId() == null || req.getShopId() <= 0) {
             return ApiResult.build(HttpStatus.PARAMS_ERROR, "参数错误，没有店铺Id");

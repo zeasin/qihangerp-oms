@@ -54,8 +54,6 @@ import Hamburger from '@/components/Hamburger'
 import Screenfull from '@/components/Screenfull'
 import SizeSelect from '@/components/SizeSelect'
 import Search from '@/components/HeaderSearch'
-import ZhiJianGit from '@/components/ZhiJian/Git'
-import ZhiJianDoc from '@/components/ZhiJian/Doc'
 
 export default {
   components: {
@@ -64,9 +62,7 @@ export default {
     Hamburger,
     Screenfull,
     SizeSelect,
-    Search,
-    ZhiJianGit,
-    ZhiJianDoc
+    Search
   },
   computed: {
     ...mapGetters([

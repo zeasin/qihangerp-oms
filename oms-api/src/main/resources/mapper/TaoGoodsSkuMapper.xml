@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qihang.oms.mapper.TaoGoodsSkuMapper">
+
+    <resultMap id="BaseResultMap" type="com.qihang.oms.domain.TaoGoodsSku">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="taoGoodsId" column="tao_goods_id" jdbcType="BIGINT"/>
+            <result property="numIid" column="num_iid" jdbcType="BIGINT"/>
+            <result property="iid" column="iid" jdbcType="VARCHAR"/>
+            <result property="skuId" column="sku_id" jdbcType="BIGINT"/>
+            <result property="properties" column="properties" jdbcType="VARCHAR"/>
+            <result property="propertiesName" column="properties_name" jdbcType="VARCHAR"/>
+            <result property="quantity" column="quantity" jdbcType="BIGINT"/>
+            <result property="spec" column="spec" jdbcType="VARCHAR"/>
+            <result property="price" column="price" jdbcType="DOUBLE"/>
+            <result property="outerId" column="outer_id" jdbcType="VARCHAR"/>
+            <result property="created" column="created" jdbcType="TIMESTAMP"/>
+            <result property="modified" column="modified" jdbcType="TIMESTAMP"/>
+            <result property="status" column="status" jdbcType="VARCHAR"/>
+            <result property="skuSpecId" column="sku_spec_id" jdbcType="VARCHAR"/>
+            <result property="barcode" column="barcode" jdbcType="VARCHAR"/>
+            <result property="erpGoodsSkuId" column="erp_goods_sku_id" jdbcType="BIGINT"/>
+            <result property="erpGoodsId" column="erp_goods_id" jdbcType="BIGINT"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,tao_goods_id,num_iid,
+        iid,sku_id,properties,
+        properties_name,quantity,spec,
+        price,outer_id,created,
+        modified,status,sku_spec_id,
+        barcode,erp_goods_sku_id,erp_goods_id,
+        create_time
+    </sql>
+</mapper>
