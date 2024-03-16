@@ -2,6 +2,9 @@ package com.qihang.sys.api.service.impl;
 
 import com.qihang.common.constant.UserConstants;
 import com.qihang.common.utils.StringUtils;
+import com.qihang.security.vo.MetaVo;
+import com.qihang.security.vo.RouterVo;
+import com.qihang.sys.api.common.SecurityUtils;
 import com.qihang.sys.api.constant.Constants;
 import com.qihang.sys.api.domain.SysMenu;
 import com.qihang.sys.api.mapper.SysMenuMapper;
@@ -104,26 +107,28 @@ public class SysMenuServiceImpl implements ISysMenuService
         return permsSet;
     }
 
+
+
     /**
      * 根据用户ID查询菜单
      *
      * @param userId 用户名称
      * @return 菜单列表
      */
-//    @Override
-//    public List<SysMenu> selectMenuTreeByUserId(Long userId)
-//    {
-//        List<SysMenu> menus = null;
-//        if (SecurityUtils.isAdmin(userId))
-//        {
-//            menus = menuMapper.selectMenuTreeAll();
-//        }
-//        else
-//        {
-//            menus = menuMapper.selectMenuTreeByUserId(userId);
-//        }
-//        return getChildPerms(menus, 0);
-//    }
+    @Override
+    public List<SysMenu> selectMenuTreeByUserId(Long userId)
+    {
+        List<SysMenu> menus = null;
+        if (SecurityUtils.isAdmin(userId))
+        {
+            menus = menuMapper.selectMenuTreeAll();
+        }
+        else
+        {
+            menus = menuMapper.selectMenuTreeByUserId(userId);
+        }
+        return getChildPerms(menus, 0);
+    }
 
     /**
      * 根据角色ID查询菜单树信息
@@ -144,57 +149,57 @@ public class SysMenuServiceImpl implements ISysMenuService
      * @param menus 菜单列表
      * @return 路由列表
      */
-//    @Override
-//    public List<RouterVo> buildMenus(List<SysMenu> menus)
-//    {
-//        List<RouterVo> routers = new LinkedList<RouterVo>();
-//        for (SysMenu menu : menus)
-//        {
-//            RouterVo router = new RouterVo();
-//            router.setHidden("1".equals(menu.getVisible()));
-//            router.setName(getRouteName(menu));
-//            router.setPath(getRouterPath(menu));
-//            router.setComponent(getComponent(menu));
-//            router.setQuery(menu.getQuery());
-//            router.setMeta(new MetaVo(menu.getMenuName(), menu.getIcon(), StringUtils.equals("1", menu.getIsCache()), menu.getPath()));
-//            List<SysMenu> cMenus = menu.getChildren();
-//            if (StringUtils.isNotEmpty(cMenus) && UserConstants.TYPE_DIR.equals(menu.getMenuType()))
-//            {
-//                router.setAlwaysShow(true);
-//                router.setRedirect("noRedirect");
-//                router.setChildren(buildMenus(cMenus));
-//            }
-//            else if (isMenuFrame(menu))
-//            {
-//                router.setMeta(null);
-//                List<RouterVo> childrenList = new ArrayList<RouterVo>();
-//                RouterVo children = new RouterVo();
-//                children.setPath(menu.getPath());
-//                children.setComponent(menu.getComponent());
-//                children.setName(StringUtils.capitalize(menu.getPath()));
-//                children.setMeta(new MetaVo(menu.getMenuName(), menu.getIcon(), StringUtils.equals("1", menu.getIsCache()), menu.getPath()));
-//                children.setQuery(menu.getQuery());
-//                childrenList.add(children);
-//                router.setChildren(childrenList);
-//            }
-//            else if (menu.getParentId().intValue() == 0 && isInnerLink(menu))
-//            {
-//                router.setMeta(new MetaVo(menu.getMenuName(), menu.getIcon()));
-//                router.setPath("/");
-//                List<RouterVo> childrenList = new ArrayList<RouterVo>();
-//                RouterVo children = new RouterVo();
-//                String routerPath = innerLinkReplaceEach(menu.getPath());
-//                children.setPath(routerPath);
-//                children.setComponent(UserConstants.INNER_LINK);
-//                children.setName(StringUtils.capitalize(routerPath));
-//                children.setMeta(new MetaVo(menu.getMenuName(), menu.getIcon(), menu.getPath()));
-//                childrenList.add(children);
-//                router.setChildren(childrenList);
-//            }
-//            routers.add(router);
-//        }
-//        return routers;
-//    }
+    @Override
+    public List<RouterVo> buildMenus(List<SysMenu> menus)
+    {
+        List<RouterVo> routers = new LinkedList<RouterVo>();
+        for (SysMenu menu : menus)
+        {
+            RouterVo router = new RouterVo();
+            router.setHidden("1".equals(menu.getVisible()));
+            router.setName(getRouteName(menu));
+            router.setPath(getRouterPath(menu));
+            router.setComponent(getComponent(menu));
+            router.setQuery(menu.getQuery());
+            router.setMeta(new MetaVo(menu.getMenuName(), menu.getIcon(), StringUtils.equals("1", menu.getIsCache()), menu.getPath()));
+            List<SysMenu> cMenus = menu.getChildren();
+            if (StringUtils.isNotEmpty(cMenus) && UserConstants.TYPE_DIR.equals(menu.getMenuType()))
+            {
+                router.setAlwaysShow(true);
+                router.setRedirect("noRedirect");
+                router.setChildren(buildMenus(cMenus));
+            }
+            else if (isMenuFrame(menu))
+            {
+                router.setMeta(null);
+                List<RouterVo> childrenList = new ArrayList<RouterVo>();
+                RouterVo children = new RouterVo();
+                children.setPath(menu.getPath());
+                children.setComponent(menu.getComponent());
+                children.setName(StringUtils.capitalize(menu.getPath()));
+                children.setMeta(new MetaVo(menu.getMenuName(), menu.getIcon(), StringUtils.equals("1", menu.getIsCache()), menu.getPath()));
+                children.setQuery(menu.getQuery());
+                childrenList.add(children);
+                router.setChildren(childrenList);
+            }
+            else if (menu.getParentId().intValue() == 0 && isInnerLink(menu))
+            {
+                router.setMeta(new MetaVo(menu.getMenuName(), menu.getIcon()));
+                router.setPath("/");
+                List<RouterVo> childrenList = new ArrayList<RouterVo>();
+                RouterVo children = new RouterVo();
+                String routerPath = innerLinkReplaceEach(menu.getPath());
+                children.setPath(routerPath);
+                children.setComponent(UserConstants.INNER_LINK);
+                children.setName(StringUtils.capitalize(routerPath));
+                children.setMeta(new MetaVo(menu.getMenuName(), menu.getIcon(), menu.getPath()));
+                childrenList.add(children);
+                router.setChildren(childrenList);
+            }
+            routers.add(router);
+        }
+        return routers;
+    }
 
     /**
      * 构建前端所需要树结构

@@ -1,5 +1,6 @@
 package com.qihang.sys.api.service;
 
+import com.qihang.security.vo.RouterVo;
 import com.qihang.sys.api.domain.SysMenu;
 
 import java.util.List;
@@ -51,7 +52,7 @@ public interface ISysMenuService
      * @param userId 用户ID
      * @return 菜单列表
      */
-//    public List<SysMenu> selectMenuTreeByUserId(Long userId);
+    public List<SysMenu> selectMenuTreeByUserId(Long userId);
 
     /**
      * 根据角色ID查询菜单树信息
@@ -67,7 +68,7 @@ public interface ISysMenuService
      * @param menus 菜单列表
      * @return 路由列表
      */
-//    public List<RouterVo> buildMenus(List<SysMenu> menus);
+    public List<RouterVo> buildMenus(List<SysMenu> menus);
 
     /**
      * 构建前端所需要树结构
