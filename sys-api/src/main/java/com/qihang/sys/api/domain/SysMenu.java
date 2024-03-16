@@ -21,7 +21,7 @@ public class SysMenu extends BaseEntity
     private Long menuId;
 
     /** 菜单名称 */
-    @JsonProperty("title")
+//    @JsonProperty("title")
     private String menuName;
 
     /** 父菜单名称 */

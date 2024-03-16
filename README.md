@@ -1,7 +1,7 @@
 # 启航电商OMS订单处理系统
 
 ## 一、介绍
-启航电商OMS订单处理系统是一套为中小电商企业构建的一套简单实用的第三方平台订单处理系统，本项目后端采用SpringCloudAlibaba 微服务架构，前端采用Vue3开发。
+启航电商OMS订单处理系统是一套为中小电商企业构建的一套简单实用的第三方平台订单处理系统，本项目后端采用SpringCloudAlibaba 微服务架构，前端采用Vue2开发。
 
 支持多平台店铺，目前支持：淘宝、京东、拼多多、抖店。后续计划支持快手、小红书等。
 
@@ -42,7 +42,7 @@
 ### 1、开发环境级组件
 #### 1.1 开发环境
 + Jdk：17
-+ Nodejs：v20.11.0
++ Nodejs：v16.20.0
 
 #### 1.2 项目组件
 ##### 后端核心组件
@@ -54,8 +54,8 @@
   + spring-cloud-starter-loadbalancer
 
 ##### 前端框架及组件
-+ vue3 
-+ element-plus
++ vue2
++ element
 
 #### 1.3、存储及中间件
 
@@ -123,12 +123,11 @@ oms主功能微服务，主要功能包括：
 3.  启动微服务网关（api）
 
 #### 3.3、运行前端
-+ Nodejs版本：v20.11.0
-+ 进入`vue3`文件夹
-+ 安装pnpm：`npm install pnpm -g`
-+ 运行`pnpm install` 
-+ 运行`pnpm run dev`
-+ 浏览网页`http://localhost:3000`
++ Nodejs版本：v16.20.0
++ 进入`vue`文件夹
++ 运行`npm install` 
++ 运行`npm run dev`
++ 浏览网页`http://localhost`
 
 ### 4、项目部署
 
@@ -156,21 +155,24 @@ server {
 	}
 	# 反向代理配置
 	location /prod-api/ {
-			proxy_pass http://vapi.youlai.tech/; # vapi.youlai.tech替换成你的后端API地址
+			proxy_pass http://127.0.0.1:8080/; # 替换成你的后端网关API地址
 	}
 }
 ```
 
 
-## 捐献作者
-
+## 交个朋友
 
 💖 如果觉得有用记得点 Star⭐
 
+#### 关注公众号
+
+作者微信公众号：qihangerp168
 
 欢迎一起交流！
 
 
+#### 捐献支持
 
 作者为兼职做开源,平时还需要工作,如果帮到了您可以请作者吃个盒饭(目前还希望接收大家的捐献可以搭建一个演示环境！)
 

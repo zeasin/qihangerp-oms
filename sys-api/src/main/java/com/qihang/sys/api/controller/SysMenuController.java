@@ -1,54 +1,62 @@
-//package com.qihang.sys.api.controller;
-//
-////import com.zhijian.common.annotation.Log;
-////import com.zhijian.common.constant.UserConstants;
-////import com.zhijian.common.core.controller.BaseController;
-////import com.zhijian.common.core.domain.AjaxResult;
-////import com.zhijian.common.core.domain.entity.SysMenu;
-////import com.zhijian.common.enums.BusinessType;
-////import com.zhijian.common.utils.StringUtils;
-////import com.zhijian.system.service.ISysMenuService;
-//import com.qihang.sys.api.service.ISysMenuService;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.security.access.prepost.PreAuthorize;
-//import org.springframework.validation.annotation.Validated;
-//import org.springframework.web.bind.annotation.*;
-//
-//import java.util.List;
-//
-///**
-// * 菜单信息
-// *
-// * @author qihang
-// */
-//@RestController
-//@RequestMapping("/system/menu")
-//public class SysMenuController
-//{
-//    @Autowired
-//    private ISysMenuService menuService;
-//
-//    /**
-//     * 获取菜单列表
-//     */
-//    @PreAuthorize("@ss.hasPermi('system:menu:list')")
-//    @GetMapping("/list")
-//    public AjaxResult list(SysMenu menu)
-//    {
-//        List<SysMenu> menus = menuService.selectMenuList(menu, getUserId());
-//        return success(menus);
-//    }
-//
-//    /**
-//     * 根据菜单编号获取详细信息
-//     */
-//    @PreAuthorize("@ss.hasPermi('system:menu:query')")
-//    @GetMapping(value = "/{menuId}")
-//    public AjaxResult getInfo(@PathVariable Long menuId)
-//    {
-//        return success(menuService.selectMenuById(menuId));
-//    }
-//
+package com.qihang.sys.api.controller;
+
+//import com.zhijian.common.annotation.Log;
+//import com.zhijian.common.constant.UserConstants;
+//import com.zhijian.common.core.controller.BaseController;
+//import com.zhijian.common.core.domain.AjaxResult;
+//import com.zhijian.common.core.domain.entity.SysMenu;
+//import com.zhijian.common.enums.BusinessType;
+//import com.zhijian.common.utils.StringUtils;
+//import com.zhijian.system.service.ISysMenuService;
+import com.qihang.common.common.AjaxResult;
+import com.qihang.common.constant.UserConstants;
+import com.qihang.common.utils.StringUtils;
+import com.qihang.sys.api.domain.SysMenu;
+import com.qihang.sys.api.service.ISysMenuService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+import static com.qihang.common.common.AjaxResult.success;
+import static com.qihang.common.common.AjaxResult.warn;
+import static com.qihang.sys.api.common.SecurityUtils.getUserId;
+
+/**
+ * 菜单信息
+ *
+ * @author qihang
+ */
+@RestController
+@RequestMapping("/system/menu")
+public class SysMenuController extends BaseController
+{
+    @Autowired
+    private ISysMenuService menuService;
+
+    /**
+     * 获取菜单列表
+     */
+    @PreAuthorize("@ss.hasPermi('system:menu:list')")
+    @GetMapping("/list")
+    public AjaxResult list(SysMenu menu)
+    {
+        List<SysMenu> menus = menuService.selectMenuList(menu, getUserId());
+        return success(menus);
+    }
+
+    /**
+     * 根据菜单编号获取详细信息
+     */
+    @PreAuthorize("@ss.hasPermi('system:menu:query')")
+    @GetMapping(value = "/{menuId}")
+    public AjaxResult getInfo(@PathVariable Long menuId)
+    {
+        return success(menuService.selectMenuById(menuId));
+    }
+
 //    /**
 //     * 获取菜单下拉树列表
 //     */
@@ -66,7 +74,7 @@
 //    public AjaxResult roleMenuTreeselect(@PathVariable("roleId") Long roleId)
 //    {
 //        List<SysMenu> menus = menuService.selectMenuList(getUserId());
-//        AjaxResult ajax = AjaxResult.success();
+//        AjaxResult ajax = success();
 //        ajax.put("checkedKeys", menuService.selectMenuListByRoleId(roleId));
 //        ajax.put("menus", menuService.buildMenuTreeSelect(menus));
 //        return ajax;
@@ -76,7 +84,6 @@
 //     * 新增菜单
 //     */
 //    @PreAuthorize("@ss.hasPermi('system:menu:add')")
-//    @Log(title = "菜单管理", businessType = BusinessType.INSERT)
 //    @PostMapping
 //    public AjaxResult add(@Validated @RequestBody SysMenu menu)
 //    {
@@ -92,35 +99,33 @@
 //        return toAjax(menuService.insertMenu(menu));
 //    }
 //
-//    /**
-//     * 修改菜单
-//     */
-//    @PreAuthorize("@ss.hasPermi('system:menu:edit')")
-//    @Log(title = "菜单管理", businessType = BusinessType.UPDATE)
-//    @PutMapping
-//    public AjaxResult edit(@Validated @RequestBody SysMenu menu)
-//    {
-//        if (!menuService.checkMenuNameUnique(menu))
-//        {
-//            return error("修改菜单'" + menu.getMenuName() + "'失败，菜单名称已存在");
-//        }
-//        else if (UserConstants.YES_FRAME.equals(menu.getIsFrame()) && !StringUtils.ishttp(menu.getPath()))
-//        {
-//            return error("修改菜单'" + menu.getMenuName() + "'失败，地址必须以http(s)://开头");
-//        }
-//        else if (menu.getMenuId().equals(menu.getParentId()))
-//        {
-//            return error("修改菜单'" + menu.getMenuName() + "'失败，上级菜单不能选择自己");
-//        }
-//        menu.setUpdateBy(getUsername());
-//        return toAjax(menuService.updateMenu(menu));
-//    }
+    /**
+     * 修改菜单
+     */
+    @PreAuthorize("@ss.hasPermi('system:menu:edit')")
+    @PutMapping
+    public AjaxResult edit(@Validated @RequestBody SysMenu menu)
+    {
+        if (!menuService.checkMenuNameUnique(menu))
+        {
+            return error("修改菜单'" + menu.getMenuName() + "'失败，菜单名称已存在");
+        }
+        else if (UserConstants.YES_FRAME.equals(menu.getIsFrame()) && !StringUtils.ishttp(menu.getPath()))
+        {
+            return error("修改菜单'" + menu.getMenuName() + "'失败，地址必须以http(s)://开头");
+        }
+        else if (menu.getMenuId().equals(menu.getParentId()))
+        {
+            return error("修改菜单'" + menu.getMenuName() + "'失败，上级菜单不能选择自己");
+        }
+        menu.setUpdateBy(getUsername());
+        return toAjax(menuService.updateMenu(menu));
+    }
 //
 //    /**
 //     * 删除菜单
 //     */
 //    @PreAuthorize("@ss.hasPermi('system:menu:remove')")
-//    @Log(title = "菜单管理", businessType = BusinessType.DELETE)
 //    @DeleteMapping("/{menuId}")
 //    public AjaxResult remove(@PathVariable("menuId") Long menuId)
 //    {
@@ -134,4 +139,4 @@
 //        }
 //        return toAjax(menuService.deleteMenuById(menuId));
 //    }
-//}
+}
