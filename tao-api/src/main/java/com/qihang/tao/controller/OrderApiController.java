@@ -56,7 +56,7 @@ public class OrderApiController {
         String appSecret = checkResult.getData().getAppSecret();
 
         log.info("/**************增量更新tao订单，条件判断完成，开始更新。。。。。。****************/");
-        Long pageSize = 10l;
+        Long pageSize = 100l;
         Long pageIndex = 1l;
 
         //第一次获取

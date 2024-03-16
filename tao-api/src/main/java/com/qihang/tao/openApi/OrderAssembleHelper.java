@@ -3,6 +3,7 @@ package com.qihang.tao.openApi;
 import com.qihang.tao.domain.TaoOrder;
 import com.qihang.tao.domain.TaoOrderItem;
 import com.taobao.api.domain.Trade;
+import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -66,13 +67,13 @@ public class OrderAssembleHelper {
                 orderItem.setTitle(item.getTitle());
                 orderItem.setTid(trade.getTid());
                 orderItem.setOid(item.getOid());
-                orderItem.setTotalFee(BigDecimal.valueOf(Double.parseDouble(item.getTotalFee())));
-                orderItem.setDiscountFee(BigDecimal.valueOf(Double.parseDouble(item.getDiscountFee())));
-                orderItem.setAdjustFee(BigDecimal.valueOf(Double.parseDouble(item.getAdjustFee())));
-                orderItem.setDivideOrderFee(Double.parseDouble(item.getDivideOrderFee()));
-                orderItem.setPartMjzDiscount(Double.parseDouble(item.getPartMjzDiscount()));
-                orderItem.setPayment(Double.parseDouble(item.getPayment()));
-                orderItem.setPrice(BigDecimal.valueOf(Double.parseDouble(item.getPrice())));
+                orderItem.setTotalFee(StringUtils.hasText(item.getTotalFee()) ? BigDecimal.valueOf(Double.parseDouble(item.getTotalFee())): BigDecimal.valueOf(0));
+                orderItem.setDiscountFee(StringUtils.hasText(item.getDiscountFee()) ? BigDecimal.valueOf(Double.parseDouble(item.getDiscountFee())): BigDecimal.valueOf(0));
+                orderItem.setAdjustFee(StringUtils.hasText(item.getAdjustFee()) ?BigDecimal.valueOf(Double.parseDouble(item.getAdjustFee())): BigDecimal.valueOf(0));
+                orderItem.setDivideOrderFee( StringUtils.hasText(item.getDivideOrderFee()) ? Double.parseDouble(item.getDivideOrderFee()):0.0);
+                orderItem.setPartMjzDiscount(StringUtils.hasText(item.getPartMjzDiscount()) ? Double.parseDouble(item.getPartMjzDiscount()):0.0);
+                orderItem.setPayment(StringUtils.hasText(item.getPayment()) ? Double.parseDouble(item.getPayment()):0.0);
+                orderItem.setPrice(StringUtils.hasText(item.getPrice()) ? BigDecimal.valueOf(Double.parseDouble(item.getPrice())): BigDecimal.valueOf(0));
                 orderItem.setPicPath(item.getPicPath());
                 orderItem.setNumIid(item.getNumIid());
                 orderItem.setSkuId(item.getSkuId());
@@ -100,6 +101,7 @@ public class OrderAssembleHelper {
             order.setItems(items);
             return order;
         }catch (Exception e){
+            e.printStackTrace();
             return null;
         }
     }

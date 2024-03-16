@@ -9,8 +9,10 @@ import com.qihang.tao.domain.TaoOrder;
 import com.taobao.api.ApiException;
 import com.taobao.api.DefaultTaobaoClient;
 import com.taobao.api.TaobaoClient;
+import com.taobao.api.request.TopOaidDecryptRequest;
 import com.taobao.api.request.TradesSoldGetRequest;
 import com.taobao.api.request.TradesSoldIncrementGetRequest;
+import com.taobao.api.response.TopOaidDecryptResponse;
 import com.taobao.api.response.TradesSoldGetResponse;
 import com.taobao.api.response.TradesSoldIncrementGetResponse;
 import org.slf4j.Logger;
@@ -155,20 +157,61 @@ public class OrderApiHelper {
 
         //组合的订单列表
         List<TaoOrder> orderList = new ArrayList<>();
-        //有数据
-        for (var trade : rsp.getTrades()) {
-            //组装订单
-            orderList.add(OrderAssembleHelper.assembleOrder(trade));
+        if(rsp.getTrades()!=null && !rsp.getTrades().isEmpty()) {
+            TopOaidDecryptRequest req2 = new TopOaidDecryptRequest();
+            List<TopOaidDecryptRequest.ReceiverQuery> list2 = new ArrayList<TopOaidDecryptRequest.ReceiverQuery>();
+            TopOaidDecryptRequest.ReceiverQuery obj2 = new TopOaidDecryptRequest.ReceiverQuery();
+            list2.add(obj2);
+            obj2.setScene("1005");
+            obj2.setSecretNoDays(15L);
+
+            //有数据
+            for (var trade : rsp.getTrades()) {
+                //组装订单
+                TaoOrder taoOrder = OrderAssembleHelper.assembleOrder(trade);
+
+                obj2.setOaid(trade.getOaid());
+                obj2.setTid(trade.getTid().toString());
+                req2.setQueryList(list2);
+                TopOaidDecryptResponse rsp2 = client.execute(req2, sessionKey);
+//                System.out.println(rsp2.getBody());
+                if (rsp2.getReceiverList() != null && !rsp2.getReceiverList().isEmpty()) {
+                    taoOrder.setReceiverName(rsp2.getReceiverList().get(0).getName());
+                    taoOrder.setReceiverAddress(rsp2.getReceiverList().get(0).getAddressDetail());
+                    taoOrder.setReceiverMobile(rsp2.getReceiverList().get(0).getMobile());
+                }
+                orderList.add(taoOrder);
+            }
         }
         // 有分页，继续拉取
         while (rsp.getHasNext()) {
             pageNo++;
             req.setPageNo(pageNo);
             rsp = client.execute(req, sessionKey);
-            //有数据
-            for (var trade : rsp.getTrades()) {
-                //组装订单
-                orderList.add(OrderAssembleHelper.assembleOrder(trade));
+            if(rsp.getTrades()!=null && !rsp.getTrades().isEmpty()) {
+                TopOaidDecryptRequest req2 = new TopOaidDecryptRequest();
+                List<TopOaidDecryptRequest.ReceiverQuery> list2 = new ArrayList<TopOaidDecryptRequest.ReceiverQuery>();
+                TopOaidDecryptRequest.ReceiverQuery obj2 = new TopOaidDecryptRequest.ReceiverQuery();
+                list2.add(obj2);
+                obj2.setScene("1005");
+                obj2.setSecretNoDays(15L);
+                //有数据
+                for (var trade : rsp.getTrades()) {
+                    //组装订单
+                    TaoOrder taoOrder = OrderAssembleHelper.assembleOrder(trade);
+
+                    obj2.setOaid(trade.getOaid());
+                    obj2.setTid(trade.getTid().toString());
+                    req2.setQueryList(list2);
+                    TopOaidDecryptResponse rsp2 = client.execute(req2, sessionKey);
+//                System.out.println(rsp2.getBody());
+                    if (rsp2.getReceiverList() != null && !rsp2.getReceiverList().isEmpty()) {
+                        taoOrder.setReceiverName(rsp2.getReceiverList().get(0).getName());
+                        taoOrder.setReceiverAddress(rsp2.getReceiverList().get(0).getAddressDetail());
+                        taoOrder.setReceiverMobile(rsp2.getReceiverList().get(0).getMobile());
+                    }
+                    orderList.add(taoOrder);
+                }
             }
         }
 //        return new ApiResult(orderList.size(), orderList);

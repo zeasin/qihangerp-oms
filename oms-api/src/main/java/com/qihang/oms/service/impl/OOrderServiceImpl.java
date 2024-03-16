@@ -6,6 +6,7 @@ import com.qihang.common.common.ResultVo;
 import com.qihang.common.common.ResultVoEnum;
 import com.qihang.common.enums.EnumShopType;
 import com.qihang.common.enums.JdOrderStateEnum;
+import com.qihang.common.enums.TaoOrderStateEnum;
 import com.qihang.common.utils.DateUtils;
 import com.qihang.common.utils.StringUtils;
 import com.qihang.oms.domain.*;
@@ -162,6 +163,42 @@ public class OOrderServiceImpl extends ServiceImpl<OOrderMapper, OOrder>
         if(oOrders == null || oOrders.isEmpty()) {
             // 新增订单
             OOrder insert = new OOrder();
+            insert.setOrderNum(orderId);
+            insert.setShopType(EnumShopType.TAO.getIndex());
+            insert.setShopId(taoOrder.getShopId());
+            String buyerMemo = "";
+            if(org.springframework.util.StringUtils.hasText(taoOrder.getBuyerMessage())){
+                buyerMemo += taoOrder.getBuyerMessage();
+            }
+            if(org.springframework.util.StringUtils.hasText(taoOrder.getBuyerMemo())){
+                buyerMemo += taoOrder.getBuyerMemo();
+            }
+            insert.setBuyerMemo(buyerMemo);
+            insert.setSellerMemo(taoOrder.getSellerMemo());
+            // 状态
+            int orderStatus = TaoOrderStateEnum.getIndex(taoOrder.getStatus());
+            if (orderStatus == 11) {
+                insert.setRefundStatus(2);
+            } else if (orderStatus == -1) {
+                insert.setRefundStatus(-1);
+            } else {
+                insert.setRefundStatus(1);
+            }
+            insert.setOrderStatus(orderStatus);
+            insert.setGoodsAmount(taoOrder.getTotalFee());
+            insert.setAmount(taoOrder.getPayment().doubleValue());
+
+            insert.setReceiverName(taoOrder.getReceiverName());
+            insert.setReceiverMobile(taoOrder.getReceiverMobile());
+            insert.setAddress(taoOrder.getReceiverAddress());
+            insert.setProvince(taoOrder.getReceiverState());
+            insert.setCity(taoOrder.getReceiverCity());
+            insert.setTown(taoOrder.getReceiverDistrict());
+            insert.setOrderTime(taoOrder.getCreated() );
+            insert.setShipType(0);
+            insert.setCreateTime(new Date());
+            insert.setCreateBy("ORDER_MESSAGE");
+            orderMapper.insert(insert);
 
             List<TaoOrderItem> taoOrderItems = taoOrderItemMapper.selectList(new LambdaQueryWrapper<TaoOrderItem>().eq(TaoOrderItem::getTid, taoOrder.getTid()));
             if(taoOrderItems!=null && taoOrderItems.size()>0) {
@@ -181,11 +218,48 @@ public class OOrderServiceImpl extends ServiceImpl<OOrderMapper, OOrder>
 //                        orderItem.setGoodsSpec(jdGoodsSkus.get(0).getSkuName());
                         orderItem.setSkuNum(taoGoodsSku.get(0).getOuterId());
                     }
+                    orderItem.setSkuId(item.getSkuId());
+                    orderItem.setErpGoodsId(erpGoodsId);
+                    orderItem.setErpSkuId(erpSkuId);
+                    orderItem.setGoodsImg(item.getPicPath());
+                    orderItem.setGoodsSpec(item.getSkuPropertiesName());
+                    orderItem.setGoodsTitle(item.getTitle());
+                    orderItem.setGoodsPrice(item.getPrice().doubleValue());
+                    orderItem.setItemAmount(item.getPayment());
+                    orderItem.setQuantity(item.getNum());
+                    if(orderStatus == 11){
+                        orderItem.setRefundStatus(2);
+                        orderItem.setRefundCount(item.getNum());
+                    }else if (orderStatus == -1) {
+
+                    }else{
+                        orderItem.setRefundStatus(1);
+                        orderItem.setRefundCount(0);
+                    }
+                    orderItem.setCreateTime(new Date());
+                    orderItem.setCreateBy("ORDER_MESSAGE");
+                    orderItemMapper.insert(orderItem);
                 }
             }
 
         }else{
             // 修改订单 (修改：)
+            // 修改订单 (修改：)
+            OOrder update = new OOrder();
+            update.setId(oOrders.get(0).getId());
+            // 状态
+            int orderStatus = TaoOrderStateEnum.getIndex(taoOrder.getStatus());
+            if (orderStatus == 11) {
+                update.setRefundStatus(2);
+            } else if (orderStatus == -1) {
+                update.setRefundStatus(-1);
+            } else {
+                update.setRefundStatus(1);
+            }
+            update.setOrderStatus(orderStatus);
+            update.setUpdateTime(new Date());
+            update.setUpdateBy("ORDER_MESSAGE");
+            orderMapper.updateById(update);
         }
         return null;
     }
