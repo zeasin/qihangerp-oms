@@ -1,4 +1,4 @@
-package com.qihang.jd.domain;
+package com.qihang.tao.domain;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -17,12 +17,16 @@ public class SysShopPullLogs implements Serializable {
      * 店铺id
      */
     private Integer shopId;
+
+    /**
+     * 平台id
+     */
     private Integer shopType;
 
     /**
-     * 类型（ORDER订单，GOODS商品，REFUN退款）
+     * 类型（ORDER订单，GOODS商品，REFUND退款）
      */
-    private String pullType;
+    private Object pullType;
 
     /**
      * 拉取方式（主动拉取、定时任务）
@@ -79,25 +83,31 @@ public class SysShopPullLogs implements Serializable {
         this.shopId = shopId;
     }
 
+    /**
+     * 平台id
+     */
     public Integer getShopType() {
         return shopType;
     }
 
+    /**
+     * 平台id
+     */
     public void setShopType(Integer shopType) {
         this.shopType = shopType;
     }
 
     /**
-     * 类型（ORDER订单，GOODS商品，REFUN退款）
+     * 类型（ORDER订单，GOODS商品，REFUND退款）
      */
-    public String getPullType() {
+    public Object getPullType() {
         return pullType;
     }
 
     /**
-     * 类型（ORDER订单，GOODS商品，REFUN退款）
+     * 类型（ORDER订单，GOODS商品，REFUND退款）
      */
-    public void setPullType(String pullType) {
+    public void setPullType(Object pullType) {
         this.pullType = pullType;
     }
 
@@ -185,6 +195,7 @@ public class SysShopPullLogs implements Serializable {
         SysShopPullLogs other = (SysShopPullLogs) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getShopId() == null ? other.getShopId() == null : this.getShopId().equals(other.getShopId()))
+            && (this.getShopType() == null ? other.getShopType() == null : this.getShopType().equals(other.getShopType()))
             && (this.getPullType() == null ? other.getPullType() == null : this.getPullType().equals(other.getPullType()))
             && (this.getPullWay() == null ? other.getPullWay() == null : this.getPullWay().equals(other.getPullWay()))
             && (this.getPullParams() == null ? other.getPullParams() == null : this.getPullParams().equals(other.getPullParams()))
@@ -199,6 +210,7 @@ public class SysShopPullLogs implements Serializable {
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getShopId() == null) ? 0 : getShopId().hashCode());
+        result = prime * result + ((getShopType() == null) ? 0 : getShopType().hashCode());
         result = prime * result + ((getPullType() == null) ? 0 : getPullType().hashCode());
         result = prime * result + ((getPullWay() == null) ? 0 : getPullWay().hashCode());
         result = prime * result + ((getPullParams() == null) ? 0 : getPullParams().hashCode());
@@ -216,6 +228,7 @@ public class SysShopPullLogs implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
         sb.append(", shopId=").append(shopId);
+        sb.append(", shopType=").append(shopType);
         sb.append(", pullType=").append(pullType);
         sb.append(", pullWay=").append(pullWay);
         sb.append(", pullParams=").append(pullParams);

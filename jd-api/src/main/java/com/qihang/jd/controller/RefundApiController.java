@@ -294,6 +294,7 @@ public class RefundApiController {
 
         SysShopPullLogs logs = new SysShopPullLogs();
         logs.setShopId(params.getShopId());
+        logs.setShopType(EnumShopType.JD.getIndex());
         logs.setPullType("REFUND");
         logs.setPullWay("主动更新状态");
         logs.setPullParams("{ApplyTimeBegin:" + startTimeStr + ",ApplyTimeEnd:" + endTimeStr + ",PageIndex:1,PageSize:100}");

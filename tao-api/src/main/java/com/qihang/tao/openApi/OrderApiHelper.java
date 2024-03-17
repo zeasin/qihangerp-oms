@@ -21,6 +21,7 @@ import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
@@ -119,12 +120,10 @@ public class OrderApiHelper {
      * @return
      * @throws ApiException
      */
-    public static ApiResult<TaoOrder> pullIncrementOrder(Long pageNo, Long pageSize, String url, String appKey, String appSecret, String sessionKey) throws ApiException {
-        log.info("=======开增量拉取订单{}=========",LocalDateTime.now());
-        // 取当前时间30分钟前
-        LocalDateTime endTime = LocalDateTime.now();
-        LocalDateTime startTime = endTime.minus(60*24, ChronoUnit.MINUTES);
-
+    public static ApiResult<TaoOrder> pullIncrementOrder(LocalDateTime startTime,LocalDateTime endTime,Long pageNo, Long pageSize, String url, String appKey, String appSecret, String sessionKey) throws ApiException {
+        String startTimeStr = startTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        String endTimeStr = endTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        log.info("=======开始全量拉取TAO订单{}，参数日期：{}-{}=========",LocalDateTime.now(),startTimeStr,endTimeStr);
 
         TaobaoClient client = new DefaultTaobaoClient(url, appKey, appSecret);
         TradesSoldIncrementGetRequest req = new TradesSoldIncrementGetRequest();

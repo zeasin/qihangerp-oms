@@ -22,6 +22,7 @@ import com.jd.open.api.sdk.response.ware.SkuReadSearchSkuListResponse;
 import com.jd.open.api.sdk.response.ware.WareReadSearchWare4ValidResponse;
 import com.qihang.common.common.ApiResult;
 import com.qihang.common.common.ResultVo;
+import com.qihang.common.enums.EnumShopType;
 import com.qihang.common.enums.HttpStatus;
 import com.qihang.jd.domain.JdGoods;
 import com.qihang.jd.domain.JdGoodsSku;
@@ -133,6 +134,7 @@ public class GoodsApiController {
 
 
         logs.setShopId(params.getShopId());
+        logs.setShopType(EnumShopType.JD.getIndex());
         logs.setPullType("GOODS");
         logs.setPullWay("主动拉取");
         logs.setPullParams("{WareStatusValue:8,PageNo:1,PageSize:100}");

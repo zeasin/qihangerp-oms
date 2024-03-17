@@ -290,4 +290,9 @@ public class SysUserServiceImpl implements ISysUserService
         return userMapper.deleteUserById(userId);
     }
 
+    @Override
+    public void checkUserDataScope(Long userId) {
+
+    }
+
 }

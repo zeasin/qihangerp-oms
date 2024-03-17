@@ -110,6 +110,7 @@ public class OrderApiController {
             pullLasttimeService.updateById(updateLasttime);
         }
         SysShopPullLogs logs = new SysShopPullLogs();
+        logs.setShopType(EnumShopType.JD.getIndex());
         logs.setShopId(params.getShopId());
         logs.setPullType("ORDER");
         logs.setPullWay("主动拉取");

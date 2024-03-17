@@ -7,17 +7,24 @@ import com.qihang.common.enums.HttpStatus;
 import com.qihang.common.mq.MqMessage;
 import com.qihang.common.mq.MqType;
 import com.qihang.common.mq.MqUtils;
+import com.qihang.tao.domain.SysShopPullLasttime;
+import com.qihang.tao.domain.SysShopPullLogs;
 import com.qihang.tao.openApi.ApiCommon;
 //import com.qihang.tao.api.ApiResult;
 import com.qihang.tao.openApi.OrderApiHelper;
 import com.qihang.tao.common.TaoRequest;
 import com.qihang.tao.domain.TaoOrder;
+import com.qihang.tao.service.SysShopPullLasttimeService;
+import com.qihang.tao.service.SysShopPullLogsService;
 import com.qihang.tao.service.TaoOrderService;
 import com.taobao.api.ApiException;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * 淘系订单更新
@@ -31,8 +38,8 @@ public class OrderApiController {
     private final TaoOrderService orderService;
     private final ApiCommon apiCommon;
     private final MqUtils mqUtils;
-
-
+    private final SysShopPullLogsService pullLogsService;
+    private final SysShopPullLasttimeService pullLasttimeService;
     /**
      * 增量更新订单
      * @param req
@@ -46,6 +53,9 @@ public class OrderApiController {
         if (req.getShopId() == null || req.getShopId() <= 0) {
             return ApiResult.build(HttpStatus.PARAMS_ERROR, "参数错误，没有店铺Id");
         }
+        Date currDateTime = new Date();
+        long beginTime = System.currentTimeMillis();
+
         var checkResult = apiCommon.checkBefore(req.getShopId());
         if (checkResult.getCode() != HttpStatus.SUCCESS) {
             return ApiResult.build(checkResult.getCode(), checkResult.getMsg(),checkResult.getData());
@@ -58,9 +68,26 @@ public class OrderApiController {
         log.info("/**************增量更新tao订单，条件判断完成，开始更新。。。。。。****************/");
         Long pageSize = 100l;
         Long pageIndex = 1l;
+        // 取当前时间30分钟前
+//        LocalDateTime endTime = LocalDateTime.now();
+//        LocalDateTime startTime = endTime.minus(60*24, ChronoUnit.MINUTES);
+        // 获取最后更新时间
+        LocalDateTime startTime = null;
+        LocalDateTime  endTime = null;
+        SysShopPullLasttime lasttime = pullLasttimeService.getLasttimeByShop(req.getShopId(), "ORDER");
+        if(lasttime == null){
+            endTime = LocalDateTime.now();
+            startTime = endTime.minusDays(1);
+        }else{
+            startTime = lasttime.getLasttime().minusHours(1);//取上次结束一个小时前
+            endTime = startTime.plusDays(1);//取24小时
+            if(endTime.isAfter(LocalDateTime.now())){
+                endTime = LocalDateTime.now();
+            }
+        }
 
         //第一次获取
-        ApiResult<TaoOrder> upResult = OrderApiHelper.pullIncrementOrder(pageIndex, pageSize, url, appKey, appSecret, sessionKey);
+        ApiResult<TaoOrder> upResult = OrderApiHelper.pullIncrementOrder(startTime,endTime,pageIndex, pageSize, url, appKey, appSecret, sessionKey);
 
         if (upResult.getCode() != 0) {
             log.info("/**************主动更新tao订单：第一次获取结果失败：" + upResult.getMsg() + "****************/");
@@ -93,6 +120,35 @@ public class OrderApiController {
                 totalError++;
             }
         }
+
+        if(lasttime == null){
+            // 新增
+            SysShopPullLasttime insertLasttime = new SysShopPullLasttime();
+            insertLasttime.setShopId(req.getShopId());
+            insertLasttime.setCreateTime(new Date());
+            insertLasttime.setLasttime(endTime);
+            insertLasttime.setPullType("ORDER");
+            pullLasttimeService.save(insertLasttime);
+
+        }else {
+            // 修改
+            SysShopPullLasttime updateLasttime = new SysShopPullLasttime();
+            updateLasttime.setId(lasttime.getId());
+            updateLasttime.setUpdateTime(new Date());
+            updateLasttime.setLasttime(endTime);
+            pullLasttimeService.updateById(updateLasttime);
+        }
+
+        SysShopPullLogs logs = new SysShopPullLogs();
+        logs.setShopType(EnumShopType.TAO.getIndex());
+        logs.setShopId(req.getShopId());
+        logs.setPullType("ORDER");
+        logs.setPullWay("主动拉取");
+        logs.setPullParams("{startTime:"+startTime+",endTime:"+endTime+"}");
+        logs.setPullResult("{insertSuccess:"+insertSuccess+",hasExistOrder:"+hasExistOrder+",totalError:"+totalError+"}");
+        logs.setPullTime(currDateTime);
+        logs.setDuration(System.currentTimeMillis() - beginTime);
+        pullLogsService.save(logs);
 
         String msg = "成功，总共找到：" + upResult.getTotalRecords() + "条订单，新增：" + insertSuccess + "条，添加错误：" + totalError + "条，更新：" + hasExistOrder + "条";
         log.info("/**************主动更新tao订单：END：" + msg + "****************/");
