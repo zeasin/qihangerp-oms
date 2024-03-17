@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.qihang.common.common.ResultVo;
 import com.qihang.oms.domain.ORefund;
 
+import java.util.List;
+
 
 /**
 * @author qilip
@@ -13,4 +15,8 @@ import com.qihang.oms.domain.ORefund;
 public interface ORefundService extends IService<ORefund> {
     ResultVo<Integer> jdRefundMessage(String refundId);
     ResultVo<Integer> taoRefundMessage(String refundId);
+    List<ORefund> selectList(ORefund refund);
+
+    ORefund selectById(Long id);
+
 }

@@ -103,6 +103,17 @@ public class ORefundServiceImpl extends ServiceImpl<ORefundMapper, ORefund>
     public ResultVo<Integer> taoRefundMessage(String refundId) {
         return null;
     }
+
+    @Override
+    public List<ORefund> selectList(ORefund refund) {
+        List<ORefund> list = mapper.selectList(new LambdaQueryWrapper<>());
+        return list;
+    }
+
+    @Override
+    public ORefund selectById(Long id) {
+        return mapper.selectById(id);
+    }
 }
 
 

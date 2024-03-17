@@ -43,6 +43,18 @@
             <result property="updateBy" column="update_by" jdbcType="VARCHAR"/>
             <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
     </resultMap>
+    <resultMap type="com.qihang.oms.vo.GoodsSpecListVo" id="GoodsSpecListVoResult">
+        <result property="id"    column="id"    />
+        <result property="goodsId"    column="goods_id"    />
+        <result property="name"    column="name"    />
+        <result property="number"    column="number"    />
+        <result property="specNum"    column="spec_num"    />
+        <result property="colorValue"    column="color_value"    />
+        <result property="colorImage"    column="color_image"    />
+        <result property="sizeValue"    column="size_value"    />
+        <result property="styleValue"    column="style_value"    />
+        <result property="purPrice"    column="pur_price"    />
+    </resultMap>
 
     <sql id="Base_Column_List">
         id,name,image,
@@ -59,4 +71,20 @@
         create_by,create_time,update_by,
         update_time
     </sql>
+
+    <select id="searchGoodsSpec" parameterType="String" resultMap="GoodsSpecListVoResult">
+        SELECT spec.id,spec.goods_id,g.number,g.`name`,spec.spec_num,spec.color_value,spec.color_image,spec.size_value,spec.style_value,spec.pur_price
+        FROM `erp_goods_spec` as spec
+        LEFT JOIN erp_goods as g on g.id = spec.goods_id
+        <where>
+            <if test="keyword != null  and keyword != ''">
+                and
+                (
+                g.name like concat('%', #{keyword}, '%')
+                or g.number like concat(#{keyword}, '%')
+                or spec.spec_num like concat(#{keyword}, '%')
+                )
+            </if>
+        </where>
+    </select>
 </mapper>

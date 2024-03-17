@@ -2,6 +2,9 @@ package com.qihang.oms.mapper;
 
 import com.qihang.oms.domain.OGoods;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.qihang.oms.vo.GoodsSpecListVo;
+
+import java.util.List;
 
 /**
 * @author TW
@@ -10,7 +13,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 * @Entity com.qihang.oms.domain.OGoods
 */
 public interface OGoodsMapper extends BaseMapper<OGoods> {
-
+    List<GoodsSpecListVo> searchGoodsSpec(String keyword);
 }
 
 

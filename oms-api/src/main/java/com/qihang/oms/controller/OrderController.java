@@ -1,7 +1,6 @@
 package com.qihang.oms.controller;
 
 
-import com.qihang.common.common.AjaxResult;
 import com.qihang.common.common.TableDataInfo;
 import com.qihang.oms.common.BaseController;
 import com.qihang.oms.domain.OOrder;
@@ -19,7 +18,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/order")
-public class ErpOrderController extends BaseController
+public class OrderController extends BaseController
 {
     @Autowired
     private OOrderService orderService;
