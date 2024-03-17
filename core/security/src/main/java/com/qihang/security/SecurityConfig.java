@@ -26,7 +26,11 @@ public class SecurityConfig {
 
     @Autowired
     private AuthenticationExceptionHandler invalidAuthenticationEntryPoint;
-
+    /**
+     * 退出处理类
+     */
+    @Autowired
+    private LogoutSuccessHandlerImpl logoutSuccessHandler;
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -48,7 +52,7 @@ public class SecurityConfig {
                 // 禁用默认登录页
                 .formLogin().disable()
                 // 禁用默认登出页
-                .logout().disable()
+//                .logout().disable()
                 // 设置异常的EntryPoint，如果不设置，默认使用Http403ForbiddenEntryPoint
                 .exceptionHandling(exceptions -> exceptions.authenticationEntryPoint(invalidAuthenticationEntryPoint))
                 // 前后端分离是无状态的，不需要session了，直接禁用。
@@ -65,10 +69,12 @@ public class SecurityConfig {
                         //.requestMatchers("/**").hasAnyAuthority("ROLE_USER")
                         // 允许任意请求被已登录用户访问，不检查Authority
                         .anyRequest().authenticated())
+
                 .authenticationProvider(authenticationProvider())
                 // 加我们自定义的过滤器，替代UsernamePasswordAuthenticationFilter
                 .addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
-
+        // 添加Logout filter
+                http.logout().logoutUrl("/logout").logoutSuccessHandler(logoutSuccessHandler);
         return http.build();
     }
 
