@@ -3,6 +3,7 @@ package com.qihang.security;
 
 import com.alibaba.fastjson2.JSON;
 import com.qihang.common.common.R;
+import com.qihang.common.enums.HttpStatus;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -71,9 +72,9 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter
         PrintWriter writer = null;
         try {
             if (message == null) {
-                message = "403 Forbidden";
+                message = "401 Forbidden";
             }
-            R res = R.error(403, message);
+            R res = R.error(HttpStatus.UNAUTHORIZED, message);
             writer = response.getWriter();
             writer.append(JSON.toJSONString(res));
         } catch (IOException e) {

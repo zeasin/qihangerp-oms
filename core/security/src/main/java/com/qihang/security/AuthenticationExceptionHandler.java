@@ -3,6 +3,7 @@ package com.qihang.security;
 import com.alibaba.fastjson2.JSON;
 
 import com.qihang.common.common.R;
+import com.qihang.common.enums.HttpStatus;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -32,7 +33,7 @@ public class AuthenticationExceptionHandler implements AuthenticationEntryPoint 
             if (message == null) {
                 message = "认证失败！";
             }
-            R res = R.error(500, message);
+            R res = R.error(HttpStatus.ERROR, message);
             writer = response.getWriter();
             writer.append(JSON.toJSONString(res));
         } catch (IOException e) {
