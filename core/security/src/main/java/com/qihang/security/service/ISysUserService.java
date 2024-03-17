@@ -157,5 +157,5 @@ public interface ISysUserService
      * @return 结果
      */
     public int deleteUserById(Long userId);
-
+    void checkUserDataScope(Long userId);
 }

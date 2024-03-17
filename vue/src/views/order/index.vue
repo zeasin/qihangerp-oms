@@ -17,12 +17,10 @@
             :label="item.name"
             :value="item.id">
             <span style="float: left">{{ item.name }}</span>
-              <span style="float: right; color: #8492a6; font-size: 13px"  v-if="item.type === 4">淘宝天猫</span>
-              <span style="float: right; color: #8492a6; font-size: 13px"  v-if="item.type === 5">拼多多</span>
-              <span style="float: right; color: #8492a6; font-size: 13px"  v-if="item.type === 6">抖店</span>
-              <span style="float: right; color: #8492a6; font-size: 13px"  v-if="item.type === 7">小红书</span>
-              <span style="float: right; color: #8492a6; font-size: 13px"  v-if="item.type === 13">快手小店</span>
-              <span style="float: right; color: #8492a6; font-size: 13px"  v-if="item.type === 99">其他</span>
+              <span style="float: right; color: #8492a6; font-size: 13px"  v-if="item.type === 1">淘宝天猫</span>
+              <span style="float: right; color: #8492a6; font-size: 13px"  v-if="item.type === 2">京东</span>
+              <span style="float: right; color: #8492a6; font-size: 13px"  v-if="item.type === 3">抖店</span>
+              <span style="float: right; color: #8492a6; font-size: 13px"  v-if="item.type === 4">拼多多</span>
           </el-option>
         </el-select>
       </el-form-item>
@@ -86,16 +84,6 @@
     </el-form>
 
     <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
-        <el-button
-          type="primary"
-          plain
-          icon="el-icon-plus"
-          size="mini"
-          @click="handleAdd"
-          v-hasPermi="['shop:order:add']"
-        >手动创建订单</el-button>
-      </el-col>
       <el-col :span="1.5">
         <el-button
           type="warning"

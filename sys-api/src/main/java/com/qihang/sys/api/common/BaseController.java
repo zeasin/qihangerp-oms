@@ -1,16 +1,13 @@
-package com.qihang.sys.api.controller;
+package com.qihang.sys.api.common;
 
 import com.qihang.common.common.AjaxResult;
+import com.qihang.common.common.TableDataInfo;
+import com.qihang.common.enums.HttpStatus;
 import com.qihang.common.utils.StringUtils;
 import com.qihang.security.LoginUser;
-import com.qihang.sys.api.common.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
 
-import java.beans.PropertyEditorSupport;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -133,4 +130,20 @@ public class BaseController
     {
         return getLoginUser().getUsername();
     }
+
+    /**
+     * 响应请求分页数据
+     */
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    protected TableDataInfo getDataTable(List<?> list)
+    {
+        TableDataInfo rspData = new TableDataInfo();
+        rspData.setCode(HttpStatus.SUCCESS);
+        rspData.setMsg("查询成功");
+        rspData.setRows(list);
+//        rspData.setTotal(new PageInfo(list).getTotal());
+        rspData.setTotal(list.size());
+        return rspData;
+    }
+
 }

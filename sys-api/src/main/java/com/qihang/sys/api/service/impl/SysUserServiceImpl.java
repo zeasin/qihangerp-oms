@@ -2,7 +2,9 @@ package com.qihang.sys.api.service.impl;
 
 import com.qihang.common.common.ServiceException;
 import com.qihang.common.constant.UserConstants;
+import com.qihang.common.utils.SpringUtils;
 import com.qihang.common.utils.StringUtils;
+import com.qihang.sys.api.common.SecurityUtils;
 import com.qihang.sys.api.mapper.SysUserMapper;
 import com.qihang.security.entity.SysUser;
 import com.qihang.security.service.ISysUserService;
@@ -288,6 +290,20 @@ public class SysUserServiceImpl implements ISysUserService
 //        // 删除用户与岗位表
 //        userPostMapper.deleteUserPostByUserId(userId);
         return userMapper.deleteUserById(userId);
+    }
+
+    @Override
+    public void checkUserDataScope(Long userId) {
+        if (!SysUser.isAdmin(SecurityUtils.getUserId()))
+        {
+            SysUser user = new SysUser();
+            user.setUserId(userId);
+            List<SysUser> users = SpringUtils.getAopProxy(this).selectUserList(user);
+            if (StringUtils.isEmpty(users))
+            {
+                throw new ServiceException("没有权限访问用户数据！");
+            }
+        }
     }
 
 }

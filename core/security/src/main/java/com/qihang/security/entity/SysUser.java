@@ -3,6 +3,7 @@ package com.qihang.security.entity;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 用户对象 sys_user
@@ -73,6 +74,18 @@ public class SysUser
     /** 创建者 */
     private String createBy;
     private String remark;
+
+
+    private Map<String, Object> params;
+
+    public Map<String, Object> getParams() {
+        return params;
+    }
+
+    public void setParams(Map<String, Object> params) {
+        this.params = params;
+    }
+
     public SysUser()
     {
 

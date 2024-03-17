@@ -130,6 +130,8 @@ public class GoodsApiController {
         }
 
         SysShopPullLogs logs = new SysShopPullLogs();
+
+
         logs.setShopId(params.getShopId());
         logs.setPullType("GOODS");
         logs.setPullWay("主动拉取");

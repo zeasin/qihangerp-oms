@@ -2,7 +2,7 @@ package com.qihang.common.enums;
 
 /**
  * 描述：
- * 京东订单状态
+ * Tao订单状态
  *
  * @author qlp
  * @date 2019-09-18 19:44

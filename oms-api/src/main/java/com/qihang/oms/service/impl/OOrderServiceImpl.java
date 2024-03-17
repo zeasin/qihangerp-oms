@@ -263,6 +263,11 @@ public class OOrderServiceImpl extends ServiceImpl<OOrderMapper, OOrder>
         }
         return null;
     }
+
+    @Override
+    public List<OOrder> getList(OOrder order) {
+        return orderMapper.selectList(new LambdaQueryWrapper<>());
+    }
 }
 
 

@@ -9,6 +9,7 @@ package com.qihang.sys.api.controller;
 //import com.zhijian.common.utils.StringUtils;
 //import com.zhijian.system.service.ISysMenuService;
 import com.qihang.common.common.AjaxResult;
+import com.qihang.sys.api.common.BaseController;
 import com.qihang.common.constant.UserConstants;
 import com.qihang.common.utils.StringUtils;
 import com.qihang.sys.api.domain.SysMenu;
@@ -22,7 +23,6 @@ import java.util.List;
 
 import static com.qihang.common.common.AjaxResult.success;
 import static com.qihang.common.common.AjaxResult.warn;
-import static com.qihang.sys.api.common.SecurityUtils.getUserId;
 
 /**
  * 菜单信息
