@@ -1,8 +1,7 @@
-package com.qihang.tao.common;
+package com.qihang.common.common;
 
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.qihang.common.common.ServiceException;
 import lombok.Data;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -14,7 +13,7 @@ import java.util.List;
 @Data
 public class PageQuery implements Serializable {
     private Integer pageSize;
-    private Integer pageIndex;
+    private Integer pageNum;
     private String orderByColumn;
     private String isAsc;
 
@@ -22,7 +21,7 @@ public class PageQuery implements Serializable {
     public static final int DEFAULT_PAGE_SIZE = 10;
 
     public <T> Page<T> build() {
-        Integer pageIndex = (getPageIndex() == null || getPageIndex() == 0) ? DEFAULT_PAGE_INDEX : getPageIndex();
+        Integer pageIndex = (getPageNum() == null || getPageNum() == 0) ? DEFAULT_PAGE_INDEX : getPageNum();
         Integer pageSize = (getPageSize() == null || getPageSize() == 0) ? DEFAULT_PAGE_SIZE : getPageSize();
         if (pageIndex <= 0) {
             pageIndex = DEFAULT_PAGE_INDEX;

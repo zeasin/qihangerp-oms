@@ -1,10 +1,8 @@
 package com.qihang.tao.controller;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.qihang.common.common.ApiResult;
-import com.qihang.tao.common.PageQuery;
-import com.qihang.tao.common.PageResult;
+import com.qihang.common.common.PageQuery;
+import com.qihang.common.common.PageResult;
 import com.qihang.tao.domain.TaoGoods;
 import com.qihang.tao.domain.bo.TaoGoodsBo;
 import com.qihang.tao.service.TaoGoodsService;
@@ -12,8 +10,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 @RequestMapping("/goods")
 @RestController

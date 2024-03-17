@@ -1,6 +1,8 @@
 package com.qihang.oms.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.qihang.common.common.PageQuery;
+import com.qihang.common.common.PageResult;
 import com.qihang.common.common.ResultVo;
 import com.qihang.oms.domain.OOrder;
 
@@ -16,4 +18,5 @@ public interface OOrderService extends IService<OOrder> {
     ResultVo<Integer> taoOrderMessage(String orderId);
 
     List<OOrder> getList(OOrder order);
+    PageResult<OOrder> queryPageList(OOrder bo, PageQuery pageQuery);
 }

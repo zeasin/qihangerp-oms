@@ -25,6 +25,11 @@
         <artifactId>spring-boot-starter-data-redis</artifactId>
         <version>${spring-boot.version}</version>
     </dependency>
+    <dependency>
+        <groupId>com.baomidou</groupId>
+        <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
+        <version>3.5.5</version>
+    </dependency>
     <!-- Token生成与解析-->
     <dependency>
         <groupId>io.jsonwebtoken</groupId>

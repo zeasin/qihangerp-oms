@@ -1,6 +1,7 @@
 package com.qihang.oms.controller;
 
 
+import com.qihang.common.common.PageQuery;
 import com.qihang.common.common.TableDataInfo;
 import com.qihang.oms.common.BaseController;
 import com.qihang.oms.domain.OOrder;
@@ -28,10 +29,12 @@ public class OrderController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('shop:order:list')")
     @GetMapping("/list")
-    public TableDataInfo list(OOrder order)
+    public TableDataInfo list(OOrder order,PageQuery pageQuery)
     {
-        List<OOrder> list = orderService.getList(order);
-        return getDataTable(list);
+//        PageQuery pageQuery = new PageQuery();
+//        List<OOrder> list = orderService.getList(order);
+        var pageList = orderService.queryPageList(order,pageQuery);
+        return getDataTable(pageList);
     }
 
 

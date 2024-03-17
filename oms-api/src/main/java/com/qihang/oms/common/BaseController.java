@@ -1,9 +1,11 @@
 package com.qihang.oms.common;
 
 import com.qihang.common.common.AjaxResult;
+import com.qihang.common.common.PageResult;
 import com.qihang.common.common.TableDataInfo;
 import com.qihang.common.enums.HttpStatus;
 import com.qihang.common.utils.StringUtils;
+import com.qihang.oms.domain.OOrder;
 import com.qihang.security.LoginUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -145,5 +147,16 @@ public class BaseController
         rspData.setTotal(list.size());
         return rspData;
     }
+    protected TableDataInfo getDataTable(PageResult<?> pageResult)
+    {
+        TableDataInfo rspData = new TableDataInfo();
+        rspData.setCode(HttpStatus.SUCCESS);
+        rspData.setMsg("查询成功");
+        rspData.setRows(pageResult.getRecords());
+//        rspData.setTotal(new PageInfo(list).getTotal());
+        rspData.setTotal(pageResult.getTotal());
+        return rspData;
+    }
+
 
 }

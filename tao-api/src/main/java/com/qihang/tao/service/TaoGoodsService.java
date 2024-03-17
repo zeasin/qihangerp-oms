@@ -1,7 +1,7 @@
 package com.qihang.tao.service;
 
-import com.qihang.tao.common.PageQuery;
-import com.qihang.tao.common.PageResult;
+import com.qihang.common.common.PageQuery;
+import com.qihang.common.common.PageResult;
 import com.qihang.tao.domain.TaoGoods;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.qihang.tao.domain.bo.TaoGoodsBo;

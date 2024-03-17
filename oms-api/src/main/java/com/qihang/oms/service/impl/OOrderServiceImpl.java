@@ -1,7 +1,10 @@
 package com.qihang.oms.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.qihang.common.common.PageQuery;
+import com.qihang.common.common.PageResult;
 import com.qihang.common.common.ResultVo;
 import com.qihang.common.common.ResultVoEnum;
 import com.qihang.common.enums.EnumShopType;
@@ -267,6 +270,14 @@ public class OOrderServiceImpl extends ServiceImpl<OOrderMapper, OOrder>
     @Override
     public List<OOrder> getList(OOrder order) {
         return orderMapper.selectList(new LambdaQueryWrapper<>());
+    }
+
+    @Override
+    public PageResult<OOrder> queryPageList(OOrder bo, PageQuery pageQuery) {
+        LambdaQueryWrapper<OOrder> queryWrapper = new LambdaQueryWrapper<>();
+        Page<OOrder> pages = orderMapper.selectPage(pageQuery.build(), queryWrapper);
+
+        return PageResult.build(pages);
     }
 }
 

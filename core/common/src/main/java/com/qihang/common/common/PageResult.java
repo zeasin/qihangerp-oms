@@ -1,4 +1,4 @@
-package com.qihang.tao.common;
+package com.qihang.common.common;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.qihang.common.enums.HttpStatus;
