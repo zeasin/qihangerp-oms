@@ -2,11 +2,11 @@ package com.qihang.sys.api.controller;
 
 
 import com.qihang.common.common.AjaxResult;
-import com.qihang.sys.api.common.BaseController;
 import com.qihang.common.utils.StringUtils;
+import com.qihang.security.common.BaseController;
+import com.qihang.security.common.SecurityUtils;
 import com.qihang.security.entity.SysUser;
 import com.qihang.security.service.ISysUserService;
-import com.qihang.sys.api.common.SecurityUtils;
 import com.qihang.common.common.TableDataInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;

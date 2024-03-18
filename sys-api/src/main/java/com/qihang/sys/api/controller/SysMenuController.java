@@ -1,17 +1,10 @@
 package com.qihang.sys.api.controller;
 
-//import com.zhijian.common.annotation.Log;
-//import com.zhijian.common.constant.UserConstants;
-//import com.zhijian.common.core.controller.BaseController;
-//import com.zhijian.common.core.domain.AjaxResult;
-//import com.zhijian.common.core.domain.entity.SysMenu;
-//import com.zhijian.common.enums.BusinessType;
-//import com.zhijian.common.utils.StringUtils;
-//import com.zhijian.system.service.ISysMenuService;
+
 import com.qihang.common.common.AjaxResult;
-import com.qihang.sys.api.common.BaseController;
 import com.qihang.common.constant.UserConstants;
 import com.qihang.common.utils.StringUtils;
+import com.qihang.security.common.BaseController;
 import com.qihang.sys.api.domain.SysMenu;
 import com.qihang.sys.api.service.ISysMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,25 +73,25 @@ public class SysMenuController extends BaseController
 //        return ajax;
 //    }
 //
-//    /**
-//     * 新增菜单
-//     */
-//    @PreAuthorize("@ss.hasPermi('system:menu:add')")
-//    @PostMapping
-//    public AjaxResult add(@Validated @RequestBody SysMenu menu)
-//    {
-//        if (!menuService.checkMenuNameUnique(menu))
-//        {
-//            return error("新增菜单'" + menu.getMenuName() + "'失败，菜单名称已存在");
-//        }
-//        else if (UserConstants.YES_FRAME.equals(menu.getIsFrame()) && !StringUtils.ishttp(menu.getPath()))
-//        {
-//            return error("新增菜单'" + menu.getMenuName() + "'失败，地址必须以http(s)://开头");
-//        }
-//        menu.setCreateBy(getUsername());
-//        return toAjax(menuService.insertMenu(menu));
-//    }
-//
+    /**
+     * 新增菜单
+     */
+    @PreAuthorize("@ss.hasPermi('system:menu:add')")
+    @PostMapping
+    public AjaxResult add(@Validated @RequestBody SysMenu menu)
+    {
+        if (!menuService.checkMenuNameUnique(menu))
+        {
+            return error("新增菜单'" + menu.getMenuName() + "'失败，菜单名称已存在");
+        }
+        else if (UserConstants.YES_FRAME.equals(menu.getIsFrame()) && !StringUtils.ishttp(menu.getPath()))
+        {
+            return error("新增菜单'" + menu.getMenuName() + "'失败，地址必须以http(s)://开头");
+        }
+        menu.setCreateBy(getUsername());
+        return toAjax(menuService.insertMenu(menu));
+    }
+
     /**
      * 修改菜单
      */

@@ -4,7 +4,7 @@ import com.qihang.common.common.ServiceException;
 import com.qihang.common.constant.UserConstants;
 import com.qihang.common.utils.SpringUtils;
 import com.qihang.common.utils.StringUtils;
-import com.qihang.sys.api.common.SecurityUtils;
+import com.qihang.security.common.SecurityUtils;
 import com.qihang.sys.api.mapper.SysUserMapper;
 import com.qihang.security.entity.SysUser;
 import com.qihang.security.service.ISysUserService;

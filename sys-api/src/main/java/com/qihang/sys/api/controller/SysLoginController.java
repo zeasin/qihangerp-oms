@@ -1,19 +1,10 @@
 package com.qihang.sys.api.controller;
 
-//import com.zhijian.common.constant.Constants;
-//import com.zhijian.common.core.domain.AjaxResult;
-//import com.zhijian.common.core.domain.entity.SysMenu;
-//import com.zhijian.common.core.domain.entity.SysUser;
-//import com.zhijian.common.core.domain.model.LoginBody;
-//import com.zhijian.common.utils.SecurityUtils;
-//import com.zhijian.core.web.service.SysLoginService;
-//import com.zhijian.core.web.service.SysPermissionService;
-//import com.zhijian.system.service.ISysMenuService;
 import com.qihang.common.common.AjaxResult;
 import com.qihang.common.constant.Constants;
+import com.qihang.security.common.SecurityUtils;
 import com.qihang.security.entity.SysUser;
 import com.qihang.security.service.SysLoginService;
-import com.qihang.sys.api.common.SecurityUtils;
 import com.qihang.sys.api.domain.LoginBody;
 import com.qihang.sys.api.domain.SysMenu;
 import com.qihang.sys.api.service.ISysMenuService;
