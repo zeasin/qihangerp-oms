@@ -3,10 +3,10 @@ package com.qihang.oms.controller;
 
 import com.qihang.common.common.AjaxResult;
 import com.qihang.common.common.TableDataInfo;
-import com.qihang.oms.common.BaseController;
 import com.qihang.oms.domain.OGoods;
 import com.qihang.oms.service.OGoodsService;
 import com.qihang.oms.vo.GoodsSpecListVo;
+import com.qihang.security.common.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
