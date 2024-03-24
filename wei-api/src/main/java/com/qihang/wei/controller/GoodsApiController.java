@@ -1,6 +1,7 @@
 package com.qihang.wei.controller;
 
 import com.qihang.common.common.AjaxResult;
+import com.qihang.common.common.ResultVoEnum;
 import com.qihang.common.enums.HttpStatus;
 import com.qihang.wei.openApi.ApiCommon;
 import com.qihang.wei.openApi.PullRequest;
@@ -30,14 +31,14 @@ public class GoodsApiController {
         Date currDateTime = new Date();
         long startTime = System.currentTimeMillis();
         var checkResult = apiCommon.checkBefore(params.getShopId());
-        if (checkResult.getCode() != HttpStatus.SUCCESS) {
+        if (checkResult.getCode() != ResultVoEnum.SUCCESS.getIndex()) {
             return AjaxResult.error(checkResult.getCode(), checkResult.getMsg(), checkResult.getData());
         }
         String accessToken = checkResult.getData().getAccessToken();
         String serverUrl = checkResult.getData().getServerUrl();
         String appKey = checkResult.getData().getAppKey();
         String appSecret = checkResult.getData().getAppSecret();
-        GoodsApiService remoting = RemoteUtil.Remoting("https://api.weixin.qq.com", GoodsApiService.class);
+        GoodsApiService remoting = RemoteUtil.Remoting(serverUrl, GoodsApiService.class);
         GoodsApiBo apiBo = new GoodsApiBo();
         apiBo.setPage_size(10);
         GoodsListVo res = remoting.getGoodsList(accessToken, apiBo);

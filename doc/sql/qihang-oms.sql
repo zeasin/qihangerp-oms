@@ -11,7 +11,7 @@
  Target Server Version : 80200
  File Encoding         : 65001
 
- Date: 24/03/2024 17:06:44
+ Date: 24/03/2024 18:21:33
 */
 
 SET NAMES utf8mb4;
@@ -2267,10 +2267,11 @@ CREATE TABLE `sys_platform`  (
 -- ----------------------------
 -- Records of sys_platform
 -- ----------------------------
-INSERT INTO `sys_platform` VALUES (1, '天猫', 'TMALL', '', NULL, NULL, NULL);
-INSERT INTO `sys_platform` VALUES (2, '京东', 'JD', '', NULL, NULL, NULL);
-INSERT INTO `sys_platform` VALUES (3, '抖店', 'DOUDIAN', '', NULL, NULL, NULL);
-INSERT INTO `sys_platform` VALUES (4, '拼多多', 'PDD', '', NULL, NULL, NULL);
+INSERT INTO `sys_platform` VALUES (1, '天猫', 'TMALL', '12175777', '368dbbd183a77d551735be13f59bbcda', '', 'http://gw.api.taobao.com/router/rest');
+INSERT INTO `sys_platform` VALUES (2, '京东', 'JD', 'FB4CC3688E6F9065D4FF510A53BB60FF', '40e8c8b2427f4e6db8f4a39af27d719e', 'http://www.qumei.com', 'https://api.jd.com/routerjson');
+INSERT INTO `sys_platform` VALUES (3, '抖店', 'DOUDIAN', '7344938657423296019', '4e704882-832a-42e5-845f-6af991ce0ce2', '', NULL);
+INSERT INTO `sys_platform` VALUES (4, '拼多多', 'PDD', 'b92194d1af904c8a86a2c9eff6f9bfb0', '8da714f8dcbfb12d3972626ef8acfc0737aacecb', 'http://www.qumei.com', NULL);
+INSERT INTO `sys_platform` VALUES (5, '微信视频号小店', 'WEI', NULL, NULL, NULL, 'https://api.weixin.qq.com');
 
 -- ----------------------------
 -- Table structure for sys_shop
@@ -2300,11 +2301,11 @@ CREATE TABLE `sys_shop`  (
 -- ----------------------------
 -- Records of sys_shop
 -- ----------------------------
-INSERT INTO `sys_shop` VALUES (1, '天猫旗舰店', 1, '', 98, 1, 0, '', 0, '', '', '', NULL, NULL, NULL, NULL, 'http://gw.api.taobao.com/router/rest');
-INSERT INTO `sys_shop` VALUES (2, '京东旗舰店', 2, NULL, 9, 1, 0, NULL, 0, NULL, NULL, '', 31535999, NULL, '919b21a3b9d247d08d7701cb8bcc2432ote5', NULL, NULL);
-INSERT INTO `sys_shop` VALUES (3, '抖音旗舰店', 3, 'http://openapi.jinritemai.com', 87, 1, 1653672695, NULL, 0, '', '', '', NULL, NULL, NULL, NULL, '2');
-INSERT INTO `sys_shop` VALUES (5, '拼多多旗舰店', 4, NULL, 99, 1, 1680698886, 'pdd10006159121', 0, NULL, NULL, '', NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_shop` VALUES (6, '视频号小店', 5, NULL, 9, 0, 0, NULL, 0, 'wx2b826d52663c3ac5', '680867143a2cdf9caa350c947df76c37', '78_Dlbnrt1yqBv0C2ThdK5k80vh3Agg-sdgg0AvgEp6J28aiDQ0tlMteFHaLIr0sle-UXMiNBTkqzgdme-Z1zGR3XkCxGP4afeT9mB-mZPzWI6QE7Vdl6HwOv7tgY0FVZfADAZPT', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_shop` VALUES (1, '天猫旗舰店AB', 1, '', 98, 1, 0, '', 59972781, '31014100', '7b0769269b0c0ca88949791c14eb3a5c', '6102522199aaa4a42a2e6be95d0a5e18657c1576ec563a0351855490', NULL, NULL, NULL, NULL, 'http://gw.api.taobao.com/router/rest');
+INSERT INTO `sys_shop` VALUES (2, '京东旗舰店', 2, NULL, 9, 1, 0, NULL, 10706, NULL, NULL, '8abd974c62c34778935b34b5952e6f68izdk', 31535999, NULL, '919b21a3b9d247d08d7701cb8bcc2432ote5', NULL, NULL);
+INSERT INTO `sys_shop` VALUES (3, '抖音旗舰店', 3, 'http://openapi.jinritemai.com', 87, 1, 1653672695, NULL, 90158786, '7249607407477720636', '36a12497-fb9d-4b54-8cd1-fd1617346687', '', NULL, NULL, NULL, NULL, '2');
+INSERT INTO `sys_shop` VALUES (4, '拼多多旗舰店', 4, NULL, 99, 1, 1680698886, '', 100061591, NULL, NULL, '87f8044d2a5f45a489aa3a952785b0d35e61788a', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_shop` VALUES (5, '视频号小店', 5, NULL, 9, 0, 0, NULL, 0, 'wx2b826d52663c3ac5', '680867143a2cdf9caa350c947df76c37', '78_xn2z6F4-Eq8OeElAYhn0PKCfAhcOfrS4M47w8xybtFThM2jusDxoVDPBY8XJDQ2q5-aTaSlHjiSuKotZPpYY1SH_w8E_VE8EeD0dc3ABVLfH1Eu1PJZvOYNIjbYMSFgAHASYL', NULL, NULL, NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for sys_shop_pull_lasttime
@@ -2432,7 +2433,7 @@ CREATE TABLE `sys_user`  (
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES (1, 103, 'admin', '启航oms', '00', '280645618@qq.com', '15888888888', '1', '', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '0', '0', '127.0.0.1', '2024-03-24 16:56:36', 'admin', '2023-08-07 19:31:37', '', '2024-03-24 16:56:35', '管理员');
+INSERT INTO `sys_user` VALUES (1, 103, 'admin', '启航oms', '00', '280645618@qq.com', '15888888888', '1', '', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '0', '0', '127.0.0.1', '2024-03-24 17:46:21', 'admin', '2023-08-07 19:31:37', '', '2024-03-24 17:46:21', '管理员');
 INSERT INTO `sys_user` VALUES (100, NULL, 'qlp', 'a', '00', '', '15818590119', '0', '', '$2a$10$5YEoazvKfi3TTfvduAe8mOT5dtV7W4EeJo5x5T.4P0yOTBms2BDmy', '0', '0', '', NULL, 'admin', '2024-03-17 14:55:22', '', NULL, NULL);
 
 -- ----------------------------

@@ -1,7 +1,6 @@
 package com.qihang.wei.controller;
 
 import com.qihang.common.common.AjaxResult;
-import com.qihang.common.common.ApiResult;
 import com.qihang.common.common.ResultVoEnum;
 import com.qihang.common.enums.EnumShopType;
 import com.qihang.common.enums.HttpStatus;

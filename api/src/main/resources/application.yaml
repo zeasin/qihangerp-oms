@@ -59,6 +59,12 @@ spring:
             - Path=/api/pdd-api/**
           filters:
             - StripPrefix=2
+        - id: wei_api_route
+          uri: lb://wei-api
+          predicates:
+            - Path=/api/wei-api/**
+          filters:
+            - StripPrefix=2
 #            - TokenFilter
 #      default-filters:
 #        - TokenFilter

@@ -9,7 +9,9 @@ import com.pdd.pop.sdk.http.api.pop.request.PddPopAuthTokenRefreshRequest;
 import com.pdd.pop.sdk.http.api.pop.response.PddOrderListGetResponse;
 import com.pdd.pop.sdk.http.api.pop.response.PddPopAuthTokenRefreshResponse;
 import com.pdd.pop.sdk.http.token.AccessTokenResponse;
-import com.qihang.common.common.ApiResult;
+import com.qihang.common.common.AjaxResult;
+import com.qihang.common.common.ResultVo;
+import com.qihang.common.common.ResultVoEnum;
 import com.qihang.common.enums.EnumShopType;
 import com.qihang.common.enums.HttpStatus;
 import com.qihang.pdd.domain.SysPlatform;
@@ -49,29 +51,29 @@ public class AjaxOrderPddController {
      * @throws Exception
      */
     @RequestMapping(value = "/pull_order", method = RequestMethod.POST)
-    public ApiResult<Object> getOrderList(@RequestBody OpenApiRequest reqData)
+    public AjaxResult getOrderList(@RequestBody OpenApiRequest reqData)
             throws Exception {
         Integer updType = reqData.getUpdType();//更新类型0拉取新订单1更新订单
         String startDate = reqData.getStartDate();//reqData.getString("startTime");
         String endDate = reqData.getEndDate();//reqData.getString("endTime");
 
         var shop = shopService.selectShopById(reqData.getShopId());
-        if(shop == null) return ApiResult.build(HttpStatus.PARAMS_ERROR, "店铺不存在！");
+        if(shop == null) AjaxResult.error(HttpStatus.PARAMS_ERROR, "店铺不存在！");
 
         if (shop.getType() != EnumShopType.PDD.getIndex()) {
-            return ApiResult.build(HttpStatus.PARAMS_ERROR, "参数错误，店铺不是PDD店铺");
+            return AjaxResult.error(HttpStatus.PARAMS_ERROR, "参数错误，店铺不是PDD店铺");
         }
         SysPlatform platform = platformService.selectById(EnumShopType.PDD.getIndex());
 
         if(!StringUtils.hasText(platform.getAppKey())) {
-            return ApiResult.build(HttpStatus.PARAMS_ERROR, "平台配置错误，没有找到AppKey");
+            return AjaxResult.error(HttpStatus.PARAMS_ERROR, "平台配置错误，没有找到AppKey");
         }
         if(!StringUtils.hasText(platform.getAppSecret())) {
-            return ApiResult.build(HttpStatus.PARAMS_ERROR, "第三方平台配置错误，没有找到AppSercet");
+            return AjaxResult.error(HttpStatus.PARAMS_ERROR, "第三方平台配置错误，没有找到AppSercet");
         }
-        if(!StringUtils.hasText(platform.getRedirectUri())) {
-            return ApiResult.build(HttpStatus.PARAMS_ERROR, "第三方平台配置错误，没有找到RedirectUri");
-        }
+//        if(!StringUtils.hasText(platform.getRedirectUri())) {
+//            return AjaxResult.error(HttpStatus.PARAMS_ERROR, "第三方平台配置错误，没有找到RedirectUri");
+//        }
 //        if(!StringUtils.hasText(platform.getServerUrl())) {
 //            return ApiResult.build(HttpStatus.PARAMS_ERROR, "第三方平台配置错误，没有找到ServerUrl");
 //        }
@@ -91,16 +93,16 @@ public class AjaxOrderPddController {
         params.setAccessToken(shop.getAccessToken());
         params.setTokenRequestUrl("http://localhost:3000/pdd_api2/oauth");
         params.setApiRequestUrl(shop.getApiRequestUrl());
-        String url = "https://mms.pinduoduo.com/open.html?response_type=code&client_id=" + params.getAppKey() + "&redirect_uri=" + URLEncoder.encode(platform.getRedirectUri());
+//        String url = "https://mms.pinduoduo.com/open.html?response_type=code&client_id=" + params.getAppKey() + "&redirect_uri=" + URLEncoder.encode(platform.getRedirectUri());
 
         String accessToken = params.getAccessToken();
         if(!StringUtils.hasText(accessToken)) {
-            return ApiResult.build(HttpStatus.PARAMS_ERROR, "参数错误：accessToken为空");
+            return AjaxResult.error(HttpStatus.PARAMS_ERROR, "参数错误：accessToken为空");
         }
 //        if(!StringUtils.hasText(accessToken)) return new ApiResult<>(EnumResultVo.TokenFail.getIndex(), "参数错误：accessToken为空",params);
         // 获取店铺信息，判断店铺是否一致
         var shopResult = PddApiUtils.getShopInfo(params.getAppKey(), params.getAppSecret(), accessToken);
-        if (shopResult.getCode() != HttpStatus.SUCCESS) {
+        if (shopResult.getCode() != ResultVoEnum.SUCCESS.getIndex()) {
 //            if(shopResult.getCode() == HttpStatus.UNAUTHORIZED){
 //                // 生成AccessToken
 //                PopAccessTokenClient accessTokenClient = new PopAccessTokenClient(params.getAppKey(), params.getAppSecret());
@@ -117,7 +119,7 @@ public class AjaxOrderPddController {
 //                    e.printStackTrace();
 //                }
 //            }
-            return ApiResult.build(shopResult.getCode(), shopResult.getMsg(), params);
+            return AjaxResult.error(shopResult.getCode(), shopResult.getMsg(), params);
         }else{
             // 看看是否需要刷新一下token
             PopClient client = new PopHttpClient(params.getAppKey(), params.getAppSecret());
@@ -130,10 +132,10 @@ public class AjaxOrderPddController {
         }
 
         if (shopResult.getData().getMallId().longValue() != shop.getSellerId().longValue()) {
-            return ApiResult.build(HttpStatus.UNAUTHORIZED, "该店铺不是授权店铺",params);
+            return AjaxResult.error(HttpStatus.UNAUTHORIZED, "该店铺不是授权店铺",params);
         }
 
-        ApiResult<ErpSalesPullCountResp> result = null;// 返回结果
+        ResultVo<ErpSalesPullCountResp> result = null;// 返回结果
 
         Long endTime = System.currentTimeMillis() / 1000;// 订单更新结束时间(默认值)
         Long startTime = endTime - 60 * 60 * 24 + 10;// 订单更新开始时间(默认值)
@@ -193,7 +195,7 @@ public class AjaxOrderPddController {
                 failCount += result.getData().getFailCount();
                 // log.info("查询到数据:"+result.getData().getTotalRecords());
             } else if (result.getCode() > 0)
-                return ApiResult.build(result.getCode(), result.getMsg());
+                return AjaxResult.error(result.getCode(), result.getMsg());
             // 计算总页数
             int totalPage = (result.getData().getTotalRecords() % pageSize == 0)
                     ? result.getData().getTotalRecords() / pageSize
@@ -229,9 +231,9 @@ public class AjaxOrderPddController {
          * log.info("添加更新日志错误"); }
          */
         if (result.getCode() == 0)
-            return ApiResult.build(HttpStatus.SUCCESS, "SUCCESS");
+            return AjaxResult.success();
         else
-            return ApiResult.build(result.getCode(), result.getMsg());
+            return AjaxResult.error(result.getCode(), result.getMsg());
     }
 
     /**
@@ -245,7 +247,7 @@ public class AjaxOrderPddController {
      * @return
      * @throws Exception
      */
-    private ApiResult<ErpSalesPullCountResp> pullPddOrder( String clientId,String clientSecret,String accessToken,Integer pageNo, Integer pageSize, Long startTime, Long endTime, Long shopId) throws Exception {
+    private ResultVo<ErpSalesPullCountResp> pullPddOrder( String clientId,String clientSecret,String accessToken,Integer pageNo, Integer pageSize, Long startTime, Long endTime, Long shopId) throws Exception {
         PopClient client = new PopHttpClient(clientId, clientSecret);
 
         // 调取拼多多接口 pdd.order.list.get 订单列表查询接口（根据成交时间）
@@ -268,9 +270,9 @@ public class AjaxOrderPddController {
         PddOrderListGetResponse pddOrderListGetResponse = client.syncInvoke(pddOrderListGetRequest, accessToken);
         if (pddOrderListGetResponse.getErrorResponse() != null) {
             if (pddOrderListGetResponse.getErrorResponse().getErrorCode().intValue() == 10019) {
-                return ApiResult.build(HttpStatus.UNAUTHORIZED, "Token过期");
+                return ResultVo.error(HttpStatus.UNAUTHORIZED, "Token过期");
             } else
-                return ApiResult.build(HttpStatus.ERROR,
+                return ResultVo.error(HttpStatus.ERROR,
                         "接口调用失败：" + pddOrderListGetResponse.getErrorResponse().getErrorMsg());
         } else {
             // 获取到了数据
@@ -370,7 +372,7 @@ public class AjaxOrderPddController {
             } else
                 resp.setTotalRecords(0);
         }
-        return ApiResult.build(HttpStatus.SUCCESS, "SUCCESS", resp);
+        return ResultVo.success(resp);
     }
 
 
