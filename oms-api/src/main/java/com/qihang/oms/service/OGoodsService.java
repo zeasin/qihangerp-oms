@@ -1,7 +1,11 @@
 package com.qihang.oms.service;
 
+import com.qihang.common.common.PageQuery;
+import com.qihang.common.common.PageResult;
 import com.qihang.oms.domain.OGoods;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.qihang.oms.domain.OGoodsSku;
+import com.qihang.oms.domain.OOrder;
 import com.qihang.oms.vo.GoodsSpecListVo;
 
 import java.util.List;
@@ -12,6 +16,9 @@ import java.util.List;
 * @createDate 2024-03-11 14:24:49
 */
 public interface OGoodsService extends IService<OGoods> {
+
+    PageResult<OGoodsSku> querySkuPageList(OGoodsSku bo, PageQuery pageQuery);
+
     List<GoodsSpecListVo> searchGoodsSpec(String keyword);
     List<OGoods> selectGoodsList(OGoods goods);
     OGoods selectGoodsById(Long id);
@@ -38,4 +45,6 @@ public interface OGoodsService extends IService<OGoods> {
      * @return 结果
      */
     public int deleteGoodsByIds(Long[] ids);
+
+    int insertGoodsSku(OGoodsSku goodsSku);
 }

@@ -17,7 +17,7 @@ public class OrderTask implements IPollableService {
     private final SysTaskService taskService;
     @Override
     public void poll() {
-        log.info("=======自动任务=====拉取订单========="+ LocalDateTime.now());
+        log.info("=======自动任务==JD===拉取订单========="+ LocalDateTime.now());
 //        System.out.printf("更新JD订单%s","echo");
     }
 

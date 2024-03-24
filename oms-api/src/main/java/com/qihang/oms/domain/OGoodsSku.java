@@ -12,11 +12,13 @@ public class OGoodsSku implements Serializable {
      * 主键id
      */
     private Long id;
+    private Long goodsId;
 
     /**
      * 商品id
      */
     private Long erpGoodsId;
+
 
     /**
      * skuId(唯一)
@@ -428,101 +430,11 @@ public class OGoodsSku implements Serializable {
         this.disable = disable;
     }
 
-    @Override
-    public boolean equals(Object that) {
-        if (this == that) {
-            return true;
-        }
-        if (that == null) {
-            return false;
-        }
-        if (getClass() != that.getClass()) {
-            return false;
-        }
-        OGoodsSku other = (OGoodsSku) that;
-        return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-            && (this.getErpGoodsId() == null ? other.getErpGoodsId() == null : this.getErpGoodsId().equals(other.getErpGoodsId()))
-            && (this.getErpSkuId() == null ? other.getErpSkuId() == null : this.getErpSkuId().equals(other.getErpSkuId()))
-            && (this.getSkuName() == null ? other.getSkuName() == null : this.getSkuName().equals(other.getSkuName()))
-            && (this.getSkuNum() == null ? other.getSkuNum() == null : this.getSkuNum().equals(other.getSkuNum()))
-            && (this.getColorId() == null ? other.getColorId() == null : this.getColorId().equals(other.getColorId()))
-            && (this.getColorValue() == null ? other.getColorValue() == null : this.getColorValue().equals(other.getColorValue()))
-            && (this.getColorImage() == null ? other.getColorImage() == null : this.getColorImage().equals(other.getColorImage()))
-            && (this.getSizeId() == null ? other.getSizeId() == null : this.getSizeId().equals(other.getSizeId()))
-            && (this.getSizeValue() == null ? other.getSizeValue() == null : this.getSizeValue().equals(other.getSizeValue()))
-            && (this.getStyleId() == null ? other.getStyleId() == null : this.getStyleId().equals(other.getStyleId()))
-            && (this.getStyleValue() == null ? other.getStyleValue() == null : this.getStyleValue().equals(other.getStyleValue()))
-            && (this.getBarCode() == null ? other.getBarCode() == null : this.getBarCode().equals(other.getBarCode()))
-            && (this.getPurPrice() == null ? other.getPurPrice() == null : this.getPurPrice().equals(other.getPurPrice()))
-            && (this.getWholePrice() == null ? other.getWholePrice() == null : this.getWholePrice().equals(other.getWholePrice()))
-            && (this.getRetailPrice() == null ? other.getRetailPrice() == null : this.getRetailPrice().equals(other.getRetailPrice()))
-            && (this.getUnitCost() == null ? other.getUnitCost() == null : this.getUnitCost().equals(other.getUnitCost()))
-            && (this.getRemark() == null ? other.getRemark() == null : this.getRemark().equals(other.getRemark()))
-            && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
-            && (this.getLowQty() == null ? other.getLowQty() == null : this.getLowQty().equals(other.getLowQty()))
-            && (this.getHighQty() == null ? other.getHighQty() == null : this.getHighQty().equals(other.getHighQty()))
-            && (this.getDisable() == null ? other.getDisable() == null : this.getDisable().equals(other.getDisable()));
+    public Long getGoodsId() {
+        return goodsId;
     }
 
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
-        result = prime * result + ((getErpGoodsId() == null) ? 0 : getErpGoodsId().hashCode());
-        result = prime * result + ((getErpSkuId() == null) ? 0 : getErpSkuId().hashCode());
-        result = prime * result + ((getSkuName() == null) ? 0 : getSkuName().hashCode());
-        result = prime * result + ((getSkuNum() == null) ? 0 : getSkuNum().hashCode());
-        result = prime * result + ((getColorId() == null) ? 0 : getColorId().hashCode());
-        result = prime * result + ((getColorValue() == null) ? 0 : getColorValue().hashCode());
-        result = prime * result + ((getColorImage() == null) ? 0 : getColorImage().hashCode());
-        result = prime * result + ((getSizeId() == null) ? 0 : getSizeId().hashCode());
-        result = prime * result + ((getSizeValue() == null) ? 0 : getSizeValue().hashCode());
-        result = prime * result + ((getStyleId() == null) ? 0 : getStyleId().hashCode());
-        result = prime * result + ((getStyleValue() == null) ? 0 : getStyleValue().hashCode());
-        result = prime * result + ((getBarCode() == null) ? 0 : getBarCode().hashCode());
-        result = prime * result + ((getPurPrice() == null) ? 0 : getPurPrice().hashCode());
-        result = prime * result + ((getWholePrice() == null) ? 0 : getWholePrice().hashCode());
-        result = prime * result + ((getRetailPrice() == null) ? 0 : getRetailPrice().hashCode());
-        result = prime * result + ((getUnitCost() == null) ? 0 : getUnitCost().hashCode());
-        result = prime * result + ((getRemark() == null) ? 0 : getRemark().hashCode());
-        result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
-        result = prime * result + ((getLowQty() == null) ? 0 : getLowQty().hashCode());
-        result = prime * result + ((getHighQty() == null) ? 0 : getHighQty().hashCode());
-        result = prime * result + ((getDisable() == null) ? 0 : getDisable().hashCode());
-        return result;
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
-        sb.append(", erpGoodsId=").append(erpGoodsId);
-        sb.append(", erpSkuId=").append(erpSkuId);
-        sb.append(", skuName=").append(skuName);
-        sb.append(", skuNum=").append(skuNum);
-        sb.append(", colorId=").append(colorId);
-        sb.append(", colorValue=").append(colorValue);
-        sb.append(", colorImage=").append(colorImage);
-        sb.append(", sizeId=").append(sizeId);
-        sb.append(", sizeValue=").append(sizeValue);
-        sb.append(", styleId=").append(styleId);
-        sb.append(", styleValue=").append(styleValue);
-        sb.append(", barCode=").append(barCode);
-        sb.append(", purPrice=").append(purPrice);
-        sb.append(", wholePrice=").append(wholePrice);
-        sb.append(", retailPrice=").append(retailPrice);
-        sb.append(", unitCost=").append(unitCost);
-        sb.append(", remark=").append(remark);
-        sb.append(", status=").append(status);
-        sb.append(", lowQty=").append(lowQty);
-        sb.append(", highQty=").append(highQty);
-        sb.append(", disable=").append(disable);
-        sb.append(", serialVersionUID=").append(serialVersionUID);
-        sb.append("]");
-        return sb.toString();
+    public void setGoodsId(Long goodsId) {
+        this.goodsId = goodsId;
     }
 }

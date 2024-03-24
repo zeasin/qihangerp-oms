@@ -1,26 +1,39 @@
 package com.qihang.tao.controller;
 
-import com.qihang.common.common.ApiResult;
+import com.qihang.common.api.ShopApiParams;
+import com.qihang.common.common.AjaxResult;
+import com.qihang.common.common.ResultVo;
 import com.qihang.common.common.ResultVoEnum;
+import com.qihang.common.enums.EnumShopType;
 import com.qihang.common.enums.HttpStatus;
+import com.qihang.security.common.BaseController;
+import com.qihang.tao.domain.SysShopPullLogs;
 import com.qihang.tao.openApi.ApiCommon;
 import com.qihang.tao.openApi.GoodsApiHelper;
 import com.qihang.tao.common.TaoRequest;
 import com.qihang.tao.domain.TaoGoods;
+import com.qihang.tao.service.SysShopPullLogsService;
 import com.qihang.tao.service.TaoGoodsService;
 import lombok.AllArgsConstructor;
+import lombok.extern.java.Log;
+import lombok.extern.log4j.Log4j;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+@Log
 @RequestMapping("/goods")
 @RestController
 @AllArgsConstructor
-public class GoodsApiController {
+public class GoodsApiController extends BaseController {
     private final ApiCommon apiCommon;
     private final TaoGoodsService goodsService;
-
+    private final SysShopPullLogsService pullLogsService;
 /**
         * @api {post} /api/v1/pull_goods 更新店铺商品列表
      * @apiVersion 1.0.0
@@ -36,23 +49,28 @@ public class GoodsApiController {
     }
      */
     @RequestMapping(value = "/pull_goods", method = RequestMethod.POST)
-    public ApiResult<Integer> pullGoodsList(@RequestBody TaoRequest req) throws Exception {
+    public AjaxResult pullGoodsList(@RequestBody TaoRequest req) throws Exception {
         if (req.getShopId() == null || req.getShopId() <= 0) {
-            return ApiResult.build(HttpStatus.PARAMS_ERROR, "参数错误，没有店铺Id");
+            return AjaxResult.error(HttpStatus.PARAMS_ERROR, "参数错误，没有店铺Id");
+//            return ApiResult.build(HttpStatus.PARAMS_ERROR, "参数错误，没有店铺Id");
         }
+        Date currDateTime = new Date();
+        long startTime = System.currentTimeMillis();
         var checkResult = apiCommon.checkBefore(req.getShopId());
         if (checkResult.getCode() != HttpStatus.SUCCESS) {
-            return ApiResult.build(checkResult.getCode(), checkResult.getMsg());
+            return AjaxResult.error(checkResult.getCode(), checkResult.getMsg());
         }
-        String sessionKey = checkResult.getData().getAccessToken();
-        String url = checkResult.getData().getApiRequestUrl();
-        String appKey = checkResult.getData().getAppKey();
-        String appSecret = checkResult.getData().getAppSecret();
+        ShopApiParams shopApiParams = checkResult.getData();
+        String sessionKey = shopApiParams.getAccessToken();
+        String url = shopApiParams.getApiRequestUrl();
+        String appKey = shopApiParams.getAppKey();
+        String appSecret = shopApiParams.getAppSecret();
 
         Long pageIndex = 1L;
         Long pageSize = 100L;
 
-        ApiResult<TaoGoods> listApiResult = GoodsApiHelper.pullGoods(pageIndex, pageSize, url, appKey, appSecret, sessionKey);
+//        ApiResult<TaoGoods> listApiResult = GoodsApiHelper.pullGoods(pageIndex, pageSize, url, appKey, appSecret, sessionKey);
+        ResultVo<TaoGoods> listApiResult = GoodsApiHelper.pullGoods(pageIndex, pageSize, url, appKey, appSecret, sessionKey);
 
         int insertSuccess = 0;//新增成功的订单
         int totalError = 0;
@@ -75,7 +93,7 @@ public class GoodsApiController {
 
         while (pageIndex <= totalPage) {
 
-            ApiResult<TaoGoods> result1 = GoodsApiHelper.pullGoods(pageIndex, pageIndex, url, appKey, appSecret, sessionKey);
+            ResultVo<TaoGoods> result1 = GoodsApiHelper.pullGoods(pageIndex, pageIndex, url, appKey, appSecret, sessionKey);
             //循环插入订单数据到数据库
             for (var goods:listApiResult.getList()) {
                 int result = goodsService.saveAndUpdateGoods(req.getShopId(), goods);
@@ -90,10 +108,21 @@ public class GoodsApiController {
             }
             pageIndex++;
         }
+        SysShopPullLogs logs = new SysShopPullLogs();
+        logs.setShopId(req.getShopId());
+        logs.setShopType(EnumShopType.TAO.getIndex());
+        logs.setPullType("GOODS");
+        logs.setPullWay("主动拉取");
+        logs.setPullParams("{PageNo:1,PageSize:100}");
+        logs.setPullResult("{successTotal:"+listApiResult.getTotalRecords()+"}");
+        logs.setPullTime(currDateTime);
+        logs.setDuration(System.currentTimeMillis() - startTime);
+        pullLogsService.save(logs);
 
-        String msg = "成功，总共找到：" + listApiResult.getTotalRecords() + "条订单，新增：" + insertSuccess + "条，添加错误：" + totalError + "条，更新：" + hasExistOrder + "条";
+        String msg = "成功，总共找到：" + listApiResult.getTotalRecords() + "条商品数据，新增：" + insertSuccess + "条，添加错误：" + totalError + "条，更新：" + hasExistOrder + "条";
+        logger.info(msg);
 //        return new ApiResult<>(EnumResultVo.SUCCESS.getIndex(), msg);
-        return ApiResult.build(HttpStatus.SUCCESS, msg);
+        return AjaxResult.success(msg);
     }
 
 }

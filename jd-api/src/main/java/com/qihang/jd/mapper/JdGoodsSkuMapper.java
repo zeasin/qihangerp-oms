@@ -1,7 +1,10 @@
 package com.qihang.jd.mapper;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.qihang.jd.domain.JdGoodsSku;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
 * @author qilip
@@ -10,7 +13,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 * @Entity com.qihang.jd.domain.JdGoodsSku
 */
 public interface JdGoodsSkuMapper extends BaseMapper<JdGoodsSku> {
-
+    IPage<JdGoodsSku> selectSkuPageList(Page<JdGoodsSku> page, @Param("shopId") Integer shopId);
 }
 
 

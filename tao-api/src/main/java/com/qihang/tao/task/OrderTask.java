@@ -4,8 +4,12 @@ import com.qihang.common.task.IPollableService;
 import com.qihang.tao.domain.SysTask;
 import com.qihang.tao.service.SysTaskService;
 import lombok.AllArgsConstructor;
+import lombok.extern.java.Log;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
+@Log
 @AllArgsConstructor
 @Service
 public class OrderTask implements IPollableService {
@@ -13,7 +17,8 @@ public class OrderTask implements IPollableService {
     private final SysTaskService taskService;
     @Override
     public void poll() {
-        System.out.printf("更新TAO订单%s","echo");
+        log.info("=======自动任务==TAO===拉取订单========="+ LocalDateTime.now());
+//        System.out.printf("更新TAO订单%s","echo");
     }
 
     @Override

@@ -1,11 +1,16 @@
 package com.qihang.tao.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.qihang.common.common.PageQuery;
+import com.qihang.common.common.PageResult;
 import com.qihang.common.common.ResultVoEnum;
 import com.qihang.common.common.ResultVo;
+import com.qihang.tao.domain.TaoGoods;
 import com.qihang.tao.domain.TaoOrder;
 import com.qihang.tao.domain.TaoOrderItem;
+import com.qihang.tao.domain.bo.TaoOrderBo;
 import com.qihang.tao.mapper.TaoOrderItemMapper;
 import com.qihang.tao.service.TaoOrderService;
 import com.qihang.tao.mapper.TaoOrderMapper;
@@ -13,6 +18,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
+import org.springframework.util.StringUtils;
 
 import java.util.Date;
 import java.util.List;
@@ -28,10 +34,27 @@ public class TaoOrderServiceImpl extends ServiceImpl<TaoOrderMapper, TaoOrder>
     implements TaoOrderService{
     private final TaoOrderMapper mapper;
     private final TaoOrderItemMapper itemMapper;
+
+    @Override
+    public PageResult<TaoOrder> queryPageList(TaoOrderBo bo, PageQuery pageQuery) {
+        LambdaQueryWrapper<TaoOrder> queryWrapper = new LambdaQueryWrapper<TaoOrder>()
+                .eq(bo.getShopId()!=null,TaoOrder::getShopId,bo.getShopId())
+                .eq(StringUtils.hasText(bo.getTid()),TaoOrder::getTid,bo.getTid())
+                ;
+
+        Page<TaoOrder> taoGoodsPage = mapper.selectPage(pageQuery.build(), queryWrapper);
+        if(taoGoodsPage.getRecords()!=null){
+            for (var order:taoGoodsPage.getRecords()) {
+                order.setItems(itemMapper.selectList(new LambdaQueryWrapper<TaoOrderItem>().eq(TaoOrderItem::getTid,order.getTid())));
+            }
+        }
+        return PageResult.build(taoGoodsPage);
+    }
+
     @Transactional
     @Override
     public ResultVo<Integer> saveOrder(Integer shopId, TaoOrder order) {
-        if(order == null ) return new ResultVo<>(ResultVoEnum.SystemException);
+        if(order == null ) return ResultVo.error(ResultVoEnum.SystemException);
         try {
             List<TaoOrder> taoOrders = mapper.selectList(new LambdaQueryWrapper<TaoOrder>().eq(TaoOrder::getTid, order.getTid()));
             if (taoOrders != null && taoOrders.size() > 0) {
@@ -70,7 +93,7 @@ public class TaoOrderServiceImpl extends ServiceImpl<TaoOrderMapper, TaoOrder>
                         itemMapper.insert(item);
                     }
                 }
-                return new ResultVo<>(ResultVoEnum.DataExist, "订单已经存在，更新成功");
+                return ResultVo.error(ResultVoEnum.DataExist, "订单已经存在，更新成功");
             } else {
                 // 不存在，新增
                 order.setShopId(shopId);
@@ -80,11 +103,11 @@ public class TaoOrderServiceImpl extends ServiceImpl<TaoOrderMapper, TaoOrder>
                 for (var item : order.getItems()) {
                     itemMapper.insert(item);
                 }
-                return new ResultVo<>(ResultVoEnum.SUCCESS, "SUCCESS");
+                return ResultVo.success();
             }
         } catch (Exception e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            return new ResultVo<>(ResultVoEnum.SystemException, "系统异常：" + e.getMessage());
+            return ResultVo.error(ResultVoEnum.SystemException, "系统异常：" + e.getMessage());
         }
     }
 }

@@ -32,4 +32,13 @@
         modified,created,currency_spu_id,
         erp_goods_id,erp_sku_id
     </sql>
+    <select id="selectSkuPageList" resultType="JdGoodsSku">
+        SELECT sku.* FROM jd_goods_sku sku
+        LEFT JOIN jd_goods g on g.id = sku.goods_id
+        WHERE 1=1
+        <if test="shopId != null and shopId != ''">
+            AND g.shop_id = #{shopId}
+        </if>
+
+    </select>
 </mapper>

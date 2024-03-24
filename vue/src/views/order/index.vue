@@ -24,16 +24,6 @@
           </el-option>
         </el-select>
       </el-form-item>
-    <!--
-      <el-form-item label="标签" prop="tag">
-        <el-input
-          v-model="queryParams.tag"
-          placeholder="请输入标签"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      -->
       <el-form-item label="收件人" prop="receiverName">
         <el-input
           v-model="queryParams.receiverName"
@@ -42,32 +32,14 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="手机号" prop="receiverPhone">
+      <el-form-item label="手机号" prop="receiverMobile">
         <el-input
-          v-model="queryParams.receiverPhone"
+          v-model="queryParams.receiverMobile"
           placeholder="请输入手机号"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-
-     <!--  <el-form-item label="城市" prop="city">
-        <el-input
-          v-model="queryParams.city"
-          placeholder="请输入城市"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="省份" prop="province">
-        <el-input
-          v-model="queryParams.province"
-          placeholder="请输入省份"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item> -->
-
       <el-form-item label="快递单号" prop="shippingNumber">
         <el-input
           v-model="queryParams.shippingNumber"
@@ -84,24 +56,24 @@
     </el-form>
 
     <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
-        <el-button
-          type="warning"
-          plain
-          icon="el-icon-download"
-          size="mini"
-          @click="handleExport"
-          v-hasPermi="['shop:order:export']"
-        >导出</el-button>
-      </el-col>
+<!--      <el-col :span="1.5">-->
+<!--        <el-button-->
+<!--          type="warning"-->
+<!--          plain-->
+<!--          icon="el-icon-download"-->
+<!--          size="mini"-->
+<!--          @click="handleExport"-->
+<!--          v-hasPermi="['shop:order:export']"-->
+<!--        >导出</el-button>-->
+<!--      </el-col>-->
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="orderList" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="订单ID" align="center" prop="id" />
+<!--      <el-table-column type="selection" width="55" align="center" />-->
+<!--      <el-table-column label="订单ID" align="center" prop="id" />-->
       <el-table-column label="订单编号" align="center" prop="orderNum" />
-      <el-table-column label="店铺ID" align="center" prop="shopId" >
+      <el-table-column label="店铺" align="center" prop="shopId" >
         <template slot-scope="scope">
           <span>{{ shopList.find(x=>x.id === scope.row.shopId).name  }}</span>
         </template>
@@ -125,12 +97,10 @@
       </el-table-column>
       <el-table-column label="订单备注" align="center" prop="remark" >
         <template slot-scope="scope">
-          {{scope.row.remark}}<br />
-          {{scope.row.tag}}
+          {{scope.row.buyerMemo}}<br />
+          {{scope.row.sellerMemo}}
         </template>
       </el-table-column>
-      <!-- <el-table-column label="买家留言信息" align="center" prop="buyerMemo" /> -->
-      <!-- <el-table-column label="标签" align="center" prop="tag" /> -->
       <el-table-column label="状态" align="center" prop="orderStatus" >
         <template slot-scope="scope">
           <el-tag v-if="scope.row.orderStatus === 1" style="margin-bottom: 6px;">待发货</el-tag>
@@ -145,27 +115,19 @@
            <el-tag v-if="scope.row.refundStatus === 4">退款成功</el-tag>
         </template>
       </el-table-column>
-      <!-- <el-table-column label="售后状态" align="center" prop="refundStatus" /> -->
-      <!-- <el-table-column label="订单状态" align="center" prop="orderStatus" /> -->
-      <!-- <el-table-column label="邮费，单位：元" align="center" prop="postage" /> -->
-      <!-- <el-table-column label="折扣金额(元)" align="center" prop="discountAmount" /> -->
-      <!-- <el-table-column label="商品金额(元)" align="center" prop="goodsAmount" /> -->
-      <el-table-column label="支付金额" align="center" prop="amount" />
-      <!-- <el-table-column label="支付时间" align="center" prop="payTime" /> -->
-      <el-table-column label="收件信息" align="center" prop="receiverName" >
+      <el-table-column label="订单金额" align="center" prop="amount" />
+      <el-table-column label="收件信息" prop="receiverName" >
         <template slot-scope="scope">
-          {{scope.row.receiverName}}<br />
+          {{scope.row.receiverName}}&nbsp;  {{scope.row.receiverMobile}} <br />
           {{scope.row.province}} {{scope.row.city}} {{scope.row.town}}
         </template>
       </el-table-column>
-      <!-- <el-table-column label="手机号" align="center" prop="receiverPhone" /> -->
-      <!-- <el-table-column label="${comment}" align="center" prop="address" /> -->
-      <!-- <el-table-column label="${comment}" align="center" prop="town" /> -->
-      <!-- <el-table-column label="省" align="center" prop="province" /> -->
-      <!-- <el-table-column label="市" align="center" prop="city" /> -->
-      <el-table-column label="发货时间" align="center" prop="shippingTime" />
-      <el-table-column label="快递单号" align="center" prop="shippingNumber" />
-      <!-- <el-table-column label="物流公司" align="center" prop="shippingCompany" /> -->
+      <el-table-column label="发货信息" align="center" prop="shippingNumber" >
+        <template slot-scope="scope">
+          {{scope.row.shippingNumber}}&nbsp; {{scope.row.shippingCompany}}<br />
+          {{scope.row.shippingTime}}
+        </template>
+      </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -173,9 +135,15 @@
             type="text"
             icon="el-icon-view"
             @click="handleDetail(scope.row)"
-            v-hasPermi="['shop:order:edit']"
           >详情</el-button>
-
+          <div>
+            <el-button
+              size="mini"
+              type="success"
+              icon="el-icon-share"
+              @click="handleShip(scope.row)"
+            >订单发货</el-button>
+          </div>
         </template>
       </el-table-column>
     </el-table>
@@ -296,7 +264,7 @@
 </template>
 
 <script>
-import { listOrder, getOrder, delOrder, addOrder, updateOrder } from "@/api/shop/order";
+import { listOrder, getOrder, delOrder, addOrder, updateOrder } from "@/api/order/order";
 import { listShop } from "@/api/shop/shop";
 export default {
   name: "Order",
@@ -336,7 +304,7 @@ export default {
         orderStatus: null,
         payTime: null,
         receiverName: null,
-        receiverPhone: null,
+        receiverMobile: null,
         town: null,
         city: null,
         province: null,
@@ -383,20 +351,14 @@ export default {
       this.single = selection.length!==1
       this.multiple = !selection.length
     },
-    /** 新增按钮操作 */
-    handleAdd() {
-      this.$router.push('/sale/order/create');
-    },
-    /** 导出按钮操作 */
-    handleExport() {
-      this.download('api/order/export', {
-        ...this.queryParams
-      }, `order_${new Date().getTime()}.xlsx`)
-    },
+
     reset(){
 
     },
-    /** 删除按钮操作 */
+    handleShip(row){
+
+    },
+    /** 详情按钮操作 */
     handleDetail(row) {
       this.reset();
       const id = row.id || this.ids

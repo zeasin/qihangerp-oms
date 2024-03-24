@@ -1,7 +1,10 @@
 package com.qihang.oms.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.qihang.common.common.PageQuery;
+import com.qihang.common.common.PageResult;
 import com.qihang.common.common.ResultVo;
+import com.qihang.oms.domain.OOrder;
 import com.qihang.oms.domain.ORefund;
 
 import java.util.List;
@@ -16,6 +19,8 @@ public interface ORefundService extends IService<ORefund> {
     ResultVo<Integer> jdRefundMessage(String refundId);
     ResultVo<Integer> taoRefundMessage(String refundId);
     List<ORefund> selectList(ORefund refund);
+
+    PageResult<ORefund> queryPageList(ORefund bo, PageQuery pageQuery);
 
     ORefund selectById(Long id);
 

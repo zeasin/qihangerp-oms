@@ -2,6 +2,7 @@ package com.qihang.oms.controller;
 
 
 import com.qihang.common.common.AjaxResult;
+import com.qihang.common.common.PageQuery;
 import com.qihang.common.common.TableDataInfo;
 import com.qihang.oms.domain.ORefund;
 import com.qihang.oms.service.ORefundService;
@@ -30,10 +31,10 @@ public class RefundController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('api:returned:list')")
     @GetMapping("/list")
-    public TableDataInfo list(ORefund refund)
+    public TableDataInfo list(ORefund refund, PageQuery pageQuery)
     {
-        List<ORefund> list = refundService.selectList(refund);
-        return getDataTable(list);
+        var pageList = refundService.queryPageList(refund,pageQuery);
+        return getDataTable(pageList);
     }
 
 

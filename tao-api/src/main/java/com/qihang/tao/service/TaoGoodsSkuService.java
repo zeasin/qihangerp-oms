@@ -1,7 +1,12 @@
 package com.qihang.tao.service;
 
+import com.qihang.common.common.PageQuery;
+import com.qihang.common.common.PageResult;
+import com.qihang.tao.domain.TaoGoods;
 import com.qihang.tao.domain.TaoGoodsSku;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.qihang.tao.domain.bo.TaoGoodsBo;
+import com.qihang.tao.domain.vo.TaoGoodsSkuListVo;
 
 /**
 * @author TW
@@ -9,5 +14,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 * @createDate 2024-02-29 19:01:35
 */
 public interface TaoGoodsSkuService extends IService<TaoGoodsSku> {
-
+    PageResult<TaoGoodsSkuListVo> queryPageList(TaoGoodsBo bo, PageQuery pageQuery);
 }

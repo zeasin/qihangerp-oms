@@ -1,10 +1,15 @@
 package com.qihang.jd.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.qihang.common.common.PageQuery;
+import com.qihang.common.common.PageResult;
 import com.qihang.common.common.ResultVo;
 import com.qihang.common.common.ResultVoEnum;
 import com.qihang.jd.domain.JdOrderAfter;
+import com.qihang.jd.domain.JdRefund;
+import com.qihang.jd.domain.bo.JdAfterBo;
 import com.qihang.jd.service.JdOrderAfterService;
 import com.qihang.jd.mapper.JdOrderAfterMapper;
 import lombok.AllArgsConstructor;
@@ -23,6 +28,17 @@ import java.util.List;
 public class JdOrderAfterServiceImpl extends ServiceImpl<JdOrderAfterMapper, JdOrderAfter>
     implements JdOrderAfterService{
     private final JdOrderAfterMapper mapper;
+
+    @Override
+    public PageResult<JdOrderAfter> queryPageList(JdAfterBo bo, PageQuery pageQuery) {
+        LambdaQueryWrapper<JdOrderAfter> queryWrapper = new LambdaQueryWrapper<JdOrderAfter>()
+                .eq(bo.getShopId()!=null,JdOrderAfter::getShopId,bo.getShopId());
+
+        Page<JdOrderAfter> page = mapper.selectPage(pageQuery.build(), queryWrapper);
+
+        return PageResult.build(page);
+    }
+
     @Override
     public ResultVo<Integer> saveAfter(Integer shopId, JdOrderAfter after) {
        try {
@@ -44,17 +60,17 @@ public class JdOrderAfterServiceImpl extends ServiceImpl<JdOrderAfterMapper, JdO
                update.setProcessResult(after.getProcessResult());
                update.setProcessResultName(after.getProcessResultName());
                mapper.updateById(update);
-               return new ResultVo<>(ResultVoEnum.DataExist, "退款已经存在，更新成功");
+               return ResultVo.error(ResultVoEnum.DataExist, "退款已经存在，更新成功");
            } else {
                // 新增
                after.setShopId(shopId);
                mapper.insert(after);
-               return new ResultVo<>(ResultVoEnum.SUCCESS, "SUCCESS");
+               return ResultVo.success();
            }
 
        } catch (Exception e) {
            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-           return new ResultVo<>(ResultVoEnum.SystemException, "系统异常：" + e.getMessage());
+           return ResultVo.error(ResultVoEnum.SystemException, "系统异常：" + e.getMessage());
        }
     }
 
@@ -67,9 +83,9 @@ public class JdOrderAfterServiceImpl extends ServiceImpl<JdOrderAfterMapper, JdO
             update.setId(jdOrderAfters.get(0).getId());
             update.setServiceStatus(after.getServiceStatus());
             mapper.updateById(update);
-            return new ResultVo<>(ResultVoEnum.SUCCESS, "SUCCESS",update.getId());
+            return ResultVo.success(update.getId());
         }
-        return new ResultVo<>(ResultVoEnum.NotFound, "没有找到退款数据");
+        return ResultVo.error(ResultVoEnum.NotFound, "没有找到退款数据");
     }
 }
 

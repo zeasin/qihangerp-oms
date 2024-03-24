@@ -1,11 +1,11 @@
 package com.qihang.sys.api.service.impl;
 
+import com.qihang.common.constant.Constants;
 import com.qihang.common.constant.UserConstants;
 import com.qihang.common.utils.StringUtils;
 import com.qihang.security.common.SecurityUtils;
 import com.qihang.security.vo.MetaVo;
 import com.qihang.security.vo.RouterVo;
-import com.qihang.sys.api.constant.Constants;
 import com.qihang.sys.api.domain.SysMenu;
 import com.qihang.sys.api.mapper.SysMenuMapper;
 import com.qihang.sys.api.service.ISysMenuService;

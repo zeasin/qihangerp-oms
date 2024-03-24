@@ -35,4 +35,16 @@
         barcode,erp_goods_sku_id,erp_goods_id,
         create_time
     </sql>
+
+    <select id="selectSkuPageList" resultType="TaoGoodsSkuListVo">
+        SELECT sku.*,g.title,g.pic_url FROM tao_goods_sku sku
+        LEFT JOIN tao_goods g on g.id = sku.tao_goods_id
+        WHERE 1=1
+        <if test="shopId != null and shopId != ''">
+            AND g.shop_id = #{shopId}
+        </if>
+        <if test="numIid != null and numIid != ''">
+            AND sku.num_iid = #{numIid}
+        </if>
+    </select>
 </mapper>

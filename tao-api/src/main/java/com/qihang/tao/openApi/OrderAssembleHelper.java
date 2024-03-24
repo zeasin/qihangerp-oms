@@ -18,7 +18,7 @@ public class OrderAssembleHelper {
     public static TaoOrder assembleOrder(Trade trade){
         try {
             TaoOrder order = new TaoOrder();
-            order.setTid(trade.getTid());
+            order.setTid(trade.getTid().toString());
             order.setTitle(trade.getTitle());
             order.setType(trade.getType());
             order.setSellerFlag(trade.getSellerFlag() + "");

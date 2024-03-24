@@ -1,8 +1,11 @@
 package com.qihang.jd.service;
 
+import com.qihang.common.common.PageQuery;
+import com.qihang.common.common.PageResult;
 import com.qihang.common.common.ResultVo;
 import com.qihang.jd.domain.JdOrder;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.qihang.jd.domain.bo.JdOrderBo;
 
 /**
 * @author qilip
@@ -10,5 +13,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 * @createDate 2024-03-09 11:29:59
 */
 public interface JdOrderService extends IService<JdOrder> {
+    PageResult<JdOrder> queryPageList(JdOrderBo bo, PageQuery pageQuery);
     ResultVo<Integer> saveOrder(Integer shopId, JdOrder order);
 }

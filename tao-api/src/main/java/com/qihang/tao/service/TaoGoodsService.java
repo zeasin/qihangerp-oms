@@ -4,6 +4,7 @@ import com.qihang.common.common.PageQuery;
 import com.qihang.common.common.PageResult;
 import com.qihang.tao.domain.TaoGoods;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.qihang.tao.domain.TaoGoodsSku;
 import com.qihang.tao.domain.bo.TaoGoodsBo;
 
 /**

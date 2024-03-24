@@ -1,8 +1,11 @@
 package com.qihang.oms.domain;
 
+import com.baomidou.mybatisplus.annotation.TableField;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 订单表
@@ -12,7 +15,7 @@ public class OOrder implements Serializable {
     /**
      * 订单id，自增
      */
-    private Long id;
+    private String id;
 
     /**
      * 订单编号（第三方平台订单号）
@@ -174,19 +177,30 @@ public class OOrder implements Serializable {
      */
     private String updateBy;
 
+    @TableField(exist = false)
+    private List<OOrderItem> itemList;
+
     private static final long serialVersionUID = 1L;
+
+    public List<OOrderItem> getItemList() {
+        return itemList;
+    }
+
+    public void setItemList(List<OOrderItem> itemList) {
+        this.itemList = itemList;
+    }
 
     /**
      * 订单id，自增
      */
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
     /**
      * 订单id，自增
      */
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

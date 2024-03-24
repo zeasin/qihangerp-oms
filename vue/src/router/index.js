@@ -128,20 +128,6 @@ export const dynamicRoutes = [
         meta: { title: '字典数据', activeMenu: '/system/dict' }
       }
     ]
-  },
-  {
-    path: '/monitor/job-log',
-    component: Layout,
-    hidden: true,
-    permissions: ['monitor:job:list'],
-    children: [
-      {
-        path: 'index/:jobId(\\d+)',
-        component: () => import('@/views/monitor/job/log'),
-        name: 'JobLog',
-        meta: { title: '调度日志', activeMenu: '/monitor/job' }
-      }
-    ]
   }
 ]
 

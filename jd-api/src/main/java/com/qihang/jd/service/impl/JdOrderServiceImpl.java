@@ -1,11 +1,15 @@
 package com.qihang.jd.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.qihang.common.common.PageQuery;
+import com.qihang.common.common.PageResult;
 import com.qihang.common.common.ResultVo;
 import com.qihang.common.common.ResultVoEnum;
 import com.qihang.jd.domain.JdOrder;
 import com.qihang.jd.domain.JdOrderItem;
+import com.qihang.jd.domain.bo.JdOrderBo;
 import com.qihang.jd.mapper.JdOrderItemMapper;
 import com.qihang.jd.service.JdOrderService;
 import com.qihang.jd.mapper.JdOrderMapper;
@@ -14,6 +18,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
+import org.springframework.util.StringUtils;
 
 import java.util.Date;
 import java.util.List;
@@ -29,6 +34,23 @@ public class JdOrderServiceImpl extends ServiceImpl<JdOrderMapper, JdOrder>
     implements JdOrderService{
     private final JdOrderMapper mapper;
     private final JdOrderItemMapper itemMapper;
+
+    @Override
+    public PageResult<JdOrder> queryPageList(JdOrderBo bo, PageQuery pageQuery) {
+        LambdaQueryWrapper<JdOrder> queryWrapper = new LambdaQueryWrapper<JdOrder>()
+                .eq(bo.getShopId()!=null,JdOrder::getShopId,bo.getShopId())
+                .eq(StringUtils.hasText(bo.getOrderId()),JdOrder::getOrderId,bo.getOrderId())
+                ;
+
+        Page<JdOrder> taoGoodsPage = mapper.selectPage(pageQuery.build(), queryWrapper);
+        if(taoGoodsPage.getRecords()!=null){
+            for (var order:taoGoodsPage.getRecords()) {
+                order.setItems(itemMapper.selectList(new LambdaQueryWrapper<JdOrderItem>().eq(JdOrderItem::getOrderId,order.getId())));
+            }
+        }
+        return PageResult.build(taoGoodsPage);
+    }
+
     @Transactional
     @Override
     public ResultVo<Integer> saveOrder(Integer shopId, JdOrder order) {
@@ -60,7 +82,7 @@ public class JdOrderServiceImpl extends ServiceImpl<JdOrderMapper, JdOrder>
                         itemMapper.insert(item);
                     }
                 }
-                return new ResultVo<>(ResultVoEnum.DataExist, "订单已经存在，更新成功");
+                return ResultVo.error(ResultVoEnum.DataExist, "订单已经存在，更新成功");
             } else {
                 // 不存在，新增
                 order.setShopId(shopId);
@@ -71,11 +93,11 @@ public class JdOrderServiceImpl extends ServiceImpl<JdOrderMapper, JdOrder>
                     item.setOrderId(order.getId());
                     itemMapper.insert(item);
                 }
-                return new ResultVo<>(ResultVoEnum.SUCCESS, "SUCCESS");
+                return ResultVo.success();
             }
         } catch (Exception e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            return new ResultVo<>(ResultVoEnum.SystemException, "系统异常：" + e.getMessage());
+            return ResultVo.error(ResultVoEnum.SystemException, "系统异常：" + e.getMessage());
         }
     }
 }

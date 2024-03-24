@@ -17,7 +17,7 @@ import org.springframework.web.client.RestTemplate;
 @EnableFeignClients(basePackages = "com.qihang.sys.api")
 @EnableDiscoveryClient
 @ComponentScan(basePackages={"com.qihang"})
-@MapperScan("com.qihang.sys.api.mapper")
+//@MapperScan("com.qihang.sys.api.mapper")
 @SpringBootApplication
 public class SysApi
 {

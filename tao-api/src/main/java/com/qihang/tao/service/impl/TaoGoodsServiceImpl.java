@@ -38,9 +38,10 @@ public class TaoGoodsServiceImpl extends ServiceImpl<TaoGoodsMapper, TaoGoods>
 
     @Override
     public PageResult<TaoGoods> queryPageList(TaoGoodsBo bo, PageQuery pageQuery) {
-        LambdaQueryWrapper<TaoGoods> queryWrapper = new LambdaQueryWrapper<>();
-        Page<TaoGoods> taoGoodsPage = mapper.selectPage(pageQuery.build(), queryWrapper);
+        LambdaQueryWrapper<TaoGoods> queryWrapper = new LambdaQueryWrapper<TaoGoods>()
+                .eq(bo.getShopId()!=null,TaoGoods::getShopId,bo.getShopId());
 
+        Page<TaoGoods> taoGoodsPage = mapper.selectPage(pageQuery.build(), queryWrapper);
         return PageResult.build(taoGoodsPage);
     }
 

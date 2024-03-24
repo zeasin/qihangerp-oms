@@ -1,15 +1,12 @@
 package com.qihang.jd.openApi;
 
 import com.qihang.common.api.ShopApiParams;
-import com.qihang.common.common.ApiResult;
+import com.qihang.common.common.ResultVo;
 import com.qihang.common.enums.EnumShopType;
 import com.qihang.common.enums.HttpStatus;
-
 import com.qihang.jd.domain.SysPlatform;
 import com.qihang.jd.service.SysPlatformService;
 import com.qihang.jd.service.SysShopService;
-//import com.qihang.tao.common.ServerConfig;
-
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -27,29 +24,29 @@ public class ApiCommon {
      * @return
      * @throws
      */
-    public ApiResult<ShopApiParams> checkBefore(Integer shopId) {
+    public ResultVo<ShopApiParams> checkBefore(Integer shopId) {
         var shop = shopService.selectShopById(shopId);
         if (shop == null) {
 //            return new ApiResult<>(EnumResultVo.ParamsError.getIndex(), "参数错误，没有找到店铺");
-            return ApiResult.build(HttpStatus.PARAMS_ERROR,"参数错误，没有找到店铺");
+            return ResultVo.error(HttpStatus.PARAMS_ERROR, "参数错误，没有找到店铺");
         }
 
         if (shop.getType() != EnumShopType.JD.getIndex()) {
-            return ApiResult.build(HttpStatus.PARAMS_ERROR, "参数错误，店铺不是JD店铺");
+            return ResultVo.error(HttpStatus.PARAMS_ERROR, "参数错误，店铺不是JD店铺");
         }
         SysPlatform platform = platformService.selectById(EnumShopType.JD.getIndex());
 
-        if(!StringUtils.hasText(platform.getAppKey())) {
-            return ApiResult.build(HttpStatus.PARAMS_ERROR, "平台配置错误，没有找到AppKey");
+        if (!StringUtils.hasText(platform.getAppKey())) {
+            return ResultVo.error(HttpStatus.PARAMS_ERROR, "平台配置错误，没有找到AppKey");
         }
-        if(!StringUtils.hasText(platform.getAppSecret())) {
-            return ApiResult.build(HttpStatus.PARAMS_ERROR, "第三方平台配置错误，没有找到AppSercet");
+        if (!StringUtils.hasText(platform.getAppSecret())) {
+            return ResultVo.error(HttpStatus.PARAMS_ERROR, "第三方平台配置错误，没有找到AppSercet");
         }
-        if(!StringUtils.hasText(platform.getRedirectUri())) {
-            return ApiResult.build(HttpStatus.PARAMS_ERROR, "第三方平台配置错误，没有找到RedirectUri");
+        if (!StringUtils.hasText(platform.getRedirectUri())) {
+            return ResultVo.error(HttpStatus.PARAMS_ERROR, "第三方平台配置错误，没有找到RedirectUri");
         }
-        if(!StringUtils.hasText(platform.getServerUrl())) {
-            return ApiResult.build(HttpStatus.PARAMS_ERROR, "第三方平台配置错误，没有找到ServerUrl");
+        if (!StringUtils.hasText(platform.getServerUrl())) {
+            return ResultVo.error(HttpStatus.PARAMS_ERROR, "第三方平台配置错误，没有找到ServerUrl");
         }
 
 //        if(shop.getSellerId() == null || shop.getSellerId() <= 0) {
@@ -61,12 +58,12 @@ public class ApiCommon {
         params.setAppSecret(platform.getAppSecret());
         params.setAccessToken(shop.getAccessToken());
         params.setTokenRequestUrl(platform.getRedirectUri());
-        params.setApiRequestUrl(shop.getApiRequestUrl());
+        params.setApiRequestUrl(platform.getServerUrl());
         params.setServerUrl(platform.getServerUrl());
         params.setSellerId(shop.getSellerId().toString());
         if (!StringUtils.hasText(shop.getAccessToken())) {
 
-            return ApiResult.build(HttpStatus.UNAUTHORIZED, "Token已过期，请重新授权", params);
+            return ResultVo.error(HttpStatus.UNAUTHORIZED, "Token已过期，请重新授权", params);
         }
 
         /****************先查询卖家对不对***************/
@@ -94,7 +91,7 @@ public class ApiCommon {
 //        else if (shop.getSellerUserId().longValue() != rsp.getUser().getUserId().longValue()) {
 //            return new ApiResult<>(EnumResultVo.TokenFail.getIndex(), "当前用户是：" + rsp.getUser().getNick() + "，请重新授权",params);
 //        }
-        return ApiResult.build(HttpStatus.SUCCESS,"",params);
+        return ResultVo.success(HttpStatus.SUCCESS, params);
     }
 
 }

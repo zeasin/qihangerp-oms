@@ -31,8 +31,26 @@ public class SysPlatform implements Serializable {
      * 
      */
     private String appSecret;
+    private String serverUrl;
+    private String redirectUri;
 
     private static final long serialVersionUID = 1L;
+
+    public String getServerUrl() {
+        return serverUrl;
+    }
+
+    public void setServerUrl(String serverUrl) {
+        this.serverUrl = serverUrl;
+    }
+
+    public String getRedirectUri() {
+        return redirectUri;
+    }
+
+    public void setRedirectUri(String redirectUri) {
+        this.redirectUri = redirectUri;
+    }
 
     /**
      * 

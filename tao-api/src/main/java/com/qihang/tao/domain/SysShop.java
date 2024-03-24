@@ -90,7 +90,7 @@ public class SysShop implements Serializable {
     /**
      * 请求url
      */
-    private String apiRequestUrl;
+//    private String apiRequestUrl;
 
     private static final long serialVersionUID = 1L;
 
@@ -318,19 +318,19 @@ public class SysShop implements Serializable {
         this.refreshTokenTimeout = refreshTokenTimeout;
     }
 
-    /**
-     * 请求url
-     */
-    public String getApiRequestUrl() {
-        return apiRequestUrl;
-    }
-
-    /**
-     * 请求url
-     */
-    public void setApiRequestUrl(String apiRequestUrl) {
-        this.apiRequestUrl = apiRequestUrl;
-    }
+//    /**
+//     * 请求url
+//     */
+//    public String getApiRequestUrl() {
+//        return apiRequestUrl;
+//    }
+//
+//    /**
+//     * 请求url
+//     */
+//    public void setApiRequestUrl(String apiRequestUrl) {
+//        this.apiRequestUrl = apiRequestUrl;
+//    }
 
     @Override
     public boolean equals(Object that) {
@@ -359,8 +359,8 @@ public class SysShop implements Serializable {
             && (this.getExpiresIn() == null ? other.getExpiresIn() == null : this.getExpiresIn().equals(other.getExpiresIn()))
             && (this.getAccessTokenBegin() == null ? other.getAccessTokenBegin() == null : this.getAccessTokenBegin().equals(other.getAccessTokenBegin()))
             && (this.getRefreshToken() == null ? other.getRefreshToken() == null : this.getRefreshToken().equals(other.getRefreshToken()))
-            && (this.getRefreshTokenTimeout() == null ? other.getRefreshTokenTimeout() == null : this.getRefreshTokenTimeout().equals(other.getRefreshTokenTimeout()))
-            && (this.getApiRequestUrl() == null ? other.getApiRequestUrl() == null : this.getApiRequestUrl().equals(other.getApiRequestUrl()));
+            && (this.getRefreshTokenTimeout() == null ? other.getRefreshTokenTimeout() == null : this.getRefreshTokenTimeout().equals(other.getRefreshTokenTimeout()));
+//            && (this.getApiRequestUrl() == null ? other.getApiRequestUrl() == null : this.getApiRequestUrl().equals(other.getApiRequestUrl()));
     }
 
     @Override
@@ -383,7 +383,7 @@ public class SysShop implements Serializable {
         result = prime * result + ((getAccessTokenBegin() == null) ? 0 : getAccessTokenBegin().hashCode());
         result = prime * result + ((getRefreshToken() == null) ? 0 : getRefreshToken().hashCode());
         result = prime * result + ((getRefreshTokenTimeout() == null) ? 0 : getRefreshTokenTimeout().hashCode());
-        result = prime * result + ((getApiRequestUrl() == null) ? 0 : getApiRequestUrl().hashCode());
+//        result = prime * result + ((getApiRequestUrl() == null) ? 0 : getApiRequestUrl().hashCode());
         return result;
     }
 
@@ -409,7 +409,7 @@ public class SysShop implements Serializable {
         sb.append(", accessTokenBegin=").append(accessTokenBegin);
         sb.append(", refreshToken=").append(refreshToken);
         sb.append(", refreshTokenTimeout=").append(refreshTokenTimeout);
-        sb.append(", apiRequestUrl=").append(apiRequestUrl);
+//        sb.append(", apiRequestUrl=").append(apiRequestUrl);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

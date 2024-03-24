@@ -4,7 +4,7 @@ import com.jd.open.api.sdk.DefaultJdClient;
 import com.jd.open.api.sdk.JdClient;
 import com.jd.open.api.sdk.request.order.PopOrderEnSearchRequest;
 import com.jd.open.api.sdk.response.order.PopOrderEnSearchResponse;
-import com.qihang.common.common.ApiResult;
+import com.qihang.common.common.ResultVo;
 import com.qihang.common.enums.HttpStatus;
 import com.qihang.jd.domain.JdOrder;
 import com.qihang.jd.domain.JdOrderItem;
@@ -12,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.StringUtils;
-
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
@@ -34,7 +33,7 @@ public class OrderApiHelper {
      * @param accessToken
      * @return
      */
-    public static ApiResult<JdOrder> pullOrder(LocalDateTime startTime,LocalDateTime endTime,Long pageNo, Long pageSize, String serverUrl, String appKey, String appSecret, String accessToken) throws Exception {
+    public static ResultVo<JdOrder> pullOrder(LocalDateTime startTime, LocalDateTime endTime, Long pageNo, Long pageSize, String serverUrl, String appKey, String appSecret, String accessToken) throws Exception {
         String startTimeStr = startTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         String endTimeStr = endTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
@@ -56,13 +55,13 @@ public class OrderApiHelper {
         request.setDateType(0);
         PopOrderEnSearchResponse response=client.execute(request);
         if(response.getSearchorderinfoResult() == null || response.getSearchorderinfoResult().getApiResult() == null) {
-            return ApiResult.build(HttpStatus.ERROR, "接口调用错误" );
+            return ResultVo.error(HttpStatus.ERROR, "接口调用错误" );
         }
         if(!response.getSearchorderinfoResult().getApiResult().getSuccess()){
-            return ApiResult.build(HttpStatus.ERROR, "接口调用错误:"+ response.getSearchorderinfoResult().getApiResult().getChineseErrCode());
+            return ResultVo.error(HttpStatus.ERROR, "接口调用错误:"+ response.getSearchorderinfoResult().getApiResult().getChineseErrCode());
         }
         if(response.getSearchorderinfoResult().getOrderTotal() == 0){
-            return  ApiResult.build(0, new ArrayList<>());
+            return  ResultVo.success(0, new ArrayList<>());
         }
         //组合的订单列表
         List<JdOrder> orderList = new ArrayList<>();
@@ -104,7 +103,7 @@ public class OrderApiHelper {
             orderList.add(order);
         }
 
-        return ApiResult.build(response.getSearchorderinfoResult().getOrderTotal(), orderList);
+        return ResultVo.success(response.getSearchorderinfoResult().getOrderTotal(), orderList);
 
 
 //        TradesSoldGetRequest req = new TradesSoldGetRequest();

@@ -51,8 +51,8 @@
         />
       </el-form-item> -->
 
-      
-      
+
+
 
 
       <el-form-item>
@@ -72,17 +72,17 @@
           v-hasPermi="['goods:goods:add']"
         >添加商品</el-button>
       </el-col>
- <!--      <el-col :span="1.5">
+      <el-col :span="1.5">
         <el-button
           type="success"
           plain
           icon="el-icon-edit"
           size="mini"
-          :disabled="single"
-          @click="handleUpdate"
+          @click="handleImport"
           v-hasPermi="['goods:goods:edit']"
-        >修改</el-button>
+        >导入商品</el-button>
       </el-col>
+      <!--
       <el-col :span="1.5">
         <el-button
           type="danger"
@@ -125,7 +125,7 @@
       </el-table-column>
       <!-- <el-table-column label="条码" align="center" prop="barCode" /> -->
       <el-table-column label="备注" align="center" prop="remark" />
-      
+
       <!-- <el-table-column label="衣长/裙长/裤长" align="center" prop="length" />
       <el-table-column label="高度/袖长" align="center" prop="height" />
       <el-table-column label="宽度/胸阔(围)" align="center" prop="width" />
@@ -186,6 +186,20 @@
       :limit.sync="queryParams.pageSize"
       @pagination="getList"
     />
+    <!-- 导入ERP商品 -->
+    <el-dialog title="导入商品" :visible.sync="importOpen" width="400px" append-to-body>
+      <el-upload
+        class="upload-demo"
+        :headers="headers"
+        drag
+        action="/dev-api/tao/order/order_import"
+        accept="xlsx"
+        multiple >
+        <i class="el-icon-upload"></i>
+        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
+      </el-upload>
+    </el-dialog>
 
     <!-- 添加或修改商品管理对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
@@ -294,12 +308,14 @@ import { listGoods, getGoods, delGoods, addGoods, updateGoods } from "@/api/good
 import Treeselect from '@riophae/vue-treeselect'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 import { listCategory } from "@/api/goods/category";
-import { listSupplier } from "@/api/scm/supplier";
+import {getToken} from "@/utils/auth";
 export default {
   name: "Goods",
   components: { Treeselect },
   data() {
     return {
+      importOpen:false,
+      headers: { 'Authorization': 'Bearer ' + getToken() },
       // 遮罩层
       loading: true,
       // 选中数组
@@ -336,7 +352,6 @@ export default {
       },
       // 表单参数
       form: {},
-      supplierList: [],
       categoryList: [],
       categoryTree: [],
       // 表单校验
@@ -369,14 +384,14 @@ export default {
     };
   },
   created() {
-    listCategory(this.queryParams).then(response => {
-        this.categoryList = response.rows
-        this.categoryTree = this.buildTree(response.rows,0)
-      });
-    listSupplier({}).then(response => {
-      this.supplierList = response.rows;
-      // this.supplierLoading = false;
-    });
+    // listCategory(this.queryParams).then(response => {
+    //     this.categoryList = response.rows
+    //     this.categoryTree = this.buildTree(response.rows,0)
+    //   });
+    // listSupplier({}).then(response => {
+    //   this.supplierList = response.rows;
+    //   // this.supplierLoading = false;
+    // });
     this.getList();
   },
   methods: {
@@ -475,7 +490,7 @@ export default {
       this.single = selection.length!==1
       this.multiple = !selection.length
     },
-  
+
     /** 删除按钮操作 */
     handleDelete(row) {
       const ids = row.id || this.ids;
@@ -491,6 +506,9 @@ export default {
       this.download('goods/goods/export', {
         ...this.queryParams
       }, `goods_${new Date().getTime()}.xlsx`)
+    },
+    handleImport(){
+      this.importOpen = true
     }
   }
 };

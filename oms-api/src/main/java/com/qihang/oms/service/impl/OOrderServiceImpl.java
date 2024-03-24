@@ -50,7 +50,7 @@ public class OOrderServiceImpl extends ServiceImpl<OOrderMapper, OOrder>
         List<JdOrder> jdOrders = jdOrderMapper.selectList(new LambdaQueryWrapper<JdOrder>().eq(JdOrder::getOrderId, orderId));
         if(jdOrders == null || jdOrders.size() == 0) {
             // 没有找到订单信息
-            return new ResultVo<>(ResultVoEnum.NotFound,"没有找到JD订单："+orderId);
+            return ResultVo.error(ResultVoEnum.NotFound,"没有找到JD订单："+orderId);
         }
         JdOrder jdOrder = jdOrders.get(0);
 
@@ -93,7 +93,8 @@ public class OOrderServiceImpl extends ServiceImpl<OOrderMapper, OOrder>
             if(jdOrderItems!=null && jdOrderItems.size()>0) {
                 for (var item : jdOrderItems) {
                     OOrderItem orderItem = new OOrderItem();
-                    orderItem.setOrderId(insert.getId());
+                    orderItem.setOrderId(Long.parseLong(insert.getId()));
+                    orderItem.setOrderNum(orderId);
                     orderItem.setSubOrderNum(item.getId().toString());
                     // TODO：这里将订单商品skuid转换成erp系统的skuid
                     Long erpGoodsId = 0L;
@@ -149,7 +150,7 @@ public class OOrderServiceImpl extends ServiceImpl<OOrderMapper, OOrder>
             update.setUpdateBy("ORDER_MESSAGE");
             orderMapper.updateById(update);
         }
-        return null;
+        return ResultVo.success();
     }
 
     @Override
@@ -159,7 +160,7 @@ public class OOrderServiceImpl extends ServiceImpl<OOrderMapper, OOrder>
 
         if(taoOrders == null || taoOrders.size() == 0) {
             // 没有找到订单信息
-            return new ResultVo<>(ResultVoEnum.NotFound,"没有找到TAO订单："+orderId);
+            return ResultVo.error(ResultVoEnum.NotFound,"没有找到TAO订单："+orderId);
         }
         TaoOrder taoOrder = taoOrders.get(0);
         List<OOrder> oOrders = orderMapper.selectList(new LambdaQueryWrapper<OOrder>().eq(OOrder::getOrderNum, orderId));
@@ -207,8 +208,9 @@ public class OOrderServiceImpl extends ServiceImpl<OOrderMapper, OOrder>
             if(taoOrderItems!=null && taoOrderItems.size()>0) {
                 for (var item : taoOrderItems) {
                     OOrderItem orderItem = new OOrderItem();
-                    orderItem.setOrderId(insert.getId());
-                    orderItem.setSubOrderNum(item.getTid().toString());
+                    orderItem.setOrderId(Long.parseLong(insert.getId()));
+                    orderItem.setOrderNum(item.getTid().toString());
+                    orderItem.setSubOrderNum(item.getOid().toString());
                     // TODO：这里将订单商品skuid转换成erp系统的skuid
                     Long erpGoodsId = 0L;
                     Long erpSkuId = 0L;
@@ -264,7 +266,7 @@ public class OOrderServiceImpl extends ServiceImpl<OOrderMapper, OOrder>
             update.setUpdateBy("ORDER_MESSAGE");
             orderMapper.updateById(update);
         }
-        return null;
+        return ResultVo.success();
     }
 
     @Override
@@ -274,8 +276,21 @@ public class OOrderServiceImpl extends ServiceImpl<OOrderMapper, OOrder>
 
     @Override
     public PageResult<OOrder> queryPageList(OOrder bo, PageQuery pageQuery) {
-        LambdaQueryWrapper<OOrder> queryWrapper = new LambdaQueryWrapper<>();
+        LambdaQueryWrapper<OOrder> queryWrapper = new LambdaQueryWrapper<OOrder>()
+                .eq(bo.getShopId()!=null,OOrder::getShopId,bo.getShopId())
+                .eq(org.springframework.util.StringUtils.hasText(bo.getOrderNum()),OOrder::getOrderNum,bo.getOrderNum())
+                .eq(org.springframework.util.StringUtils.hasText(bo.getShippingNumber()),OOrder::getShippingNumber,bo.getShippingNumber())
+                .eq(org.springframework.util.StringUtils.hasText(bo.getReceiverName()),OOrder::getReceiverName,bo.getReceiverName())
+                .like(org.springframework.util.StringUtils.hasText(bo.getReceiverMobile()),OOrder::getReceiverMobile,bo.getReceiverMobile())
+                ;
         Page<OOrder> pages = orderMapper.selectPage(pageQuery.build(), queryWrapper);
+
+        // 查询子订单
+        if(pages.getRecords()!=null){
+            for (var order:pages.getRecords()) {
+                order.setItemList(orderItemMapper.selectList(new LambdaQueryWrapper<OOrderItem>().eq(OOrderItem::getOrderId, order.getId())));
+            }
+        }
 
         return PageResult.build(pages);
     }

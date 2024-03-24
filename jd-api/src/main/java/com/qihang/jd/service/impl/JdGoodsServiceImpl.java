@@ -1,13 +1,17 @@
 package com.qihang.jd.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.qihang.common.common.PageQuery;
+import com.qihang.common.common.PageResult;
 import com.qihang.common.common.ResultVo;
 import com.qihang.common.common.ResultVoEnum;
 import com.qihang.common.utils.StringUtils;
 import com.qihang.jd.domain.JdGoods;
 import com.qihang.jd.domain.JdGoodsSku;
 import com.qihang.jd.domain.OGoodsSku;
+import com.qihang.jd.domain.bo.JdGoodsBo;
 import com.qihang.jd.mapper.JdGoodsSkuMapper;
 import com.qihang.jd.mapper.OGoodsSkuMapper;
 import com.qihang.jd.service.JdGoodsService;
@@ -30,6 +34,16 @@ public class JdGoodsServiceImpl extends ServiceImpl<JdGoodsMapper, JdGoods>
     private final JdGoodsMapper mapper;
     private final JdGoodsSkuMapper skuMapper;
     private final OGoodsSkuMapper goodsSkuMapper;
+
+    @Override
+    public PageResult<JdGoods> queryPageList(JdGoodsBo bo, PageQuery pageQuery) {
+        LambdaQueryWrapper<JdGoods> queryWrapper = new LambdaQueryWrapper<JdGoods>()
+                .eq(bo.getShopId()!=null,JdGoods::getShopId,bo.getShopId());
+
+        Page<JdGoods> goodsPage = mapper.selectPage(pageQuery.build(), queryWrapper);
+        return PageResult.build(goodsPage);
+    }
+
     @Transactional
     @Override
     public ResultVo<Integer> saveGoods(Integer shopId, JdGoods goods) {
@@ -62,7 +76,7 @@ public class JdGoodsServiceImpl extends ServiceImpl<JdGoodsMapper, JdGoods>
                 skuMapper.insert(item);
             }
         }
-        return new ResultVo<>(ResultVoEnum.SUCCESS);
+        return ResultVo.success();
     }
 }
 

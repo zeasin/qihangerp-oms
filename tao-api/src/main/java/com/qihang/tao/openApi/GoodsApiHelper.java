@@ -1,6 +1,6 @@
 package com.qihang.tao.openApi;
 
-import com.qihang.common.common.ApiResult;
+import com.qihang.common.common.ResultVo;
 import com.qihang.tao.domain.TaoGoods;
 import com.qihang.tao.domain.TaoGoodsSku;
 import com.taobao.api.ApiException;
@@ -24,7 +24,7 @@ public class GoodsApiHelper {
     private static final String LIST_FIELDS = "approve_status,num_iid,title,nick,type,cid,pic_url,num,props,props_name,valid_thru,list_time,price,has_discount,has_invoice,has_warranty," +
             "has_showcase,modified,delist_time,postage_id,seller_cids,outer_id,sold_quantity,skus";
 
-    public static ApiResult<TaoGoods> pullGoods(Long pageNo, Long pageSize, String url, String appKey, String appSecret, String sessionKey) throws ApiException {
+    public static ResultVo<TaoGoods> pullGoods(Long pageNo, Long pageSize, String url, String appKey, String appSecret, String sessionKey) throws ApiException {
         log.info("=======开始全量商品数据{}=========", LocalDateTime.now());
         TaobaoClient client = new DefaultTaobaoClient(url, appKey, appSecret);
         ItemsOnsaleGetRequest req = new ItemsOnsaleGetRequest();
@@ -33,7 +33,7 @@ public class GoodsApiHelper {
         req.setPageSize(pageSize);
         ItemsOnsaleGetResponse rsp = client.execute(req, sessionKey);
         if (rsp.getItems() == null) {
-            return ApiResult.build(0, new ArrayList());
+            return ResultVo.success(0,new ArrayList<>());
         }
         List<TaoGoods> goodsList = new ArrayList<>();
         for (Item item : rsp.getItems()) {
@@ -64,7 +64,7 @@ public class GoodsApiHelper {
             goods.setSkus(pullSku(client, sessionKey, item.getNumIid()));
             goodsList.add(goods);
         }
-        return ApiResult.build(rsp.getTotalResults().intValue(), goodsList);
+        return ResultVo.success(rsp.getTotalResults().intValue(), goodsList);
     }
 
     private static List<TaoGoodsSku> pullSku(TaobaoClient client, String sessionKey, Long numIid) {

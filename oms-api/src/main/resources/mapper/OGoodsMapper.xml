@@ -73,16 +73,17 @@
     </sql>
 
     <select id="searchGoodsSpec" parameterType="String" resultMap="GoodsSpecListVoResult">
-        SELECT spec.id,spec.goods_id,g.number,g.`name`,spec.spec_num,spec.color_value,spec.color_image,spec.size_value,spec.style_value,spec.pur_price
-        FROM `erp_goods_spec` as spec
-        LEFT JOIN erp_goods as g on g.id = spec.goods_id
+        SELECT g.`name`,spec.id,spec.erp_goods_id,spec.erp_sku_id,spec.`sku_name`,spec.sku_num,spec.color_value,spec.color_image,spec.size_value,spec.style_value,spec.pur_price
+        FROM `o_goods_sku` as spec
+        LEFT JOIN o_goods as g on g.id = spec.goods_id
         <where>
             <if test="keyword != null  and keyword != ''">
                 and
                 (
                 g.name like concat('%', #{keyword}, '%')
-                or g.number like concat(#{keyword}, '%')
-                or spec.spec_num like concat(#{keyword}, '%')
+                or spec.sku_name like concat('%', #{keyword}, '%')
+                or g.goods_num like concat(#{keyword}, '%')
+                or spec.sku_num like concat(#{keyword}, '%')
                 )
             </if>
         </where>

@@ -12,7 +12,7 @@ public class TaoGoodsSku implements Serializable {
     /**
      * 主键id
      */
-    private Long id;
+    private String id;
 
     /**
      * 外键id
@@ -109,14 +109,14 @@ public class TaoGoodsSku implements Serializable {
     /**
      * 主键id
      */
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
     /**
      * 主键id
      */
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

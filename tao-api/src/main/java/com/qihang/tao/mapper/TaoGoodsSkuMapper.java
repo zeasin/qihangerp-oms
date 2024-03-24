@@ -1,7 +1,11 @@
 package com.qihang.tao.mapper;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.qihang.tao.domain.TaoGoodsSku;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.qihang.tao.domain.vo.TaoGoodsSkuListVo;
+import org.apache.ibatis.annotations.Param;
 
 /**
 * @author TW
@@ -10,7 +14,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 * @Entity com.qihang.tao.domain.TaoGoodsSku
 */
 public interface TaoGoodsSkuMapper extends BaseMapper<TaoGoodsSku> {
-
+    IPage<TaoGoodsSkuListVo> selectSkuPageList(Page<TaoGoodsSku> page, @Param("shopId") Integer shopId,@Param("numIid") Long numIid);
 }
 
 

@@ -1,6 +1,7 @@
 package com.qihang.tao.controller;
 
-import com.qihang.common.common.ApiResult;
+import com.qihang.common.common.AjaxResult;
+import com.qihang.common.common.ResultVo;
 import com.qihang.common.common.ResultVoEnum;
 import com.qihang.common.enums.EnumShopType;
 import com.qihang.common.enums.HttpStatus;
@@ -48,17 +49,17 @@ public class OrderApiController {
      */
     @PostMapping("/pull_order_tao")
     @ResponseBody
-    public ApiResult<Object> pullIncrementOrder(@RequestBody TaoRequest req) throws ApiException {
+    public AjaxResult pullIncrementOrder(@RequestBody TaoRequest req) throws ApiException {
         log.info("/**************增量拉取tao订单****************/");
         if (req.getShopId() == null || req.getShopId() <= 0) {
-            return ApiResult.build(HttpStatus.PARAMS_ERROR, "参数错误，没有店铺Id");
+            return AjaxResult.error(HttpStatus.PARAMS_ERROR, "参数错误，没有店铺Id");
         }
         Date currDateTime = new Date();
         long beginTime = System.currentTimeMillis();
 
         var checkResult = apiCommon.checkBefore(req.getShopId());
         if (checkResult.getCode() != HttpStatus.SUCCESS) {
-            return ApiResult.build(checkResult.getCode(), checkResult.getMsg(),checkResult.getData());
+            return AjaxResult.error(checkResult.getCode(), checkResult.getMsg(),checkResult.getData());
         }
         String sessionKey = checkResult.getData().getAccessToken();
         String url = checkResult.getData().getApiRequestUrl();
@@ -87,14 +88,14 @@ public class OrderApiController {
         }
 
         //第一次获取
-        ApiResult<TaoOrder> upResult = OrderApiHelper.pullIncrementOrder(startTime,endTime,pageIndex, pageSize, url, appKey, appSecret, sessionKey);
+        ResultVo<TaoOrder> upResult = OrderApiHelper.pullIncrementOrder(startTime,endTime,pageIndex, pageSize, url, appKey, appSecret, sessionKey);
 
-        if (upResult.getCode() != 0) {
+        if (upResult.getCode() !=  ResultVoEnum.SUCCESS.getIndex()) {
             log.info("/**************主动更新tao订单：第一次获取结果失败：" + upResult.getMsg() + "****************/");
             if(upResult.getCode() == HttpStatus.UNAUTHORIZED){
-                return ApiResult.build(HttpStatus.UNAUTHORIZED, "Token已过期，请重新授权",checkResult.getData());
+                return AjaxResult.error(HttpStatus.UNAUTHORIZED, "Token已过期，请重新授权",checkResult.getData());
             }
-            return ApiResult.build(HttpStatus.SYSTEM_EXCEPTION, upResult.getMsg());
+            return AjaxResult.error(HttpStatus.SYSTEM_EXCEPTION, upResult.getMsg());
         }
 
         log.info("/**************主动更新tao订单：第一次获取结果：总记录数" + upResult.getTotalRecords() + "****************/");
@@ -145,14 +146,14 @@ public class OrderApiController {
         logs.setPullType("ORDER");
         logs.setPullWay("主动拉取");
         logs.setPullParams("{startTime:"+startTime+",endTime:"+endTime+"}");
-        logs.setPullResult("{insertSuccess:"+insertSuccess+",hasExistOrder:"+hasExistOrder+",totalError:"+totalError+"}");
+        logs.setPullResult("{insert:"+insertSuccess+",update:"+hasExistOrder+",fail:"+totalError+"}");
         logs.setPullTime(currDateTime);
         logs.setDuration(System.currentTimeMillis() - beginTime);
         pullLogsService.save(logs);
 
         String msg = "成功，总共找到：" + upResult.getTotalRecords() + "条订单，新增：" + insertSuccess + "条，添加错误：" + totalError + "条，更新：" + hasExistOrder + "条";
         log.info("/**************主动更新tao订单：END：" + msg + "****************/");
-        return ApiResult.build(HttpStatus.SUCCESS, msg);
+        return AjaxResult.success(msg);
     }
 
     /**
@@ -164,14 +165,14 @@ public class OrderApiController {
      */
     @GetMapping("/pull_order_tao_all")
     @ResponseBody
-    public ApiResult<Object> orderPull(TaoRequest req) throws ApiException {
+    public AjaxResult orderPull(TaoRequest req) throws ApiException {
         log.info("/**************主动更新tao订单****************/");
         if (req.getShopId() == null || req.getShopId() <= 0) {
-            return ApiResult.build(HttpStatus.PARAMS_ERROR, "参数错误，没有店铺Id");
+            return AjaxResult.error(HttpStatus.PARAMS_ERROR, "参数错误，没有店铺Id");
         }
         var checkResult = apiCommon.checkBefore(req.getShopId());
-        if (checkResult.getCode() != HttpStatus.SUCCESS) {
-            return ApiResult.build(checkResult.getCode(), checkResult.getMsg(),checkResult.getData());
+        if (checkResult.getCode() !=  HttpStatus.SUCCESS) {
+            return AjaxResult.error(checkResult.getCode(), checkResult.getMsg(),checkResult.getData());
         }
         String sessionKey = checkResult.getData().getAccessToken();
         String url = checkResult.getData().getApiRequestUrl();
@@ -213,14 +214,14 @@ public class OrderApiController {
         Long pageIndex = 1l;
 
         //第一次获取
-        ApiResult<TaoOrder> upResult = OrderApiHelper.pullOrder(pageIndex, pageSize, url, appKey, appSecret, sessionKey);
+        ResultVo<TaoOrder> upResult = OrderApiHelper.pullOrder(pageIndex, pageSize, url, appKey, appSecret, sessionKey);
 
-        if (upResult.getCode() != 0) {
+        if (upResult.getCode() != HttpStatus.SUCCESS) {
             log.info("/**************主动更新tao订单：第一次获取结果失败：" + upResult.getMsg() + "****************/");
             if(upResult.getCode() == HttpStatus.UNAUTHORIZED){
-                return ApiResult.build(HttpStatus.UNAUTHORIZED, "Token已过期，请重新授权",checkResult.getData());
+                return AjaxResult.error(HttpStatus.UNAUTHORIZED, "Token已过期，请重新授权",checkResult.getData());
             }
-            return ApiResult.build(HttpStatus.SYSTEM_EXCEPTION, upResult.getMsg());
+            return AjaxResult.error(HttpStatus.SYSTEM_EXCEPTION, upResult.getMsg());
         }
 
         log.info("/**************主动更新tao订单：第一次获取结果：总记录数" + upResult.getTotalRecords() + "****************/");
@@ -252,7 +253,7 @@ public class OrderApiController {
 
         while (pageIndex <= totalPage) {
 
-            ApiResult<TaoOrder> upResult1 = OrderApiHelper.pullOrder(pageIndex, pageSize, url, appKey, appSecret, sessionKey);
+            ResultVo<TaoOrder> upResult1 = OrderApiHelper.pullOrder(pageIndex, pageSize, url, appKey, appSecret, sessionKey);
             //循环插入订单数据到数据库
             for (var order : upResult1.getList()) {
                 //插入订单数据
@@ -273,7 +274,7 @@ public class OrderApiController {
         }
         String msg = "成功，总共找到：" + upResult.getTotalRecords() + "条订单，新增：" + insertSuccess + "条，添加错误：" + totalError + "条，更新：" + hasExistOrder + "条";
         log.info("/**************主动更新tao订单：END：" + msg + "****************/");
-        return ApiResult.build(HttpStatus.SUCCESS, msg);
+        return AjaxResult.success();
 
     }
 

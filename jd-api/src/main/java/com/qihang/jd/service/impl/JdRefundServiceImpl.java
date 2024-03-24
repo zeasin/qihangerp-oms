@@ -1,12 +1,14 @@
 package com.qihang.jd.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.qihang.common.common.PageQuery;
+import com.qihang.common.common.PageResult;
 import com.qihang.common.common.ResultVo;
 import com.qihang.common.common.ResultVoEnum;
-import com.qihang.jd.domain.JdOrder;
-import com.qihang.jd.domain.JdOrderItem;
 import com.qihang.jd.domain.JdRefund;
+import com.qihang.jd.domain.bo.JdAfterBo;
 import com.qihang.jd.service.JdRefundService;
 import com.qihang.jd.mapper.JdRefundMapper;
 import lombok.AllArgsConstructor;
@@ -14,7 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -27,6 +28,16 @@ import java.util.List;
 public class JdRefundServiceImpl extends ServiceImpl<JdRefundMapper, JdRefund>
     implements JdRefundService{
     private final JdRefundMapper mapper;
+
+    @Override
+    public PageResult<JdRefund> queryPageList(JdAfterBo bo, PageQuery pageQuery) {
+        LambdaQueryWrapper<JdRefund> queryWrapper = new LambdaQueryWrapper<JdRefund>()
+                .eq(bo.getShopId()!=null,JdRefund::getShopId,bo.getShopId());
+
+        Page<JdRefund> page = mapper.selectPage(pageQuery.build(), queryWrapper);
+
+        return PageResult.build(page);
+    }
 
     @Transactional
     @Override
@@ -41,16 +52,16 @@ public class JdRefundServiceImpl extends ServiceImpl<JdRefundMapper, JdRefund>
                 update.setCheckUsername(refund.getCheckUsername());
                 update.setStatus(refund.getStatus());
                 mapper.updateById(update);
-                return new ResultVo<>(ResultVoEnum.DataExist, "退款已经存在，更新成功");
+                return ResultVo.error(ResultVoEnum.DataExist, "退款已经存在，更新成功");
             } else {
                 // 不存在，新增
                 refund.setShopId(shopId);
                 mapper.insert(refund);
-                return new ResultVo<>(ResultVoEnum.SUCCESS, "SUCCESS");
+                return  ResultVo.success();
             }
         } catch (Exception e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            return new ResultVo<>(ResultVoEnum.SystemException, "系统异常：" + e.getMessage());
+            return ResultVo.error(ResultVoEnum.SystemException, "系统异常：" + e.getMessage());
         }
     }
 }

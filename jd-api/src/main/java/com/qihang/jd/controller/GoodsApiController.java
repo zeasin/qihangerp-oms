@@ -20,7 +20,7 @@ import com.jd.open.api.sdk.response.refundapply.PopAfsRefundapplyQuerybyidRespon
 import com.jd.open.api.sdk.response.refundapply.PopAfsRefundapplyQuerylistResponse;
 import com.jd.open.api.sdk.response.ware.SkuReadSearchSkuListResponse;
 import com.jd.open.api.sdk.response.ware.WareReadSearchWare4ValidResponse;
-import com.qihang.common.common.ApiResult;
+import com.qihang.common.common.AjaxResult;
 import com.qihang.common.common.ResultVo;
 import com.qihang.common.enums.EnumShopType;
 import com.qihang.common.enums.HttpStatus;
@@ -50,17 +50,17 @@ public class GoodsApiController {
     private final JdGoodsService goodsService;
     private final SysShopPullLogsService pullLogsService;
 
-    @RequestMapping(value = "/pull_list", method = RequestMethod.POST)
-    public Object pullList(@RequestBody PullRequest params) throws Exception {
+    @RequestMapping(value = "/pull_goods", method = RequestMethod.POST)
+    public AjaxResult pullList(@RequestBody PullRequest params) throws Exception {
         if (params.getShopId() == null || params.getShopId() <= 0) {
 //            return ApiResul new ApiResult(HttpStatus.PARAMS_ERROR, "参数错误，没有店铺Id");
-            return ApiResult.build(HttpStatus.PARAMS_ERROR, "参数错误，没有店铺Id");
+            return AjaxResult.error(HttpStatus.PARAMS_ERROR, "参数错误，没有店铺Id");
         }
         Date currDateTime = new Date();
         long startTime = System.currentTimeMillis();
         var checkResult = apiCommon.checkBefore(params.getShopId());
         if (checkResult.getCode() != HttpStatus.SUCCESS) {
-            return ApiResult.build(checkResult.getCode(), checkResult.getMsg(), checkResult.getData());
+            return AjaxResult.error(checkResult.getCode(), checkResult.getMsg(), checkResult.getData());
         }
         String accessToken = checkResult.getData().getAccessToken();
         String serverUrl = checkResult.getData().getServerUrl();
@@ -182,6 +182,6 @@ public class GoodsApiController {
 //        PopAfsRefundapplyQuerybyidRequest request3=new PopAfsRefundapplyQuerybyidRequest();
 //        request3.setRaId(23454754437L);
 //        PopAfsRefundapplyQuerybyidResponse response3=client.execute(request3);
-        return response;
+        return AjaxResult.success();
     }
 }

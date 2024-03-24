@@ -25,7 +25,7 @@ public class TaoOrder implements Serializable {
     /**
      * 交易编号 (父订单的交易编号)
      */
-    private Long tid;
+    private String tid;
 
     /**
      * 交易标题，以店铺名作为此标题的值。
@@ -459,14 +459,14 @@ public class TaoOrder implements Serializable {
     /**
      * 交易编号 (父订单的交易编号)
      */
-    public Long getTid() {
+    public String getTid() {
         return tid;
     }
 
     /**
      * 交易编号 (父订单的交易编号)
      */
-    public void setTid(Long tid) {
+    public void setTid(String tid) {
         this.tid = tid;
     }
 
