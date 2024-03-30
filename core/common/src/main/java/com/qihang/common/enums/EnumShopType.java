@@ -12,6 +12,7 @@ public enum EnumShopType {
     JD("京东", 2),
     DOUDIAN("抖音", 3),
     WEI("微信视频号小店", 5),
+    KWAI("快手小店", 6),
     PDD("拼多多", 4);
     private String name;
     private int index;

@@ -1615,29 +1615,6 @@ INSERT INTO `sys_menu` VALUES (117, '菜单管理', 5, 1, 'menu', 'system/menu/i
 INSERT INTO `sys_menu` VALUES (2078, '添加ERP商品', 4, 9, 'goods_add', 'goods/create', NULL, 1, 0, 'C', '0', '0', NULL, 'checkbox', 'admin', '2024-03-18 07:59:57', '', NULL, '');
 INSERT INTO `sys_menu` VALUES (2079, '字典管理', 5, 9, 'dict', 'system/dict/index', NULL, 1, 0, 'C', '0', '0', '', 'dict', 'admin', '2024-03-18 08:43:55', 'admin', '2024-03-18 08:44:08', '');
 
--- ----------------------------
--- Table structure for sys_platform
--- ----------------------------
-DROP TABLE IF EXISTS `sys_platform`;
-CREATE TABLE `sys_platform`  (
-  `id` int(0) NOT NULL,
-  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '平台名',
-  `code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '平台编码',
-  `app_key` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `app_secret` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `redirect_uri` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '平台回调uri',
-  `server_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '接口访问地址',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of sys_platform
--- ----------------------------
-INSERT INTO `sys_platform` VALUES (1, '天猫', 'TMALL', '', '', NULL, NULL);
-INSERT INTO `sys_platform` VALUES (2, '京东', 'JD', '', '', '', '');
-INSERT INTO `sys_platform` VALUES (3, '抖店', 'DOUDIAN', '', '', NULL, NULL);
-INSERT INTO `sys_platform` VALUES (4, '拼多多', 'PDD', '', '', NULL, NULL);
-INSERT INTO `sys_platform` VALUES (5, '视频号小店', 'WEI', '', NULL, NULL, 'https://api.weixin.qq.com');
 
 -- ----------------------------
 -- Table structure for sys_post
@@ -1809,39 +1786,6 @@ INSERT INTO `sys_role_menu` VALUES (2, 1058);
 INSERT INTO `sys_role_menu` VALUES (2, 1059);
 INSERT INTO `sys_role_menu` VALUES (2, 1060);
 
--- ----------------------------
--- Table structure for sys_shop
--- ----------------------------
-DROP TABLE IF EXISTS `sys_shop`;
-CREATE TABLE `sys_shop`  (
-  `id` int(0) NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '店铺名',
-  `type` int(0) NOT NULL COMMENT '对应第三方平台Id',
-  `url` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '店铺url',
-  `sort` int(0) NOT NULL DEFAULT 9 COMMENT '排序',
-  `status` int(0) DEFAULT 0 COMMENT '状态（1正常2已删除）',
-  `modify_on` bigint(0) NOT NULL COMMENT '更新时间',
-  `remark` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '描述',
-  `seller_id` bigint(0) NOT NULL DEFAULT 0 COMMENT '第三方平台店铺id，淘宝天猫开放平台使用',
-  `app_key` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT 'Appkey',
-  `app_sercet` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT 'Appsercet',
-  `access_token` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '第三方平台sessionKey（access_token）',
-  `expires_in` bigint(0) DEFAULT NULL COMMENT '到期',
-  `access_token_begin` bigint(0) DEFAULT NULL COMMENT 'access_token开始时间',
-  `refresh_token` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '刷新token',
-  `refresh_token_timeout` bigint(0) DEFAULT NULL COMMENT '刷新token过期时间',
-  `api_request_url` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '请求url',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 23 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '数据中心-店铺' ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of sys_shop
--- ----------------------------
-INSERT INTO `sys_shop` VALUES (1, '天猫旗舰店', 1, '', 98, 1, 0, '', 59972781, '', '', '', NULL, NULL, NULL, NULL, 'http://gw.api.taobao.com/router/rest');
-INSERT INTO `sys_shop` VALUES (2, '京东旗舰店', 2, NULL, 9, 1, 0, NULL, 10706, NULL, NULL, '', 31535999, NULL, '', NULL, NULL);
-INSERT INTO `sys_shop` VALUES (3, '抖音旗舰店', 3, 'http://openapi.jinritemai.com', 87, 1, 1653672695, NULL, 0, '', '', '', NULL, NULL, NULL, NULL, '2');
-INSERT INTO `sys_shop` VALUES (5, '拼多多旗舰店', 4, NULL, 99, 1, 1680698886, '', 100061591, NULL, NULL, '', NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_shop` VALUES (6, '视频号小店', 5, NULL, 9, 0, 0, NULL, 0, '', '', '', NULL, NULL, NULL, NULL, 'https://api.weixin.qq.com');
 
 -- ----------------------------
 -- Table structure for sys_shop_pull_lasttime

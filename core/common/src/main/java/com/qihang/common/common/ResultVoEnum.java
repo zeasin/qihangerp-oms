@@ -8,10 +8,11 @@ package com.qihang.common.common;
  */
 public enum ResultVoEnum {
     SUCCESS("成功", 0),
+    TokenFail("Token失效",401),
     NotFound("NotFound", 404),//没有找到
     Unable("Unable", 403),//无法处理
 //    NotLogin("未登录", 400),//未登录
-    Cancelled("Cancelled", 401),//已经取消的
+    Cancelled("Cancelled", 408),//已经取消的
     StateError("StateError", 402),//状态错误
     Locking("Locking", 405),//锁定，不能操作
     NumberLess("数量不足", 406),

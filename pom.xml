@@ -19,8 +19,7 @@
       <module>oms-api</module>
       <module>pdd-api</module>
       <module>dou-api</module>
-      <module>wei-api</module>
-      <!--    <module>core/common</module>-->
+      <module>open-api</module>
   </modules>
 
   <properties>
