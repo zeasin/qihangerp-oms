@@ -24,34 +24,27 @@ graph TD
 ```
 
 
-
-
-
 ### 2.2 处理订单（发货）
-
-```flow
-start=>start: 订单管理：店铺订单拉取
-pull=>operation: 后台任务：店铺订单推送到OMS数据库
-info=>operation: 后台任务：订单商品数据自动关联ERP系统SKU
-push=>operation: 接口（方式待定）：将数据推送给ERP系统（外部系统）
-send=>operation: 接口（方式待定）：接收（手动录入）ERP系统发货单号
-sendPush=>operation: 变更OMS订单状态 - 将发货信息推送给平台店铺
-end=>end: 完成
-start->pull->info->push->send->sendPush->end
+```mermaid
+graph TD
+    A[店铺订单拉取] -->B(店铺订单推送到OMS订单中心)
+    B --> C(后台任务:订单商品数据自动关联ERP系统SKU)
+    C --> D[接口推送/手动推送:将订单推送给ERP系统-外部系统]
+    D --> E[接收/手动录入ERP系统发货单号]
+    E --> F[变更OMS订单状态 - 将发货信息推送给平台店铺]
+    F --> G(完成)
 ```
-
 
 
 ### 2.3 处理售后
 
-```flow
-start=>start: 售后管理：店铺退款拉取
-pull=>operation: 后台任务：店铺退款推送到OMS数据库
-push=>operation: 接口（方式待定）：将数据推送给ERP系统（外部系统）
-send=>operation: 录入ERP系统处理售后结果
-sendPush=>operation: 将售后结果信息推送给平台店铺
-end=>end: 完成
-start->pull->push->send->sendPush->end
+```mermaid
+graph TD
+    A[店铺退款拉取] -->B(店铺退款推送到OMS售后中心)
+    B --> D[接口推送/手动推送:将订单推送给ERP系统-外部系统]
+    D --> E[接收/手动录入ERP系统处理售后结果:补发/换货/退货]
+    E --> F[变更OMS售后状态 - 将售后结果信息推送给平台店铺]
+    F --> G(完成)
 ```
 
 
