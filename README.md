@@ -1,17 +1,60 @@
 # 启航电商OMS订单处理系统
 
 ## 一、介绍
-启航电商OMS订单处理系统是一套为中小电商企业构建的一套简单实用的第三方平台订单处理系统，本项目后端采用SpringCloudAlibaba 微服务架构，前端采用Vue2开发。
 
-支持多平台店铺，支持淘宝、京东、拼多多、抖店、快手、视频号。
+启航电商OMS订单处理系统支持多平台多店铺订单、售后、商品等管理，支持：淘宝、京东、拼多多、抖店，快手、视频号。
 
-主要功能包括：订单管理及发货、售后处理、商品管理等。
+主体功能包括：商品管理（ERP关联、库存同步）、订单管理（订单同步）、售后管理（补发、换货、退货处理）、发货管理（发货记录、物流跟踪）等，基本上覆盖了电商网店管理日常业务，可使用接口对接内部ERP系统。
 
-后续计划推出订单打单（电子面单打印）功能。
+**后续计划推出订单打单（电子面单打印）功能。**
+
+本项目采用SpringCloudAlibaba微服务架构+Vue2+Element开发。
+
 
 <img src="preview.png" />
+## 二、关键流程
 
-## 二、主体功能
+### 2.1 关联商品SKU
+
+```flow
+start=>start: 商品管理：添加ERP商品SKU信息
+info=>operation: 店铺商品管理：拉取店铺商品
+setCache=>operation: 店铺商品SKU关联ERP商品SKU
+end=>end: 完成
+start->info->setCache->end
+```
+
+
+
+### 2.2 处理订单（发货）
+
+```flow
+start=>start: 订单管理：店铺订单拉取
+pull=>operation: 后台任务：店铺订单推送到OMS数据库
+info=>operation: 后台任务：订单商品数据自动关联ERP系统SKU
+push=>operation: 接口（方式待定）：将数据推送给ERP系统（外部系统）
+send=>operation: 接口（方式待定）：接收（手动录入）ERP系统发货单号
+sendPush=>operation: 变更OMS订单状态 - 将发货信息推送给平台店铺
+end=>end: 完成
+start->pull->info->push->send->sendPush->end
+```
+
+
+
+### 2.3 处理售后
+
+```flow
+start=>start: 售后管理：店铺退款拉取
+pull=>operation: 后台任务：店铺退款推送到OMS数据库
+push=>operation: 接口（方式待定）：将数据推送给ERP系统（外部系统）
+send=>operation: 录入ERP系统处理售后结果
+sendPush=>operation: 将售后结果信息推送给平台店铺
+end=>end: 完成
+start->pull->push->send->sendPush->end
+```
+
+
+## 三、功能模块
 
 ### 1、订单管理
 + 从平台同步订单
@@ -38,7 +81,7 @@
   + 发货地址库
   + 发货物流公司库
 
-## 三、软件架构
+## 四、软件架构
 ### 1、开发环境级组件
 #### 1.1 开发环境
 + Jdk：17
