@@ -12,17 +12,18 @@
 
 
 <img src="preview.png" />
+
 ## 二、关键流程
 
 ### 2.1 关联商品SKU
-
-```flow
-start=>start: 商品管理：添加ERP商品SKU信息
-info=>operation: 店铺商品管理：拉取店铺商品
-setCache=>operation: 店铺商品SKU关联ERP商品SKU
-end=>end: 完成
-start->info->setCache->end
+```mermaid
+graph TD
+    A[添加ERP商品SKU信息] -->B(拉取店铺商品)
+    B --> C[店铺商品SKU关联ERP商品SKU]
+    C --> E(完成)
 ```
+
+
 
 
 
@@ -98,7 +99,7 @@ start->pull->push->send->sendPush->end
 
 ##### 前端框架及组件
 + vue2
-+ element
++ elemen[README.md](..%2Fqihang.ecom.erp%2FREADME.md)t
 
 #### 1.3、存储及中间件
 
