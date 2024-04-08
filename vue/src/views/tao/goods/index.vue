@@ -33,16 +33,16 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-<!--      <el-form-item label="店铺" prop="shopId">-->
-<!--        <el-select v-model="queryParams.shopId" placeholder="请选择店铺" clearable @change="handleQuery">-->
-<!--         <el-option-->
-<!--            v-for="item in shopList"-->
-<!--            :key="item.id"-->
-<!--            :label="item.name"-->
-<!--            :value="item.id">-->
-<!--          </el-option>-->
-<!--        </el-select>-->
-<!--      </el-form-item>-->
+      <el-form-item label="店铺" prop="shopId">
+        <el-select v-model="queryParams.shopId" placeholder="请选择店铺" clearable @change="handleQuery">
+         <el-option
+            v-for="item in shopList"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id">
+          </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -130,7 +130,7 @@ import {isRelogin} from "../../../utils/request";
 import {getGoodsSku, linkErpGoodsSkuId, listGoodsSku, pullGoodsList} from "@/api/tao/goods";
 
 export default {
-  name: "Order",
+  name: "GoodsTao",
   data() {
     return {
       // 显示搜索条件

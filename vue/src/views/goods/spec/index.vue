@@ -65,13 +65,18 @@
       <el-table-column label="Sku名" align="center" prop="skuName" />
       <el-table-column label="Sku编码" align="center" prop="skuNum" />
 <!--      <el-table-column label="颜色" align="center" prop="colorValue" />-->
-      <el-table-column label="颜色图片" align="center" prop="colorImage" width="100">
+<!--      <el-table-column label="颜色图片" align="center" prop="colorImage" width="100">-->
+<!--        <template slot-scope="scope">-->
+<!--          <image-preview :src="scope.row.colorImage" :width="50" :height="50"/>-->
+<!--        </template>-->
+<!--      </el-table-column>-->
+<!--      <el-table-column label="尺码" align="center" prop="sizeValue" />-->
+<!--      <el-table-column label="款式" align="center" prop="styleValue" />-->
+      <el-table-column label="Tag" align="center" prop="tag" >
         <template slot-scope="scope">
-          <image-preview :src="scope.row.colorImage" :width="50" :height="50"/>
+        <el-tag size="small" v-if="scope.row.tag">{{ scope.row.tag }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="尺码" align="center" prop="sizeValue" />
-      <el-table-column label="款式" align="center" prop="styleValue" />
       <el-table-column label="备注" align="center" prop="remark" />
       <el-table-column label="状态" align="center" prop="status" >
         <template slot-scope="scope">

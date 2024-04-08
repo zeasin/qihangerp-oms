@@ -25,16 +25,16 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-<!--            <el-form-item label="店铺" prop="shopId">-->
-<!--              <el-select v-model="queryParams.shopId" placeholder="请选择店铺" clearable @change="handleQuery">-->
-<!--               <el-option-->
-<!--                  v-for="item in shopList"-->
-<!--                  :key="item.id"-->
-<!--                  :label="item.name"-->
-<!--                  :value="item.id">-->
-<!--                </el-option>-->
-<!--              </el-select>-->
-<!--            </el-form-item>-->
+            <el-form-item label="店铺" prop="shopId">
+              <el-select v-model="queryParams.shopId" placeholder="请选择店铺" clearable @change="handleQuery">
+               <el-option
+                  v-for="item in shopList"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id">
+                </el-option>
+              </el-select>
+            </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -116,7 +116,7 @@ import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 import {listShop} from "@/api/shop/shop";
 
 export default {
-  name: "Goods",
+  name: "GoodsDou",
   data() {
     return {
       // 遮罩层
@@ -161,10 +161,10 @@ export default {
     };
   },
   created() {
-    // listShop({type:3}).then(response => {
-    //   this.shopList = response.rows;
-    // });
-    // this.getList();
+    listShop({type:3}).then(response => {
+      this.shopList = response.rows;
+    });
+    this.getList();
     this.loading = false;
   },
   methods: {

@@ -114,17 +114,7 @@
            <el-tag style="margin-top: 5px" size="small" v-if="scope.row.hasGoodReturn === 0"> 买家不需要退货</el-tag>
          </template>
        </el-table-column>
-      <!-- <el-table-column label="处理时间" align="center" prop="auditTime" width="180">
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.auditTime, '{y}-{m}-{d}') }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="收货时间" align="center" prop="receivedTime" width="180">
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.receivedTime, '{y}-{m}-{d}') }}</span>
-        </template>
-      </el-table-column> -->
-      <!-- <el-table-column label="${comment}" align="center" prop="address" /> -->
+
 <!--      <el-table-column label="备注" align="center" prop="remark" />-->
       <!-- <el-table-column label="创建时间" align="center" prop="createOn" /> -->
       <el-table-column label="店铺" align="center" prop="shopId" >
@@ -140,18 +130,16 @@
         <template slot-scope="scope">
           <el-button
             size="mini"
-            type="text"
-            icon="el-icon-edit"
-            @click="handleConfirm(scope.row)"
-            v-hasPermi="['tao:taoRefund:edit']"
+            icon="el-icon-refresh"
+            @click="handleUpdateRefund(scope.row)"
           >更新状态</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-            v-hasPermi="['tao:taoRefund:remove']"
-          >详情</el-button>
+<!--          <el-button-->
+<!--            size="mini"-->
+<!--            type="text"-->
+<!--            icon="el-icon-delete"-->
+<!--            @click="handleDelete(scope.row)"-->
+<!--            v-hasPermi="['tao:taoRefund:remove']"-->
+<!--          >详情</el-button>-->
         </template>
       </el-table-column>
     </el-table>
@@ -218,7 +206,7 @@ import {
   getTaoRefund,
   pushOms,
   updateTaoRefund,
-  pullRefund
+  pullRefund, pullRefundDetail
 } from "@/api/tao/taoRefund";
 import { listShop } from "@/api/shop/shop";
 import {pullOrder} from "@/api/tao/order";
@@ -348,15 +336,23 @@ export default {
             // return Promise.reject('无效的会话，或者会话已过期，请重新登录。')
           }else{
             this.$modal.msgSuccess(JSON.stringify(response));
-            this.pullLoading = false
-          }
 
+          }
+          this.pullLoading = false
         })
       }else{
         this.$modal.msgSuccess("请先选择店铺");
       }
 
       // this.$modal.msgSuccess("请先配置API");
+    },
+    handleUpdateRefund(row){
+      console.log("更新退款")
+      this.pullLoading = true
+      pullRefundDetail({shopId:row.shopId,refundId:row.refundId}).then(response => {
+        this.pullLoading = false
+        this.$modal.msgSuccess(JSON.stringify(response));
+      })
     }
   }
 

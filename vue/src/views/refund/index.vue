@@ -142,6 +142,9 @@
           <el-tag size="small" v-if="scope.row.status === 14000"> 拒绝退款</el-tag>
           <el-tag size="small" v-if="scope.row.status === 10011"> 退款关闭</el-tag>
           <el-tag size="small" v-if="scope.row.status === 10010"> 退款完成</el-tag>
+          <br />
+          <el-tag style="margin-top: 5px" size="small" v-if="scope.row.hasGoodReturn === 1"> 买家需要退货</el-tag>
+          <el-tag style="margin-top: 5px" size="small" v-if="scope.row.hasGoodReturn === 0"> 买家不需要退货</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">

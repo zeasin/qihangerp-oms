@@ -323,8 +323,6 @@ export default {
         this.$router.push({path:'/shop/goods/dou_goods_list',query:{shopId:row.id}})
       }else if(row.type === 4){
         this.$router.push({path:'/shop/goods/pdd_goods_list',query:{shopId:row.id}})
-      } else if(row.type === 5){
-        this.$router.push({path:'/shop/goods/wei_goods_list',query:{shopId:row.id}})
       }
     },
     handleLogistics(row) {

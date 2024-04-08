@@ -19,7 +19,17 @@
           </el-option>
         </el-select>
       </el-form-item>
-
+      <el-form-item label="订单状态" prop="orderState">
+        <el-select v-model="queryParams.orderState" placeholder="请选择状态" clearable @change="handleQuery">
+          <el-option label="等待出库" value="WAIT_SELLER_STOCK_OUT" ></el-option>
+          <el-option label="等待确认收货" value="WAIT_GOODS_RECEIVE_CONFIRM"></el-option>
+          <el-option label="等待发货" value="WAIT_SELLER_DELIVERY"> </el-option>
+          <el-option label="POP暂停" value="POP_ORDER_PAUSE"></el-option>
+          <el-option label="完成" value="FINISHED_L"></el-option>
+          <el-option label="取消" value="TRADE_CANCELED"></el-option>
+          <el-option label="已锁定" value="LOCKED"></el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -88,19 +98,10 @@
         <template slot-scope="scope">
           <el-button
             size="mini"
-            type="success"
-            icon="el-icon-success"
+            :loading="pullLoading"
+            icon="el-icon-refresh"
             @click="handlePullUpdate(scope.row)"
           >更新订单</el-button>
-          <div>
-            <el-button
-              size="mini"
-              type="text"
-              icon="el-icon-view"
-              @click="handleDetail(scope.row)"
-              v-hasPermi="['tao:order:remove']"
-            >详情</el-button>
-          </div>
         </template>
       </el-table-column>
     </el-table>
@@ -116,7 +117,7 @@
 </template>
 
 <script>
-import { listOrder, pullOrder,getOrder,pushOms } from "@/api/jd/order";
+import {listOrder, pullOrder, getOrder, pushOms, pullOrderDetail} from "@/api/jd/order";
 import { listShop } from "@/api/shop/shop";
 import {MessageBox} from "element-ui";
 import {isRelogin} from "@/utils/request";
@@ -238,6 +239,15 @@ export default {
       }else{
         this.$modal.msgSuccess("请先选择店铺");
       }
+    },
+    handlePullUpdate(row) {
+      // 接口拉取订单并更新
+      this.pullLoading = true
+      pullOrderDetail({shopId:row.shopId,orderId:row.orderId}).then(response => {
+        console.log('拉取JD订单接口返回=====',response)
+        this.$modal.msgSuccess(JSON.stringify(response));
+        this.pullLoading = false
+      })
     }
   }
 };

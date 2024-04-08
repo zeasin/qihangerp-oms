@@ -27,6 +27,14 @@ export function pullOrder(data) {
   })
 }
 
+export function pullOrderDetail(data) {
+  return request({
+    url: '/api/tao-api/order/pull_order_detail',
+    method: 'post',
+    data: data
+  })
+}
+
 export function pushOms(data) {
   return request({
     url: '/api/tao-api/order/push_oms',

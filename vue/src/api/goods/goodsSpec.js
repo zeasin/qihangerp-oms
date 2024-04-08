@@ -12,7 +12,7 @@ export function listGoodsSpec(query) {
 // 查询商品规格库存管理详细
 export function getGoodsSpec(id) {
   return request({
-    url: '/goods/goodsSpec/' + id,
+    url: '/api/oms-api/goods/sku/' + id,
     method: 'get'
   })
 }
@@ -29,7 +29,7 @@ export function addGoodsSpec(data) {
 // 修改商品规格库存管理
 export function updateGoodsSpec(data) {
   return request({
-    url: '/goods/goodsSpec',
+    url: '/api/oms-api/goods/sku',
     method: 'put',
     data: data
   })
