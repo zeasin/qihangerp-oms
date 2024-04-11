@@ -128,12 +128,12 @@
           <br />
           <el-tag style="margin-bottom: 6px;" v-if="scope.row.hasPushErp === 1">已推送到ERP</el-tag>
           <el-tag type="danger" style="margin-bottom: 6px;" v-if="scope.row.hasPushErp === 0">待推送到ERP</el-tag>
-          <br />
-           <!-- 1：无售后或售后关闭，2：售后处理中，3：退款中，4： 退款成功 -->
-           <el-tag v-if="scope.row.refundStatus === 1">无售后或售后关闭</el-tag>
-           <el-tag v-if="scope.row.refundStatus === 2">售后处理中</el-tag>
-           <el-tag v-if="scope.row.refundStatus === 3">退款中</el-tag>
-           <el-tag v-if="scope.row.refundStatus === 4">退款成功</el-tag>
+<!--          <br />-->
+<!--           &lt;!&ndash; 1：无售后或售后关闭，2：售后处理中，3：退款中，4： 退款成功 &ndash;&gt;-->
+<!--           <el-tag v-if="scope.row.refundStatus === 1">无售后或售后关闭</el-tag>-->
+<!--           <el-tag v-if="scope.row.refundStatus === 2">售后处理中</el-tag>-->
+<!--           <el-tag v-if="scope.row.refundStatus === 3">退款中</el-tag>-->
+<!--           <el-tag v-if="scope.row.refundStatus === 4">退款成功</el-tag>-->
         </template>
       </el-table-column>
       <el-table-column label="订单金额" align="center" prop="amount" />
@@ -146,7 +146,7 @@
       <el-table-column label="发货信息" align="center" prop="shippingNumber" >
         <template slot-scope="scope">
           {{scope.row.shippingNumber}}&nbsp; {{scope.row.shippingCompany}}<br />
-          {{scope.row.shippingTime}}
+          {{ parseTime(scope.row.shippingTime, '{y}-{m}-{d} {h}:{m}:{s}') }}
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
@@ -265,16 +265,26 @@
             <el-table-column label="SKU" prop="goodsSpec" width="150"></el-table-column>
             <el-table-column label="sku编码" prop="specNum"></el-table-column>
             <el-table-column label="单价" prop="goodsPrice"></el-table-column>
+            <el-table-column label="子订单金额" prop="itemAmount"></el-table-column>
+            <el-table-column label="实付金额" prop="payment"></el-table-column>
             <el-table-column label="数量" prop="quantity"></el-table-column>
-            <el-table-column label="退款状态" prop="refundStatus">
+            <el-table-column label="状态" prop="refundStatus">
               <template slot-scope="scope">
-                <!-- 1：无售后或售后关闭，2：售后处理中，3：退款中，4： 退款成功 -->
-                <el-tag v-if="scope.row.refundStatus === 1">无售后或售后关闭</el-tag>
-                <el-tag v-if="scope.row.refundStatus === 2">售后处理中</el-tag>
-                <el-tag v-if="scope.row.refundStatus === 3">退款中</el-tag>
-                <el-tag v-if="scope.row.refundStatus === 4">退款成功</el-tag>
+                <el-tag v-if="scope.row.orderStatus === 1">待发货</el-tag>
+                <el-tag v-if="scope.row.orderStatus === 2">已发货</el-tag>
+                <el-tag v-if="scope.row.orderStatus === 3">已完成</el-tag>
+                <el-tag v-if="scope.row.orderStatus === 11">已取消</el-tag>
               </template>
             </el-table-column>
+<!--            <el-table-column label="退款状态" prop="refundStatus">-->
+<!--              <template slot-scope="scope">-->
+<!--                &lt;!&ndash; 1：无售后或售后关闭，2：售后处理中，3：退款中，4： 退款成功 &ndash;&gt;-->
+<!--                <el-tag v-if="scope.row.refundStatus === 1">无售后或售后关闭</el-tag>-->
+<!--                <el-tag v-if="scope.row.refundStatus === 2">售后处理中</el-tag>-->
+<!--                <el-tag v-if="scope.row.refundStatus === 3">退款中</el-tag>-->
+<!--                <el-tag v-if="scope.row.refundStatus === 4">退款成功</el-tag>-->
+<!--              </template>-->
+<!--            </el-table-column>-->
           </el-table>
         </el-tab-pane>
         <el-tab-pane label="优惠明细" name="orderCou" lazy>

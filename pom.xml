@@ -3,11 +3,11 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.qihang</groupId>
-  <artifactId>qihang-oms</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <artifactId>qihangec-oms</artifactId>
+  <version>0.4.11</version>
   <packaging>pom</packaging>
 
-  <name>qihang-oms</name>
+  <name>qihangec-oms</name>
   <url>http://maven.apache.org</url>
   <modules>
     <module>sys-api</module>

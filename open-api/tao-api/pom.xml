@@ -132,6 +132,13 @@
 <!--            <systemPath>${project.basedir}/libs/taobao-sdk-0.20200820.jar</systemPath>-->
             <systemPath>${project.basedir}/libs/taobao-sdk-0.20240301.jar</systemPath>
         </dependency>
+        <dependency>
+            <groupId>com.qihangec</groupId>
+            <artifactId>tao-open-api</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/libs/tao-1.0.jar</systemPath>
+        </dependency>
     </dependencies>
 <!--    <dependencyManagement>-->
 <!--        <dependencies>-->

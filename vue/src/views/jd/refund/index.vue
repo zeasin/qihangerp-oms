@@ -28,20 +28,20 @@
         />
       </el-form-item>
 
-      <el-form-item label="申请时间" prop="created">
-        <!-- <el-input
-          v-model="queryParams.created"
-          placeholder="请输入退款申请时间。"
-          clearable
-          @keyup.enter.native="handleQuery"
-        /> -->
-        <el-date-picker clearable
-          v-model="queryParams.created"
-          type="date"
-          value-format="yyyy-MM-dd"
-          placeholder="请选择退款申请时间">
-        </el-date-picker>
-      </el-form-item>
+<!--      <el-form-item label="申请时间" prop="created">-->
+<!--        &lt;!&ndash; <el-input-->
+<!--          v-model="queryParams.created"-->
+<!--          placeholder="请输入退款申请时间。"-->
+<!--          clearable-->
+<!--          @keyup.enter.native="handleQuery"-->
+<!--        /> &ndash;&gt;-->
+<!--        <el-date-picker clearable-->
+<!--          v-model="queryParams.created"-->
+<!--          type="date"-->
+<!--          value-format="yyyy-MM-dd"-->
+<!--          placeholder="请选择退款申请时间">-->
+<!--        </el-date-picker>-->
+<!--      </el-form-item>-->
 
 
       <!-- <el-form-item label="退款原因" prop="reason">
@@ -53,14 +53,14 @@
         />
       </el-form-item> -->
 
-      <el-form-item label="物流单号" prop="logisticsCode">
-        <el-input
-          v-model="queryParams.logisticsCode"
-          placeholder="请输入物流单号"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
+<!--      <el-form-item label="物流单号" prop="logisticsCode">-->
+<!--        <el-input-->
+<!--          v-model="queryParams.logisticsCode"-->
+<!--          placeholder="请输入物流单号"-->
+<!--          clearable-->
+<!--          @keyup.enter.native="handleQuery"-->
+<!--        />-->
+<!--      </el-form-item>-->
 
 
 
@@ -100,8 +100,10 @@
       <el-table-column label="服务单号" align="center" prop="serviceId" />
       <el-table-column label="类型" align="center" prop="customerExpect" >
         <template slot-scope="scope">
+          <el-tag size="small" v-if="scope.row.customerExpect === 1"> 售前退款</el-tag>
           <el-tag size="small" v-if="scope.row.customerExpect === 10"> 退货</el-tag>
           <el-tag size="small" v-if="scope.row.customerExpect === 20"> 换货</el-tag>
+          <el-tag size="small" v-if="scope.row.customerExpect === 30"> 维修</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="店铺" align="center" prop="shopId" >

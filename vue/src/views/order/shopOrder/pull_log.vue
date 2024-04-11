@@ -31,12 +31,18 @@
 
     <el-table v-loading="loading" :data="lists" >
 <!--      <el-table-column type="selection" width="55" align="center" />-->
-      <el-table-column label="ID" align="center" prop="id" />
-      <el-table-column label="店铺" align="center" prop="shopId" />
+<!--      <el-table-column label="ID" align="center" prop="id" />-->
+      <el-table-column label="店铺" align="center" prop="shopId" >
+        <template slot-scope="scope">
+          <span>{{ shopList.find(x=>x.id === scope.row.shopId).name  }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="平台" align="center" prop="shopType" >
         <template slot-scope="scope">
           <el-tag size="small" v-if="scope.row.shopType === 1">天猫</el-tag>
           <el-tag size="small" v-if="scope.row.shopType === 2">京东</el-tag>
+          <el-tag size="small" v-if="scope.row.shopType === 3">抖店</el-tag>
+          <el-tag size="small" v-if="scope.row.shopType === 4">拼多多</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="类型" align="center" prop="pullType" >
@@ -51,7 +57,11 @@
       <el-table-column label="参数" align="center" prop="pullParams" />
       <el-table-column label="结果" align="center" prop="pullResult" />
       <el-table-column label="耗时（ms）" align="center" prop="duration" />
-      <el-table-column label="时间" align="center" prop="pullTime" />
+      <el-table-column label="时间" align="center" prop="pullTime" >
+        <template slot-scope="scope">
+          {{ parseTime(scope.row.pullTime, '{y}-{m}-{d} {h}:{m}:{s}') }}
+        </template>
+      </el-table-column>
 
     </el-table>
 

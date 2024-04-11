@@ -1,24 +1,27 @@
 package com.qihang.tao.controller;
 
 import com.qihang.common.common.AjaxResult;
-import com.qihang.common.common.PageQuery;
-import com.qihang.common.common.PageResult;
 import com.qihang.common.common.TableDataInfo;
 import com.qihang.common.enums.EnumShopType;
 import com.qihang.common.mq.MqMessage;
 import com.qihang.common.mq.MqType;
 import com.qihang.common.mq.MqUtils;
-import com.qihang.security.common.BaseController;
+import com.qihang.tao.common.BaseController;
 import com.qihang.tao.common.TaoRequest;
 import com.qihang.tao.domain.TaoGoods;
-import com.qihang.tao.domain.TaoOrder;
 import com.qihang.tao.domain.bo.TaoGoodsBo;
 import com.qihang.tao.domain.bo.TaoOrderBo;
 import com.qihang.tao.domain.bo.TaoOrderPushBo;
-import com.qihang.tao.service.TaoOrderService;
+
 import com.taobao.api.ApiException;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import tech.qihangec.open.tao.common.PageQuery;
+import tech.qihangec.open.tao.common.PageResult;
+import tech.qihangec.open.tao.domain.TaoOrder;
+import tech.qihangec.open.tao.service.TaoOrderService;
+
+import java.util.ArrayList;
 
 @AllArgsConstructor
 @RestController
@@ -27,10 +30,16 @@ public class OrderContoller extends BaseController {
     private final TaoOrderService orderService;
     private final MqUtils mqUtils;
     @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public TableDataInfo goodsList(TaoOrderBo bo, PageQuery pageQuery) {
-        PageResult<TaoOrder> result = orderService.queryPageList(bo, pageQuery);
+    public TableDataInfo goodsList(TaoOrderBo bo, PageQuery pageQuery)   {
+        TaoOrder taoOrder = new TaoOrder();
+        taoOrder.setShopId(bo.getShopId());
+        try {
+            PageResult<TaoOrder> result = orderService.queryPageList(taoOrder, pageQuery);
 
-        return getDataTable(result);
+            return getDataTable(result);
+        }catch (Exception e){
+            return getDataTable(new ArrayList<>());
+        }
     }
 
     @PostMapping("/push_oms")

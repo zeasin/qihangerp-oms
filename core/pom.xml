@@ -3,11 +3,11 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.qihang</groupId>
-        <artifactId>qihang-oms</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <artifactId>qihangec-oms</artifactId>
+        <version>0.4.11</version>
     </parent>
 
-    <groupId>com.qihang</groupId>
+<!--    <groupId>com.qihang</groupId>-->
     <artifactId>core</artifactId>
     <packaging>pom</packaging>
 
