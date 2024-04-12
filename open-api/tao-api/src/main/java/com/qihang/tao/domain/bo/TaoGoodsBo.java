@@ -1,11 +1,12 @@
 package com.qihang.tao.domain.bo;
 
 import lombok.Data;
+import tech.qihangec.open.tao.domain.TaoGoods;
 
 import java.io.Serializable;
 
 @Data
-public class TaoGoodsBo implements Serializable {
+public class TaoGoodsBo extends TaoGoods implements Serializable {
     /**
      * 商品数字id
      */

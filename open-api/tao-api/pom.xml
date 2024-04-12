@@ -135,9 +135,9 @@
         <dependency>
             <groupId>com.qihangec</groupId>
             <artifactId>tao-open-api</artifactId>
-            <version>1.0</version>
+            <version>1.4.12</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/libs/tao-1.0.jar</systemPath>
+            <systemPath>${project.basedir}/libs/tao-1.4.12.jar</systemPath>
         </dependency>
     </dependencies>
 <!--    <dependencyManagement>-->

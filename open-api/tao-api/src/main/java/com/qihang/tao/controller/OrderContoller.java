@@ -8,7 +8,6 @@ import com.qihang.common.mq.MqType;
 import com.qihang.common.mq.MqUtils;
 import com.qihang.tao.common.BaseController;
 import com.qihang.tao.common.TaoRequest;
-import com.qihang.tao.domain.TaoGoods;
 import com.qihang.tao.domain.bo.TaoGoodsBo;
 import com.qihang.tao.domain.bo.TaoOrderBo;
 import com.qihang.tao.domain.bo.TaoOrderPushBo;

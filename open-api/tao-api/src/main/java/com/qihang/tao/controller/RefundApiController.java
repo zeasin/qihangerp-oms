@@ -11,12 +11,9 @@ import com.qihang.common.mq.MqUtils;
 import com.qihang.tao.domain.SysShopPullLasttime;
 import com.qihang.tao.domain.SysShopPullLogs;
 import com.qihang.tao.openApi.ApiCommon;
-import com.qihang.tao.openApi.RefundApiHelper;
 import com.qihang.tao.common.TaoRequest;
-import com.qihang.tao.domain.TaoRefund;
 import com.qihang.tao.service.SysShopPullLasttimeService;
 import com.qihang.tao.service.SysShopPullLogsService;
-import com.qihang.tao.service.TaoRefundService;
 import com.taobao.api.ApiException;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
@@ -25,6 +22,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import tech.qihangec.open.tao.TaoRefundApiService;
+import tech.qihangec.open.tao.common.ApiResultVo;
+import tech.qihangec.open.tao.domain.TaoRefund;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -35,7 +35,7 @@ import java.util.Date;
 public class RefundApiController {
     private static Logger log = LoggerFactory.getLogger(RefundApiController.class);
     private final ApiCommon apiCommon;
-    private final TaoRefundService refundService;
+    private final TaoRefundApiService refundApiService;
     private final MqUtils mqUtils;
     private final SysShopPullLogsService pullLogsService;
     private final SysShopPullLasttimeService pullLasttimeService;
@@ -86,38 +86,39 @@ public class RefundApiController {
 //        Long pageSize = 100l;
 //        Long pageIndex = 1l;
 
-        //第一次获取
-        ResultVo<TaoRefund> upResult = RefundApiHelper.pullRefund(startTime,endTime, url, appKey, appSecret, sessionKey);
+        //获取
+        ApiResultVo<TaoRefund> resultVo = refundApiService.pullRefundList(startTime, endTime, shopId, url, appKey, appSecret, sessionKey);
+//        ResultVo<TaoRefund> upResult = RefundApiHelper.pullRefund(startTime,endTime, url, appKey, appSecret, sessionKey);
 
-        if (upResult.getCode() != 0) {
-            log.info("/**************主动更新tao退货订单：第一次获取结果失败：" + upResult.getMsg() + "****************/");
+        if (resultVo.getCode() != 0) {
+            log.info("/**************主动更新tao退货订单：第一次获取结果失败：" + resultVo.getMsg() + "****************/");
 //            return new ApiResult<>(EnumResultVo.SystemException.getIndex(), upResult.getMsg());
-            return AjaxResult.error(HttpStatus.ERROR ,upResult.getMsg());
+            return AjaxResult.error(HttpStatus.ERROR ,resultVo.getMsg());
         }
 
-        log.info("/**************主动更新tao退货订单：第一次获取结果：总记录数" + upResult.getTotalRecords() + "****************/");
+        log.info("/**************主动更新tao退货订单：第一次获取结果：总记录数" + resultVo.getTotalRecords() + "****************/");
         int insertSuccess = 0;//新增成功的订单
         int totalError = 0;
         int hasExistOrder = 0;//已存在的订单数
 
         //循环插入订单数据到数据库
-        for (var refund : upResult.getList()) {
-
+        for (var refund : resultVo.getList()) {
+            mqUtils.sendApiMessage(MqMessage.build(EnumShopType.TAO, MqType.REFUND_MESSAGE,refund.getRefundId()));
             //插入订单数据
-            var result = refundService.saveAndUpdateRefund(shopId, refund);
-            if (result == ResultVoEnum.DataExist.getIndex()) {
-                //已经存在
-                mqUtils.sendApiMessage(MqMessage.build(EnumShopType.TAO, MqType.REFUND_MESSAGE,refund.getRefundId()));
-                log.info("/**************主动更新tao退货订单：开始更新数据库：" + refund.getRefundId() + "存在、更新****************/");
-                hasExistOrder++;
-            } else if (result == ResultVoEnum.SUCCESS.getIndex()) {
-                log.info("/**************主动更新tao退货订单：开始插入数据库：" + refund.getRefundId() + "不存在、新增****************/");
-                mqUtils.sendApiMessage(MqMessage.build(EnumShopType.TAO, MqType.REFUND_MESSAGE,refund.getRefundId()));
-                insertSuccess++;
-            } else {
-                log.info("/**************主动更新tao退货订单：开始更新数据库：" + refund.getRefundId() + "报错****************/");
-                totalError++;
-            }
+//            var result = refundService.saveAndUpdateRefund(shopId, refund);
+//            if (result == ResultVoEnum.DataExist.getIndex()) {
+//                //已经存在
+//                mqUtils.sendApiMessage(MqMessage.build(EnumShopType.TAO, MqType.REFUND_MESSAGE,refund.getRefundId()));
+//                log.info("/**************主动更新tao退货订单：开始更新数据库：" + refund.getRefundId() + "存在、更新****************/");
+//                hasExistOrder++;
+//            } else if (result == ResultVoEnum.SUCCESS.getIndex()) {
+//                log.info("/**************主动更新tao退货订单：开始插入数据库：" + refund.getRefundId() + "不存在、新增****************/");
+//                mqUtils.sendApiMessage(MqMessage.build(EnumShopType.TAO, MqType.REFUND_MESSAGE,refund.getRefundId()));
+//                insertSuccess++;
+//            } else {
+//                log.info("/**************主动更新tao退货订单：开始更新数据库：" + refund.getRefundId() + "报错****************/");
+//                totalError++;
+//            }
         }
         if(lasttime == null){
             // 新增
@@ -137,7 +138,7 @@ public class RefundApiController {
             pullLasttimeService.updateById(updateLasttime);
         }
 
-        String msg = "成功，总共找到：" + upResult.getTotalRecords() + "条订单，新增：" + insertSuccess + "条，添加错误：" + totalError + "条，更新：" + hasExistOrder + "条";
+        String msg = "成功，总共找到：" + resultVo.getTotalRecords() + "条订单";
         SysShopPullLogs logs = new SysShopPullLogs();
         logs.setShopType(EnumShopType.TAO.getIndex());
         logs.setShopId(taoRequest.getShopId());
