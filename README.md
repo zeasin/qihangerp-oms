@@ -207,22 +207,44 @@ server {
 ```
 
 
-## 交个朋友
+## 五、获取一键演示包
+
+启航电商ERP系统自从开源以来，收到很多兄弟们的关注，也很多兄弟们想看演示效果，由于项目是非商业化的没有财力去支撑演示环境服务器，为了满足兄弟们想看系统演示，作者特地制作了一个一键演示包，获取之后直接在Windows电脑中即可运行。
+
+[一键演示包获取地址](https://mp.weixin.qq.com/s?__biz=MjM5MTM1ODg0Mg==&mid=2447551448&idx=1&sn=53aab9a0123caf912cc89accb5fb226d&chksm=b2a0c1cd85d748dbde1eb7d511e3933d0ebd9df7d4e8f35e4d3eba7624ab5264f10900845b11&payreadticket=HKl0eiGUReMt0NYHRj2hUZS-ANiV_oN0p8XIfKxeIqVs2ZdYE1Rts-9YlN7uXwEWnLcq2H4#rd)
+
+
+## 六、支持作者
+
+**感谢大家的关注与支持！希望利用本人从事电商10余年的经验帮助到大家提升工作效率！**
 
 💖 如果觉得有用记得点 Star⭐
 
-#### 关注公众号
 
-作者微信公众号：qihangerp168
+### 1、有偿服务
++ 提供部署服务
++ 提供演示包服务
++ 提供定制化开发服务
++ 提供系统培训服务
++ 提供版本商业化支持服务
++ 提供电商系统软著代申请服务（文档、源代码）
++ 提供电商平台appkey申请协助服务
 
-欢迎一起交流！
+### 2、更多服务
+
+更多服务，请关注作者微信公众号：qihangerp168
+
+<img src="公众号.jpg" width="300px" />
 
 
-#### 捐献支持
+💖 欢迎一起交流！
 
-作者为兼职做开源,平时还需要工作,如果帮到了您可以请作者吃个盒饭(目前还希望接收大家的捐献可以搭建一个演示环境！)
+### 3、捐助支持
+作者为兼职做开源,平时还需要工作,如果帮到了您可以请作者吃个盒饭
+
+<img src="weixinzhifu.jpg" width="300px" />
+<img src="zhifubao.jpg" width="300px" />
 
 
-<img src="./weixinzhifu.jpg" width="300px" />
-<img src="./zhifubao.jpg" width="300px" />
+
 
