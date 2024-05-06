@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.qihang</groupId>
         <artifactId>open-api</artifactId>
-        <version>1.0.0</version>
+        <version>2.0.0</version>
     </parent>
     <groupId>com.qihang.dou</groupId>
     <artifactId>dou-api</artifactId>
