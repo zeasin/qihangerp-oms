@@ -1,8 +1,8 @@
 package com.qihang.tao.controller;
 
-import com.qihang.tao.domain.SysPlatform;
-import com.qihang.tao.service.SysPlatformService;
-import com.qihang.tao.service.SysShopService;
+import com.qihang.tao.domain.SShopSetting;
+import com.qihang.tao.service.SShopService;
+import com.qihang.tao.service.SShopSettingService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
@@ -21,8 +21,8 @@ import java.io.IOException;
 @Controller
 public class OAuthTaoCallbackController {
 
-    private final SysPlatformService platformService;
-    private final SysShopService shopService;
+    private final SShopService shopService;
+    private final SShopSettingService platformService;
     private static Logger log = LoggerFactory.getLogger(OAuthTaoCallbackController.class);
     /**
      * 淘宝授权url
@@ -33,10 +33,10 @@ public class OAuthTaoCallbackController {
      * @throws InterruptedException
      */
     @GetMapping("/taoapi2/tao_oauth")
-    public String aliOAuth(@RequestParam Integer shopId) throws IOException, InterruptedException {
+    public String aliOAuth(@RequestParam Long shopId) throws IOException, InterruptedException {
         //查询店铺信息
         var shop = shopService.selectShopById(shopId);
-        SysPlatform platform = platformService.selectById(shop.getType());
+        SShopSetting platform = platformService.getById(shop.getType());
 
 
 //        var entity = thirdSettingService.getEntity(shop.getType());
@@ -57,7 +57,7 @@ public class OAuthTaoCallbackController {
         String sessionKey = request.getParameter("top_session");
         String state = request.getParameter("state");
         try {
-            Integer shopId = Integer.parseInt(state);
+            Long shopId = Long.parseLong(state);
             shopService.updateSessionKey(shopId, sessionKey);
             return "redirect:/order/list?shopId=" + shopId;
         } catch (Exception e) {

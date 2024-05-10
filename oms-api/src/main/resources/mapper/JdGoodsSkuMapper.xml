@@ -15,6 +15,7 @@
             <result property="barCode" column="bar_code" jdbcType="VARCHAR"/>
             <result property="logo" column="logo" jdbcType="VARCHAR"/>
             <result property="saleAttrs" column="sale_attrs" jdbcType="VARCHAR"/>
+            <result property="attrs" column="attrs" jdbcType="VARCHAR"/>
             <result property="skuName" column="sku_name" jdbcType="VARCHAR"/>
             <result property="stockNum" column="stock_num" jdbcType="INTEGER"/>
             <result property="modified" column="modified" jdbcType="TIMESTAMP"/>

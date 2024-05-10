@@ -8,12 +8,15 @@ package com.qihang.common.enums;
  * @date 2019-09-18 19:44
  */
 public enum EnumShopType {
-    TAO("淘宝天猫", 1),
-    JD("京东", 2),
-    DOUDIAN("抖音", 3),
-    WEI("微信视频号小店", 5),
-    KWAI("快手小店", 6),
-    PDD("拼多多", 4);
+    ALI("1688", 1),
+    WEI("视频号小店", 2),
+    TAO("淘宝天猫", 4),
+    JD("京东", 3),
+    DOU("抖音", 6),
+    XHS("小红书", 7),
+    KWAI("快手小店", 8),
+    PDD("拼多多", 5),
+    OTHER("其他渠道", 99);
     private String name;
     private int index;
 

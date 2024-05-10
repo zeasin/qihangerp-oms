@@ -1,19 +1,23 @@
 package com.qihang.oms.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.qihang.common.common.AjaxResult;
 import com.qihang.common.common.PageQuery;
 import com.qihang.common.common.PageResult;
 import com.qihang.common.common.TableDataInfo;
+import com.qihang.oms.domain.SShop;
+import com.qihang.oms.domain.SShopSetting;
 import com.qihang.oms.domain.SysLogisticsCompany;
-import com.qihang.oms.domain.SysPlatform;
-import com.qihang.oms.domain.SysShop;
+import com.qihang.oms.service.SShopService;
+import com.qihang.oms.service.SShopSettingService;
 import com.qihang.oms.service.SysLogisticsCompanyService;
-import com.qihang.oms.service.SysShopService;
 import com.qihang.security.common.BaseController;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -27,23 +31,25 @@ import java.util.List;
 @RequestMapping("/shop")
 public class ShopController extends BaseController {
     private final SysLogisticsCompanyService logisticsCompanyService;
-    private final SysShopService shopService;
+    private final SShopService shopService;
+    private final SShopSettingService shopSettingService;
 
     /**
      * 查询店铺列表logistics
      */
     @PreAuthorize("@ss.hasPermi('shop:shop:list')")
     @GetMapping("/list")
-    public TableDataInfo list(SysShop shop)
+    public TableDataInfo list(SShop shop)
     {
-        List<SysShop> list = shopService.selectShopList(shop);
+        LambdaQueryWrapper<SShop> qw = new LambdaQueryWrapper<SShop>().eq(shop.getType()!=null,SShop::getType,shop.getType());
+        List<SShop> list = shopService.list(qw);
         return getDataTable(list);
     }
 
     @GetMapping("/platformList")
     public TableDataInfo platformList()
     {
-        List<SysPlatform> list = shopService.selectShopPlatformList();
+        List<SShopSetting> list = shopSettingService.list();
         return getDataTable(list);
     }
 
@@ -54,13 +60,13 @@ public class ShopController extends BaseController {
     @GetMapping(value = "/shop/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id)
     {
-        return success(shopService.selectShopById(id));
+        return success(shopService.getById(id));
     }
 
     @GetMapping(value = "/platform/{id}")
     public AjaxResult getPlatform(@PathVariable("id") Long id)
     {
-        return success(shopService.selectShopPlatformById(id));
+        return success(shopService.getById(id));
     }
 
     /**
@@ -68,10 +74,10 @@ public class ShopController extends BaseController {
      */
     @PreAuthorize("@ss.hasPermi('shop:shop:add')")
     @PostMapping("/shop")
-    public AjaxResult add(@RequestBody SysShop shop)
+    public AjaxResult add(@RequestBody SShop shop)
     {
         shop.setModifyOn(System.currentTimeMillis()/1000);
-        return toAjax(shopService.insertShop(shop));
+        return toAjax(shopService.save(shop));
     }
 
     /**
@@ -79,9 +85,9 @@ public class ShopController extends BaseController {
      */
     @PreAuthorize("@ss.hasPermi('shop:shop:edit')")
     @PutMapping("/shop")
-    public AjaxResult edit(@RequestBody SysShop shop)
+    public AjaxResult edit(@RequestBody SShop shop)
     {
-        return toAjax(shopService.updateShopById(shop));
+        return toAjax(shopService.updateById(shop));
     }
 
     /**
@@ -90,9 +96,9 @@ public class ShopController extends BaseController {
      * @return
      */
     @PutMapping("/platform")
-    public AjaxResult edit(@RequestBody SysPlatform platform)
+    public AjaxResult edit(@RequestBody SShopSetting platform)
     {
-        return toAjax(shopService.updateShopPlatformById(platform));
+        return toAjax(shopSettingService.updateById(platform));
     }
 
     /**
@@ -102,7 +108,7 @@ public class ShopController extends BaseController {
 	@DeleteMapping("/shop/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids)
     {
-        return toAjax(shopService.deleteShopByIds(ids));
+        return toAjax(shopService.removeBatchByIds(Arrays.stream(ids).toList()));
     }
 
 

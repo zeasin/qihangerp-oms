@@ -7,7 +7,6 @@ import com.qihang.common.common.PageQuery;
 import com.qihang.common.common.TableDataInfo;
 import com.qihang.oms.domain.OGoods;
 import com.qihang.oms.domain.OGoodsSku;
-import com.qihang.oms.domain.OOrder;
 import com.qihang.oms.service.OGoodsService;
 import com.qihang.oms.vo.GoodsSpecListVo;
 import com.qihang.security.common.BaseController;

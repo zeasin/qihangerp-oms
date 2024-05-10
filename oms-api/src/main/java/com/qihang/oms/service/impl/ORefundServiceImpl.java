@@ -31,8 +31,8 @@ public class ORefundServiceImpl extends ServiceImpl<ORefundMapper, ORefund>
     implements ORefundService {
     private final ORefundMapper mapper;
     private final JdOrderAfterMapper jdOrderAfterMapper;
-    private final OOrderItemMapper orderItemMapper;
-    private final OOrderMapper orderMapper;
+    private final ErpSaleOrderItemMapper orderItemMapper;
+    private final ErpSaleOrderMapper orderMapper;
     private final JdOrderMapper jdOrderMapper;
     private final JdOrderItemMapper jdOrderItemMapper;
     private final TaoRefundMapper taoRefundMapper;
@@ -49,12 +49,14 @@ public class ORefundServiceImpl extends ServiceImpl<ORefundMapper, ORefund>
         }
         JdOrderAfter jdAfter = afterList.get(0);
         // 查询ERP订单
-        OOrder order = null;
-        OOrderItem orderItem = null;
-        List<OOrder> oOrders = orderMapper.selectList(new LambdaQueryWrapper<OOrder>().eq(OOrder::getOrderNum, jdAfter.getOrderId()).eq(OOrder::getShopId, jdAfter.getShopId()));
+        ErpSaleOrder order = null;
+        ErpSaleOrderItem orderItem = null;
+        List<ErpSaleOrder> oOrders = orderMapper.selectList(new LambdaQueryWrapper<ErpSaleOrder>()
+                .eq(ErpSaleOrder::getOrderNum, jdAfter.getOrderId()).eq(ErpSaleOrder::getShopId, jdAfter.getShopId()));
         if(oOrders!=null && oOrders.size()>0){
             order = oOrders.get(0);
-            List<OOrderItem> oOrderItems = orderItemMapper.selectList(new LambdaQueryWrapper<OOrderItem>().eq(OOrderItem::getOrderId, oOrders.get(0).getId()).eq(OOrderItem::getSkuId, jdAfter.getSkuId()));
+            List<ErpSaleOrderItem> oOrderItems = orderItemMapper.selectList(new LambdaQueryWrapper<ErpSaleOrderItem>()
+                    .eq(ErpSaleOrderItem::getOrderId, oOrders.get(0).getId()).eq(ErpSaleOrderItem::getOriginalSkuId, jdAfter.getSkuId()));
             if(oOrderItems!=null && oOrderItems.size()>0){
                 orderItem = oOrderItems.get(0);
             }else{
@@ -73,11 +75,11 @@ public class ORefundServiceImpl extends ServiceImpl<ORefundMapper, ORefund>
             insert.setShopId(jdAfter.getShopId());
             insert.setShopType(EnumShopType.JD.getIndex());
             insert.setOrderNum(jdAfter.getOrderId().toString());
-            insert.setOrderItemNum(orderItem.getSubOrderNum());
+            insert.setOrderItemNum(orderItem.getOriginalOrderItemId());
             insert.setSkuId(jdAfter.getSkuId());
-            insert.setErpGoodsId(orderItem.getErpGoodsId());
-            insert.setErpSkuId(orderItem.getErpSkuId());
-            insert.setSkuNum(orderItem.getSkuNum());
+            insert.setErpGoodsId(orderItem.getGoodsId());
+            insert.setErpSkuId(orderItem.getSpecId());
+            insert.setSkuNum(orderItem.getSpecNum());
             insert.setGoodsName(orderItem.getGoodsTitle());
             insert.setGoodsSku(orderItem.getGoodsSpec());
             insert.setGoodsImage(orderItem.getGoodsImg());
@@ -121,12 +123,14 @@ public class ORefundServiceImpl extends ServiceImpl<ORefundMapper, ORefund>
             return ResultVo.error(ResultVoEnum.NotFound, "没有找到TAO子订单：" + taoRefund.getOid());
         }
         // 查询ERP订单
-        OOrder order = null;
-        OOrderItem orderItem = null;
-        List<OOrder> oOrders = orderMapper.selectList(new LambdaQueryWrapper<OOrder>().eq(OOrder::getOrderNum, taoRefund.getTid()).eq(OOrder::getShopId, taoRefund.getShopId()));
+        ErpSaleOrder order = null;
+        ErpSaleOrderItem orderItem = null;
+        List<ErpSaleOrder> oOrders = orderMapper.selectList(new LambdaQueryWrapper<ErpSaleOrder>()
+                .eq(ErpSaleOrder::getOrderNum, taoRefund.getTid()).eq(ErpSaleOrder::getShopId, taoRefund.getShopId()));
         if(oOrders!=null && oOrders.size()>0){
             order = oOrders.get(0);
-            List<OOrderItem> oOrderItems = orderItemMapper.selectList(new LambdaQueryWrapper<OOrderItem>().eq(OOrderItem::getOrderId, oOrders.get(0).getId()).eq(OOrderItem::getSubOrderNum, taoRefund.getOid()));
+            List<ErpSaleOrderItem> oOrderItems = orderItemMapper.selectList(new LambdaQueryWrapper<ErpSaleOrderItem>()
+                    .eq(ErpSaleOrderItem::getOrderId, oOrders.get(0).getId()).eq(ErpSaleOrderItem::getOriginalOrderItemId, taoRefund.getOid()));
             if(oOrderItems!=null && oOrderItems.size()>0){
                 orderItem = oOrderItems.get(0);
             }else{
@@ -163,9 +167,9 @@ public class ORefundServiceImpl extends ServiceImpl<ORefundMapper, ORefund>
             insert.setOrderNum(taoRefund.getTid().toString());
             insert.setOrderItemNum(taoRefund.getOid().toString());
             insert.setSkuId(Long.parseLong(taoOrderItems.get(0).getSkuId()));
-            insert.setErpGoodsId(orderItem.getErpGoodsId());
-            insert.setErpSkuId(orderItem.getErpSkuId());
-            insert.setSkuNum(orderItem.getSkuNum());
+            insert.setErpGoodsId(orderItem.getGoodsId());
+            insert.setErpSkuId(orderItem.getSpecId());
+            insert.setSkuNum(orderItem.getSpecNum());
             insert.setGoodsName(orderItem.getGoodsTitle());
             insert.setGoodsSku(orderItem.getGoodsSpec());
             insert.setGoodsImage(orderItem.getGoodsImg());

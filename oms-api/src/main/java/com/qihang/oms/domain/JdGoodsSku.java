@@ -58,6 +58,7 @@ public class JdGoodsSku implements Serializable {
      * 
      */
     private String saleAttrs;
+    private String attrs;
 
     /**
      * 
@@ -95,6 +96,14 @@ public class JdGoodsSku implements Serializable {
     private Long erpSkuId;
 
     private static final long serialVersionUID = 1L;
+
+    public String getAttrs() {
+        return attrs;
+    }
+
+    public void setAttrs(String attrs) {
+        this.attrs = attrs;
+    }
 
     /**
      * 

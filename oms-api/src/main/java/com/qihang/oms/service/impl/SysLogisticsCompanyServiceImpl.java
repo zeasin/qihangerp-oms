@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.qihang.common.common.PageQuery;
 import com.qihang.common.common.PageResult;
-import com.qihang.oms.domain.OOrder;
 import com.qihang.oms.domain.SysLogisticsCompany;
 import com.qihang.oms.service.SysLogisticsCompanyService;
 import com.qihang.oms.mapper.SysLogisticsCompanyMapper;

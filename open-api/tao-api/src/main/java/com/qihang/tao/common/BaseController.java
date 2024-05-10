@@ -1,6 +1,7 @@
 package com.qihang.tao.common;
 
 import com.qihang.common.common.AjaxResult;
+import com.qihang.common.common.PageResult;
 import com.qihang.common.common.TableDataInfo;
 import com.qihang.common.enums.HttpStatus;
 import com.qihang.common.utils.StringUtils;
@@ -8,8 +9,6 @@ import com.qihang.security.LoginUser;
 import com.qihang.security.common.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import tech.qihangec.open.tao.common.PageResult;
-
 import java.util.List;
 
 /**

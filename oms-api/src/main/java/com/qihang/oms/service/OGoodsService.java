@@ -5,7 +5,6 @@ import com.qihang.common.common.PageResult;
 import com.qihang.oms.domain.OGoods;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.qihang.oms.domain.OGoodsSku;
-import com.qihang.oms.domain.OOrder;
 import com.qihang.oms.vo.GoodsSpecListVo;
 
 import java.util.List;

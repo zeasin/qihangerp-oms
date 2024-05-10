@@ -1,5 +1,7 @@
 package com.qihang.tao.domain;
 
+import com.baomidou.mybatisplus.annotation.TableName;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -8,6 +10,7 @@ import java.util.Date;
  * 店铺更新最后时间记录
  * @TableName sys_shop_pull_lasttime
  */
+@TableName("s_shop_pull_lasttime")
 public class SysShopPullLasttime implements Serializable {
     /**
      * 
@@ -17,7 +20,7 @@ public class SysShopPullLasttime implements Serializable {
     /**
      * 店铺id
      */
-    private Integer shopId;
+    private Long shopId;
 
     /**
      * 类型（ORDER:订单，REFUND:退款）
@@ -58,14 +61,14 @@ public class SysShopPullLasttime implements Serializable {
     /**
      * 店铺id
      */
-    public Integer getShopId() {
+    public Long getShopId() {
         return shopId;
     }
 
     /**
      * 店铺id
      */
-    public void setShopId(Integer shopId) {
+    public void setShopId(Long shopId) {
         this.shopId = shopId;
     }
 

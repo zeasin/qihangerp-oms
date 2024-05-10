@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qihang.oms.mapper.ErpSaleOrderItemMapper">
+
+    <resultMap id="BaseResultMap" type="com.qihang.oms.domain.ErpSaleOrderItem">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="orderId" column="order_id" jdbcType="BIGINT"/>
+            <result property="shopId" column="shop_id" jdbcType="INTEGER"/>
+            <result property="supplierId" column="supplier_id" jdbcType="INTEGER"/>
+            <result property="goodsId" column="goods_id" jdbcType="BIGINT"/>
+            <result property="specId" column="spec_id" jdbcType="BIGINT"/>
+            <result property="goodsTitle" column="goods_title" jdbcType="VARCHAR"/>
+            <result property="goodsImg" column="goods_img" jdbcType="VARCHAR"/>
+            <result property="goodsNum" column="goods_num" jdbcType="VARCHAR"/>
+            <result property="goodsSpec" column="goods_spec" jdbcType="VARCHAR"/>
+            <result property="specNum" column="spec_num" jdbcType="VARCHAR"/>
+            <result property="goodsPrice" column="goods_price" jdbcType="DOUBLE"/>
+            <result property="itemAmount" column="item_amount" jdbcType="DOUBLE"/>
+            <result property="quantity" column="quantity" jdbcType="INTEGER"/>
+            <result property="remark" column="remark" jdbcType="VARCHAR"/>
+            <result property="originalOrderItemId" column="original_order_item_id" jdbcType="VARCHAR"/>
+            <result property="originalOrderId" column="original_order_id" jdbcType="VARCHAR"/>
+            <result property="originalSkuId" column="original_sku_id" jdbcType="VARCHAR"/>
+            <result property="isGift" column="is_gift" jdbcType="TINYINT"/>
+            <result property="refundCount" column="refund_count" jdbcType="INTEGER"/>
+            <result property="refundStatus" column="refund_status" jdbcType="INTEGER"/>
+            <result property="orderStatus" column="order_status" jdbcType="INTEGER"/>
+            <result property="shipType" column="ship_type" jdbcType="INTEGER"/>
+            <result property="shipStatus" column="ship_status" jdbcType="INTEGER"/>
+            <result property="shipTime" column="ship_time" jdbcType="TIMESTAMP"/>
+            <result property="logisticsCode" column="logistics_code" jdbcType="VARCHAR"/>
+            <result property="logisticsCompany" column="logistics_company" jdbcType="VARCHAR"/>
+            <result property="shipMan" column="ship_man" jdbcType="VARCHAR"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
+            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+            <result property="updateBy" column="update_by" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,order_id,shop_id,
+        supplier_id,goods_id,spec_id,
+        goods_title,goods_img,goods_num,
+        goods_spec,spec_num,goods_price,
+        item_amount,quantity,remark,
+        original_order_item_id,original_order_id,original_sku_id,is_gift,
+        refund_count,refund_status,order_status,
+        ship_type,ship_status,ship_time,
+        logistics_code,logistics_company,ship_man,
+        create_time,create_by,update_time,
+        update_by
+    </sql>
+
+    <select id="selectPageVo" parameterType="OrderItemListBo" resultType="OrderItemListVo">
+        SELECT
+        oi.*,o.shop_id,o.order_time
+        FROM erp_sale_order_item as oi
+        left join erp_sale_order as o on o.id = oi.order_id
+
+        WHERE 1=1
+        <if test="qw.shopId!=null">
+            and o.shop_id = #{qw.shopId}
+        </if>
+        <if test="qw.orderNum!=null and qw.orderNum !=''">
+            and oi.order_num = #{qw.orderNum}
+        </if>
+        <if test="qw.subOrderNum != null and qw.subOrderNum !=''">
+            and oi.sub_order_num = #{qw.subOrderNum}
+        </if>
+        <if test="qw.refundStatus!=null">
+            and oI.refund_status = #{qw.refundStatus}
+        </if>
+
+    </select>
+
+    <select id="selectOrderItemListByOrderId" parameterType="Long" resultType="OrderItemListVo">
+        SELECT
+            oi.*,o.shop_id,o.order_time,gs.outer_erp_sku_id
+        FROM o_order_item as oi
+                 left join o_order as o on o.id = oi.order_id
+                 left join o_goods_sku as gs on gs.id = oi.goods_sku_id
+        WHERE oi.order_id = #{orderId}
+
+    </select>
+</mapper>

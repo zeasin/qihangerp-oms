@@ -25,10 +25,15 @@
             :label="item.name"
             :value="item.id">
             <span style="float: left">{{ item.name }}</span>
-              <span style="float: right; color: #8492a6; font-size: 13px"  v-if="item.type === 1">淘宝天猫</span>
-              <span style="float: right; color: #8492a6; font-size: 13px"  v-if="item.type === 2">京东</span>
-              <span style="float: right; color: #8492a6; font-size: 13px"  v-if="item.type === 3">抖店</span>
-              <span style="float: right; color: #8492a6; font-size: 13px"  v-if="item.type === 4">拼多多</span>
+           <span style="float: right; color: #8492a6; font-size: 13px"  v-if="item.type === 1">1688</span>
+           <span style="float: right; color: #8492a6; font-size: 13px"  v-if="item.type === 2">视频号小店</span>
+           <span style="float: right; color: #8492a6; font-size: 13px"  v-if="item.type === 3">京东</span>
+           <span style="float: right; color: #8492a6; font-size: 13px"  v-if="item.type === 4">淘宝天猫</span>
+           <span style="float: right; color: #8492a6; font-size: 13px"  v-if="item.type === 5">拼多多</span>
+           <span style="float: right; color: #8492a6; font-size: 13px"  v-if="item.type === 6">抖店</span>
+           <span style="float: right; color: #8492a6; font-size: 13px"  v-if="item.type === 7">小红书</span>
+           <span style="float: right; color: #8492a6; font-size: 13px"  v-if="item.type === 8">快手</span>
+           <span style="float: right; color: #8492a6; font-size: 13px"  v-if="item.type === 99">其他渠道</span>
           </el-option>
         </el-select>
       </el-form-item>

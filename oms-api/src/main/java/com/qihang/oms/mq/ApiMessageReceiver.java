@@ -6,7 +6,7 @@ import com.qihang.common.enums.EnumShopType;
 import com.qihang.common.mq.MqMessage;
 import com.qihang.common.mq.MqType;
 import com.qihang.common.utils.SpringUtils;
-import com.qihang.oms.service.OOrderService;
+import com.qihang.oms.service.ErpSaleOrderService;
 import com.qihang.oms.service.ORefundService;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
@@ -45,7 +45,7 @@ public class ApiMessageReceiver implements MessageListener {
         if(vo.getMqType() == MqType.ORDER_MESSAGE){
             // 有新订单，插入新订单到shop_order
 
-            OOrderService orderService = SpringUtils.getBean(OOrderService.class);
+            ErpSaleOrderService orderService = SpringUtils.getBean(ErpSaleOrderService.class);
             if(vo.getShopType().getIndex() == EnumShopType.JD.getIndex()) {
                 logger.info("订单消息JD"+messageContent);
                 orderService.jdOrderMessage(vo.getKeyId());

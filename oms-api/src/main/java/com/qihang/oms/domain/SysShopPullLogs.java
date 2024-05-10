@@ -1,5 +1,7 @@
 package com.qihang.oms.domain;
 
+import com.baomidou.mybatisplus.annotation.TableName;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -7,6 +9,7 @@ import java.util.Date;
  * 更新日志表
  * @TableName sys_shop_pull_logs
  */
+@TableName("s_shop_pull_logs")
 public class SysShopPullLogs implements Serializable {
     /**
      * 主键Id

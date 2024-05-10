@@ -2,7 +2,6 @@ package com.qihang.oms.service;
 
 import com.qihang.common.common.PageQuery;
 import com.qihang.common.common.PageResult;
-import com.qihang.oms.domain.OOrder;
 import com.qihang.oms.domain.SysLogisticsCompany;
 import com.baomidou.mybatisplus.extension.service.IService;
 
