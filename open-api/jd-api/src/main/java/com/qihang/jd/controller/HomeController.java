@@ -22,10 +22,10 @@ public class HomeController {
 
     @GetMapping("/")
     public String home(){
-        MqMessage mqVo = MqMessage.build(EnumShopType.JD,1,"288531622338");
-
-        mqUtils.sendMessage("channel",mqVo);
-        mqUtils.sendMessage("ApiMessage",mqVo);
+//        MqMessage mqVo = MqMessage.build(EnumShopType.JD,1,"288531622338");
+//
+//        mqUtils.sendMessage("channel",mqVo);
+//        mqUtils.sendMessage("ApiMessage",mqVo);
         return "{'code':0,'msg':'请通过api访问'}";
     }
 }

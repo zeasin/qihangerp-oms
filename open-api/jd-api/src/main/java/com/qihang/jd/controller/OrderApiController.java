@@ -1,30 +1,32 @@
 package com.qihang.jd.controller;
 
+import cn.qihangerp.open.jd.OrderApiHelper;
+import cn.qihangerp.open.jd.common.ApiResultVo;
+import cn.qihangerp.open.jd.model.OrderInfo;
 import com.qihang.common.common.AjaxResult;
-import com.qihang.common.common.ResultVo;
 import com.qihang.common.common.ResultVoEnum;
 import com.qihang.common.enums.EnumShopType;
 import com.qihang.common.enums.HttpStatus;
 import com.qihang.common.mq.MqType;
-import com.qihang.jd.domain.JdOrder;
+import com.qihang.jd.domain.OmsJdOrder;
+import com.qihang.jd.domain.OmsJdOrderItem;
 import com.qihang.jd.domain.SysShopPullLasttime;
 import com.qihang.jd.domain.SysShopPullLogs;
 import com.qihang.jd.openApi.ApiCommon;
-import com.qihang.jd.openApi.OrderApiHelper;
 import com.qihang.jd.openApi.PullRequest;
 import com.qihang.common.mq.MqMessage;
 import com.qihang.common.mq.MqUtils;
-import com.qihang.jd.service.JdOrderService;
+import com.qihang.jd.service.OmsJdOrderService;
 import com.qihang.jd.service.SysShopPullLasttimeService;
 import com.qihang.jd.service.SysShopPullLogsService;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -36,7 +38,7 @@ public class OrderApiController {
     private final ApiCommon apiCommon;
 //    private final RedisCache redisCache;
     private final MqUtils mqUtils;
-    private final JdOrderService orderService;
+    private final OmsJdOrderService orderService;
     private final SysShopPullLasttimeService pullLasttimeService;
     private final SysShopPullLogsService pullLogsService;
 
@@ -72,14 +74,35 @@ public class OrderApiController {
                 endTime = LocalDateTime.now();
             }
         }
+        //获取
+        ApiResultVo<OrderInfo> upResult = OrderApiHelper.pullOrder(startTime,endTime,appKey,appSecret,accessToken);
+        if(upResult.getCode()!=0) return AjaxResult.error(upResult.getMsg());
 
-        //第一次获取
-        ResultVo<JdOrder> upResult = OrderApiHelper.pullOrder(startTime,endTime,1L,100L,serverUrl,appKey,appSecret,accessToken);
         int insertSuccess = 0;//新增成功的订单
         int totalError = 0;
         int hasExistOrder = 0;//已存在的订单数
         //循环插入订单数据到数据库
-        for (var order : upResult.getList()) {
+        for (var orderInfo : upResult.getList()) {
+            //插入订单数据
+            OmsJdOrder order = new OmsJdOrder();
+            BeanUtils.copyProperties(orderInfo, order);
+            order.setFullname(orderInfo.getConsigneeInfo().getFullname());
+            order.setFullAddress(orderInfo.getConsigneeInfo().getFullAddress());
+            order.setTelephone(orderInfo.getConsigneeInfo().getTelephone());
+            order.setMobile(orderInfo.getConsigneeInfo().getMobile());
+            order.setProvince(orderInfo.getConsigneeInfo().getProvince());
+            order.setProvinceId(orderInfo.getConsigneeInfo().getProvinceId());
+            order.setCity(orderInfo.getConsigneeInfo().getCity());
+            order.setCityId(orderInfo.getConsigneeInfo().getCityId());
+            order.setTown(orderInfo.getConsigneeInfo().getTown());
+            order.setTownId(orderInfo.getConsigneeInfo().getTownId());
+            List<OmsJdOrderItem> itemList = new ArrayList<>();
+            for(var orderInfoItem :orderInfo.getItemInfoList()) {
+                OmsJdOrderItem jdOrderItem = new OmsJdOrderItem();
+                BeanUtils.copyProperties(orderInfoItem, jdOrderItem);
+                itemList.add(jdOrderItem);
+            }
+            order.setItemList(itemList);
             //插入订单数据
             var result = orderService.saveOrder(params.getShopId(), order);
             if (result.getCode() == ResultVoEnum.DataExist.getIndex()) {

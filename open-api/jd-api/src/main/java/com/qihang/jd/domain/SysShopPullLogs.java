@@ -1,5 +1,7 @@
 package com.qihang.jd.domain;
 
+import com.baomidou.mybatisplus.annotation.TableName;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -7,6 +9,7 @@ import java.util.Date;
  * 更新日志表
  * @TableName sys_shop_pull_logs
  */
+@TableName("s_shop_pull_logs")
 public class SysShopPullLogs implements Serializable {
     /**
      * 主键Id
@@ -16,7 +19,7 @@ public class SysShopPullLogs implements Serializable {
     /**
      * 店铺id
      */
-    private Integer shopId;
+    private Long shopId;
     private Integer shopType;
 
     /**
@@ -68,14 +71,14 @@ public class SysShopPullLogs implements Serializable {
     /**
      * 店铺id
      */
-    public Integer getShopId() {
+    public Long getShopId() {
         return shopId;
     }
 
     /**
      * 店铺id
      */
-    public void setShopId(Integer shopId) {
+    public void setShopId(Long shopId) {
         this.shopId = shopId;
     }
 

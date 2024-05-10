@@ -5,7 +5,6 @@ import com.qihang.common.common.PageResult;
 import com.qihang.common.common.ResultVo;
 import com.qihang.jd.domain.JdGoods;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.qihang.jd.domain.JdOrder;
 import com.qihang.jd.domain.bo.JdGoodsBo;
 
 /**

@@ -159,7 +159,7 @@ export default {
     };
   },
   created() {
-    listShop({type:2}).then(response => {
+    listShop({type:3}).then(response => {
       this.shopList = response.rows;
     });
     this.getList();

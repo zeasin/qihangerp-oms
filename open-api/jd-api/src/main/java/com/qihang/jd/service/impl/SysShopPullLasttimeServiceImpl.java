@@ -22,7 +22,7 @@ public class SysShopPullLasttimeServiceImpl extends ServiceImpl<SysShopPullLastt
     private final SysShopPullLasttimeMapper mapper;
 
     @Override
-    public SysShopPullLasttime getLasttimeByShop(Integer shopId, String pullType) {
+    public SysShopPullLasttime getLasttimeByShop(Long shopId, String pullType) {
         List<SysShopPullLasttime> sysShopPullLasttimes = mapper.selectList(new LambdaQueryWrapper<SysShopPullLasttime>().eq(SysShopPullLasttime::getShopId, shopId).eq(SysShopPullLasttime::getPullType, pullType));
         if(sysShopPullLasttimes != null && !sysShopPullLasttimes.isEmpty()) return sysShopPullLasttimes.get(0);
         else return null;

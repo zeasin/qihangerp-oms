@@ -8,10 +8,10 @@ import com.qihang.common.enums.EnumShopType;
 import com.qihang.common.mq.MqMessage;
 import com.qihang.common.mq.MqType;
 import com.qihang.common.mq.MqUtils;
-import com.qihang.jd.domain.JdOrder;
+import com.qihang.jd.domain.OmsJdOrder;
 import com.qihang.jd.domain.bo.JdOrderBo;
 import com.qihang.jd.domain.bo.JdOrderPushBo;
-import com.qihang.jd.service.JdOrderService;
+import com.qihang.jd.service.OmsJdOrderService;
 import com.qihang.security.common.BaseController;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -20,11 +20,11 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/order")
 public class OrderController extends BaseController {
-    private final JdOrderService orderService;
+    private final OmsJdOrderService orderService;
     private final MqUtils mqUtils;
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public TableDataInfo orderList(JdOrderBo bo, PageQuery pageQuery) {
-        PageResult<JdOrder> result = orderService.queryPageList(bo, pageQuery);
+        PageResult<OmsJdOrder> result = orderService.queryPageList(bo, pageQuery);
 
         return getDataTable(result);
     }

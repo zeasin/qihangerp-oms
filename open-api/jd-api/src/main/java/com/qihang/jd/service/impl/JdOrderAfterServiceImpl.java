@@ -8,7 +8,6 @@ import com.qihang.common.common.PageResult;
 import com.qihang.common.common.ResultVo;
 import com.qihang.common.common.ResultVoEnum;
 import com.qihang.jd.domain.JdOrderAfter;
-import com.qihang.jd.domain.JdRefund;
 import com.qihang.jd.domain.bo.JdAfterBo;
 import com.qihang.jd.service.JdOrderAfterService;
 import com.qihang.jd.mapper.JdOrderAfterMapper;
