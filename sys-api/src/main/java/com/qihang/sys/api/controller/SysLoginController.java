@@ -7,7 +7,7 @@ import com.qihang.security.entity.SysUser;
 import com.qihang.security.service.SysLoginService;
 import com.qihang.sys.api.domain.LoginBody;
 import com.qihang.sys.api.domain.SysMenu;
-import com.qihang.sys.api.service.ISysMenuService;
+import com.qihang.sys.api.service.SysMenuService;
 import com.qihang.sys.api.service.SysPermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,7 +30,7 @@ public class SysLoginController
     private SysLoginService loginService;
 
     @Autowired
-    private ISysMenuService menuService;
+    private SysMenuService menuService;
 
     @Autowired
     private SysPermissionService permissionService;

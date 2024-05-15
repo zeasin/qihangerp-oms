@@ -6,7 +6,7 @@ import com.qihang.common.constant.UserConstants;
 import com.qihang.common.utils.StringUtils;
 import com.qihang.security.common.BaseController;
 import com.qihang.sys.api.domain.SysMenu;
-import com.qihang.sys.api.service.ISysMenuService;
+import com.qihang.sys.api.service.SysMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -27,7 +27,7 @@ import static com.qihang.common.common.AjaxResult.warn;
 public class SysMenuController extends BaseController
 {
     @Autowired
-    private ISysMenuService menuService;
+    private SysMenuService menuService;
 
     /**
      * 获取菜单列表
@@ -36,7 +36,9 @@ public class SysMenuController extends BaseController
     @GetMapping("/list")
     public AjaxResult list(SysMenu menu)
     {
-        List<SysMenu> menus = menuService.selectMenuList(menu, getUserId());
+//        List<SysMenu> menus = menuService.selectMenuList(menu, getUserId());
+        List<SysMenu> menus = menuService.list();
+
         return success(menus);
     }
 
@@ -47,7 +49,7 @@ public class SysMenuController extends BaseController
     @GetMapping(value = "/{menuId}")
     public AjaxResult getInfo(@PathVariable Long menuId)
     {
-        return success(menuService.selectMenuById(menuId));
+        return success(menuService.getById(menuId));
     }
 
 //    /**
@@ -89,7 +91,7 @@ public class SysMenuController extends BaseController
             return error("新增菜单'" + menu.getMenuName() + "'失败，地址必须以http(s)://开头");
         }
         menu.setCreateBy(getUsername());
-        return toAjax(menuService.insertMenu(menu));
+        return toAjax(menuService.save(menu));
     }
 
     /**
@@ -112,7 +114,7 @@ public class SysMenuController extends BaseController
             return error("修改菜单'" + menu.getMenuName() + "'失败，上级菜单不能选择自己");
         }
         menu.setUpdateBy(getUsername());
-        return toAjax(menuService.updateMenu(menu));
+        return toAjax(menuService.updateById(menu));
     }
 //
 //    /**

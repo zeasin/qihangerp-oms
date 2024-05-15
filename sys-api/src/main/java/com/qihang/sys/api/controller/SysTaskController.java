@@ -4,19 +4,12 @@ import com.qihang.common.common.AjaxResult;
 import com.qihang.common.common.PageQuery;
 import com.qihang.common.common.PageResult;
 import com.qihang.common.common.TableDataInfo;
-import com.qihang.common.constant.UserConstants;
-import com.qihang.common.utils.StringUtils;
 import com.qihang.security.common.BaseController;
-import com.qihang.sys.api.domain.SysDictData;
-import com.qihang.sys.api.domain.SysMenu;
 import com.qihang.sys.api.domain.SysTask;
 import com.qihang.sys.api.service.SysTaskLogsService;
 import com.qihang.sys.api.service.SysTaskService;
 import lombok.AllArgsConstructor;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  *
