@@ -14,7 +14,7 @@ public class OmsJdGoodsSku implements Serializable {
     /**
      * 
      */
-    private Long id;
+    private String id;
 
     /**
      * 店铺id

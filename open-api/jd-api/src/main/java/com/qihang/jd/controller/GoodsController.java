@@ -8,9 +8,11 @@ import com.qihang.common.common.PageResult;
 import com.qihang.common.common.TableDataInfo;
 import com.qihang.jd.domain.JdGoods;
 import com.qihang.jd.domain.JdGoodsSku;
+import com.qihang.jd.domain.OmsJdGoodsSku;
 import com.qihang.jd.domain.bo.JdGoodsBo;
 import com.qihang.jd.service.JdGoodsService;
 import com.qihang.jd.service.JdGoodsSkuService;
+import com.qihang.jd.service.OmsJdGoodsSkuService;
 import com.qihang.security.common.BaseController;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 public class GoodsController extends BaseController {
     private final JdGoodsService goodsService;
-    private final JdGoodsSkuService skuService;
+    private final OmsJdGoodsSkuService skuService;
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public TableDataInfo goodsList(JdGoodsBo bo, PageQuery pageQuery) {
         PageResult<JdGoods> result = goodsService.queryPageList(bo, pageQuery);
@@ -29,8 +31,8 @@ public class GoodsController extends BaseController {
     }
 
     @RequestMapping(value = "/skuList", method = RequestMethod.GET)
-    public TableDataInfo skuList(JdGoodsBo bo, PageQuery pageQuery) {
-        PageResult<JdGoodsSku> result = skuService.queryPageList(bo, pageQuery);
+    public TableDataInfo skuList(OmsJdGoodsSku bo, PageQuery pageQuery) {
+        PageResult<OmsJdGoodsSku> result = skuService.queryPageList(bo, pageQuery);
 
         return getDataTable(result);
     }
@@ -46,9 +48,9 @@ public class GoodsController extends BaseController {
     @PostMapping(value = "/sku/linkErp")
     public AjaxResult linkErp(@RequestBody LinkErpGoodsSkuBo bo)
     {
-        JdGoodsSku sku = new JdGoodsSku();
+        OmsJdGoodsSku sku = new OmsJdGoodsSku();
         sku.setId(bo.getId());
-        sku.setErpSkuId(Long.parseLong(bo.getErpSkuId()));
+        sku.setErpGoodsSkuId(Long.parseLong(bo.getErpSkuId()));
         skuService.updateById(sku);
         return success();
     }
