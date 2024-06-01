@@ -39,7 +39,7 @@ export function updateUser(data) {
 // 删除用户
 export function delUser(userId) {
   return request({
-    url: '/system/user/' + userId,
+    url: '/api/sys-api/system/user/' + userId,
     method: 'delete'
   })
 }
@@ -51,7 +51,7 @@ export function resetUserPwd(userId, password) {
     password
   }
   return request({
-    url: '/system/user/resetPwd',
+    url: '/api/sys-api/system/user/resetPwd',
     method: 'put',
     data: data
   })
@@ -64,7 +64,7 @@ export function changeUserStatus(userId, status) {
     status
   }
   return request({
-    url: '/system/user/changeStatus',
+    url: '/api/sys-api/system/user/changeStatus',
     method: 'put',
     data: data
   })
@@ -73,7 +73,7 @@ export function changeUserStatus(userId, status) {
 // 查询用户个人信息
 export function getUserProfile() {
   return request({
-    url: '/system/user/profile',
+    url: '/api/sys-api/system/user/profile',
     method: 'get'
   })
 }
@@ -81,7 +81,7 @@ export function getUserProfile() {
 // 修改用户个人信息
 export function updateUserProfile(data) {
   return request({
-    url: '/system/user/profile',
+    url: '/api/sys-api/system/user/profile',
     method: 'put',
     data: data
   })
@@ -94,7 +94,7 @@ export function updateUserPwd(oldPassword, newPassword) {
     newPassword
   }
   return request({
-    url: '/system/user/profile/updatePwd',
+    url: '/api/sys-api/system/user/profile/updatePwd',
     method: 'put',
     params: data
   })

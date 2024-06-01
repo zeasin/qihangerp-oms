@@ -1,6 +1,7 @@
 package com.qihang.security.service;
 
 
+import com.qihang.common.common.ServiceException;
 import com.qihang.common.config.RedisCache;
 import com.qihang.common.constant.UserConstants;
 import com.qihang.common.exception.UserNotExistsException;
@@ -78,7 +79,7 @@ public class SysLoginService
             else
             {
 //                AsyncManager.me().execute(AsyncFactory.recordLogininfor(username, Constants.LOGIN_FAIL, e.getMessage()));
-//                throw new ServiceException(e.getMessage());
+                throw new ServiceException(e.getMessage());
             }
         }
         finally

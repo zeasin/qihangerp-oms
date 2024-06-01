@@ -244,7 +244,8 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu>
         }
         else
         {
-            menus = menuMapper.selectMenuTreeByUserId(userId);
+//            menus = menuMapper.selectMenuTreeByUserId(userId);
+            menus = menuMapper.selectMenuTreeAll();
         }
         return getChildPerms(menus, 0);
     }
