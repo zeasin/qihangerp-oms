@@ -10,5 +10,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 * @createDate 2024-03-29 16:44:51
 */
 public interface WeiOrderService extends IService<WeiOrder> {
-    ResultVo<Integer> saveOrder(Integer shopId, WeiOrder order);
+    ResultVo<Integer> saveOrder(Long shopId, WeiOrder order);
 }

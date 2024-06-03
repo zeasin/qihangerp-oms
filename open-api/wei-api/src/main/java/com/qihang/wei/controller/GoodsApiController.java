@@ -1,18 +1,17 @@
 package com.qihang.wei.controller;
 
+import cn.qihangerp.open.wei.bo.GoodsDetailApiBo;
+import cn.qihangerp.open.wei.bo.GoodsListApiBo;
+import cn.qihangerp.open.wei.service.GoodsApiService;
+import cn.qihangerp.open.wei.vo.GoodsDetailVo;
+import cn.qihangerp.open.wei.vo.GoodsListVo;
 import com.alibaba.fastjson2.JSONObject;
 import com.qihang.common.common.AjaxResult;
 import com.qihang.common.common.ResultVoEnum;
 import com.qihang.common.enums.HttpStatus;
+import com.qihang.wei.bo.PullRequest;
 import com.qihang.wei.domain.WeiGoods;
 import com.qihang.wei.domain.WeiGoodsSku;
-import com.qihang.wei.openApi.ApiCommon;
-import com.qihang.wei.openApi.PullRequest;
-import com.qihang.wei.openApi.bo.GoodsDetailApiBo;
-import com.qihang.wei.openApi.bo.GoodsListApiBo;
-import com.qihang.wei.openApi.service.GoodsApiService;
-import com.qihang.wei.openApi.vo.GoodsDetailVo;
-import com.qihang.wei.openApi.vo.GoodsListVo;
 import com.qihang.wei.service.WeiGoodsService;
 import com.qihang.wei.utils.RemoteUtil;
 import lombok.AllArgsConstructor;
@@ -30,7 +29,7 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 public class GoodsApiController {
-    private final ApiCommon apiCommon;
+    private final WeiApiCommon apiCommon;
     private final WeiGoodsService weiGoodsService;
 
     @RequestMapping(value = "/pull_list", method = RequestMethod.POST)

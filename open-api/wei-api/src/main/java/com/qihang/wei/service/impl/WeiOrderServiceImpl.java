@@ -29,7 +29,7 @@ public class WeiOrderServiceImpl extends ServiceImpl<WeiOrderMapper, WeiOrder>
     private final WeiOrderItemMapper itemMapper;
 
     @Override
-    public ResultVo<Integer> saveOrder(Integer shopId, WeiOrder order) {
+    public ResultVo<Integer> saveOrder(Long shopId, WeiOrder order) {
         try {
             List<WeiOrder> orders = mapper.selectList(new LambdaQueryWrapper<WeiOrder>().eq(WeiOrder::getOrderId, order.getOrderId()));
             if (orders != null && orders.size() > 0) {

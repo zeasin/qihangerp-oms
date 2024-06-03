@@ -9,5 +9,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 * @createDate 2024-03-29 11:25:17
 */
 public interface WeiGoodsService extends IService<WeiGoods> {
-    int saveAndUpdateGoods(Integer shopId,WeiGoods goods);
+    int saveAndUpdateGoods(Long shopId,WeiGoods goods);
 }

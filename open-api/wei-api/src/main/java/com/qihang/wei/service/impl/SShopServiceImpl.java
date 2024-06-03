@@ -18,12 +18,12 @@ public class SShopServiceImpl extends ServiceImpl<SShopMapper, SShop>
     implements SShopService{
     private final SShopMapper mapper;
     @Override
-    public SShop selectShopById(Integer shopId) {
+    public SShop selectShopById(Long shopId) {
         return mapper.selectById(shopId);
     }
 
     @Override
-    public void updateSessionKey(Integer shopId, String sessionKey) {
+    public void updateSessionKey(Long shopId, String sessionKey) {
         SShop shop = new SShop();
         shop.setId(shopId);
         shop.setSessionkey(sessionKey);

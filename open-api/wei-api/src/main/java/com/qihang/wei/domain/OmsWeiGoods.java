@@ -1,22 +1,23 @@
 package com.qihang.wei.domain;
 
 import java.io.Serializable;
-import java.util.List;
-
-import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 
 /**
  * 
- * @TableName wei_goods
+ * @TableName oms_wei_goods
  */
 @Data
-public class WeiGoods implements Serializable {
+public class OmsWeiGoods implements Serializable {
     /**
      * 
      */
-    private String id;
-    private Long shopId;
+    private Long id;
+
+    /**
+     * 店铺id
+     */
+    private Integer shopId;
 
     /**
      * 平台商品id
@@ -87,7 +88,6 @@ public class WeiGoods implements Serializable {
      * 商品草稿最近一次修改时间
      */
     private Integer editTime;
-    @TableField(exist = false)
-    private List<WeiGoodsSku> skus;
+
     private static final long serialVersionUID = 1L;
 }

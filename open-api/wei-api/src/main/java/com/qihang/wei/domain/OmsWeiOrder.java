@@ -1,6 +1,7 @@
 package com.qihang.wei.domain;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -8,14 +9,18 @@ import lombok.Data;
 
 /**
  * 
- * @TableName wei_order
+ * @TableName oms_wei_order
  */
 @Data
-public class WeiOrder implements Serializable {
+public class OmsWeiOrder implements Serializable {
     /**
      * 
      */
     private Long id;
+
+    /**
+     * 店铺id
+     */
     private Long shopId;
 
     /**
@@ -160,8 +165,18 @@ public class WeiOrder implements Serializable {
      */
     private String settleInfo;
 
+    /**
+     * 订单审核状态（0待审核1已审核）
+     */
+    private Integer auditStatus;
+
+    /**
+     * 订单审核时间
+     */
+    private Date auditTime;
+
     @TableField(exist = false)
-    private List<WeiOrderItem> items;
+    private List<OmsWeiOrderItem> items;
 
     private static final long serialVersionUID = 1L;
 }

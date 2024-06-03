@@ -28,7 +28,7 @@ public class WeiGoodsServiceImpl extends ServiceImpl<WeiGoodsMapper, WeiGoods>
 //    private final OGoodsSkuMapper goodsSkuMapper;
 
     @Override
-    public int saveAndUpdateGoods(Integer shopId, WeiGoods goods) {
+    public int saveAndUpdateGoods(Long shopId, WeiGoods goods) {
         List<WeiGoods> goodsList = mapper.selectList(new LambdaQueryWrapper<WeiGoods>().eq(WeiGoods::getProductId, goods.getProductId()));
         if (goodsList != null && goodsList.size() > 0) {
             // 更新
@@ -42,7 +42,7 @@ public class WeiGoodsServiceImpl extends ServiceImpl<WeiGoodsMapper, WeiGoods>
             // 重新插入sku
             if(goods.getSkus()!=null) {
                 for (var sku : goods.getSkus()) {
-                    sku.setWeiGoodsId(goods.getId());
+                    sku.setWeiGoodsId(Long.parseLong(goods.getId()));
                     // 根据OuterId查找ERP系统中的skuid
 //                    if(StringUtils.isNotEmpty(sku.getSkuCode())) {
 //                        List<OGoodsSku> oGoodsSkus = goodsSkuMapper.selectList(new LambdaQueryWrapper<OGoodsSku>().eq(OGoodsSku::getSkuNum, sku.getSkuCode()));
@@ -64,7 +64,7 @@ public class WeiGoodsServiceImpl extends ServiceImpl<WeiGoodsMapper, WeiGoods>
             // 插入sku
             if(goods.getSkus()!=null) {
                 for (var sku : goods.getSkus()) {
-                    sku.setWeiGoodsId(goods.getId());
+                    sku.setWeiGoodsId(Long.parseLong(goods.getId()));
                     // 根据OuterId查找ERP系统中的skuid
 //                    if(StringUtils.isNotEmpty(sku.getSkuCode())) {
 //                        List<OGoodsSku> oGoodsSkus = goodsSkuMapper.selectList(new LambdaQueryWrapper<OGoodsSku>().eq(OGoodsSku::getSkuNum, sku.getSkuCode()));

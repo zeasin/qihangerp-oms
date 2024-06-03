@@ -7,16 +7,10 @@ import com.alibaba.fastjson2.JSONObject;
 import com.qihang.common.common.AjaxResult;
 import com.qihang.common.common.ResultVoEnum;
 import com.qihang.common.enums.HttpStatus;
+import com.qihang.wei.bo.PullRequest;
 import com.qihang.wei.domain.WeiGoods;
 import com.qihang.wei.domain.WeiGoodsSku;
-import com.qihang.wei.openApi.ApiCommon;
-import com.qihang.wei.openApi.PullRequest;
-import com.qihang.wei.openApi.bo.GoodsDetailApiBo;
-import com.qihang.wei.openApi.bo.GoodsListApiBo;
-import com.qihang.wei.openApi.service.GoodsApiService;
-import com.qihang.wei.openApi.vo.GoodsDetailVo;
-import com.qihang.wei.openApi.vo.GoodsListVo;
-import com.qihang.wei.utils.RemoteUtil;
+
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -32,7 +26,7 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 public class eWayBillController {
-    private final ApiCommon apiCommon;
+    private final WeiApiCommon apiCommon;
     @RequestMapping(value = "/get_deliver_list", method = RequestMethod.POST)
     public AjaxResult getDeliverList(@RequestBody PullRequest params) throws Exception {
         if (params.getShopId() == null || params.getShopId() <= 0) {
@@ -50,7 +44,7 @@ public class eWayBillController {
         String appKey = checkResult.getData().getAppKey();
         String appSecret = checkResult.getData().getAppSecret();
 
-        ApiResultVo<DeliveryVo> apiResultVo = EwaybillApiHelper.pullDeliveryList(appKey, appSecret, accessToken);
+        ApiResultVo<DeliveryVo> apiResultVo = EwaybillApiHelper.getDeliveryList(appKey, appSecret, accessToken);
 
 
         return AjaxResult.success(apiResultVo.getList());
