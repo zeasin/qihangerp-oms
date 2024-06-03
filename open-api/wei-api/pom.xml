@@ -76,6 +76,13 @@
 <!--            <version>1.18.30</version>-->
 <!--            <scope>provided</scope>-->
 <!--        </dependency>-->
+        <dependency>
+            <groupId>wei-api</groupId>
+            <artifactId>wei-api</artifactId>
+            <version>1.6.3</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/libs/wei-api-1.6.3.jar</systemPath>
+        </dependency>
     </dependencies>
 <!--    <dependencyManagement>-->
 <!--        <dependencies>-->

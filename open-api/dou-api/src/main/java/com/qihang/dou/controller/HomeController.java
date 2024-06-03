@@ -40,12 +40,12 @@ public class HomeController {
         param.setTrackingNo("435435");
         param.setPresellType(1L);
         param.setOrderType(1L);
-        param.setCreateTimeStart(1617355413L);
-        param.setCreateTimeEnd(1617355413L);
+//        param.setCreateTimeStart(1617355413L);
+//        param.setCreateTimeEnd(1617355413L);
         param.setAbnormalOrder(1L);
         param.setTradeType(1L);
-        param.setUpdateTimeStart(1617355413L);
-        param.setUpdateTimeEnd(1617355413L);
+        param.setUpdateTimeStart(1709222400L);
+        param.setUpdateTimeEnd(System.currentTimeMillis()/1000);
         param.setSize(20L);
         param.setPage(0L);
         param.setOrderBy("create_time");

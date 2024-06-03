@@ -4,17 +4,14 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.qihang.common.common.ResultVoEnum;
 import com.qihang.common.utils.StringUtils;
-import com.qihang.wei.domain.OGoodsSku;
 import com.qihang.wei.domain.WeiGoods;
 import com.qihang.wei.domain.WeiGoodsSku;
-import com.qihang.wei.mapper.OGoodsSkuMapper;
 import com.qihang.wei.mapper.WeiGoodsSkuMapper;
 import com.qihang.wei.service.WeiGoodsService;
 import com.qihang.wei.mapper.WeiGoodsMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -28,7 +25,7 @@ public class WeiGoodsServiceImpl extends ServiceImpl<WeiGoodsMapper, WeiGoods>
     implements WeiGoodsService{
     private final WeiGoodsMapper mapper;
     private final WeiGoodsSkuMapper skuMapper;
-    private final OGoodsSkuMapper goodsSkuMapper;
+//    private final OGoodsSkuMapper goodsSkuMapper;
 
     @Override
     public int saveAndUpdateGoods(Integer shopId, WeiGoods goods) {
@@ -47,13 +44,13 @@ public class WeiGoodsServiceImpl extends ServiceImpl<WeiGoodsMapper, WeiGoods>
                 for (var sku : goods.getSkus()) {
                     sku.setWeiGoodsId(goods.getId());
                     // 根据OuterId查找ERP系统中的skuid
-                    if(StringUtils.isNotEmpty(sku.getSkuCode())) {
-                        List<OGoodsSku> oGoodsSkus = goodsSkuMapper.selectList(new LambdaQueryWrapper<OGoodsSku>().eq(OGoodsSku::getSkuNum, sku.getSkuCode()));
-                        if(oGoodsSkus!=null && !oGoodsSkus.isEmpty()){
-                            sku.setErpGoodsId(oGoodsSkus.get(0).getErpGoodsId());
-                            sku.setErpGoodsSkuId(oGoodsSkus.get(0).getErpSkuId());
-                        }
-                    }
+//                    if(StringUtils.isNotEmpty(sku.getSkuCode())) {
+//                        List<OGoodsSku> oGoodsSkus = goodsSkuMapper.selectList(new LambdaQueryWrapper<OGoodsSku>().eq(OGoodsSku::getSkuNum, sku.getSkuCode()));
+//                        if(oGoodsSkus!=null && !oGoodsSkus.isEmpty()){
+//                            sku.setErpGoodsId(oGoodsSkus.get(0).getErpGoodsId());
+//                            sku.setErpGoodsSkuId(oGoodsSkus.get(0).getErpSkuId());
+//                        }
+//                    }
                     skuMapper.insert(sku);
                 }
             }
@@ -69,13 +66,13 @@ public class WeiGoodsServiceImpl extends ServiceImpl<WeiGoodsMapper, WeiGoods>
                 for (var sku : goods.getSkus()) {
                     sku.setWeiGoodsId(goods.getId());
                     // 根据OuterId查找ERP系统中的skuid
-                    if(StringUtils.isNotEmpty(sku.getSkuCode())) {
-                        List<OGoodsSku> oGoodsSkus = goodsSkuMapper.selectList(new LambdaQueryWrapper<OGoodsSku>().eq(OGoodsSku::getSkuNum, sku.getSkuCode()));
-                        if(oGoodsSkus!=null && !oGoodsSkus.isEmpty()){
-                            sku.setErpGoodsId(oGoodsSkus.get(0).getErpGoodsId());
-                            sku.setErpGoodsSkuId(oGoodsSkus.get(0).getErpSkuId());
-                        }
-                    }
+//                    if(StringUtils.isNotEmpty(sku.getSkuCode())) {
+//                        List<OGoodsSku> oGoodsSkus = goodsSkuMapper.selectList(new LambdaQueryWrapper<OGoodsSku>().eq(OGoodsSku::getSkuNum, sku.getSkuCode()));
+//                        if(oGoodsSkus!=null && !oGoodsSkus.isEmpty()){
+//                            sku.setErpGoodsId(oGoodsSkus.get(0).getErpGoodsId());
+//                            sku.setErpGoodsSkuId(oGoodsSkus.get(0).getErpSkuId());
+//                        }
+//                    }
 
                     skuMapper.insert(sku);
                 }

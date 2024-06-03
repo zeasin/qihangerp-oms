@@ -7,6 +7,9 @@ mybatis-plus:
 #  mapper-locations: classpath*:mappers/user/*.xml
 
 spring:
+  messages:
+    # 国际化资源文件路径
+    basename: i18n/messages
   cloud:
     loadbalancer:
       nacos:
