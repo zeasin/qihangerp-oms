@@ -13,7 +13,7 @@
       <el-table-column label="平台" align="center" prop="name" />
        <el-table-column label="AppKey" align="center" prop="appKey" />
        <el-table-column label="AppSecret" align="center" prop="appSecret" />
-       <el-table-column label="回调URL" align="center" prop="redirectUri" />
+       <el-table-column label="回调URL" align="center" prop="redirectUrl" />
       <el-table-column label="接口请求URL" align="center" prop="serverUrl" />
 <!--      <el-table-column label="描述" align="center" prop="remark" />-->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
@@ -51,17 +51,14 @@
         <el-form-item label="平台名" prop="name">
           <el-input v-model="form.name" placeholder="请输入平台名" />
         </el-form-item>
-        <el-form-item label="编码" prop="code">
-          <el-input v-model="form.code" placeholder="请输入平台编码" />
-        </el-form-item>
         <el-form-item label="AppKey" prop="appKey">
           <el-input v-model="form.appKey" placeholder="请输入AppKey" />
         </el-form-item>
         <el-form-item label="AppSecret" prop="appSecret">
           <el-input v-model="form.appSecret" placeholder="请输入AppSecret" />
         </el-form-item>
-        <el-form-item label="回调URL" prop="redirectUri">
-          <el-input v-model="form.redirectUri" placeholder="请输入回调URL" />
+        <el-form-item label="回调URL" prop="redirectUrl">
+          <el-input v-model="form.redirectUrl" placeholder="请输入回调URL" />
         </el-form-item>
         <el-form-item label="接口请求URL" prop="serverUrl">
           <el-input v-model="form.serverUrl" placeholder="请输入接口请求URL" />
@@ -78,31 +75,6 @@
       </div>
     </el-dialog>
 
-    <!-- API参数设置对话框 -->
-    <el-dialog :title="title" :visible.sync="apiOpen" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="120px">
-        <el-form-item label="appkey" prop="appkey">
-          <el-input v-model="form.appkey" placeholder="请输入appkey" />
-        </el-form-item>
-        <el-form-item label="appSercet" prop="appSercet">
-          <el-input v-model="form.appSercet" placeholder="请输入appSercet" />
-        </el-form-item>
-        <el-form-item label="API请求URL" prop="apiRequestUrl">
-          <el-input v-model="form.apiRequestUrl" placeholder="请输入API请求URL" />
-        </el-form-item>
-        <el-form-item label="卖家UserId" prop="sellerUserId">
-          <el-input v-model="form.sellerUserId" placeholder="请输入sellerUserId" />
-        </el-form-item>
-<!--        <el-form-item label="描述" prop="remark">-->
-<!--          <el-input type="textarea" v-model="form.remark" placeholder="请输入描述" />-->
-<!--        </el-form-item>-->
-
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm">确 定</el-button>
-        <el-button @click="cancel">取 消</el-button>
-      </div>
-    </el-dialog>
   </div>
 </template>
 
@@ -171,21 +143,11 @@ export default {
       this.form = {
         id: null,
         name: null,
-        nickName: null,
-        ename: null,
-        company: null,
-        type: null,
-        url: null,
-        orderNum: null,
-        isDelete: null,
-        isShow: null,
-        modifyOn: null,
-        remark: null,
-        sellerUserId: null,
-        sellerUserIdStr: null,
-        sessionKey: null,
         appkey: null,
-        appSercet: null
+        appSercet: null,
+        remark: null,
+        serverUrl: null,
+        redirectUrl: null,
       };
       this.resetForm("form");
     },
@@ -206,7 +168,7 @@ export default {
       getPlatform(id).then(response => {
         this.form = response.data;
         this.$nextTick(()=>{
-          this.form.type = response.data.type+'';
+          this.form.platform = response.data.platform+'';
         })
 
         this.open = true;

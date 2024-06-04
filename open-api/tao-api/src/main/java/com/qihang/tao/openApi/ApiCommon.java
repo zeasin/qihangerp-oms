@@ -5,9 +5,8 @@ import com.qihang.common.enums.HttpStatus;
 import com.qihang.common.enums.EnumShopType;
 import com.qihang.tao.common.ServerConfig;
 import com.qihang.common.api.ShopApiParams;
-import com.qihang.tao.domain.SShopSetting;
+import com.qihang.tao.service.SShopPlatformService;
 import com.qihang.tao.service.SShopService;
-import com.qihang.tao.service.SShopSettingService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -15,8 +14,8 @@ import org.springframework.util.StringUtils;
 @Component
 public class ApiCommon {
     private final SShopService shopService;
-    private final SShopSettingService platformService;
-    private final ServerConfig serverConfig;
+    private final SShopPlatformService platformService;
+//    private final ServerConfig serverConfig;
     /**
      * 更新前的检查
      *
@@ -32,12 +31,12 @@ public class ApiCommon {
             return ResultVo.error(HttpStatus.PARAMS_ERROR, "参数错误，没有找到店铺");
         }
 
-        if (shop.getType() != EnumShopType.TAO.getIndex()) {
+        if (shop.getPlatform() != EnumShopType.TAO.getIndex()) {
 //            return ApiResult.build(HttpStatus.PARAMS_ERROR, "参数错误，店铺不是淘系店铺");
             return ResultVo.error(HttpStatus.PARAMS_ERROR, "参数错误，店铺不是淘系店铺");
         }
 
-        SShopSetting platform = platformService.getById(EnumShopType.TAO.getIndex());
+        var platform = platformService.getById(EnumShopType.TAO.getIndex());
 
         if(!StringUtils.hasText(platform.getAppKey())) {
             return ResultVo.error(HttpStatus.PARAMS_ERROR, "平台配置错误，没有找到AppKey");
@@ -45,6 +44,9 @@ public class ApiCommon {
         if(!StringUtils.hasText(platform.getAppSecret())) {
             return ResultVo.error(HttpStatus.PARAMS_ERROR, "第三方平台配置错误，没有找到AppSercet");
         }
+        //        if(!StringUtils.hasText(platform.getServerUrl())) {
+//            return ResultVo.error(HttpStatus.PARAMS_ERROR, "第三方平台配置错误，没有找到ApiRequestUrl");
+//        }
 //        if(!StringUtils.hasText(platform.getServerUrl())) {
 //            return ResultVo.error(HttpStatus.PARAMS_ERROR, "第三方平台配置错误，没有找到ApiRequestUrl");
 //        }
@@ -55,11 +57,11 @@ public class ApiCommon {
         ShopApiParams params = new ShopApiParams();
         params.setAppKey(platform.getAppKey());
         params.setAppSecret(platform.getAppSecret());
-        params.setAccessToken(shop.getSessionkey());
-        params.setTokenRequestUrl(serverConfig.getUrl()+"/taoapi2/tao_oauth");
+        params.setAccessToken(shop.getAccessToken());
+        params.setTokenRequestUrl(platform.getRedirectUrl());
 //        params.setApiRequestUrl(platform.getServerUrl());
 
-        if (!StringUtils.hasText(shop.getSessionkey())) {
+        if (!StringUtils.hasText(shop.getAccessToken())) {
 
             return ResultVo.error(HttpStatus.UNAUTHORIZED, "Token已过期，请重新授权", params);
         }

@@ -1,10 +1,11 @@
 package com.qihang.tao.domain;
 
 import java.io.Serializable;
+import java.util.Date;
 import lombok.Data;
 
 /**
- * 数据中心-店铺
+ * 电商平台店铺表
  * @TableName s_shop
  */
 @Data
@@ -22,7 +23,7 @@ public class SShop implements Serializable {
     /**
      * 店铺别名
      */
-    private String nickname;
+    private String nickName;
 
     /**
      * 标识
@@ -37,32 +38,22 @@ public class SShop implements Serializable {
     /**
      * 对应第三方平台Id
      */
-    private Integer type;
+    private Integer platform;
 
     /**
      * 店铺url
      */
-    private String url;
+    private String shopUrl;
 
     /**
      * 排序
      */
-    private Integer ordernum;
+    private Integer orderNum;
 
     /**
      * 是否删除0否1是
      */
-    private Integer isdelete;
-
-    /**
-     * 是否显示(0：是1否）
-     */
-    private Integer isshow;
-
-    /**
-     * 更新时间
-     */
-    private Long modifyOn;
+    private Integer isDelete;
 
     /**
      * 描述
@@ -70,34 +61,29 @@ public class SShop implements Serializable {
     private String remark;
 
     /**
-     * 第三方平台店铺id，淘宝天猫开放平台使用
+     * 第三方平台店铺id
      */
-    private Long selleruserid;
+    private Long sellerShopId;
 
     /**
-     * 卖家userId
+     * Appkey(微信视频号小店专用)
      */
-    private String selleruseridstr;
+    private String appKey;
+
+    /**
+     * Appsercet(微信视频号小店专用)
+     */
+    private String appSercet;
 
     /**
      * 第三方平台sessionKey（access_token）
      */
-    private String sessionkey;
+    private String accessToken;
 
     /**
-     * Appkey
+     * accessToken到期（秒）
      */
-    private String appkey;
-
-    /**
-     * Appsercet
-     */
-    private String appsercet;
-
-    /**
-     * 到期
-     */
-    private Long expiresIn;
+    private Long accessExpiresIn;
 
     /**
      * access_token开始时间
@@ -115,9 +101,14 @@ public class SShop implements Serializable {
     private Long refreshTokenTimeout;
 
     /**
-     * 请求url
+     * 创建时间
      */
-    private String apiRequestUrl;
+    private Date createTime;
+
+    /**
+     * 更新时间
+     */
+    private Date updateTime;
 
     private static final long serialVersionUID = 1L;
 }

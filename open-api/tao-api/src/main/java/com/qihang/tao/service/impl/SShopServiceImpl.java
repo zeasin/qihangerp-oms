@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
 
 /**
 * @author TW
-* @description 针对表【s_shop(数据中心-店铺)】的数据库操作Service实现
-* @createDate 2024-05-10 10:13:15
+* @description 针对表【s_shop(电商平台店铺表)】的数据库操作Service实现
+* @createDate 2024-06-04 15:20:42
 */
 @AllArgsConstructor
 @Service
@@ -26,7 +26,7 @@ public class SShopServiceImpl extends ServiceImpl<SShopMapper, SShop>
     public void updateSessionKey(Long shopId, String sessionKey) {
         SShop shop = new SShop();
         shop.setId(shopId);
-        shop.setSessionkey(sessionKey);
+        shop.setAccessToken(sessionKey);
         mapper.updateById(shop);
     }
 }

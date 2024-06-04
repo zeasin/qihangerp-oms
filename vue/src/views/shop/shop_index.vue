@@ -9,8 +9,8 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-       <el-form-item label="平台" prop="type">
-        <el-select v-model="queryParams.type" placeholder="请选择平台" clearable>
+       <el-form-item label="平台" prop="platform">
+        <el-select v-model="queryParams.platform" placeholder="请选择平台" clearable>
          <el-option
             v-for="item in typeList"
             :key="item.id"
@@ -79,17 +79,17 @@
       <!-- <el-table-column label="店铺别名" align="center" prop="nickName" /> -->
       <!-- <el-table-column label="标识" align="center" prop="ename" /> -->
       <!-- <el-table-column label="店铺主体" align="center" prop="company" /> -->
-      <el-table-column label="平台" align="center" prop="type" >
+      <el-table-column label="平台" align="center" prop="platform" >
         <template slot-scope="scope">
-          <el-tag v-if="scope.row.type === 1">1688</el-tag>
-          <el-tag v-if="scope.row.type === 2">视频号小店</el-tag>
-          <el-tag v-if="scope.row.type === 3">京东</el-tag>
-          <el-tag v-if="scope.row.type === 4">淘系店铺</el-tag>
-          <el-tag v-if="scope.row.type === 5">拼多多</el-tag>
-          <el-tag v-if="scope.row.type === 6">抖店</el-tag>
-          <el-tag v-if="scope.row.type === 7">小红书</el-tag>
-          <el-tag v-if="scope.row.type === 8">快手小店</el-tag>
-          <el-tag v-if="scope.row.type === 99">其他</el-tag>
+          <el-tag v-if="scope.row.platform === 1">1688</el-tag>
+          <el-tag v-if="scope.row.platform === 2">视频号小店</el-tag>
+          <el-tag v-if="scope.row.platform === 3">京东</el-tag>
+          <el-tag v-if="scope.row.platform === 4">淘系店铺</el-tag>
+          <el-tag v-if="scope.row.platform === 5">拼多多</el-tag>
+          <el-tag v-if="scope.row.platform === 6">抖店</el-tag>
+          <el-tag v-if="scope.row.platform === 7">小红书</el-tag>
+          <el-tag v-if="scope.row.platform === 8">快手小店</el-tag>
+          <el-tag v-if="scope.row.platform === 99">其他</el-tag>
         </template>
       </el-table-column>
       <!-- <el-table-column label="店铺url" align="center" prop="url" /> -->
@@ -122,20 +122,14 @@
           >删除</el-button>
           </el-row>
           <el-button
-            v-if="scope.row.type!==3"
+            v-if="scope.row.platform !== 99"
             type="success"
             plain
             icon="el-icon-refresh"
             size="mini"
             @click="handleUpdateToken(scope.row)"
           >更新AccessToken</el-button>
-            <el-button
-              size="mini"
-              plain
-              type="primary"
-              icon="el-icon-edit"
-              @click="handleApiSetting(scope.row)"
-            >API参数设置</el-button>
+
 
         </template>
       </el-table-column>
@@ -151,12 +145,12 @@
 
     <!-- 添加或修改店铺对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+      <el-form ref="form" :model="form" :rules="rules" label-width="128px">
         <el-form-item label="店铺名" prop="name">
           <el-input v-model="form.name" placeholder="请输入店铺名" />
         </el-form-item>
-        <el-form-item label="平台" prop="type">
-          <el-select v-model="form.type" placeholder="请选择店铺平台">
+        <el-form-item label="平台" prop="platform">
+          <el-select v-model="form.platform" placeholder="请选择店铺平台">
            <el-option
               v-for="item in typeList"
               :key="item.id"
@@ -168,7 +162,15 @@
         <el-form-item label="店铺别名" prop="nickName">
           <el-input v-model="form.nickName" placeholder="请输入店铺别名" />
         </el-form-item>
-
+        <el-form-item label="平台店铺ID" prop="sellerShopId">
+          <el-input v-model="form.sellerShopId" placeholder="请输入平台ShopId" />
+        </el-form-item>
+        <el-form-item label="视频号appKey" prop="appKey" v-if="form.platform === 2">
+          <el-input v-model="form.appKey" placeholder="请输入视频号appKey" />
+        </el-form-item>
+        <el-form-item label="视频号appSercet" prop="appSercet" v-if="form.platform === 2">
+          <el-input v-model="form.appSercet" placeholder="请输入视频号appSercet" />
+        </el-form-item>
         <el-form-item label="描述" prop="remark">
           <el-input type="textarea" v-model="form.remark" placeholder="请输入描述" />
         </el-form-item>
@@ -180,31 +182,6 @@
       </div>
     </el-dialog>
 
-    <!-- API参数设置对话框 -->
-    <el-dialog :title="title" :visible.sync="apiOpen" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="120px">
-        <el-form-item label="appkey" prop="appkey">
-          <el-input v-model="form.appkey" placeholder="请输入appkey" />
-        </el-form-item>
-        <el-form-item label="appSercet" prop="appSercet">
-          <el-input v-model="form.appSercet" placeholder="请输入appSercet" />
-        </el-form-item>
-        <el-form-item label="API请求URL" prop="apiRequestUrl">
-          <el-input v-model="form.apiRequestUrl" placeholder="请输入API请求URL" />
-        </el-form-item>
-        <el-form-item label="卖家UserId" prop="sellerUserId">
-          <el-input v-model="form.sellerUserId" placeholder="请输入sellerUserId" />
-        </el-form-item>
-<!--        <el-form-item label="描述" prop="remark">-->
-<!--          <el-input type="textarea" v-model="form.remark" placeholder="请输入描述" />-->
-<!--        </el-form-item>-->
-
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm">确 定</el-button>
-        <el-button @click="cancel">取 消</el-button>
-      </div>
-    </el-dialog>
 
     <el-dialog :title="title" :visible.sync="authOpen" width="500px" append-to-body>
       <el-form ref="tokenForm" :model="tokenForm"  :rules="rules" label-width="80px">
@@ -231,7 +208,10 @@
 
 <script>
 import {listShop, getShop, delShop, addShop, updateShop, listPlatform} from "@/api/shop/shop";
+import {getJdOAuthUrl, getJdToken} from "@/api/jd/shop";
+import {getTaoOAuthUrl, getTaoToken} from "@/api/tao/shop";
 import {float} from "quill/ui/icons";
+import {getPddOAuthUrl,getPddToken} from "@/api/pdd/shop";
 export default {
   name: "Shop",
   data() {
@@ -262,11 +242,11 @@ export default {
         pageNum: 1,
         pageSize: 10,
         name: null,
-        type: null
+        platform: null
       },
       // 表单参数
       form: {
-        type:null
+        platform:null
       },
       // 获取token表单
       tokenForm:{
@@ -278,11 +258,8 @@ export default {
         name: [
           { required: true, message: "店铺名不能为空", trigger: "blur" }
         ],
-        type: [{ required: true, message: "请选择平台", trigger: "change" }],
-        appkey: [{ required: true, message: "不能为空", trigger: "change" }],
-        appSercet: [{ required: true, message: "不能为空", trigger: "change" }],
-        apiRequestUrl: [{ required: true, message: "不能为空", trigger: "change" }],
-        sellerUserId: [{ required: true, message: "不能为空", trigger: "change" }],
+        platform: [{ required: true, message: "请选择平台", trigger: "change" }],
+        sellerShopId: [{ required: true, message: "不能为空", trigger: "change" }],
         code: [{ required: true, message: "不能为空", trigger: "change" }],
 
       }
@@ -313,6 +290,7 @@ export default {
     cancel() {
       this.open = false;
       this.apiOpen = false;
+      this.authOpen = false
       this.reset();
     },
     // 表单重置
@@ -375,15 +353,7 @@ export default {
       });
     },
 
-    handleApiSetting(row) {
-      this.reset();
-      const id = row.id || this.ids
-      getShop(id).then(response => {
-        this.form = response.data;
-        this.apiOpen = true;
-        this.title = "API参数设置";
-      });
-    },
+
     /** 提交按钮 */
     submitForm() {
       this.$refs["form"].validate(valid => {
@@ -417,35 +387,64 @@ export default {
     },
     handleUpdateToken(row){
       console.log("获取token",row)
-      if(row.type === 2 || row.type === 5){
+      if(row.platform === 2){
+        this.$modal.msgSuccess("视频号小店后台会自动获取token，无需手动授权！");
+      }
+      if(row.platform === 3){
         getJdOAuthUrl({shopId:row.id}).then(response => {
           console.log("获取token=====jd ",response)
           this.authOpen = true;
           this.title = "更新店铺授权";
           this.tokenForm.url = response.data
           this.tokenForm.shopId = row.id
-          this.tokenForm.shopType = row.type
+          this.tokenForm.platform = row.platform
         })
-      }else if(row.type ===1){
+      }else if(row.platform === 4){
         getTaoOAuthUrl({shopId:row.id}).then(response => {
           console.log("获取token=====tao ",response)
           this.authOpen = true;
           this.title = "更新店铺授权";
           this.tokenForm.url = response.data
           this.tokenForm.shopId = row.id
-          this.tokenForm.shopType = row.type
+          this.tokenForm.platform = row.platform
         })
-      }else if(row.type ===4){
-        getOAuthUrl({shopId:row.id}).then(response => {
+      }else if(row.platform ===5){
+        getPddOAuthUrl({shopId:row.id}).then(response => {
           console.log("获取token=====pdd ",response)
           this.authOpen = true;
           this.title = "更新店铺授权";
           this.tokenForm.url = response.data
           this.tokenForm.shopId = row.id
-          this.tokenForm.shopType = row.type
+          this.tokenForm.platform = row.platform
         })
+      }else if(row.platform === 6){
+        this.$modal.msgSuccess("抖店后台会自动获取token，无需手动授权！");
+      }else if(row.platform === 7){
+        this.$modal.msgError("还未实现小红书接入！敬请期待！");
+      }else if(row.platform === 8){
+        this.$modal.msgError("还未实现快手小店接入！敬请期待！");
       }
 
+    },
+    getTokenSubmit(){
+      this.$refs["tokenForm"].validate(valid => {
+        if (valid) {
+          console.log("=====更新token=====",this.tokenForm)
+          if(this.tokenForm.platform === 3){
+            getJdToken(this.tokenForm).then(response => {
+              this.authOpen = false
+              this.$modal.msgSuccess("授权成功");
+
+            });
+          }else if(this.tokenForm.platform === 4){
+            getTaoToken(this.tokenForm).then(response => {
+              this.authOpen = false
+              this.$modal.msgSuccess("授权成功");
+
+            });
+          }
+        }
+      })
     },
   }
 };

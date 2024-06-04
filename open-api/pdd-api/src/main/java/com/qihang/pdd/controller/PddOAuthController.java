@@ -4,18 +4,15 @@ package com.qihang.pdd.controller;
 import com.pdd.pop.sdk.http.PopAccessTokenClient;
 import com.pdd.pop.sdk.http.token.AccessTokenResponse;
 import com.qihang.common.enums.EnumShopType;
-import com.qihang.pdd.domain.SysPlatform;
-import com.qihang.pdd.service.SysPlatformService;
-import com.qihang.pdd.service.SysShopService;
+import com.qihang.pdd.service.SShopPlatformService;
+import com.qihang.pdd.service.SShopService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+
 import java.io.IOException;
 import java.net.URLEncoder;
 
@@ -23,8 +20,8 @@ import java.net.URLEncoder;
 @RequestMapping("/pdd_api2")
 @Controller
 public class PddOAuthController {
-    private final SysShopService shopService;
-    private final SysPlatformService platformService;
+    private final SShopService shopService;
+    private final SShopPlatformService platformService;
 //    @Autowired
 //    private IShopService shopService;
 //    @Autowired
@@ -34,12 +31,12 @@ public class PddOAuthController {
     @RequestMapping("/oauth")
     public String oauth(OpenApiRequest reqData) {
 //        String returnUrl = serverConfig.getUrl() + "/pdd_api/getToken&state="+req.getParameter("shopId");
-        var shop = shopService.selectShopById(reqData.getShopId());
-        SysPlatform platform = platformService.selectById(EnumShopType.PDD.getIndex());
+//        var shop = shopService.selectShopById(reqData.getShopId());
+        var platform = platformService.getById(EnumShopType.PDD.getIndex());
         String appKey = platform.getAppKey();
         String appSercet = platform.getAppSecret();
 
-        String url = "https://mms.pinduoduo.com/open.html?response_type=code&client_id=" + appKey + "&redirect_uri=" + URLEncoder.encode(platform.getRedirectUri());
+        String url = "https://mms.pinduoduo.com/open.html?response_type=code&client_id=" + appKey + "&redirect_uri=" + URLEncoder.encode(platform.getRedirectUrl());
         return url;
     }
 
@@ -50,7 +47,7 @@ public class PddOAuthController {
 
         Integer shopId =Integer.parseInt(req.getParameter("state"));
         var shop = shopService.selectShopById(shopId);
-        SysPlatform platform = platformService.selectById(EnumShopType.PDD.getIndex());
+        var platform = platformService.getById(EnumShopType.PDD.getIndex());
         String appKey = platform.getAppKey();
         String appSercet = platform.getAppSecret();
 

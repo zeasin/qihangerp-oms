@@ -1,16 +1,15 @@
 package com.qihang.oms.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.qihang.common.common.AjaxResult;
 import com.qihang.common.common.PageQuery;
 import com.qihang.common.common.PageResult;
 import com.qihang.common.common.TableDataInfo;
 import com.qihang.oms.domain.SShop;
-import com.qihang.oms.domain.SShopSetting;
+import com.qihang.oms.domain.SShopPlatform;
 import com.qihang.oms.domain.SysLogisticsCompany;
+import com.qihang.oms.service.SShopPlatformService;
 import com.qihang.oms.service.SShopService;
-import com.qihang.oms.service.SShopSettingService;
 import com.qihang.oms.service.SysLogisticsCompanyService;
 import com.qihang.security.common.BaseController;
 import lombok.AllArgsConstructor;
@@ -18,6 +17,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -32,7 +32,7 @@ import java.util.List;
 public class ShopController extends BaseController {
     private final SysLogisticsCompanyService logisticsCompanyService;
     private final SShopService shopService;
-    private final SShopSettingService shopSettingService;
+    private final SShopPlatformService platformService;
 
     /**
      * 查询店铺列表logistics
@@ -41,7 +41,7 @@ public class ShopController extends BaseController {
     @GetMapping("/list")
     public TableDataInfo list(SShop shop)
     {
-        LambdaQueryWrapper<SShop> qw = new LambdaQueryWrapper<SShop>().eq(shop.getType()!=null,SShop::getType,shop.getType());
+        LambdaQueryWrapper<SShop> qw = new LambdaQueryWrapper<SShop>().eq(shop.getPlatform()!=null,SShop::getPlatform,shop.getPlatform());
         List<SShop> list = shopService.list(qw);
         return getDataTable(list);
     }
@@ -49,7 +49,7 @@ public class ShopController extends BaseController {
     @GetMapping("/platformList")
     public TableDataInfo platformList()
     {
-        List<SShopSetting> list = shopSettingService.list();
+        List<SShopPlatform> list = platformService.list();
         return getDataTable(list);
     }
 
@@ -66,7 +66,7 @@ public class ShopController extends BaseController {
     @GetMapping(value = "/platform/{id}")
     public AjaxResult getPlatform(@PathVariable("id") Long id)
     {
-        return success(shopService.getById(id));
+        return success(platformService.getById(id));
     }
 
     /**
@@ -76,7 +76,7 @@ public class ShopController extends BaseController {
     @PostMapping("/shop")
     public AjaxResult add(@RequestBody SShop shop)
     {
-        shop.setModifyOn(System.currentTimeMillis()/1000);
+        shop.setCreateTime(new Date());
         return toAjax(shopService.save(shop));
     }
 
@@ -87,6 +87,7 @@ public class ShopController extends BaseController {
     @PutMapping("/shop")
     public AjaxResult edit(@RequestBody SShop shop)
     {
+        shop.setUpdateTime(new Date());
         return toAjax(shopService.updateById(shop));
     }
 
@@ -96,9 +97,9 @@ public class ShopController extends BaseController {
      * @return
      */
     @PutMapping("/platform")
-    public AjaxResult edit(@RequestBody SShopSetting platform)
+    public AjaxResult edit(@RequestBody SShopPlatform platform)
     {
-        return toAjax(shopSettingService.updateById(platform));
+        return toAjax(platformService.updateById(platform));
     }
 
     /**

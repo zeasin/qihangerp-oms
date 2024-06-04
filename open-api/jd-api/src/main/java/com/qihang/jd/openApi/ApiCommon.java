@@ -4,9 +4,9 @@ import com.qihang.common.api.ShopApiParams;
 import com.qihang.common.common.ResultVo;
 import com.qihang.common.enums.EnumShopType;
 import com.qihang.common.enums.HttpStatus;
-import com.qihang.jd.domain.SShopSetting;
+import com.qihang.jd.domain.SShopPlatform;
+import com.qihang.jd.service.SShopPlatformService;
 import com.qihang.jd.service.SShopService;
-import com.qihang.jd.service.SShopSettingService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -15,7 +15,7 @@ import org.springframework.util.StringUtils;
 @Component
 public class ApiCommon {
     private final SShopService shopService;
-    private final SShopSettingService platformService;
+    private final SShopPlatformService platformService;
 //    private final ServerConfig serverConfig;
     /**
      * 更新前的检查
@@ -31,10 +31,10 @@ public class ApiCommon {
             return ResultVo.error(HttpStatus.PARAMS_ERROR, "参数错误，没有找到店铺");
         }
 
-        if (shop.getType() != EnumShopType.JD.getIndex()) {
+        if (shop.getPlatform() != EnumShopType.JD.getIndex()) {
             return ResultVo.error(HttpStatus.PARAMS_ERROR, "参数错误，店铺不是JD店铺");
         }
-        SShopSetting platform = platformService.getById(EnumShopType.JD.getIndex());
+        SShopPlatform platform = platformService.getById(EnumShopType.JD.getIndex());
 
         if (!StringUtils.hasText(platform.getAppKey())) {
             return ResultVo.error(HttpStatus.PARAMS_ERROR, "平台配置错误，没有找到AppKey");
@@ -56,12 +56,12 @@ public class ApiCommon {
         ShopApiParams params = new ShopApiParams();
         params.setAppKey(platform.getAppKey());
         params.setAppSecret(platform.getAppSecret());
-        params.setAccessToken(shop.getSessionkey());
+        params.setAccessToken(shop.getAccessToken());
 //        params.setTokenRequestUrl(platform.getRedirectUri());
 //        params.setApiRequestUrl(platform.getServerUrl());
 //        params.setServerUrl(platform.getServerUrl());
-        params.setSellerId(shop.getSelleruserid().toString());
-        if (!StringUtils.hasText(shop.getSessionkey())) {
+        params.setSellerId(shop.getSellerShopId().toString());
+        if (!StringUtils.hasText(shop.getAccessToken())) {
 
             return ResultVo.error(HttpStatus.UNAUTHORIZED, "Token已过期，请重新授权", params);
         }
