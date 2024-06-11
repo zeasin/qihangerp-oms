@@ -55,17 +55,17 @@
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="goodsList" @selection-change="handleSelectionChange">
+    <el-table v-loading="loading" :data="goodsList" >
       <!-- <el-table-column type="selection" width="55" align="center" /> -->
 <!--      <el-table-column label="ID" align="center" prop="id" />-->
       <el-table-column label="商品ID" align="center" prop="wareId" />
       <el-table-column label="Sku Id" align="center" prop="skuId" />
       <el-table-column label="sku名称" align="center" prop="skuName" />
-      <el-table-column label="图片" align="center" prop="logo" width="100">
-        <template slot-scope="scope">
-          <image-preview :src="scope.row.logo" :width="50" :height="50"/>
-        </template>
-      </el-table-column>
+<!--      <el-table-column label="图片" align="center" prop="logo" width="100">-->
+<!--        <template slot-scope="scope">-->
+<!--          <image-preview :src="scope.row.logo" :width="50" :height="50"/>-->
+<!--        </template>-->
+<!--      </el-table-column>-->
 
 <!--      <el-table-column label="店铺" align="center" prop="categoryId" >-->
 <!--        <template slot-scope="scope">-->

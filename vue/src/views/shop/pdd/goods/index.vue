@@ -55,7 +55,7 @@
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="goodsList" @selection-change="handleSelectionChange">
+    <el-table v-loading="loading" :data="goodsList">
       <!-- <el-table-column type="selection" width="55" align="center" /> -->
 <!--      <el-table-column label="ID" align="center" prop="id" />-->
       <el-table-column label="商品ID" align="center" prop="goodsId" />
@@ -74,7 +74,7 @@
         </template>
       </el-table-column>
        <el-table-column label="商家编码" align="center" prop="outerId" />
-
+      <el-table-column label="ERP SKU ID" align="center" prop="erpGoodsSkuId" />
       <el-table-column label="状态" align="center" prop="isSkuOnsale" >
         <template slot-scope="scope">
           <el-tag size="small" v-if="scope.row.isSkuOnsale === 1">上架中</el-tag>
@@ -106,8 +106,8 @@
     <!-- 添加或修改商品管理对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="120px">
-        <el-form-item label="ERP商品SkuId" prop="erpSkuId">
-          <el-input v-model.number="form.erpSkuId" placeholder="请输入ERP商品SkuId" />
+        <el-form-item label="ERP商品SkuId" prop="erpGoodsSkuId">
+          <el-input v-model.number="form.erpGoodsSkuId" placeholder="请输入ERP商品SkuId" />
         </el-form-item>
 
       </el-form>
@@ -123,7 +123,7 @@
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 
 import {listShop} from "@/api/shop/shop";
-import {listGoodsSku,pullGoodsList} from "@/api/pdd/goods";
+import {listGoodsSku,pullGoodsList,getGoodsSku,linkErpGoodsSkuId} from "@/api/pdd/goods";
 
 import {MessageBox} from "element-ui";
 import {isRelogin} from "@/utils/request";
@@ -168,7 +168,7 @@ export default {
         id: [
           { required: true, message: "不能为空", trigger: "change" }
         ],
-        erpSkuId: [
+        erpGoodsSkuId: [
           { required: true, message: "不能为空", trigger: "blur" }
         ],
       }

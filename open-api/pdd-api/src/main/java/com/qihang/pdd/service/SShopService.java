@@ -9,6 +9,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 * @createDate 2024-06-04 15:29:29
 */
 public interface SShopService extends IService<SShop> {
-    SShop selectShopById(Integer shopId);
+    SShop selectShopById(Long shopId);
     void updateSessionKey(Integer shopId, String ownerId, String sessionKey, String refreshToken, Long expiresIn);
 }

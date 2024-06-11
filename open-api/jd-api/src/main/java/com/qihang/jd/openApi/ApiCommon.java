@@ -63,7 +63,7 @@ public class ApiCommon {
         params.setSellerId(shop.getSellerShopId().toString());
         if (!StringUtils.hasText(shop.getAccessToken())) {
 
-            return ResultVo.error(HttpStatus.UNAUTHORIZED, "Token已过期，请重新授权", params);
+            return ResultVo.error(HttpStatus.UNAUTHORIZED1, "Token已过期，请重新授权", params);
         }
 
         /****************先查询卖家对不对***************/

@@ -18,7 +18,7 @@ public class SShopServiceImpl extends ServiceImpl<SShopMapper, SShop>
     implements SShopService{
     private SShopMapper mapper;
     @Override
-    public SShop selectShopById(Integer shopId) {
+    public SShop selectShopById(Long shopId) {
         return mapper.selectById(shopId);
     }
 
