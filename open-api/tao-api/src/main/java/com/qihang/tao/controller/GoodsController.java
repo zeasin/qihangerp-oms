@@ -8,6 +8,7 @@ import com.qihang.common.common.PageResult;
 import com.qihang.common.common.TableDataInfo;
 import com.qihang.tao.common.BaseController;
 import com.qihang.tao.domain.OmsTaoGoods;
+import com.qihang.tao.domain.OmsTaoGoodsSku;
 import com.qihang.tao.domain.bo.TaoGoodsBo;
 import com.qihang.tao.domain.vo.TaoGoodsSkuListVo;
 import com.qihang.tao.service.OmsTaoGoodsService;
@@ -44,14 +45,15 @@ public class GoodsController extends BaseController {
     {
         return AjaxResult.success(skuService.getById(id));
     }
-//    @PostMapping(value = "/sku/linkErp")
-//    public AjaxResult linkErp(@RequestBody LinkErpGoodsSkuBo bo)
-//    {
-//        TaoGoodsSku sku = new TaoGoodsSku();
-//        sku.setId(bo.getId());
-//        sku.setErpGoodsSkuId(Long.parseLong(bo.getErpGoodsSkuId()));
-//        skuService.updateById(sku);
-//        return success();
-//    }
+
+    @PostMapping(value = "/sku/linkErp")
+    public AjaxResult linkErp(@RequestBody LinkErpGoodsSkuBo bo)
+    {
+        OmsTaoGoodsSku sku = new OmsTaoGoodsSku();
+        sku.setId(bo.getId());
+        sku.setErpGoodsSkuId(Long.parseLong(bo.getErpGoodsSkuId()));
+        skuService.updateById(sku);
+        return success();
+    }
 
 }

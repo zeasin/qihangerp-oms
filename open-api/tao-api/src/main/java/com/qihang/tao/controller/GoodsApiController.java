@@ -73,103 +73,87 @@ public class GoodsApiController extends BaseController {
         int insertSuccess = 0;//新增成功的订单
         int totalError = 0;
         int hasExistOrder = 0;//已存在的订单数
+        try {
+            ApiResultVo<GoodsItem> goodsItemApiResultVo = GoodsApiHelper.pullGoodsList(appKey, appSecret, sessionKey);
+            if (goodsItemApiResultVo.getCode() == ApiResultVoEnum.SUCCESS.getIndex()) {
+                //成功
+                if (goodsItemApiResultVo.getList() != null) {
+                    for (var g : goodsItemApiResultVo.getList()) {
+                        OmsTaoGoods goods = new OmsTaoGoods();
+                        // TODO:转换goods
+                        goods.setNumIid(g.getNum_iid());
+                        goods.setTitle(g.getTitle());
+                        goods.setType(g.getType());
+                        goods.setCid(g.getCid());
+                        goods.setPicUrl(g.getPic_url());
+                        goods.setNum(g.getNum());
+                        goods.setValidThru(g.getValid_thru());
+                        goods.setHasDiscount(g.isHas_discount() + "");
+                        goods.setHasInvoice(g.isHas_invoice() + "");
+                        goods.setHasWarranty(g.isHas_warranty() + "");
+                        goods.setHasShowcase(g.isHas_showcase() + "");
+                        goods.setModified(DateUtil.stringtoDate(g.getModified()));
+                        goods.setDelistTime(StringUtils.isEmpty(g.getDelist_time()) ? null : DateUtil.stringtoDate(g.getDelist_time()));
+                        goods.setPostageId(g.getPostage_id());
+                        goods.setOuterId(g.getOuter_id());
+                        goods.setListTime(StringUtils.isEmpty(g.getList_time()) ? null : DateUtil.stringtoDate(g.getList_time()));
+                        goods.setPrice(g.getPrice());
+                        goods.setSoldQuantity(g.getSold_quantity());
+                        goods.setShopId(req.getShopId());
+                        List<OmsTaoGoodsSku> skuList = new ArrayList<>();
+                        for (var s : g.getSkuList()) {
+                            OmsTaoGoodsSku sku = new OmsTaoGoodsSku();
+                            sku.setShopId(req.getShopId());
+                            sku.setNumIid(s.getNum_iid());
+                            sku.setIid(s.getIid());
+                            sku.setSkuId(s.getSku_id());
+                            sku.setProperties(s.getProperties());
+                            sku.setPropertiesName(s.getProperties_name());
+                            sku.setQuantity(s.getQuantity());
+                            sku.setSkuSpecId(s.getSku_spec_id() + "");
+                            sku.setPrice(StringUtils.isEmpty(s.getPrice()) ? null : Double.parseDouble(s.getPrice()));
+                            sku.setOuterId(s.getOuter_id());
+                            sku.setCreated(StringUtils.isEmpty(s.getCreated()) ? null : DateUtil.stringtoDate(s.getCreated()));
+                            sku.setModified(StringUtils.isEmpty(s.getModified()) ? null : DateUtil.stringtoDate(s.getModified()));
+                            sku.setStatus(s.getStatus());
+                            sku.setCreateTime(new Date());
+                            skuList.add(sku);
+                        }
+                        goods.setSkuList(skuList);
 
-        ApiResultVo<GoodsItem> goodsItemApiResultVo = GoodsApiHelper.pullGoodsList(appKey, appSecret, sessionKey);
-        if(goodsItemApiResultVo.getCode() == ApiResultVoEnum.SUCCESS.getIndex()){
-            //成功
-            if(goodsItemApiResultVo.getList()!=null){
-                for (var g:goodsItemApiResultVo.getList()) {
-                    OmsTaoGoods goods = new OmsTaoGoods();
-                    // TODO:转换goods
-                    goods.setNumIid(g.getNum_iid());
-                    goods.setTitle(g.getTitle());
-                    goods.setType(g.getType());
-                    goods.setCid(g.getCid());
-                    goods.setPicUrl(g.getPic_url());
-                    goods.setNum(g.getNum());
-                    goods.setValidThru(g.getValid_thru());
-                    goods.setHasDiscount(g.isHas_discount()+"");
-                    goods.setHasInvoice(g.isHas_invoice()+"");
-                    goods.setHasWarranty(g.isHas_warranty()+"");
-                    goods.setHasShowcase(g.isHas_showcase()+"");
-                    goods.setModified(DateUtil.stringtoDate(g.getModified()));
-                    goods.setDelistTime(StringUtils.isEmpty(g.getDelist_time())?null:DateUtil.stringtoDate(g.getDelist_time()));
-                    goods.setPostageId(g.getPostage_id());
-                    goods.setOuterId(g.getOuter_id());
-                    goods.setListTime(StringUtils.isEmpty(g.getList_time())?null:DateUtil.stringtoDate(g.getList_time()));
-                    goods.setPrice(g.getPrice());
-                    goods.setSoldQuantity(g.getSold_quantity());
-                    goods.setShopId(req.getShopId());
-                    List<OmsTaoGoodsSku> skuList = new ArrayList<>();
-                    for (var s:g.getSkuList()) {
-                        OmsTaoGoodsSku sku = new OmsTaoGoodsSku();
-                        sku.setShopId(req.getShopId());
-                        sku.setNumIid(s.getNum_iid());
-                        sku.setIid(s.getIid());
-                        sku.setSkuId(s.getSku_id());
-                        sku.setProperties(s.getProperties());
-                        sku.setPropertiesName(s.getProperties_name());
-                        sku.setQuantity(s.getQuantity());
-                        sku.setSkuSpecId(s.getSku_spec_id()+"");
-                        sku.setPrice(StringUtils.isEmpty(s.getPrice())?null:Double.parseDouble(s.getPrice()));
-                        sku.setOuterId(s.getOuter_id());
-                        sku.setCreated(StringUtils.isEmpty(s.getCreated())?null:DateUtil.stringtoDate(s.getCreated()));
-                        sku.setModified(StringUtils.isEmpty(s.getModified())?null: DateUtil.stringtoDate(s.getModified()));
-                        sku.setStatus(s.getStatus());
-                        sku.setCreateTime(new Date());
-                        skuList.add(sku);
-                    }
-                    goods.setSkuList(skuList);
-
-                    int result = goodsService.saveAndUpdateGoods(req.getShopId(), goods);
-                    if (result == ResultVoEnum.DataExist.getIndex()) {
-                        //已经存在
-                        hasExistOrder++;
-                    } else if (result == ResultVoEnum.SUCCESS.getIndex()) {
-                        insertSuccess++;
-                    }else {
-                        totalError++;
+                        int result = goodsService.saveAndUpdateGoods(req.getShopId(), goods);
+                        if (result == ResultVoEnum.DataExist.getIndex()) {
+                            //已经存在
+                            hasExistOrder++;
+                        } else if (result == ResultVoEnum.SUCCESS.getIndex()) {
+                            insertSuccess++;
+                        } else {
+                            totalError++;
+                        }
                     }
                 }
-            }
-            String msg = "成功，总共找到：" + goodsItemApiResultVo.getTotalRecords() + "条商品数据，新增：" + insertSuccess + "条，添加错误：" + totalError + "条，更新：" + hasExistOrder + "条";
-            logger.info(msg);
-            SysShopPullLogs logs = new SysShopPullLogs();
-            logs.setShopId(req.getShopId());
-            logs.setShopType(EnumShopType.TAO.getIndex());
-            logs.setPullType("GOODS");
-            logs.setPullWay("主动拉取");
-            logs.setPullParams("{PageNo:1,PageSize:100}");
-            logs.setPullResult("{successTotal:"+goodsItemApiResultVo.getTotalRecords()+"}");
-            logs.setPullTime(currDateTime);
-            logs.setDuration(System.currentTimeMillis() - startTime);
-            pullLogsService.save(logs);
+                String msg = "成功，总共找到：" + goodsItemApiResultVo.getTotalRecords() + "条商品数据，新增：" + insertSuccess + "条，添加错误：" + totalError + "条，更新：" + hasExistOrder + "条";
+                logger.info(msg);
+                SysShopPullLogs logs = new SysShopPullLogs();
+                logs.setShopId(req.getShopId());
+                logs.setShopType(EnumShopType.TAO.getIndex());
+                logs.setPullType("GOODS");
+                logs.setPullWay("主动拉取");
+                logs.setPullParams("{PageNo:1,PageSize:100}");
+                logs.setPullResult("{successTotal:" + goodsItemApiResultVo.getTotalRecords() + "}");
+                logs.setPullTime(currDateTime);
+                logs.setDuration(System.currentTimeMillis() - startTime);
+                pullLogsService.save(logs);
 //        return new ApiResult<>(EnumResultVo.SUCCESS.getIndex(), msg);
-            return AjaxResult.success(msg);
-        }else{
-            return AjaxResult.error(goodsItemApiResultVo.getCode(),goodsItemApiResultVo.getMsg());
+                return AjaxResult.success(msg);
+            } else {
+                return AjaxResult.error(goodsItemApiResultVo.getCode(), goodsItemApiResultVo.getMsg());
+            }
+        }catch (IllegalStateException e){
+            e.printStackTrace();
+            log.info("链接超时！！！！");
+            return AjaxResult.error("链接超时！！！！");
         }
-//        ApiResultVo<TaoGoods> resultVo = goodsApiService.pullGoodsList(req.getShopId(), url, appKey, appSecret, sessionKey);
-
-
-//        for (var goods:resultVo.getList()) {
-//            int result = goodsService.saveAndUpdateGoods(req.getShopId(), goods);
-//            if (result == ResultVoEnum.DataExist.getIndex()) {
-//                //已经存在
-//                hasExistOrder++;
-//            } else if (result == ResultVoEnum.SUCCESS.getIndex()) {
-//                insertSuccess++;
-//            }else {
-//                totalError++;
-//            }
-//        }
-
-
-
-//        String msg = "成功，总共找到：" + resultVo.getTotalRecords() + "条商品数据";
-//        logger.info(msg);
-////        return new ApiResult<>(EnumResultVo.SUCCESS.getIndex(), msg);
-//        return AjaxResult.success(msg);
     }
 
 }

@@ -174,7 +174,7 @@ export default {
     };
   },
   created() {
-    listShop({type: 2}).then(response => {
+    listShop({platform: 2}).then(response => {
       this.shopList = response.rows;
       if (this.shopList && this.shopList.length > 0) {
         this.queryParams.shopId = this.shopList[0].id

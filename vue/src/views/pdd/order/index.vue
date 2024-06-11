@@ -882,7 +882,7 @@ export default {
     };
   },
   created() {
-     listShop({type:5}).then(response => {
+     listShop({platform:5}).then(response => {
         this.shopList = response.rows;
 
       });

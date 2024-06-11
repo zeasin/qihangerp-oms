@@ -27,7 +27,7 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      
+
       <el-form-item label="拼多多商品id" prop="goodsId">
         <el-input
           v-model="queryParams.goodsId"
@@ -36,7 +36,7 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      
+
       <el-form-item label="商品编码" prop="goodsNumber">
         <el-input
           v-model="queryParams.goodsNumber"
@@ -45,7 +45,7 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-     
+
       <el-form-item label="快递单号" prop="trackingNumber">
         <el-input
           v-model="queryParams.trackingNumber"
@@ -54,7 +54,7 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      
+
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -174,7 +174,7 @@
       </el-table-column> -->
       <el-table-column label="备注" align="center" prop="describe" />
       <el-table-column label="退货说明" align="center" prop="remark" />
-      
+
       <!-- <el-table-column label="erp退货单号" align="center" prop="erpOrderReturnNum" /> -->
       <!-- <el-table-column label="erp退货单id" align="center" prop="erpOrderReturnId" /> -->
       <el-table-column label="标记" align="center" prop="sign" />
@@ -197,7 +197,7 @@
         </template>
       </el-table-column> -->
     </el-table>
-    
+
     <pagination
       v-show="total>0"
       :total="total"
@@ -409,7 +409,7 @@ export default {
     };
   },
   created() {
-    listShop({type:5}).then(response => {
+    listShop({platform:5}).then(response => {
         this.shopList = response.rows;
       });
     this.getList();

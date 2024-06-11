@@ -17,7 +17,7 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      
+
       <el-form-item label="店铺" prop="shopId">
         <el-select v-model="queryParams.shopId" placeholder="请选择店铺" clearable @change="handleQuery">
          <el-option
@@ -36,7 +36,7 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      
+
       <el-form-item label="商品编码" prop="goodsNum">
         <el-input
           v-model="queryParams.goodsNum"
@@ -45,7 +45,7 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-     
+
       <el-form-item label="物流单号" prop="logisticsCode">
         <el-input
           v-model="queryParams.logisticsCode"
@@ -62,7 +62,7 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      
+
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -192,7 +192,7 @@
         </template>
       </el-table-column> -->
     </el-table>
-    
+
     <pagination
       v-show="total>0"
       :total="total"
@@ -403,7 +403,7 @@ export default {
     };
   },
   created() {
-    listShop({type:6}).then(response => {
+    listShop({platform:6}).then(response => {
         this.shopList = response.rows;
       });
     this.getList();

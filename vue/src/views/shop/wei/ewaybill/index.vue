@@ -182,7 +182,7 @@ export default {
     };
   },
   created() {
-    // listShop({type:3}).then(response => {
+    // listShop({platform:3}).then(response => {
     //   this.shopList = response.rows;
     // });
     // this.getList();

@@ -62,14 +62,14 @@ public class OmsTaoGoodsServiceImpl extends ServiceImpl<OmsTaoGoodsMapper, OmsTa
 //                    sku.setTaoGoodsId(goods.getId());
                     sku.setShopId(shopId);
                     // 根据OuterId查找ERP系统中的skuid
-                    if(StringUtils.isNotEmpty(sku.getOuterId())) {
-                        List<OGoodsSku> oGoodsSkus = goodsSkuMapper.selectList(new LambdaQueryWrapper<OGoodsSku>().eq(OGoodsSku::getSkuNum, sku.getOuterId()));
-                        if(oGoodsSkus!=null && !oGoodsSkus.isEmpty()){
-                            sku.setErpGoodsId(oGoodsSkus.get(0).getErpGoodsId());
-                            sku.setErpGoodsSkuId(oGoodsSkus.get(0).getErpSkuId());
-                        }
-
-                    }
+//                    if(StringUtils.isNotEmpty(sku.getOuterId())) {
+//                        List<OGoodsSku> oGoodsSkus = goodsSkuMapper.selectList(new LambdaQueryWrapper<OGoodsSku>().eq(OGoodsSku::getSkuNum, sku.getOuterId()));
+//                        if(oGoodsSkus!=null && !oGoodsSkus.isEmpty()){
+//                            sku.setErpGoodsId(oGoodsSkus.get(0).getErpGoodsId());
+//                            sku.setErpGoodsSkuId(oGoodsSkus.get(0).getErpSkuId());
+//                        }
+//
+//                    }
                     skuMapper.insert(sku);
                 }
             }
@@ -85,13 +85,13 @@ public class OmsTaoGoodsServiceImpl extends ServiceImpl<OmsTaoGoodsMapper, OmsTa
 //                    sku.setTaoGoodsId(goods.getId());
                     sku.setShopId(shopId);
                     // 根据OuterId查找ERP系统中的skuid
-                    if(StringUtils.isNotEmpty(sku.getOuterId())) {
-                        List<OGoodsSku> oGoodsSkus = goodsSkuMapper.selectList(new LambdaQueryWrapper<OGoodsSku>().eq(OGoodsSku::getSkuNum, sku.getOuterId()));
-                        if(oGoodsSkus!=null && !oGoodsSkus.isEmpty()){
-                            sku.setErpGoodsId(oGoodsSkus.get(0).getErpGoodsId());
-                            sku.setErpGoodsSkuId(oGoodsSkus.get(0).getErpSkuId());
-                        }
-                    }
+//                    if(StringUtils.isNotEmpty(sku.getOuterId())) {
+//                        List<OGoodsSku> oGoodsSkus = goodsSkuMapper.selectList(new LambdaQueryWrapper<OGoodsSku>().eq(OGoodsSku::getSkuNum, sku.getOuterId()));
+//                        if(oGoodsSkus!=null && !oGoodsSkus.isEmpty()){
+//                            sku.setErpGoodsId(oGoodsSkus.get(0).getErpGoodsId());
+//                            sku.setErpGoodsSkuId(oGoodsSkus.get(0).getErpSkuId());
+//                        }
+//                    }
                     skuMapper.insert(sku);
                 }
             }

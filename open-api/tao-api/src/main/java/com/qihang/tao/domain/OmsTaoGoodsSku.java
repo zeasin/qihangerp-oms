@@ -13,7 +13,7 @@ public class OmsTaoGoodsSku implements Serializable {
     /**
      * 主键id
      */
-    private Long id;
+    private String id;
 
     /**
      * sku所属商品数字id

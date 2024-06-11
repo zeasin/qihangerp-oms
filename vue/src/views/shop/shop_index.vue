@@ -100,7 +100,7 @@
       <el-table-column label="描述" align="center" prop="remark" />
       <!-- <el-table-column label="第三方平台店铺id，淘宝天猫开放平台使用" align="center" prop="sellerUserId" /> -->
       <!-- <el-table-column label="卖家userId" align="center" prop="sellerUserIdStr" /> -->
-      <!-- <el-table-column label="第三方平台sessionKey" align="center" prop="sessionKey" /> -->
+       <el-table-column label="AccessToken" align="center" prop="accessToken" />
       <!-- <el-table-column label="Appkey暂时抖音用" align="center" prop="appkey" /> -->
       <!-- <el-table-column label="Appsercet暂时抖音用" align="center" prop="appSercet" /> -->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
@@ -171,6 +171,10 @@
         <el-form-item label="视频号appSercet" prop="appSercet" v-if="form.platform === 2">
           <el-input v-model="form.appSercet" placeholder="请输入视频号appSercet" />
         </el-form-item>
+        <el-form-item label="AccessToken" prop="accessToken" >
+          <el-input v-model="form.accessToken" type="textarea" placeholder="请输入accessToken" />
+        </el-form-item>
+
         <el-form-item label="描述" prop="remark">
           <el-input type="textarea" v-model="form.remark" placeholder="请输入描述" />
         </el-form-item>
@@ -268,8 +272,8 @@ export default {
   created() {
     listPlatform().then(res=>{
       this.typeList = res.rows;
-      if(this.$route.query.type){
-        this.queryParams.type = parseInt(this.$route.query.type)
+      if(this.$route.query.platform){
+        this.queryParams.platform = parseInt(this.$route.query.platform)
       }
       this.getList();
     })

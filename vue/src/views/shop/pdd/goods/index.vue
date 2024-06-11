@@ -175,7 +175,7 @@ export default {
     };
   },
   created() {
-    listShop({type:5}).then(response => {
+    listShop({platform:5}).then(response => {
       this.shopList = response.rows;
       if (this.shopList && this.shopList.length > 0) {
         this.queryParams.shopId = this.shopList[0].id
@@ -246,7 +246,7 @@ export default {
           console.log('拉取PDD商品接口返回=====',response)
           if(response.code === 1401) {
             MessageBox.confirm('Token已过期，需要重新授权！请前往店铺列表重新获取授权！', '系统提示', { confirmButtonText: '前往授权', cancelButtonText: '取消', type: 'warning' }).then(() => {
-              this.$router.push({path:"/shop/shop_list",query:{type:5}})
+              this.$router.push({path:"/shop/shop_list",query:{platform:5}})
               // isRelogin.show = false;
               // store.dispatch('LogOut').then(() => {
               // location.href = response.data.tokenRequestUrl+'?shopId='+this.queryParams.shopId

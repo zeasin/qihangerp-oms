@@ -178,7 +178,7 @@ export default {
     };
   },
   created() {
-    listShop({type: 3}).then(response => {
+    listShop({platform: 3}).then(response => {
       this.shopList = response.rows;
       if (this.shopList && this.shopList.length > 0) {
         this.queryParams.shopId = this.shopList[0].id
@@ -250,7 +250,7 @@ export default {
             MessageBox.confirm('Token已过期，需要重新授权！请前往店铺列表重新获取授权！', '系统提示', { confirmButtonText: '前往授权', cancelButtonText: '取消', type: 'warning' }).then(() => {
               // isRelogin.show = false;
               // store.dispatch('LogOut').then(() => {
-              this.$router.push({path:"/shop/shop_list",query:{type:3}})
+              this.$router.push({path:"/shop/shop_list",query:{platform:3}})
               // location.href = response.data.tokenRequestUrl+'?shopId='+this.queryParams.shopId
               // })
             }).catch(() => {

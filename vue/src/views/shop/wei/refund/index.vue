@@ -284,7 +284,7 @@ export default {
     };
   },
   created() {
-    listShop({type:2}).then(response => {
+    listShop({platform:2}).then(response => {
         this.shopList = response.rows;
       });
     this.getList();
