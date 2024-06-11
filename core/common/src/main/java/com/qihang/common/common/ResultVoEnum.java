@@ -8,7 +8,7 @@ package com.qihang.common.common;
  */
 public enum ResultVoEnum {
     SUCCESS("成功", 0),
-    TokenFail("Token失效",401),
+    TokenFail("Token失效",1401),
     NotFound("NotFound", 404),//没有找到
     Unable("Unable", 403),//无法处理
 //    NotLogin("未登录", 400),//未登录
