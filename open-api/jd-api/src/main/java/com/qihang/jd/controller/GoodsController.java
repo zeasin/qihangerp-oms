@@ -50,7 +50,7 @@ public class GoodsController extends BaseController {
     {
         OmsJdGoodsSku sku = new OmsJdGoodsSku();
         sku.setId(bo.getId());
-        sku.setErpGoodsSkuId(Long.parseLong(bo.getErpSkuId()));
+        sku.setErpGoodsSkuId(Long.parseLong(bo.getErpGoodsSkuId()));
         skuService.updateById(sku);
         return success();
     }

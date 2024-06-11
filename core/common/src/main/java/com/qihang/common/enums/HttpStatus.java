@@ -51,6 +51,7 @@ public class HttpStatus
      * 未授权
      */
     public static final int UNAUTHORIZED = 401;
+    public static final int UNAUTHORIZED1 = 1401;
 
     /**
      * 访问受限，授权过期

@@ -74,7 +74,7 @@
 <!--      </el-table-column>-->
        <el-table-column label="商家编码" align="center" prop="outerId" />
       <el-table-column label="京东价" align="center" prop="jdPrice" />
-      <el-table-column label="ERP SKU ID" align="center" prop="erpSkuId" />
+      <el-table-column label="ERP SKU ID" align="center" prop="erpGoodsSkuId" />
       <el-table-column label="状态" align="center" prop="status" >
         <template slot-scope="scope">
           <el-tag size="small" v-if="scope.row.status === 1">销售中</el-tag>
@@ -106,8 +106,8 @@
     <!-- 添加或修改商品管理对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="120px">
-        <el-form-item label="ERP商品SkuId" prop="erpSkuId">
-          <el-input v-model.number="form.erpSkuId" placeholder="请输入ERP商品SkuId" />
+        <el-form-item label="ERP商品SkuId" prop="erpGoodsSkuId">
+          <el-input v-model.number="form.erpGoodsSkuId" placeholder="请输入ERP商品SkuId" />
         </el-form-item>
 
       </el-form>
@@ -171,7 +171,7 @@ export default {
         id: [
           { required: true, message: "不能为空", trigger: "change" }
         ],
-        erpSkuId: [
+        erpGoodsSkuId: [
           { required: true, message: "不能为空", trigger: "blur" }
         ],
       }
