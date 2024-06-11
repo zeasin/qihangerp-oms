@@ -58,8 +58,8 @@ public class ApiCommon {
         params.setAppKey(platform.getAppKey());
         params.setAppSecret(platform.getAppSecret());
         params.setAccessToken(shop.getAccessToken());
-        params.setTokenRequestUrl(platform.getRedirectUrl());
-//        params.setApiRequestUrl(platform.getServerUrl());
+        params.setRedirectUrl(platform.getRedirectUrl());
+        params.setServerUrl(platform.getServerUrl());
 
         if (!StringUtils.hasText(shop.getAccessToken())) {
 

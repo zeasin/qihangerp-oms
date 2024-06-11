@@ -57,10 +57,9 @@ public class ApiCommon {
         params.setAppKey(platform.getAppKey());
         params.setAppSecret(platform.getAppSecret());
         params.setAccessToken(shop.getAccessToken());
-//        params.setTokenRequestUrl(platform.getRedirectUri());
-//        params.setApiRequestUrl(platform.getServerUrl());
-//        params.setServerUrl(platform.getServerUrl());
-        params.setSellerId(shop.getSellerShopId().toString());
+        params.setRedirectUrl(platform.getRedirectUrl());
+        params.setServerUrl(platform.getServerUrl());
+        params.setSellerShopId(shop.getSellerShopId());
         if (!StringUtils.hasText(shop.getAccessToken())) {
 
             return ResultVo.error(HttpStatus.UNAUTHORIZED1, "Token已过期，请重新授权", params);

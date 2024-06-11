@@ -66,7 +66,7 @@ public class RefundApiController {
         }
 
         String sessionKey = checkResult.getData().getAccessToken();
-        String url = checkResult.getData().getApiRequestUrl();
+        String url = checkResult.getData().getServerUrl();
         String appKey = checkResult.getData().getAppKey();
         String appSecret = checkResult.getData().getAppSecret();
 
@@ -184,7 +184,7 @@ public class RefundApiController {
         }
 
         String sessionKey = checkResult.getData().getAccessToken();
-        String url = checkResult.getData().getApiRequestUrl();
+        String url = checkResult.getData().getServerUrl();
         String appKey = checkResult.getData().getAppKey();
         String appSecret = checkResult.getData().getAppSecret();
 

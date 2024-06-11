@@ -66,7 +66,7 @@ public class GoodsApiController extends BaseController {
         }
         ShopApiParams shopApiParams = checkResult.getData();
         String sessionKey = shopApiParams.getAccessToken();
-        String url = shopApiParams.getApiRequestUrl();
+        String url = shopApiParams.getServerUrl();
         String appKey = shopApiParams.getAppKey();
         String appSecret = shopApiParams.getAppSecret();
 
