@@ -1,5 +1,7 @@
 package com.qihang.wei.service;
 
+import com.qihang.common.common.PageQuery;
+import com.qihang.common.common.PageResult;
 import com.qihang.wei.domain.OmsWeiGoodsSku;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -9,5 +11,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 * @createDate 2024-06-03 16:51:29
 */
 public interface OmsWeiGoodsSkuService extends IService<OmsWeiGoodsSku> {
-
+    PageResult<OmsWeiGoodsSku> queryPageList(OmsWeiGoodsSku bo, PageQuery pageQuery);
 }

@@ -76,7 +76,7 @@
       <el-table-column label="销售价" align="center" prop="salePrice" >
         <template slot-scope="scope">{{scope.row.salePrice / 100}}</template>
       </el-table-column>
-      <el-table-column label="ERP SKU ID" align="center" prop="erpSkuId" />
+      <el-table-column label="ERP SKU ID" align="center" prop="erpGoodsSkuId" />
       <el-table-column label="状态" align="center" prop="status" >
         <template slot-scope="scope">
           <el-tag size="small" v-if="scope.row.status === 5">销售中</el-tag>
@@ -108,8 +108,8 @@
     <!-- 添加或修改商品管理对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="120px">
-        <el-form-item label="ERP商品SkuId" prop="erpSkuId">
-          <el-input v-model.number="form.erpSkuId" placeholder="请输入ERP商品SkuId" />
+        <el-form-item label="ERP商品SkuId" prop="erpGoodsSkuId">
+          <el-input v-model.number="form.erpGoodsSkuId" placeholder="请输入ERP商品SkuId" />
         </el-form-item>
 
       </el-form>
@@ -125,7 +125,7 @@
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 
 import {listShop} from "@/api/shop/shop";
-import {pullGoodsList,listGoodsSku} from "@/api/wei/goods";
+import {pullGoodsList,listGoodsSku,getGoodsSku,linkErpGoodsSkuId} from "@/api/wei/goods";
 import {MessageBox} from "element-ui";
 
 export default {
@@ -167,7 +167,7 @@ export default {
         id: [
           { required: true, message: "不能为空", trigger: "change" }
         ],
-        erpSkuId: [
+        erpGoodsSkuId: [
           { required: true, message: "不能为空", trigger: "blur" }
         ],
       }

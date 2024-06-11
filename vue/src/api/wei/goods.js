@@ -43,3 +43,11 @@ export function pullGoodsList(data) {
     data: data
   })
 }
+
+export function linkErpGoodsSkuId(data) {
+  return request({
+    url: '/wei-api/goods/sku/linkErp',
+    method: 'post',
+    data: data
+  })
+}

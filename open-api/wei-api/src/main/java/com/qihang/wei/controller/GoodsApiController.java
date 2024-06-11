@@ -32,7 +32,7 @@ public class GoodsApiController {
     private final WeiApiCommon apiCommon;
     private final WeiGoodsService weiGoodsService;
 
-    @RequestMapping(value = "/pull_list", method = RequestMethod.POST)
+    @RequestMapping(value = "/pull_goods_list", method = RequestMethod.POST)
     public AjaxResult pullList(@RequestBody PullRequest params) throws Exception {
         if (params.getShopId() == null || params.getShopId() <= 0) {
 //            return ApiResul new ApiResult(HttpStatus.PARAMS_ERROR, "参数错误，没有店铺Id");
