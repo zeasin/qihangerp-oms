@@ -4,7 +4,7 @@
       <el-tab-pane label="天猫" name="taoOrder">
         <order-tao></order-tao>
       </el-tab-pane>
-      <el-tab-pane label="京东" name="jdOrder" lazy>
+      <el-tab-pane label="京东POP" name="jdOrder" lazy>
         <order-jd></order-jd>
       </el-tab-pane>
 

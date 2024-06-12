@@ -55,16 +55,16 @@
           @click="handlePull"
         >API拉取订单</el-button>
       </el-col>
-      <el-col :span="1.5">
-        <el-button
-          :loading="pullLoading"
-          type="primary"
-          plain
-          icon="el-icon-download"
-          size="mini"
-          @click="handlePullDetailByTid"
-        >API拉取单个订单</el-button>
-      </el-col>
+<!--      <el-col :span="1.5">-->
+<!--        <el-button-->
+<!--          :loading="pullLoading"-->
+<!--          type="primary"-->
+<!--          plain-->
+<!--          icon="el-icon-download"-->
+<!--          size="mini"-->
+<!--          @click="handlePullDetailByTid"-->
+<!--        >API拉取单个订单</el-button>-->
+<!--      </el-col>-->
       <el-col :span="1.5">
         <el-button
           type="primary"
@@ -73,7 +73,7 @@
           size="mini"
           :disabled="multiple"
           @click="handlePushOms"
-        >手动将选中订单推送到OMS</el-button>
+        >批量确认订单</el-button>
       </el-col>
 
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
@@ -128,12 +128,26 @@
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
+          <el-row>
+            <el-button
+              :loading="pullLoading"
+              type="text"
+              @click="handlePullUpdate(scope.row)"
+            >详情</el-button>
+            <el-button
+              :loading="pullLoading"
+              type="text"
+              icon="el-icon-refresh"
+              @click="handlePullUpdate(scope.row)"
+            >更新</el-button>
+          </el-row>
           <el-button
             :loading="pullLoading"
             size="mini"
-            icon="el-icon-refresh"
+            type="success"
+            icon="el-icon-success"
             @click="handlePullUpdate(scope.row)"
-          >更新订单</el-button>
+          >确认订单</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -311,7 +325,7 @@ export default {
     },
     handlePushOms(row) {
       const ids = row.id || this.ids;
-      this.$modal.confirm('是否手动推送到系统？').then(function() {
+      this.$modal.confirm('是否批量确认订单？').then(function() {
         return pushOms({ids:ids});
       }).then(() => {
         // this.getList();
