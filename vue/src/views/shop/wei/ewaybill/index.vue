@@ -1,32 +1,9 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="108px">
-      <el-form-item label="平台SkuId" prop="skuId">
-        <el-input
-          v-model="queryParams.skuId"
-          placeholder="请输入平台SkuId"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="商家sku编码" prop="outerId">
-        <el-input
-          v-model="queryParams.outerId"
-          placeholder="请输入商家sku编码"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="ERP skuId" prop="erpSkuId">
-        <el-input
-          v-model="queryParams.erpSkuId"
-          placeholder="请输入ERP skuId"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="快递公司" prop="shopId">
-        <el-select v-model="queryParams.shopId" placeholder="请选择快递公司" clearable @change="handleQuery">
+    <el-form :model="printParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="108px">
+
+      <el-form-item label="快递公司" prop="deliver">
+        <el-select v-model="printParams.deliver" placeholder="请选择快递公司" clearable>
           <el-option
             v-for="item in deliverList"
             :key="item.delivery_id"
@@ -36,19 +13,19 @@
         </el-select>
         <el-button  @click="getDeliverList"> 获取 </el-button>
       </el-form-item>
-      <el-form-item label="店铺" prop="shopId">
-        <el-select v-model="queryParams.shopId" placeholder="请选择店铺" clearable @change="handleQuery">
+      <el-form-item label="打印机" prop="printer">
+        <el-select v-model="printParams.printer" placeholder="请选择打印机" clearable>
          <el-option
-            v-for="item in shopList"
-            :key="item.id"
+            v-for="item in printerList"
+            :key="item.name"
             :label="item.name"
-            :value="item.id">
+            :value="item.name">
           </el-option>
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+<!--        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>-->
+
       </el-form-item>
     </el-form>
 
@@ -151,9 +128,6 @@ export default {
       showSearch: true,
       // 总条数
       total: 0,
-      // 商品管理表格数据
-      goodsList: [],
-      shopList: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -164,24 +138,21 @@ export default {
         pageSize: 10,
         name: null
       },
+      // 打印参数
+      printParams: {
+        deliver: null,
+        printer: null
+      },
       // 表单参数
       form: {},
+      printerList: [],
       deliverList: [],
-      supplierList: [],
-      categoryList: [],
-      categoryTree: [],
       // 表单校验
-      rules: {
-        id: [
-          { required: true, message: "不能为空", trigger: "change" }
-        ],
-        erpSkuId: [
-          { required: true, message: "不能为空", trigger: "blur" }
-        ],
-      }
+      rules: {}
     };
   },
   created() {
+    this.openWs()
     // listShop({platform:3}).then(response => {
     //   this.shopList = response.rows;
     // });
@@ -249,11 +220,50 @@ export default {
         }
       });
     },
-    handlePrintEwaybill(){
+    openWs() {
       const ws = new WebSocket('ws://127.0.0.1:12705');
       ws.onopen = () => {
         console.log('与打印组件建立连接成功: ');
+        // 或打印机
         ws.send(JSON.stringify({
+          requestID: '12345',
+          command: 'getPrinterList'
+        }))
+      };
+      let obj = this.$modal;
+      ws.onmessage = (e) => {
+        const resp = JSON.parse(e.data || '{}')
+        if (resp.command === 'getPrinterList') {
+          this.printerList = resp.printerList
+          obj.msgSuccess("打印组件连接成功！");
+          console.log('打印机列表: ', resp.printerList);
+        }
+      };
+      // 当发生错误时触发
+      ws.onerror = function(error) {
+        obj.msgError("打印组件连接失败！请安装并启动微信视频号小单打印组件！");
+        console.error('WebSocket error:', error);
+        // alert('WebSocket error occurred. Check the console for more details.');
+      };
+    },
+    handlePrintEwaybill() {
+      // if (!this.ws) {
+      //   this.$modal.msgError('打印组件连接失败！请安装并启动微信视频号小单打印组件！');
+      //   this.openWs()
+      // }
+      // if(!this.printParams.deliver){
+      //   this.$modal.msgError('请选择快递公司！');
+      //   return
+      // }
+      if(!this.printParams.printer){
+        this.$modal.msgError('请选择打印机！');
+        return
+      }
+      const ws = new WebSocket('ws://127.0.0.1:12705');
+      ws.onopen = () => {
+        console.log('开始打印: ');
+        // 打印
+        this.ws.send(JSON.stringify({
           command: 'print',
           version: '2.0', // 必传
           requestID: '1234', // String, 调用方保证唯一
@@ -276,17 +286,25 @@ export default {
             width: 76, // 纸张尺寸，单位毫米，printType 为 2 时必传
             height: 130
           },
-          printer: 'Microsoft Print to PDF', // 选中的打印机，printer.name
+          printer: this.printParams.printer, // 选中的打印机，printer.name
         }))
       };
-
+      let obj = this.$modal;
       ws.onmessage = (e) => {
         const resp = JSON.parse(e.data || '{}')
         if (resp.command === 'print') {
           console.log('打印结果: ', resp);
+          obj.msgError("打印结果！"+JSON.stringify(resp));
         }
       };
 
+
+      // 当发生错误时触发
+      ws.onerror = function(error) {
+        obj.msgError("打印失败！");
+        console.error('WebSocket error:', error);
+        // alert('WebSocket error occurred. Check the console for more details.');
+      };
 
     }
   }
