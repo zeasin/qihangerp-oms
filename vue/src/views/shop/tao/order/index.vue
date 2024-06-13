@@ -73,7 +73,7 @@
           size="mini"
           :disabled="multiple"
           @click="handlePushOms"
-        >批量确认订单</el-button>
+        >批量推送订单</el-button>
       </el-col>
 
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
@@ -141,13 +141,6 @@
               @click="handlePullUpdate(scope.row)"
             >更新</el-button>
           </el-row>
-          <el-button
-            :loading="pullLoading"
-            size="mini"
-            type="success"
-            icon="el-icon-success"
-            @click="handlePullUpdate(scope.row)"
-          >确认订单</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -169,7 +162,7 @@ import {listOrder, pullOrder, getOrder, pushOms, pullOrderDetail} from "@/api/ta
 import { listShop } from "@/api/shop/shop";
 import { searchSku } from "@/api/goods/goods";
 import {MessageBox} from "element-ui";
-import {isRelogin} from "../../../utils/request";
+import {isRelogin} from "../../../../utils/request";
 
 export default {
   name: "OrderTao",
@@ -207,10 +200,14 @@ export default {
     };
   },
   created() {
-    listShop({platform:4}).then(response => {
-        this.shopList = response.rows;
-      });
-    this.getList();
+    listShop({platform: 4}).then(response => {
+      this.shopList = response.rows;
+      if (this.shopList && this.shopList.length > 0) {
+        this.queryParams.shopId = this.shopList[0].id
+      }
+      this.getList();
+    });
+    // this.getList();
   },
   methods: {
     amountFormatter(row, column, cellValue, index) {
@@ -286,6 +283,7 @@ export default {
             // return Promise.reject('无效的会话，或者会话已过期，请重新登录。')
           }else{
             this.$modal.msgSuccess(JSON.stringify(response));
+            this.getList()
           }
           this.pullLoading = false
         })
@@ -325,7 +323,7 @@ export default {
     },
     handlePushOms(row) {
       const ids = row.id || this.ids;
-      this.$modal.confirm('是否批量确认订单？').then(function() {
+      this.$modal.confirm('是否批量重新推送订单？').then(function() {
         return pushOms({ids:ids});
       }).then(() => {
         // this.getList();

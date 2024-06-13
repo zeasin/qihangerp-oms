@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.qihang.oms.mapper.TaoOrderMapper">
+<mapper namespace="com.qihang.oms.mapper.OmsTaoOrderMapper">
 
-    <resultMap id="BaseResultMap" type="com.qihang.oms.domain.TaoOrder">
+    <resultMap id="BaseResultMap" type="com.qihang.oms.domain.OmsTaoOrder">
             <id property="id" column="id" jdbcType="BIGINT"/>
             <result property="shopId" column="shop_id" jdbcType="INTEGER"/>
             <result property="tid" column="tid" jdbcType="BIGINT"/>
@@ -84,6 +84,9 @@
             <result property="sendTime" column="send_time" jdbcType="VARCHAR"/>
             <result property="isPartConsign" column="is_part_consign" jdbcType="VARCHAR"/>
             <result property="sid" column="sid" jdbcType="VARCHAR"/>
+            <result property="tmallCouponFee" column="tmall_coupon_fee" jdbcType="BIGINT"/>
+            <result property="auditStatus" column="audit_status" jdbcType="INTEGER"/>
+            <result property="auditTime" column="audit_time" jdbcType="TIMESTAMP"/>
     </resultMap>
 
     <sql id="Base_Column_List">
@@ -113,6 +116,7 @@
         seller_alipay_no,has_post_fee,timeout_action_time,
         snapshot_url,promotion,yfx_fee,
         has_yfx,send_time,is_part_consign,
-        sid
+        sid,tmall_coupon_fee,audit_status,
+        audit_time
     </sql>
 </mapper>

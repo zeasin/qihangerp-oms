@@ -39,9 +39,9 @@ public class ErpSaleOrderServiceImpl extends ServiceImpl<ErpSaleOrderMapper, Erp
     private final JdOrderMapper jdOrderMapper;
     private final JdOrderItemMapper jdOrderItemMapper;
     private final JdGoodsSkuMapper jdGoodsSkuMapper;
-    private final TaoOrderMapper taoOrderMapper;
-    private final TaoOrderItemMapper taoOrderItemMapper;
-    private final TaoGoodsSkuMapper taoGoodsSkuMapper;
+    private final OmsTaoOrderMapper taoOrderMapper;
+    private final OmsTaoOrderItemMapper taoOrderItemMapper;
+    private final OmsTaoGoodsSkuMapper taoGoodsSkuMapper;
 
     @Transactional
     @Override
@@ -153,16 +153,17 @@ public class ErpSaleOrderServiceImpl extends ServiceImpl<ErpSaleOrderMapper, Erp
         return ResultVo.success();
     }
 
+    @Transactional
     @Override
     public ResultVo<Integer> taoOrderMessage(String orderId) {
         log.info("Tao订单消息处理"+orderId);
-        List<TaoOrder> taoOrders = taoOrderMapper.selectList(new LambdaQueryWrapper<TaoOrder>().eq(TaoOrder::getTid, orderId));
+        List<OmsTaoOrder> taoOrders = taoOrderMapper.selectList(new LambdaQueryWrapper<OmsTaoOrder>().eq(OmsTaoOrder::getTid, orderId));
 
         if(taoOrders == null || taoOrders.size() == 0) {
             // 没有找到订单信息
             return ResultVo.error(ResultVoEnum.NotFound,"没有找到TAO订单："+orderId);
         }
-        TaoOrder taoOrder = taoOrders.get(0);
+        OmsTaoOrder taoOrder = taoOrders.get(0);
         List<ErpSaleOrder> oOrders = orderMapper.selectList(new LambdaQueryWrapper<ErpSaleOrder>().eq(ErpSaleOrder::getOrderNum, orderId));
         if(oOrders == null || oOrders.isEmpty()) {
             // 新增订单
@@ -191,7 +192,8 @@ public class ErpSaleOrderServiceImpl extends ServiceImpl<ErpSaleOrderMapper, Erp
             insert.setOrderStatus(orderStatus);
             insert.setGoodsAmount(taoOrder.getTotalFee());
             insert.setAmount(taoOrder.getPayment().doubleValue());
-
+            insert.setDiscountAmount(taoOrder.getDiscountFee().doubleValue());
+            insert.setPostage(taoOrder.getPostFee().doubleValue());
             insert.setReceiverName(taoOrder.getReceiverName());
             insert.setReceiverPhone(taoOrder.getReceiverMobile());
             insert.setAddress(taoOrder.getReceiverAddress());
@@ -205,7 +207,8 @@ public class ErpSaleOrderServiceImpl extends ServiceImpl<ErpSaleOrderMapper, Erp
             insert.setCreateBy("ORDER_MESSAGE");
             orderMapper.insert(insert);
 
-            List<TaoOrderItem> taoOrderItems = taoOrderItemMapper.selectList(new LambdaQueryWrapper<TaoOrderItem>().eq(TaoOrderItem::getTid, taoOrder.getTid()));
+            List<OmsTaoOrderItem> taoOrderItems = taoOrderItemMapper.selectList(
+                    new LambdaQueryWrapper<OmsTaoOrderItem>().eq(OmsTaoOrderItem::getTid, taoOrder.getTid()));
             if(taoOrderItems!=null && taoOrderItems.size()>0) {
                 for (var item : taoOrderItems) {
                     ErpSaleOrderItem orderItem = new ErpSaleOrderItem();
@@ -213,12 +216,13 @@ public class ErpSaleOrderServiceImpl extends ServiceImpl<ErpSaleOrderMapper, Erp
                     orderItem.setOriginalOrderId(orderId);
                     orderItem.setOriginalOrderItemId(item.getId().toString());
                     orderItem.setOriginalSkuId(item.getSkuId());
-
+                    orderItem.setShopId(taoOrder.getShopId());
+                    orderItem.setShipStatus(0);
                     // TODO：这里将订单商品skuid转换成erp系统的skuid
                     Long erpGoodsId = 0L;
                     Long erpSkuId = 0L;
 
-                    List<TaoGoodsSku> taoGoodsSku = taoGoodsSkuMapper.selectList(new LambdaQueryWrapper<TaoGoodsSku>().eq(TaoGoodsSku::getSkuId, item.getSkuId()));
+                    List<OmsTaoGoodsSku> taoGoodsSku = taoGoodsSkuMapper.selectList(new LambdaQueryWrapper<OmsTaoGoodsSku>().eq(OmsTaoGoodsSku::getSkuId, item.getSkuId()));
                     if (taoGoodsSku != null && !taoGoodsSku.isEmpty()) {
                         erpGoodsId = taoGoodsSku.get(0).getErpGoodsId();
                         erpSkuId = taoGoodsSku.get(0).getErpGoodsSkuId();

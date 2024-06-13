@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import OrderTao  from "@/views/tao/order/index";
+import OrderTao  from "@/views/shop/tao/order/index";
 import OrderJd  from "@/views/jd/order/index";
 import OrderDou  from "@/views/dou/order/index";
 import OrderPdd  from "@/views/pdd/order/index";

@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.qihang.oms.mapper.TaoOrderItemMapper">
+<mapper namespace="com.qihang.oms.mapper.OmsTaoOrderItemMapper">
 
-    <resultMap id="BaseResultMap" type="com.qihang.oms.domain.TaoOrderItem">
+    <resultMap id="BaseResultMap" type="com.qihang.oms.domain.OmsTaoOrderItem">
             <id property="id" column="id" jdbcType="BIGINT"/>
             <result property="tid" column="tid" jdbcType="BIGINT"/>
             <result property="oid" column="oid" jdbcType="BIGINT"/>

@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.qihang.common.common.PageQuery;
 import com.qihang.common.common.PageResult;
-import com.qihang.oms.domain.OGoodsSku;
 import com.qihang.oms.domain.SysShopPullLogs;
 import com.qihang.oms.service.SysShopPullLogsService;
 import com.qihang.oms.mapper.SysShopPullLogsMapper;

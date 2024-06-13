@@ -7,7 +7,6 @@ import com.qihang.common.mq.MqMessage;
 import com.qihang.common.mq.MqType;
 import com.qihang.common.utils.SpringUtils;
 import com.qihang.oms.service.ErpSaleOrderService;
-import com.qihang.oms.service.ORefundService;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,15 +52,16 @@ public class ApiMessageReceiver implements MessageListener {
                 logger.info("订单消息TAO"+messageContent);
                 orderService.taoOrderMessage(vo.getKeyId());
             }
-        }else if(vo.getMqType() == MqType.REFUND_MESSAGE){
-            ORefundService refundService = SpringUtils.getBean(ORefundService.class);
-            if(vo.getShopType().getIndex() == EnumShopType.JD.getIndex()) {
-                logger.info("退款消息JD" + messageContent);
-                refundService.jdRefundMessage(vo.getKeyId());
-            }else if(vo.getShopType().getIndex() == EnumShopType.TAO.getIndex()) {
-                logger.info("退款消息TAO"+messageContent);
-                refundService.taoRefundMessage(vo.getKeyId());
-            }
         }
+//        else if(vo.getMqType() == MqType.REFUND_MESSAGE){
+//            ORefundService refundService = SpringUtils.getBean(ORefundService.class);
+//            if(vo.getShopType().getIndex() == EnumShopType.JD.getIndex()) {
+//                logger.info("退款消息JD" + messageContent);
+//                refundService.jdRefundMessage(vo.getKeyId());
+//            }else if(vo.getShopType().getIndex() == EnumShopType.TAO.getIndex()) {
+//                logger.info("退款消息TAO"+messageContent);
+//                refundService.taoRefundMessage(vo.getKeyId());
+//            }
+//        }
     }
 }
