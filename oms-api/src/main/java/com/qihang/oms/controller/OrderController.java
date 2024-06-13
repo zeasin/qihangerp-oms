@@ -4,11 +4,14 @@ package com.qihang.oms.controller;
 import com.qihang.common.common.AjaxResult;
 import com.qihang.common.common.PageQuery;
 import com.qihang.common.common.TableDataInfo;
+import com.qihang.common.mq.MqType;
 import com.qihang.oms.domain.ErpSaleOrder;
 import com.qihang.oms.domain.ErpSaleOrderItem;
 import com.qihang.oms.service.ErpSaleOrderService;
 import com.qihang.security.common.BaseController;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -19,12 +22,14 @@ import java.util.List;
  * @author qihang
  * @date 2023-12-31
  */
+@AllArgsConstructor
 @RestController
 @RequestMapping("/order")
 public class OrderController extends BaseController
 {
-    @Autowired
-    private ErpSaleOrderService orderService;
+
+    private final ErpSaleOrderService orderService;
+    private final KafkaTemplate<String,Object> kafkaTemplate;
 
     /**
      * 查询店铺订单列表
@@ -33,6 +38,7 @@ public class OrderController extends BaseController
     @GetMapping("/list")
     public TableDataInfo list(ErpSaleOrder order, PageQuery pageQuery)
     {
+//        kafkaTemplate.send(MqType.ORDER_MQ,"新订单");
 //        PageQuery pageQuery = new PageQuery();
 //        List<OOrder> list = orderService.getList(order);
         var pageList = orderService.queryPageList(order,pageQuery);

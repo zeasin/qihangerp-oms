@@ -9,4 +9,7 @@ public class MqType {
      * 退款消息
      */
     public static final int REFUND_MESSAGE = 2;
+
+    public static final String ORDER_MQ = "ORDER_MQ";
+    public static final String REFUND_MQ = "REFUND_MQ";
 }
