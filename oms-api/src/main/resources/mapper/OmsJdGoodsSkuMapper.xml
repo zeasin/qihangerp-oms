@@ -2,11 +2,11 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.qihang.oms.mapper.JdGoodsSkuMapper">
+<mapper namespace="com.qihang.oms.mapper.OmsJdGoodsSkuMapper">
 
-    <resultMap id="BaseResultMap" type="com.qihang.oms.domain.JdGoodsSku">
+    <resultMap id="BaseResultMap" type="com.qihang.oms.domain.OmsJdGoodsSku">
             <id property="id" column="id" jdbcType="BIGINT"/>
-            <result property="goodsId" column="goods_id" jdbcType="BIGINT"/>
+            <result property="shopId" column="shop_id" jdbcType="BIGINT"/>
             <result property="wareId" column="ware_id" jdbcType="BIGINT"/>
             <result property="skuId" column="sku_id" jdbcType="BIGINT"/>
             <result property="status" column="status" jdbcType="INTEGER"/>
@@ -22,15 +22,15 @@
             <result property="created" column="created" jdbcType="TIMESTAMP"/>
             <result property="currencySpuId" column="currency_spu_id" jdbcType="VARCHAR"/>
             <result property="erpGoodsId" column="erp_goods_id" jdbcType="BIGINT"/>
-            <result property="erpSkuId" column="erp_sku_id" jdbcType="BIGINT"/>
+            <result property="erpGoodsSkuId" column="erp_goods_sku_id" jdbcType="BIGINT"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,goods_id,ware_id,
+        id,shop_id,ware_id,
         sku_id,status,jd_price,
         outer_id,bar_code,logo,
-        sale_attrs,sku_name,stock_num,
-        modified,created,currency_spu_id,
-        erp_goods_id,erp_sku_id
+        sale_attrs,attrs,sku_name,
+        stock_num,modified,created,
+        currency_spu_id,erp_goods_id,erp_goods_sku_id
     </sql>
 </mapper>

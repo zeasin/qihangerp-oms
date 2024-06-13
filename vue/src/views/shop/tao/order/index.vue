@@ -73,7 +73,7 @@
           size="mini"
           :disabled="multiple"
           @click="handlePushOms"
-        >批量推送订单</el-button>
+        >手动推送订单</el-button>
       </el-col>
 
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>

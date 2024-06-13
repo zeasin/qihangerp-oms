@@ -17,15 +17,15 @@
             :label="item.name"
             :value="item.id">
             <span style="float: left">{{ item.name }}</span>
-              <span style="float: right; color: #8492a6; font-size: 13px"  v-if="item.type === 1">1688</span>
-              <span style="float: right; color: #8492a6; font-size: 13px"  v-if="item.type === 2">视频号小店</span>
-              <span style="float: right; color: #8492a6; font-size: 13px"  v-if="item.type === 3">京东</span>
-              <span style="float: right; color: #8492a6; font-size: 13px"  v-if="item.type === 4">淘宝天猫</span>
-              <span style="float: right; color: #8492a6; font-size: 13px"  v-if="item.type === 5">拼多多</span>
-              <span style="float: right; color: #8492a6; font-size: 13px"  v-if="item.type === 6">抖店</span>
-              <span style="float: right; color: #8492a6; font-size: 13px"  v-if="item.type === 7">小红书</span>
-              <span style="float: right; color: #8492a6; font-size: 13px"  v-if="item.type === 8">快手</span>
-              <span style="float: right; color: #8492a6; font-size: 13px"  v-if="item.type === 99">其他渠道</span>
+              <span style="float: right; color: #8492a6; font-size: 13px"  v-if="item.platform === 1">1688</span>
+              <span style="float: right; color: #8492a6; font-size: 13px"  v-if="item.platform === 2">视频号小店</span>
+              <span style="float: right; color: #8492a6; font-size: 13px"  v-if="item.platform === 3">京东</span>
+              <span style="float: right; color: #8492a6; font-size: 13px"  v-if="item.platform === 4">淘宝天猫</span>
+              <span style="float: right; color: #8492a6; font-size: 13px"  v-if="item.platform === 5">拼多多</span>
+              <span style="float: right; color: #8492a6; font-size: 13px"  v-if="item.platform === 6">抖店</span>
+              <span style="float: right; color: #8492a6; font-size: 13px"  v-if="item.platform === 7">小红书</span>
+              <span style="float: right; color: #8492a6; font-size: 13px"  v-if="item.platform === 8">快手</span>
+              <span style="float: right; color: #8492a6; font-size: 13px"  v-if="item.platform === 99">其他渠道</span>
           </el-option>
         </el-select>
       </el-form-item>
@@ -68,16 +68,16 @@
     </el-form>
 
     <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
-        <el-button
-          type="primary"
-          plain
-          icon="el-icon-refresh"
-          size="mini"
-          :disabled="multiple"
-          @click="handlePushOms"
-        >手动将选中订单推送到ERP</el-button>
-      </el-col>
+<!--      <el-col :span="1.5">-->
+<!--        <el-button-->
+<!--          type="primary"-->
+<!--          plain-->
+<!--          icon="el-icon-refresh"-->
+<!--          size="mini"-->
+<!--          :disabled="multiple"-->
+<!--          @click="handlePushOms"-->
+<!--        >手动将选中订单推送到ERP</el-button>-->
+<!--      </el-col>-->
 <!--      <el-col :span="1.5">-->
 <!--        <el-button-->
 <!--          type="warning"-->
@@ -94,12 +94,17 @@
     <el-table v-loading="loading" :data="orderList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
 <!--      <el-table-column label="订单ID" align="center" prop="id" />-->
-      <el-table-column label="订单编号" align="center" prop="orderNum" />
-      <el-table-column label="店铺" align="center" prop="shopId" >
+      <el-table-column label="订单编号" align="center" prop="orderNum" >
         <template slot-scope="scope">
-          <span>{{ shopList.find(x=>x.id === scope.row.shopId).name  }}</span>
+          <p>{{scope.row.orderNum}}</p>
+          <el-tag>{{ shopList.find(x=>x.id === scope.row.shopId).name  }}</el-tag>
         </template>
       </el-table-column>
+<!--      <el-table-column label="店铺" align="center" prop="shopId" >-->
+<!--        <template slot-scope="scope">-->
+<!--          <span>{{ shopList.find(x=>x.id === scope.row.shopId).name  }}</span>-->
+<!--        </template>-->
+<!--      </el-table-column>-->
 
       <el-table-column label="商品" width="350">
           <template slot-scope="scope">

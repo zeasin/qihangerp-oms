@@ -56,22 +56,23 @@
           size="mini"
           :disabled="multiple"
           @click="handlePushOms"
-        >手动将选中订单推送到OMS</el-button>
+        >手动推送订单</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="lists" @selection-change="handleSelectionChange">
        <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="订单ID" align="center" prop="orderId" />
-      <el-table-column label="店铺" align="center" prop="shopId" >
+<!--      <el-table-column label="订单ID" align="center" prop="orderId" />-->
+      <el-table-column label="订单号" align="center" prop="orderId" >
         <template slot-scope="scope">
+          <p>{{scope.row.orderId}}</p>
           <el-tag size="small">{{shopList.find(x=>x.id === scope.row.shopId).name}}</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="商品" width="350">
         <template slot-scope="scope">
-          <el-row v-for="item in scope.row.items" :key="item.id" :gutter="20">
+          <el-row v-for="item in scope.row.itemList" :key="item.id" :gutter="20">
 
             <div style="float: left;display: flex;align-items: center;" >
 <!--              <el-image  style="width: 70px; height: 70px;" :src="item.picPath"></el-image>-->
@@ -161,8 +162,12 @@ export default {
   created() {
     listShop({platform:3}).then(response => {
       this.shopList = response.rows;
+      if (this.shopList && this.shopList.length > 0) {
+        this.queryParams.shopId = this.shopList[0].id
+      }
+      this.getList();
     });
-    this.getList();
+    // this.getList();
   },
   methods: {
     /** 查询商品管理列表 */

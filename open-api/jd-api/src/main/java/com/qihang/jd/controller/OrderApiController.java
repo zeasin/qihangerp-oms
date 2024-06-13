@@ -3,6 +3,7 @@ package com.qihang.jd.controller;
 import cn.qihangerp.open.jd.OrderApiHelper;
 import cn.qihangerp.open.jd.common.ApiResultVo;
 import cn.qihangerp.open.jd.model.OrderInfo;
+import com.alibaba.fastjson2.JSONObject;
 import com.qihang.common.common.AjaxResult;
 import com.qihang.common.common.ResultVoEnum;
 import com.qihang.common.enums.EnumShopType;
@@ -21,6 +22,7 @@ import com.qihang.jd.service.SysShopPullLasttimeService;
 import com.qihang.jd.service.SysShopPullLogsService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -37,10 +39,11 @@ import java.util.List;
 public class OrderApiController {
     private final ApiCommon apiCommon;
 //    private final RedisCache redisCache;
-    private final MqUtils mqUtils;
+//    private final MqUtils mqUtils;
     private final OmsJdOrderService orderService;
     private final SysShopPullLasttimeService pullLasttimeService;
     private final SysShopPullLogsService pullLogsService;
+    private final KafkaTemplate<String,Object> kafkaTemplate;
 
     @RequestMapping(value = "/pull_order_jd", method = RequestMethod.POST)
     public AjaxResult pullList(@RequestBody PullRequest params) throws Exception {
@@ -107,10 +110,12 @@ public class OrderApiController {
             if (result.getCode() == ResultVoEnum.DataExist.getIndex()) {
                 //已经存在
                 hasExistOrder++;
-                mqUtils.sendApiMessage(MqMessage.build(EnumShopType.JD,MqType.ORDER_MESSAGE,order.getOrderId()));
+                kafkaTemplate.send(MqType.ORDER_MQ, JSONObject.toJSONString(MqMessage.build(EnumShopType.JD, MqType.ORDER_MESSAGE,order.getOrderId())));
+//                mqUtils.sendApiMessage(MqMessage.build(EnumShopType.JD,MqType.ORDER_MESSAGE,order.getOrderId()));
             } else if (result.getCode() == ResultVoEnum.SUCCESS.getIndex()) {
                 insertSuccess++;
-                mqUtils.sendApiMessage(MqMessage.build(EnumShopType.JD,MqType.ORDER_MESSAGE,order.getOrderId()));
+                kafkaTemplate.send(MqType.ORDER_MQ, JSONObject.toJSONString(MqMessage.build(EnumShopType.JD, MqType.ORDER_MESSAGE,order.getOrderId())));
+//                mqUtils.sendApiMessage(MqMessage.build(EnumShopType.JD,MqType.ORDER_MESSAGE,order.getOrderId()));
             } else {
                 totalError++;
             }

@@ -1,5 +1,6 @@
 package com.qihang.jd.controller;
 
+import com.alibaba.fastjson2.JSONObject;
 import com.qihang.common.common.AjaxResult;
 import com.qihang.common.common.PageQuery;
 import com.qihang.common.common.PageResult;
@@ -14,6 +15,7 @@ import com.qihang.jd.domain.bo.JdOrderPushBo;
 import com.qihang.jd.service.OmsJdOrderService;
 import com.qihang.security.common.BaseController;
 import lombok.AllArgsConstructor;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.*;
 
 @AllArgsConstructor
@@ -21,7 +23,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/order")
 public class OrderController extends BaseController {
     private final OmsJdOrderService orderService;
-    private final MqUtils mqUtils;
+//    private final MqUtils mqUtils;
+    private final KafkaTemplate<String,Object> kafkaTemplate;
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public TableDataInfo orderList(JdOrderBo bo, PageQuery pageQuery) {
         PageResult<OmsJdOrder> result = orderService.queryPageList(bo, pageQuery);
@@ -34,7 +37,8 @@ public class OrderController extends BaseController {
         // TODO:需要优化消息格式
         if(bo!=null && bo.getIds()!=null) {
             for(String id: bo.getIds()) {
-                mqUtils.sendApiMessage(MqMessage.build(EnumShopType.JD, MqType.ORDER_MESSAGE, id));
+                kafkaTemplate.send(MqType.ORDER_MQ, JSONObject.toJSONString(MqMessage.build(EnumShopType.JD, MqType.ORDER_MESSAGE,id)));
+//                mqUtils.sendApiMessage(MqMessage.build(EnumShopType.JD, MqType.ORDER_MESSAGE, id));
             }
         }
         return success();

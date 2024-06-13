@@ -21,7 +21,7 @@
 
 <script>
 import OrderTao  from "@/views/shop/tao/order/index";
-import OrderJd  from "@/views/jd/order/index";
+import OrderJd  from "@/views/shop/jd/order/index";
 import OrderDou  from "@/views/dou/order/index";
 import OrderPdd  from "@/views/pdd/order/index";
 export default {

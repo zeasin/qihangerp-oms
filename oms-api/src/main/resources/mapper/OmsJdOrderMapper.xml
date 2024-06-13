@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.qihang.oms.mapper.JdOrderMapper">
+<mapper namespace="com.qihang.oms.mapper.OmsJdOrderMapper">
 
-    <resultMap id="BaseResultMap" type="com.qihang.oms.domain.JdOrder">
+    <resultMap id="BaseResultMap" type="com.qihang.oms.domain.OmsJdOrder">
             <id property="id" column="id" jdbcType="BIGINT"/>
             <result property="shopId" column="shop_id" jdbcType="INTEGER"/>
             <result property="orderId" column="order_id" jdbcType="VARCHAR"/>
@@ -53,6 +53,8 @@
             <result property="openId" column="open_id" jdbcType="VARCHAR"/>
             <result property="openIdBuyer" column="open_id_buyer" jdbcType="VARCHAR"/>
             <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="auditStatus" column="audit_status" jdbcType="INTEGER"/>
+            <result property="auditTime" column="audit_time" jdbcType="TIMESTAMP"/>
     </resultMap>
 
     <sql id="Base_Column_List">
@@ -71,6 +73,7 @@
         waybill,logistics_id,modified,
         direct_parent_order_id,parent_order_id,order_source,
         store_order,id_sop_shipmenttype,real_pin,
-        open_id,open_id_buyer,create_time
+        open_id,open_id_buyer,create_time,
+        audit_status,audit_time
     </sql>
 </mapper>

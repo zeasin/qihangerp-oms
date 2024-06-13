@@ -36,9 +36,9 @@ public class ErpSaleOrderServiceImpl extends ServiceImpl<ErpSaleOrderMapper, Erp
 
     private final ErpSaleOrderMapper orderMapper;
     private final ErpSaleOrderItemMapper orderItemMapper;
-    private final JdOrderMapper jdOrderMapper;
-    private final JdOrderItemMapper jdOrderItemMapper;
-    private final JdGoodsSkuMapper jdGoodsSkuMapper;
+    private final OmsJdOrderMapper jdOrderMapper;
+    private final OmsJdOrderItemMapper jdOrderItemMapper;
+    private final OmsJdGoodsSkuMapper jdGoodsSkuMapper;
     private final OmsTaoOrderMapper taoOrderMapper;
     private final OmsTaoOrderItemMapper taoOrderItemMapper;
     private final OmsTaoGoodsSkuMapper taoGoodsSkuMapper;
@@ -47,12 +47,12 @@ public class ErpSaleOrderServiceImpl extends ServiceImpl<ErpSaleOrderMapper, Erp
     @Override
     public ResultVo<Integer> jdOrderMessage(String orderId) {
         log.info("京东订单消息处理"+orderId);
-        List<JdOrder> jdOrders = jdOrderMapper.selectList(new LambdaQueryWrapper<JdOrder>().eq(JdOrder::getOrderId, orderId));
+        List<OmsJdOrder> jdOrders = jdOrderMapper.selectList(new LambdaQueryWrapper<OmsJdOrder>().eq(OmsJdOrder::getOrderId, orderId));
         if(jdOrders == null || jdOrders.size() == 0) {
             // 没有找到订单信息
             return ResultVo.error(ResultVoEnum.NotFound,"没有找到JD订单："+orderId);
         }
-        JdOrder jdOrder = jdOrders.get(0);
+        OmsJdOrder jdOrder = jdOrders.get(0);
 
         List<ErpSaleOrder> oOrders = orderMapper.selectList(new LambdaQueryWrapper<ErpSaleOrder>().eq(ErpSaleOrder::getOrderNum, orderId));
         if(oOrders == null || oOrders.isEmpty()) {
@@ -77,6 +77,16 @@ public class ErpSaleOrderServiceImpl extends ServiceImpl<ErpSaleOrderMapper, Erp
             double orderSellerPrice = StringUtils.isEmpty(jdOrder.getOrderSellerPrice()) ? 0.0 : Double.parseDouble(jdOrder.getOrderSellerPrice());
             double freightPrice = StringUtils.isEmpty(jdOrder.getFreightPrice()) ? 0.0 : Double.parseDouble(jdOrder.getFreightPrice());
             insert.setAmount(orderSellerPrice + freightPrice);
+            try {
+                insert.setPostage(org.springframework.util.StringUtils.hasText(jdOrder.getFreightPrice())?Double.parseDouble(jdOrder.getFreightPrice()):0.0);
+            }catch (Exception e){
+                insert.setPostage(0.0);
+            }
+            try {
+            insert.setDiscountAmount(org.springframework.util.StringUtils.hasText(jdOrder.getSellerDiscount())?Double.parseDouble(jdOrder.getSellerDiscount()):0.0);
+            }catch (Exception e){
+                insert.setDiscountAmount(0.0);
+            }
             insert.setReceiverName(jdOrder.getFullname());
             insert.setReceiverPhone(jdOrder.getMobile());
             insert.setAddress(jdOrder.getFullAddress());
@@ -90,7 +100,9 @@ public class ErpSaleOrderServiceImpl extends ServiceImpl<ErpSaleOrderMapper, Erp
             insert.setCreateBy("ORDER_MESSAGE");
             orderMapper.insert(insert);
 
-            List<JdOrderItem> jdOrderItems = jdOrderItemMapper.selectList(new LambdaQueryWrapper<JdOrderItem>().eq(JdOrderItem::getOrderId, jdOrder.getId()));
+            List<OmsJdOrderItem> jdOrderItems = jdOrderItemMapper.selectList(
+                    new LambdaQueryWrapper<OmsJdOrderItem>().eq(OmsJdOrderItem::getOrderId, jdOrder.getOrderId()));
+
             if(jdOrderItems!=null && jdOrderItems.size()>0) {
                 for (var item : jdOrderItems) {
                     ErpSaleOrderItem orderItem = new ErpSaleOrderItem();
@@ -102,10 +114,10 @@ public class ErpSaleOrderServiceImpl extends ServiceImpl<ErpSaleOrderMapper, Erp
                     Long erpGoodsId = 0L;
                     Long erpSkuId = 0L;
 
-                    List<JdGoodsSku> jdGoodsSkus = jdGoodsSkuMapper.selectList(new LambdaQueryWrapper<JdGoodsSku>().eq(JdGoodsSku::getSkuId, item.getSkuId()));
+                    List<OmsJdGoodsSku> jdGoodsSkus = jdGoodsSkuMapper.selectList(new LambdaQueryWrapper<OmsJdGoodsSku>().eq(OmsJdGoodsSku::getSkuId, item.getSkuId()));
                     if (jdGoodsSkus != null && !jdGoodsSkus.isEmpty()) {
                         erpGoodsId = jdGoodsSkus.get(0).getErpGoodsId();
-                        erpSkuId = jdGoodsSkus.get(0).getErpSkuId();
+                        erpSkuId = jdGoodsSkus.get(0).getErpGoodsSkuId();
                         orderItem.setGoodsImg(jdGoodsSkus.get(0).getLogo());
                         orderItem.setGoodsSpec(jdGoodsSkus.get(0).getSaleAttrs());
                         orderItem.setSpecNum(jdGoodsSkus.get(0).getOuterId());
@@ -127,6 +139,8 @@ public class ErpSaleOrderServiceImpl extends ServiceImpl<ErpSaleOrderMapper, Erp
                         orderItem.setRefundStatus(1);
                         orderItem.setRefundCount(0);
                     }
+                    orderItem.setShopId(jdOrder.getShopId());
+                    orderItem.setShipStatus(0);
                     orderItem.setCreateTime(new Date());
                     orderItem.setCreateBy("ORDER_MESSAGE");
                     orderItemMapper.insert(orderItem);
