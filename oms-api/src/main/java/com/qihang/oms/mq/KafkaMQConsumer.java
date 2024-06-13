@@ -37,6 +37,15 @@ public class KafkaMQConsumer {
         }else if(vo.getShopType().getIndex() == EnumShopType.TAO.getIndex()) {
             logger.info("Kafka订单消息TAO"+vo.getKeyId());
             orderService.taoOrderMessage(vo.getKeyId());
+        }else if(vo.getShopType().getIndex() == EnumShopType.PDD.getIndex()) {
+            logger.info("Kafka订单消息PDD"+vo.getKeyId());
+            orderService.pddOrderMessage(vo.getKeyId());
+        } else if(vo.getShopType().getIndex() == EnumShopType.DOU.getIndex()) {
+            logger.info("Kafka订单消息DOU"+vo.getKeyId());
+            orderService.douOrderMessage(vo.getKeyId());
+        } else if(vo.getShopType().getIndex() == EnumShopType.WEI.getIndex()) {
+            logger.info("Kafka订单消息WEI"+vo.getKeyId());
+//            orderService.weiOrderMessage(vo.getKeyId());
         }
     }
 

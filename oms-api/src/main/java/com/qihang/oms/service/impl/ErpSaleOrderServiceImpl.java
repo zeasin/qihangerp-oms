@@ -42,6 +42,12 @@ public class ErpSaleOrderServiceImpl extends ServiceImpl<ErpSaleOrderMapper, Erp
     private final OmsTaoOrderMapper taoOrderMapper;
     private final OmsTaoOrderItemMapper taoOrderItemMapper;
     private final OmsTaoGoodsSkuMapper taoGoodsSkuMapper;
+    private final OmsPddOrderMapper pddOrderMapper;
+    private final OmsPddOrderItemMapper pddOrderItemMapper;
+    private final OmsPddGoodsSkuMapper pddGoodsSkuMapper;
+    private final OmsDouOrderMapper douOrderMapper;
+    private final OmsDouOrderItemMapper douOrderItemMapper;
+    private final OmsDouGoodsSkuMapper douGoodsSkuMapper;
 
     @Transactional
     @Override
@@ -289,6 +295,353 @@ public class ErpSaleOrderServiceImpl extends ServiceImpl<ErpSaleOrderMapper, Erp
         }
         return ResultVo.success();
     }
+
+
+    @Transactional
+    @Override
+    public ResultVo<Integer> pddOrderMessage(String orderId) {
+        log.info("PDD订单消息处理"+orderId);
+        List<OmsPddOrder> originOrders = pddOrderMapper.selectList(new LambdaQueryWrapper<OmsPddOrder>().eq(OmsPddOrder::getOrderSn, orderId));
+
+        if(originOrders == null || originOrders.size() == 0) {
+            // 没有找到订单信息
+            return ResultVo.error(ResultVoEnum.NotFound,"没有找到PDD原始订单："+orderId);
+        }
+        OmsPddOrder originOrder = originOrders.get(0);
+        List<ErpSaleOrder> oOrders = orderMapper.selectList(new LambdaQueryWrapper<ErpSaleOrder>().eq(ErpSaleOrder::getOrderNum, orderId));
+//        List<OOrder> oOrders = orderMapper.selectList(new LambdaQueryWrapper<OOrder>().eq(OOrder::getOrderNum, orderId));
+        if(oOrders == null || oOrders.isEmpty()) {
+            // 新增订单
+            ErpSaleOrder insert = new ErpSaleOrder();
+            insert.setOrderNum(originOrder.getOrderSn());
+            insert.setShopType(EnumShopType.PDD.getIndex());
+            insert.setShopId(originOrder.getShopId());
+            insert.setBuyerMemo(originOrder.getBuyerMemo());
+            insert.setSellerMemo(originOrder.getRemark());
+            // 状态 订单状态0：新订单，1：待发货，2：已发货，3：已完成，11已取消；12退款中；21待付款；22锁定，29删除
+            int orderStatus = -1;
+            int refundStatus = -1;
+            if(originOrder.getRefundStatus()==1){
+                // 没有售后
+                orderStatus = originOrder.getOrderStatus();
+                refundStatus = 1;
+            }else{
+                if(originOrder.getRefundStatus()==4){
+                    refundStatus=4;
+                    orderStatus = 11;
+                }else{
+                    refundStatus=originOrder.getRefundStatus();
+                    orderStatus = 12;
+                }
+            }
+            insert.setRefundStatus(refundStatus);
+            insert.setOrderStatus(orderStatus);
+            insert.setGoodsAmount(originOrder.getGoodsAmount());
+            insert.setDiscountAmount(originOrder.getSellerDiscount());
+            insert.setPostage(originOrder.getPostage());
+            Double orderAmount =originOrder.getPayAmount();
+            if(originOrder.getPlatformDiscount()!=null){
+                orderAmount += originOrder.getPlatformDiscount();
+            }
+            insert.setAmount(orderAmount);
+
+//            insert.setPayment(originOrder.getPayAmount());
+            insert.setReceiverName(originOrder.getReceiverNameMask());
+            insert.setReceiverPhone(originOrder.getReceiverPhoneMask());
+            insert.setAddress(originOrder.getReceiverAddressMask());
+            insert.setProvince(originOrder.getProvince());
+            insert.setCity(originOrder.getCity());
+            insert.setTown(originOrder.getTown());
+            insert.setOrderTime(DateUtils.parseDate(originOrder.getCreatedTime()));
+            insert.setShipType(0);
+            insert.setShipStatus(0);
+            insert.setCreateTime(new Date());
+            insert.setCreateBy("ORDER_MESSAGE");
+
+            orderMapper.insert(insert);
+            // 插入orderItem
+            addPddOrderItem(insert.getId(),originOrder.getOrderSn(), insert.getShopId(), orderStatus,refundStatus);
+
+        }else{
+            // 修改订单 (修改：)
+            ErpSaleOrder update = new ErpSaleOrder();
+            update.setId(oOrders.get(0).getId());
+            // 状态 订单状态0：新订单，1：待发货，2：已发货，3：已完成，11已取消；12退款中；21待付款；22锁定，29删除
+            int orderStatus = -1;
+            int refundStatus = -1;
+            if(originOrder.getRefundStatus()==1){
+                // 没有售后
+                orderStatus = originOrder.getOrderStatus();
+                refundStatus = 1;
+            }else{
+                if(originOrder.getRefundStatus()==4){
+                    refundStatus=4;
+                    orderStatus = 11;
+                }else{
+                    refundStatus=originOrder.getRefundStatus();
+                    orderStatus = 12;
+                }
+            }
+            update.setRefundStatus(refundStatus);
+            update.setOrderStatus(orderStatus);
+//            update.setGoodsAmount(originOrder.getGoodsAmount());
+//            update.setPostFee(originOrder.getPostage());
+//            update.setAmount(originOrder.getPayAmount());
+//            update.setPayment(originOrder.getPayAmount());
+            update.setReceiverName(originOrder.getReceiverNameMask());
+            update.setReceiverPhone(originOrder.getReceiverPhoneMask());
+            update.setAddress(originOrder.getReceiverAddressMask());
+
+            update.setUpdateTime(new Date());
+            update.setUpdateBy("ORDER_MESSAGE");
+            orderMapper.updateById(update);
+
+            // 删除orderItem
+            orderItemMapper.delete(new LambdaQueryWrapper<ErpSaleOrderItem>().eq(ErpSaleOrderItem::getOrderId,update.getId()));
+            // 插入orderItem
+            addPddOrderItem(update.getId(),originOrder.getOrderSn(), oOrders.get(0).getShopId(), orderStatus,refundStatus);
+        }
+        return ResultVo.success();
+    }
+
+    private void addPddOrderItem(String oOrderId,String orderSn,Integer shopId,Integer orderStatus,Integer refundStatus){
+        List<OmsPddOrderItem> originOrderItems = pddOrderItemMapper.selectList(new LambdaQueryWrapper<OmsPddOrderItem>().eq(OmsPddOrderItem::getOrderSn, orderSn));
+        if(originOrderItems!=null && originOrderItems.size()>0) {
+            for (var item : originOrderItems) {
+                ErpSaleOrderItem orderItem = new ErpSaleOrderItem();
+                orderItem.setOrderId(Long.parseLong(oOrderId));
+                orderItem.setOriginalOrderId(orderSn);
+                orderItem.setOriginalOrderItemId(item.getId().toString());
+                orderItem.setOriginalSkuId(item.getSkuId().toString());
+                orderItem.setShopId(shopId);
+                orderItem.setShipStatus(0);
+                // 这里将订单商品skuid转换成erp系统的skuid
+                Long erpGoodsId = 0L;
+                Long erpSkuId = 0L;
+
+                List<OmsPddGoodsSku> pddGoodsSku = pddGoodsSkuMapper.selectList(new LambdaQueryWrapper<OmsPddGoodsSku>().eq(OmsPddGoodsSku::getSkuId, item.getSkuId()));
+                if (pddGoodsSku != null && !pddGoodsSku.isEmpty()) {
+                    erpGoodsId = pddGoodsSku.get(0).getErpGoodsId();
+                    erpSkuId = pddGoodsSku.get(0).getErpGoodsSkuId();
+//                        orderItem.setGoodsImg(taoGoodsSku.get(0).getLogo());
+//                        orderItem.setGoodsSpec(jdGoodsSkus.get(0).getSkuName());
+//                    orderItem.setSkuNum(taoGoodsSku.get(0).getOuterId());
+                }
+                orderItem.setGoodsId(erpGoodsId);
+                orderItem.setSpecId(erpSkuId);
+                orderItem.setGoodsImg(item.getGoodsImg());
+                orderItem.setGoodsSpec(item.getGoodsSpec());
+                orderItem.setGoodsTitle(item.getGoodsName());
+                orderItem.setGoodsPrice(item.getGoodsPrice());
+                orderItem.setItemAmount(item.getGoodsPrice());
+                orderItem.setQuantity(item.getGoodsCount());
+                orderItem.setOrderStatus(orderStatus);
+                orderItem.setRefundStatus(refundStatus);
+                orderItem.setRefundCount(0);
+                orderItem.setCreateTime(new Date());
+                orderItem.setCreateBy("ORDER_MESSAGE");
+                orderItemMapper.insert(orderItem);
+            }
+        }
+    }
+
+    @Transactional
+    @Override
+    public ResultVo<Integer> douOrderMessage(String orderId) {
+        log.info("Dou订单消息处理"+orderId);
+        List<OmsDouOrder> originOrders = douOrderMapper.selectList(new LambdaQueryWrapper<OmsDouOrder>().eq(OmsDouOrder::getOrderId, orderId));
+
+        if(originOrders == null || originOrders.size() == 0) {
+            // 没有找到订单信息
+            return ResultVo.error(ResultVoEnum.NotFound,"没有找到DOU原始订单："+orderId);
+        }
+        OmsDouOrder originOrder = originOrders.get(0);
+
+        List<ErpSaleOrder> oOrders = orderMapper.selectList(new LambdaQueryWrapper<ErpSaleOrder>().eq(ErpSaleOrder::getOrderNum, orderId));
+//        List<OOrder> oOrders = orderMapper.selectList(new LambdaQueryWrapper<OOrder>().eq(OOrder::getOrderNum, orderId));
+        if(oOrders == null || oOrders.isEmpty()) {
+            // 新增订单
+            ErpSaleOrder insert = new ErpSaleOrder();
+            insert.setOrderNum(originOrder.getOrderId());
+            insert.setShopType(EnumShopType.DOU.getIndex());
+            insert.setShopId(originOrder.getShopId().intValue());
+            insert.setBuyerMemo(originOrder.getBuyerWords());
+            insert.setSellerMemo(originOrder.getSellerWords());
+            // 状态 订单状态0：新订单，1：待发货，2：已发货，3：已完成，11已取消；12退款中；21待付款；22锁定，29删除，101部分发货
+            // 抖店订单状态 1 待确认/待支付（订单创建完毕）105 已支付 2 备货中 101 部分发货 3 已发货（全部发货）4 已取消 5 已完成（已收货）
+            int orderStatus = -1;
+            int refundStatus = -1;
+            if(originOrder.getOrderStatus()==1){
+                // 1待确认/待支付（订单创建完毕）
+                orderStatus = 21;
+                refundStatus = 1;
+            }else if(originOrder.getOrderStatus()==105){
+                // 105 已支付
+                orderStatus = 0;
+                refundStatus = 1;
+            }else if(originOrder.getOrderStatus()==2){
+                // 105 已支付
+                orderStatus = 1;
+                refundStatus = 1;
+            }else if(originOrder.getOrderStatus()==101){
+                // 101 部分发货
+                orderStatus = 101;
+                refundStatus = 1;
+            }else if(originOrder.getOrderStatus()==3){
+                //  3 已发货（全部发货）
+                orderStatus = 2;
+                refundStatus = 1;
+            }else if(originOrder.getOrderStatus()==4){
+                //  4 已取消
+                orderStatus = 11;
+                refundStatus = 1;
+            }else if(originOrder.getOrderStatus()==5){
+                //  5 已完成（已收货）
+                orderStatus = 3;
+                refundStatus = 1;
+            }
+
+            insert.setRefundStatus(refundStatus);
+            insert.setOrderStatus(orderStatus);
+
+            insert.setGoodsAmount(originOrder.getOrderAmount().doubleValue()/100);
+            insert.setPostage(originOrder.getPostAmount().doubleValue()/100);
+            insert.setAmount(originOrder.getOrderAmount().doubleValue()/100);
+//            insert.setPayment(originOrder.getPayAmount().doubleValue()/100);
+            insert.setReceiverName(originOrder.getMaskPostReceiver());
+            insert.setReceiverPhone(originOrder.getMaskPostTel());
+            insert.setAddress(originOrder.getMaskPostAddress());
+            insert.setProvince(originOrder.getProvinceName());
+            insert.setCity(originOrder.getCityName());
+            insert.setTown(originOrder.getTownName());
+            long time = originOrder.getCreateTime().longValue() * 1000;
+            insert.setOrderTime(new Date(time));
+            insert.setShipType(0);
+            insert.setShipStatus(0);
+            insert.setCreateTime(new Date());
+            insert.setCreateBy("ORDER_MESSAGE");
+
+            orderMapper.insert(insert);
+            // 插入orderItem
+            addDouOrderItem(insert.getId(),originOrder.getOrderId(),insert.getShopId(),orderStatus,refundStatus);
+
+        }else{
+            // 修改订单 (修改：)
+            ErpSaleOrder update = new ErpSaleOrder();
+            update.setId(oOrders.get(0).getId());
+            // 状态 订单状态0：新订单，1：待发货，2：已发货，3：已完成，11已取消；12退款中；21待付款；22锁定，29删除，101部分发货
+            // 抖店订单状态 1 待确认/待支付（订单创建完毕）105 已支付 2 备货中 101 部分发货 3 已发货（全部发货）4 已取消 5 已完成（已收货）
+            int orderStatus = -1;
+            int refundStatus = -1;
+            if(originOrder.getOrderStatus()==1){
+                // 1待确认/待支付（订单创建完毕）
+                orderStatus = 21;
+                refundStatus = 1;
+            }else if(originOrder.getOrderStatus()==105){
+                // 105 已支付
+                orderStatus = 0;
+                refundStatus = 1;
+            }else if(originOrder.getOrderStatus()==2){
+                // 105 已支付
+                orderStatus = 1;
+                refundStatus = 1;
+            }else if(originOrder.getOrderStatus()==101){
+                // 101 部分发货
+                orderStatus = 101;
+                refundStatus = 1;
+            }else if(originOrder.getOrderStatus()==3){
+                //  3 已发货（全部发货）
+                orderStatus = 2;
+                refundStatus = 1;
+            }else if(originOrder.getOrderStatus()==4){
+                //  4 已取消
+                orderStatus = 11;
+                refundStatus = 1;
+            }else if(originOrder.getOrderStatus()==5){
+                //  5 已完成（已收货）
+                orderStatus = 3;
+                refundStatus = 1;
+            }
+            update.setRefundStatus(refundStatus);
+            update.setOrderStatus(orderStatus);
+//            long time = originOrder.getCreateTime().longValue() * 1000;
+//            update.setOrderTime(new Date(time));
+//            update.setGoodsAmount(originOrder.getOrderAmount().doubleValue()/100);
+//            update.setPostFee(originOrder.getPostAmount().doubleValue()/100);
+//            update.setAmount(originOrder.getOrderAmount().doubleValue()/100);
+//            update.setPayment(originOrder.getPayAmount().doubleValue()/100);
+            update.setReceiverName(originOrder.getMaskPostReceiver());
+            update.setReceiverPhone(originOrder.getMaskPostTel());
+            update.setAddress(originOrder.getMaskPostAddress());
+
+
+            update.setUpdateTime(new Date());
+            update.setUpdateBy("ORDER_MESSAGE");
+            orderMapper.updateById(update);
+
+            // 删除orderItem
+            orderItemMapper.delete(new LambdaQueryWrapper<ErpSaleOrderItem>().eq(ErpSaleOrderItem::getOrderId,update.getId()));
+            // 插入orderItem
+            addDouOrderItem(update.getId(),originOrder.getOrderId(),update.getShopId(),orderStatus,refundStatus);
+        }
+        return ResultVo.success();
+    }
+    private void addDouOrderItem(String oOrderId,String originOrderId,Integer shopId,Integer orderStatus,Integer refundStatus){
+        List<OmsDouOrderItem> originOrderItems = douOrderItemMapper.selectList(new LambdaQueryWrapper<OmsDouOrderItem>().eq(OmsDouOrderItem::getParentOrderId, originOrderId));
+        if(originOrderItems!=null && originOrderItems.size()>0) {
+            for (var item : originOrderItems) {
+//                OOrderItem orderItem = new OOrderItem();
+//                orderItem.setOrderId(oOrderId);
+//                orderItem.setOrderNum(item.getParentOrderId());
+//                orderItem.setSubOrderNum(item.getOrderId());
+                ErpSaleOrderItem orderItem = new ErpSaleOrderItem();
+                orderItem.setOrderId(Long.parseLong(oOrderId));
+                orderItem.setOriginalOrderId(item.getParentOrderId());
+                orderItem.setOriginalOrderItemId(item.getOrderId());
+                orderItem.setOriginalSkuId(item.getSkuId().toString());
+                orderItem.setShopId(shopId);
+                orderItem.setShipStatus(0);
+                // 这里将订单商品skuid转换成erp系统的skuid
+                Long erpGoodsId = 0L;
+                Long erpSkuId = 0L;
+
+                OmsDouGoodsSku douGoodsSku = douGoodsSkuMapper.selectById(item.getSkuId());
+                if (douGoodsSku != null ) {
+                    erpGoodsId = douGoodsSku.getErpGoodsId();
+                    erpSkuId = douGoodsSku.getErpGoodsSkuId();
+//                        orderItem.setGoodsImg(taoGoodsSku.get(0).getLogo());
+//                        orderItem.setGoodsSpec(jdGoodsSkus.get(0).getSkuName());
+//                    orderItem.setSkuNum(taoGoodsSku.get(0).getOuterId());
+                }
+//                List<DouGoodsSku> douGoodsSku = douGoodsSkuMapper.selectList(new LambdaQueryWrapper<DouGoodsSku>().eq(DouGoodsSku::getId, item.getSkuId()));
+//                if (douGoodsSku != null && !douGoodsSku.isEmpty()) {
+//                    erpGoodsId = douGoodsSku.get(0).getOGoodsId();
+//                    erpSkuId = douGoodsSku.get(0).getOGoodsSkuId();
+////                        orderItem.setGoodsImg(taoGoodsSku.get(0).getLogo());
+////                        orderItem.setGoodsSpec(jdGoodsSkus.get(0).getSkuName());
+////                    orderItem.setSkuNum(taoGoodsSku.get(0).getOuterId());
+//                }
+
+                orderItem.setGoodsId(erpGoodsId);
+                orderItem.setSpecId(erpSkuId);
+                orderItem.setGoodsImg(item.getProductPic());
+                if(org.springframework.util.StringUtils.hasText(item.getSpec())) {
+                    orderItem.setGoodsSpec(item.getSpec().length()>500?item.getSpec().substring(0,499):item.getSpec());
+                }
+                orderItem.setGoodsTitle(item.getProductName());
+                orderItem.setGoodsPrice(item.getOriginAmount().doubleValue()/100);
+                orderItem.setItemAmount(item.getOrderAmount().doubleValue()/100);
+                orderItem.setQuantity(item.getItemNum());
+                orderItem.setOrderStatus(orderStatus);
+                orderItem.setRefundStatus(refundStatus);
+                orderItem.setRefundCount(0);
+                orderItem.setCreateTime(new Date());
+                orderItem.setCreateBy("ORDER_MESSAGE");
+                orderItemMapper.insert(orderItem);
+            }
+        }
+    }
+
 
     @Override
     public List<ErpSaleOrder> getList(ErpSaleOrder order) {

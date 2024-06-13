@@ -16,6 +16,8 @@ import java.util.List;
 public interface ErpSaleOrderService extends IService<ErpSaleOrder> {
     ResultVo<Integer> jdOrderMessage(String orderId);
     ResultVo<Integer> taoOrderMessage(String orderId);
+    ResultVo<Integer> pddOrderMessage(String orderId);
+    ResultVo<Integer> douOrderMessage(String orderId);
 
     List<ErpSaleOrder> getList(ErpSaleOrder order);
     PageResult<ErpSaleOrder> queryPageList(ErpSaleOrder bo, PageQuery pageQuery);

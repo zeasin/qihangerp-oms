@@ -26,7 +26,7 @@
 import OrderTao  from "@/views/shop/tao/order/index";
 import OrderJd  from "@/views/shop/jd/order/index";
 import OrderDou  from "@/views/dou/order/index";
-import OrderPdd  from "@/views/pdd/order/index";
+import OrderPdd  from "@/views/shop/pdd/order/index";
 import OrderWei  from "@/views/shop/wei/order/index";
 export default {
   name: "Order",
