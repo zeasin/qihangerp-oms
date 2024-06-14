@@ -140,7 +140,29 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils
     {
         return Math.abs((int) ((date2.getTime() - date1.getTime()) / (1000 * 3600 * 24)));
     }
-
+    /**
+     * 时间字符串转时间戳
+     * @param format
+     * @param time 时间字符串
+     *
+     * @return
+     */
+    public static final long dateTimeStrToTimeStamp(String format, final String time)
+    {
+        try
+        {
+            if(format==null||format.equals("")){
+                format = YYYY_MM_DD_HH_MM_SS;
+            }
+            Date date = new SimpleDateFormat(format).parse(time);
+            return date.getTime();
+        }
+        catch (ParseException e)
+        {
+            e.printStackTrace();
+            return 0;
+        }
+    }
     /**
      * 计算时间差
      *

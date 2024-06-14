@@ -18,7 +18,7 @@ public class SShopPullLogs implements Serializable {
     /**
      * 店铺id
      */
-    private Integer shopId;
+    private Long shopId;
 
     /**
      * 平台id

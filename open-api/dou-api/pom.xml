@@ -33,6 +33,12 @@
             <scope>system</scope>
             <systemPath>${project.basedir}/libs/dou-api-0.3.jar</systemPath>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/net.logstash.logback/logstash-logback-encoder -->
+        <dependency>
+            <groupId>net.logstash.logback</groupId>
+            <artifactId>logstash-logback-encoder</artifactId>
+            <version>7.4</version>
+        </dependency>
 
     </dependencies>
 

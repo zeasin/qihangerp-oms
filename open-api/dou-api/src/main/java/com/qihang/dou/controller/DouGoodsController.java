@@ -12,8 +12,9 @@ import com.qihang.dou.service.OmsDouGoodsService;
 import com.qihang.dou.service.OmsDouGoodsSkuService;
 import com.qihang.security.common.BaseController;
 import lombok.AllArgsConstructor;
+import lombok.extern.java.Log;
 import org.springframework.web.bind.annotation.*;
-
+@Log
 @RequestMapping("/goods")
 @RestController
 @AllArgsConstructor
@@ -23,7 +24,7 @@ public class DouGoodsController extends BaseController {
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public TableDataInfo goodsList(OmsDouGoods bo, PageQuery pageQuery) {
         PageResult<OmsDouGoods> result = goodsService.queryPageList(bo, pageQuery);
-
+        log.info("访问商品接口");
         return getDataTable(result);
     }
 

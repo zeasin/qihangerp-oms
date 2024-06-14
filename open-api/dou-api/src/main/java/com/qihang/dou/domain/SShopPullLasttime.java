@@ -1,6 +1,7 @@
 package com.qihang.dou.domain;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 import lombok.Data;
 
@@ -18,7 +19,7 @@ public class SShopPullLasttime implements Serializable {
     /**
      * 店铺id
      */
-    private Integer shopId;
+    private Long shopId;
 
     /**
      * 类型（ORDER:订单，REFUND:退款）
@@ -28,7 +29,7 @@ public class SShopPullLasttime implements Serializable {
     /**
      * 最后更新时间
      */
-    private Date lasttime;
+    private LocalDateTime lasttime;
 
     /**
      * 创建时间
