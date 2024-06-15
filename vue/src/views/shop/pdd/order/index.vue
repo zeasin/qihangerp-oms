@@ -72,7 +72,7 @@
           size="mini"
           :disabled="multiple"
           @click="handlePushOms"
-        >手动将选中订单推送到OMS</el-button>
+        >手动推送订单</el-button>
       </el-col>
 
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>

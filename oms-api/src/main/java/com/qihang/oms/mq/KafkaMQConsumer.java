@@ -45,7 +45,7 @@ public class KafkaMQConsumer {
             orderService.douOrderMessage(vo.getKeyId());
         } else if(vo.getShopType().getIndex() == EnumShopType.WEI.getIndex()) {
             logger.info("Kafka订单消息WEI"+vo.getKeyId());
-//            orderService.weiOrderMessage(vo.getKeyId());
+            orderService.weiOrderMessage(vo.getKeyId());
         }
     }
 

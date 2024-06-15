@@ -1,7 +1,8 @@
 package com.qihang.dou.domain;
 
-import java.io.Serializable;
 import lombok.Data;
+
+import java.io.Serializable;
 
 /**
  * 抖店订单明细表

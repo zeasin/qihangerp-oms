@@ -16,9 +16,11 @@
             <result property="refundStatus" column="refund_status" jdbcType="INTEGER"/>
             <result property="orderStatus" column="order_status" jdbcType="INTEGER"/>
             <result property="goodsAmount" column="goods_amount" jdbcType="DOUBLE"/>
-            <result property="discountAmount" column="discount_amount" jdbcType="DOUBLE"/>
+            <result property="sellerDiscount" column="seller_discount" jdbcType="DOUBLE"/>
+            <result property="platformDiscount" column="platform_discount" jdbcType="DOUBLE"/>
             <result property="postage" column="postage" jdbcType="DOUBLE"/>
-            <result property="amount" column="amount" jdbcType="DOUBLE"/>
+            <result property="orderAmount" column="order_amount" jdbcType="DOUBLE"/>
+            <result property="payAmount" column="pay_amount" jdbcType="DOUBLE"/>
             <result property="receiverName" column="receiver_name" jdbcType="VARCHAR"/>
             <result property="receiverPhone" column="receiver_phone" jdbcType="VARCHAR"/>
             <result property="address" column="address" jdbcType="VARCHAR"/>
@@ -50,8 +52,8 @@
         id,order_num,shop_type,
         shop_id,remark,buyer_memo,seller_memo,
         tag,refund_status,order_status,
-        goods_amount,discount_amount,postage,
-        amount,receiver_name,receiver_phone,
+        goods_amount,seller_discount,platform_discount,postage,
+        order_amount,pay_amount,receiver_name,receiver_phone,
         address,country,province,
         city,town,order_time,
         pay_time,confirm_time,ship_type,

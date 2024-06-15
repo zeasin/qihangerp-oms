@@ -1,9 +1,9 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="订单号" prop="tid">
+      <el-form-item label="订单号" prop="orderId">
         <el-input
-          v-model="queryParams.tid"
+          v-model="queryParams.orderId"
           placeholder="请输入订单号"
           clearable
           @keyup.enter.native="handleQuery"
@@ -47,7 +47,7 @@
       <el-col :span="1.5">
         <el-button
           :loading="pullLoading"
-          type="primary"
+          type="success"
           plain
           icon="el-icon-download"
           size="mini"
@@ -56,13 +56,13 @@
       </el-col>
       <el-col :span="1.5">
         <el-button
-          type="success"
+          type="primary"
           plain
-          icon="el-icon-success"
+          icon="el-icon-refresh"
           size="mini"
           :disabled="multiple"
-          @click="handleConfirm"
-        >确认订单</el-button>
+          @click="handlePushOms"
+        >手动推送订单</el-button>
       </el-col>
 
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
@@ -140,16 +140,6 @@
             @click="handleDetail(scope.row)"
             v-hasPermi="['xhs:order:remove']"
           >详情</el-button>
-          <el-row>
-          <el-button
-            v-if="!scope.row.auditStatus||scope.row.auditStatus === 0"
-            size="mini"
-            type="success"
-            icon="el-icon-success"
-            @click="handleConfirm(scope.row)"
-            v-hasPermi="['xhs:order:edit']"
-          >确认订单</el-button>
-          </el-row>
         </template>
       </el-table-column>
     </el-table>
@@ -292,10 +282,7 @@
         </el-form-item>
 
       </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitConfirmForm">确 定</el-button>
-        <el-button @click="cancel">取 消</el-button>
-      </div>
+
     </el-dialog>
 
   </div>
@@ -304,10 +291,7 @@
 <script>
 
 import { listShop } from "@/api/shop/shop";
-import { searchSku } from "@/api/goods/goods";
-import {MessageBox} from "element-ui";
-import {isRelogin} from "../../../../utils/request";
-import {listOrder,getOrder,confirmOrder,pullOrder,pullOrderDetail} from "@/api/wei/order";
+import {listOrder,getOrder,pushOms,pullOrder,pullOrderDetail} from "@/api/wei/order";
 import {pcaTextArr} from "element-china-area-data";
 
 export default {
@@ -405,7 +389,7 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.id)
+      this.ids = selection.map(item => item.orderId)
       this.single = selection.length!==1
       this.multiple = !selection.length
     },
@@ -435,7 +419,7 @@ export default {
     },
     handleDetail(row) {
       this.reset();
-      const id = row.id || this.ids
+      const id = row.id
       getOrder(id).then(response => {
         this.form = response.data;
         this.goodsList = response.data.items;
@@ -444,39 +428,17 @@ export default {
         this.isAudit = false
       });
     },
-    // handleConfirm(row) {
-    //   const ids = row.id || this.ids;
-    //   console.log('批量确认订单:',ids)
-    //   this.$modal.confirm('是否批量确认订单？').then(function() {
-    //     return orderConfirm({ids:ids});
-    //   }).then(() => {
-    //     this.getList();
-    //     this.$modal.msgSuccess("确认成功");
-    //   }).catch(() => {});
-    // },
-    handleConfirm(row) {
-      this.reset();
-      const id = row.id || this.ids
-      getOrder(id).then(response => {
-        this.form = response.data;
-        this.goodsList = response.data.items;
-        this.detailOpen = true;
-        this.detailTitle = "确认订单";
-        this.isAudit = true
-      });
+    handlePushOms(row) {
+      const ids = row.id || this.ids;
+      this.$modal.confirm('是否批量重新推送订单？').then(function() {
+        return pushOms({ids:ids});
+      }).then(() => {
+        // this.getList();
+        this.$modal.msgSuccess("推送成功");
+      }).catch(() => {});
     },
-    submitConfirmForm(){
-      this.$refs["form"].validate(valid => {
-        if (valid) {
-          // this.form.xhsOrderItemList = this.xhsOrderItemList;
-          confirmOrder(this.form).then(response => {
-            this.$modal.msgSuccess("确认成功");
-            this.detailOpen = false;
-            this.getList();
-          });
-        }
-      })
-    },
+
+
   }
 };
 </script>

@@ -66,9 +66,13 @@ public class ErpSaleOrder implements Serializable {
     private Double goodsAmount;
 
     /**
-     * 折扣金额
+     * 卖家优惠金额
      */
-    private Double discountAmount;
+    private Double sellerDiscount;
+    /**
+     * 卖家优惠金额
+     */
+    private Double platformDiscount;
 
     /**
      * 运费
@@ -76,9 +80,13 @@ public class ErpSaleOrder implements Serializable {
     private Double postage;
 
     /**
-     * 支付金额，单位：元，支付金额=商品金额-折扣金额+邮费
+     * 订单金额
      */
-    private Double amount;
+    private Double orderAmount;
+    /**
+     * 支付金额，单位：元
+     */
+    private Double payAmount;
 
     /**
      * 收件人姓名

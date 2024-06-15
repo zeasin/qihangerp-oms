@@ -1,11 +1,11 @@
 package com.qihang.dou.domain;
 
+import com.baomidou.mybatisplus.annotation.TableField;
+import lombok.Data;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
-
-import com.baomidou.mybatisplus.annotation.TableField;
-import lombok.Data;
 
 /**
  * 抖店订单表
@@ -184,9 +184,6 @@ public class OmsDouOrder implements Serializable {
      */
     private String encryptPostTel;
 
-    /**
-     * 收件地址
-     */
     private String encryptPostAddress;
 
     /**
@@ -408,16 +405,9 @@ public class OmsDouOrder implements Serializable {
      * 最后一次拉取时间
      */
     private Date lastPullTime;
-
-    /**
-     * 0待确认，1已确认2已拦截-9未拉取
-     */
     private Integer auditStatus;
-
-    /**
-     * 审核时间
-     */
     private Date auditTime;
+
     @TableField(exist = false)
     private List<OmsDouOrderItem> items;
     private static final long serialVersionUID = 1L;

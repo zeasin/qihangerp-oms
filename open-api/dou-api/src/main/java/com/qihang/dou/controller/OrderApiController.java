@@ -26,6 +26,7 @@ import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -51,6 +52,7 @@ public class OrderApiController {
 //    private final MqUtils mqUtils;
     private final SShopPullLogsService pullLogsService;
     private final SShopPullLasttimeService pullLasttimeService;
+    private final KafkaTemplate<String,Object> kafkaTemplate;
     /**
      * 增量更新订单
      * @param req
@@ -170,11 +172,13 @@ public class OrderApiController {
             if (result.getCode() == ResultVoEnum.DataExist.getIndex()) {
                 //已经存在
                 log.info("/**************主动更新dou订单：开始更新数据库：" + douOrder.getOrderId() + "存在、更新************开始通知****/");
+                kafkaTemplate.send(MqType.ORDER_MQ, JSONObject.toJSONString(MqMessage.build(EnumShopType.DOU, MqType.ORDER_MESSAGE,douOrder.getOrderId())));
 //                mqUtils.sendApiMessage(MqMessage.build(EnumShopType.DOU, MqType.ORDER_MESSAGE,douOrder.getOrderId()));
                 hasExistOrder++;
             } else if (result.getCode() == ResultVoEnum.SUCCESS.getIndex()) {
                 log.info("/**************主动更新dou订单：开始更新数据库：" + douOrder.getOrderId() + "不存在、新增************开始通知****/");
 //                mqUtils.sendApiMessage(MqMessage.build(EnumShopType.DOU,MqType.ORDER_MESSAGE,douOrder.getOrderId()));
+                kafkaTemplate.send(MqType.ORDER_MQ, JSONObject.toJSONString(MqMessage.build(EnumShopType.DOU, MqType.ORDER_MESSAGE,douOrder.getOrderId())));
                 insertSuccess++;
             } else {
                 log.info("/**************主动更新dou订单：开始更新数据库：" + douOrder.getOrderId() + "报错****************/");

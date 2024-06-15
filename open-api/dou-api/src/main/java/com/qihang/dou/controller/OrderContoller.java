@@ -49,7 +49,7 @@ public class OrderContoller extends BaseController {
         // TODO:需要优化消息格式
         if(bo!=null && bo.getIds()!=null) {
             for(String id: bo.getIds()) {
-                kafkaTemplate.send(MqType.ORDER_MQ, JSONObject.toJSONString(MqMessage.build(EnumShopType.PDD, MqType.ORDER_MESSAGE,id)));
+                kafkaTemplate.send(MqType.ORDER_MQ, JSONObject.toJSONString(MqMessage.build(EnumShopType.DOU, MqType.ORDER_MESSAGE,id)));
 //                mqUtils.sendApiMessage(MqMessage.build(EnumShopType.PDD, MqType.ORDER_MESSAGE, id));
             }
         }

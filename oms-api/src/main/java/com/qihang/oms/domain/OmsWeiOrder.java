@@ -1,10 +1,7 @@
-package com.qihang.wei.domain;
+package com.qihang.oms.domain;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
-
-import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 
 /**
@@ -16,12 +13,12 @@ public class OmsWeiOrder implements Serializable {
     /**
      * 
      */
-    private String id;
+    private Long id;
 
     /**
      * 店铺id
      */
-    private Long shopId;
+    private Integer shopId;
 
     /**
      * 订单号
@@ -174,9 +171,6 @@ public class OmsWeiOrder implements Serializable {
      * 订单审核时间
      */
     private Date auditTime;
-
-    @TableField(exist = false)
-    private List<OmsWeiOrderItem> items;
 
     private static final long serialVersionUID = 1L;
 }

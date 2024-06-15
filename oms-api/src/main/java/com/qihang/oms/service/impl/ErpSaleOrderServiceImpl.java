@@ -20,6 +20,8 @@ import lombok.extern.java.Log;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -48,6 +50,10 @@ public class ErpSaleOrderServiceImpl extends ServiceImpl<ErpSaleOrderMapper, Erp
     private final OmsDouOrderMapper douOrderMapper;
     private final OmsDouOrderItemMapper douOrderItemMapper;
     private final OmsDouGoodsSkuMapper douGoodsSkuMapper;
+    private final OmsWeiOrderMapper weiOrderMapper;
+    private final OmsWeiOrderItemMapper weiOrderItemMapper;
+    private final OmsWeiGoodsSkuMapper weiGoodsSkuMapper;
+
 
     @Transactional
     @Override
@@ -79,19 +85,17 @@ public class ErpSaleOrderServiceImpl extends ServiceImpl<ErpSaleOrderMapper, Erp
                 insert.setRefundStatus(1);
             }
             insert.setOrderStatus(orderStatus);
+
             insert.setGoodsAmount(StringUtils.isEmpty(jdOrder.getOrderTotalPrice()) ? 0.0 : Double.parseDouble(jdOrder.getOrderTotalPrice()));
             double orderSellerPrice = StringUtils.isEmpty(jdOrder.getOrderSellerPrice()) ? 0.0 : Double.parseDouble(jdOrder.getOrderSellerPrice());
             double freightPrice = StringUtils.isEmpty(jdOrder.getFreightPrice()) ? 0.0 : Double.parseDouble(jdOrder.getFreightPrice());
-            insert.setAmount(orderSellerPrice + freightPrice);
+            insert.setOrderAmount(orderSellerPrice + freightPrice);
+            insert.setPostage(freightPrice);
+            insert.setPlatformDiscount(0.0);
             try {
-                insert.setPostage(org.springframework.util.StringUtils.hasText(jdOrder.getFreightPrice())?Double.parseDouble(jdOrder.getFreightPrice()):0.0);
+            insert.setSellerDiscount(org.springframework.util.StringUtils.hasText(jdOrder.getSellerDiscount())?Double.parseDouble(jdOrder.getSellerDiscount()):0.0);
             }catch (Exception e){
-                insert.setPostage(0.0);
-            }
-            try {
-            insert.setDiscountAmount(org.springframework.util.StringUtils.hasText(jdOrder.getSellerDiscount())?Double.parseDouble(jdOrder.getSellerDiscount()):0.0);
-            }catch (Exception e){
-                insert.setDiscountAmount(0.0);
+                insert.setSellerDiscount(0.0);
             }
             insert.setReceiverName(jdOrder.getFullname());
             insert.setReceiverPhone(jdOrder.getMobile());
@@ -210,10 +214,14 @@ public class ErpSaleOrderServiceImpl extends ServiceImpl<ErpSaleOrderMapper, Erp
                 insert.setRefundStatus(1);
             }
             insert.setOrderStatus(orderStatus);
-            insert.setGoodsAmount(taoOrder.getTotalFee());
-            insert.setAmount(taoOrder.getPayment().doubleValue());
-            insert.setDiscountAmount(taoOrder.getDiscountFee().doubleValue());
-            insert.setPostage(taoOrder.getPostFee().doubleValue());
+
+            insert.setGoodsAmount(taoOrder.getPrice()!=null?taoOrder.getPrice():0.0);
+            insert.setPlatformDiscount(0.0);
+            insert.setSellerDiscount(taoOrder.getDiscountFee()!=null?taoOrder.getDiscountFee().doubleValue():0.0);
+            insert.setPayAmount(taoOrder.getPayment()!=null?taoOrder.getPayment().doubleValue():0.0);
+            insert.setOrderAmount(taoOrder.getTotalFee()!=null?taoOrder.getTotalFee():0.0);
+            insert.setPostage(taoOrder.getPostFee()!=null?taoOrder.getPostFee().doubleValue():0.0);
+
             insert.setReceiverName(taoOrder.getReceiverName());
             insert.setReceiverPhone(taoOrder.getReceiverMobile());
             insert.setAddress(taoOrder.getReceiverAddress());
@@ -336,16 +344,19 @@ public class ErpSaleOrderServiceImpl extends ServiceImpl<ErpSaleOrderMapper, Erp
             }
             insert.setRefundStatus(refundStatus);
             insert.setOrderStatus(orderStatus);
+
+
             insert.setGoodsAmount(originOrder.getGoodsAmount());
-            insert.setDiscountAmount(originOrder.getSellerDiscount());
             insert.setPostage(originOrder.getPostage());
+            insert.setPlatformDiscount(originOrder.getPlatformDiscount());
+            insert.setSellerDiscount(originOrder.getSellerDiscount());
             Double orderAmount =originOrder.getPayAmount();
             if(originOrder.getPlatformDiscount()!=null){
                 orderAmount += originOrder.getPlatformDiscount();
             }
-            insert.setAmount(orderAmount);
+            insert.setOrderAmount(orderAmount);
+            insert.setPayAmount(originOrder.getPayAmount());
 
-//            insert.setPayment(originOrder.getPayAmount());
             insert.setReceiverName(originOrder.getReceiverNameMask());
             insert.setReceiverPhone(originOrder.getReceiverPhoneMask());
             insert.setAddress(originOrder.getReceiverAddressMask());
@@ -504,10 +515,13 @@ public class ErpSaleOrderServiceImpl extends ServiceImpl<ErpSaleOrderMapper, Erp
             insert.setRefundStatus(refundStatus);
             insert.setOrderStatus(orderStatus);
 
-            insert.setGoodsAmount(originOrder.getOrderAmount().doubleValue()/100);
-            insert.setPostage(originOrder.getPostAmount().doubleValue()/100);
-            insert.setAmount(originOrder.getOrderAmount().doubleValue()/100);
-//            insert.setPayment(originOrder.getPayAmount().doubleValue()/100);
+            insert.setGoodsAmount(originOrder.getOrderAmount()!=null?originOrder.getOrderAmount().doubleValue()/100:0.0);
+            insert.setPostage(originOrder.getPostAmount()!=null?originOrder.getPostAmount().doubleValue()/100:0.0);
+            insert.setSellerDiscount(originOrder.getPromotionShopAmount()!=null?originOrder.getPromotionShopAmount().doubleValue()/100:0.0);
+            insert.setPlatformDiscount(originOrder.getPromotionPlatformAmount()!=null?originOrder.getPromotionPlatformAmount().doubleValue()/100:0.0);
+            insert.setOrderAmount(originOrder.getOrderAmount()!=null?originOrder.getOrderAmount().doubleValue()/100:0.0);
+            insert.setPayAmount(originOrder.getPayAmount()!=null?originOrder.getPayAmount().doubleValue()/100:0.0);
+
             insert.setReceiverName(originOrder.getMaskPostReceiver());
             insert.setReceiverPhone(originOrder.getMaskPostTel());
             insert.setAddress(originOrder.getMaskPostAddress());
@@ -642,6 +656,171 @@ public class ErpSaleOrderServiceImpl extends ServiceImpl<ErpSaleOrderMapper, Erp
         }
     }
 
+
+    @Transactional
+    @Override
+    public ResultVo<Integer> weiOrderMessage(String orderId) {
+        log.info("Wei订单消息处理"+orderId);
+        List<OmsWeiOrder> originOrders = weiOrderMapper.selectList(new LambdaQueryWrapper<OmsWeiOrder>().eq(OmsWeiOrder::getOrderId, orderId));
+
+        if(originOrders == null || originOrders.size() == 0) {
+            // 没有找到订单信息
+            return ResultVo.error(ResultVoEnum.NotFound,"没有找到WEI原始订单："+orderId);
+        }
+        OmsWeiOrder originOrder = originOrders.get(0);
+
+        List<ErpSaleOrder> oOrders = orderMapper.selectList(new LambdaQueryWrapper<ErpSaleOrder>().eq(ErpSaleOrder::getOrderNum, orderId));
+//        List<OOrder> oOrders = orderMapper.selectList(new LambdaQueryWrapper<OOrder>().eq(OOrder::getOrderNum, orderId));
+        if(oOrders == null || oOrders.isEmpty()) {
+            // 新增订单
+            ErpSaleOrder insert = new ErpSaleOrder();
+            insert.setOrderNum(originOrder.getOrderId());
+            insert.setShopType(EnumShopType.WEI.getIndex());
+            insert.setShopId(originOrder.getShopId());
+            insert.setBuyerMemo("");
+            insert.setSellerMemo("");
+            // 状态 订单状态0：新订单，1：待发货，2：已发货，3：已完成，11已取消；12退款中；21待付款；22锁定，29删除，101部分发货
+            Integer orderStatus = null;
+            Integer refundStatus = null;
+            //状态 10	待付款；20	待发货；21	部分发货；30	待收货；100	完成；200	全部商品售后之后，订单取消；250	未付款用户主动取消或超时未付款订单自动取消；
+            if(originOrder.getStatus() == 10){
+                orderStatus = 21;
+                refundStatus = 1;
+            } else if (originOrder.getStatus() == 20 || originOrder.getStatus() == 21) {
+                orderStatus = 1;
+                refundStatus = 1;
+            } else if (originOrder.getStatus() == 30) {
+                orderStatus = 2;
+                refundStatus = 1;
+            } else if (originOrder.getStatus() == 100) {
+                orderStatus = 3;
+                refundStatus = 1;
+            }else if (originOrder.getStatus() == 200 || originOrder.getStatus() == 250) {
+                orderStatus = 11;
+                refundStatus = 4;
+            }
+
+            insert.setRefundStatus(refundStatus);
+            insert.setOrderStatus(orderStatus);
+
+            insert.setGoodsAmount(originOrder.getProductPrice()!=null?originOrder.getProductPrice().doubleValue()/100:0.0);
+            insert.setPostage(originOrder.getFreight()!=null?originOrder.getFreight().doubleValue()/100:0.0);
+            insert.setSellerDiscount(originOrder.getDiscountedPrice()!=null?originOrder.getDiscountedPrice().doubleValue()/100:0.0);
+            insert.setPlatformDiscount(0.0);
+            insert.setOrderAmount(originOrder.getOrderPrice()!=null?originOrder.getOrderPrice().doubleValue()/100:0.0);
+            insert.setPayAmount(originOrder.getOrderPrice()!=null?originOrder.getOrderPrice().doubleValue()/100:0.0);
+
+            insert.setReceiverName(originOrder.getUserName());
+            insert.setReceiverPhone(originOrder.getTelNumber());
+            insert.setAddress(originOrder.getDetailInfo());
+            insert.setProvince(originOrder.getProvinceName());
+            insert.setCity(originOrder.getCityName());
+            insert.setTown(originOrder.getCountyName());
+            long time = originOrder.getCreateTime().longValue() * 1000;
+            insert.setOrderTime(new Date(time));
+            insert.setShipType(0);
+            insert.setShipStatus(0);
+            insert.setCreateTime(new Date());
+            insert.setCreateBy("ORDER_MESSAGE");
+
+            orderMapper.insert(insert);
+            // 插入orderItem
+            addWeiOrderItem(insert.getId(),originOrder.getOrderId(),originOrder.getShopId(),orderStatus,refundStatus);
+        } else{
+            // 修改订单 (修改：)
+            ErpSaleOrder update = new ErpSaleOrder();
+            update.setId(oOrders.get(0).getId());
+            // 状态 订单状态0：新订单，1：待发货，2：已发货，3：已完成，11已取消；12退款中；21待付款；22锁定，29删除，101部分发货
+            Integer orderStatus = null;
+            Integer refundStatus = null;
+            //状态 10	待付款；20	待发货；21	部分发货；30	待收货；100	完成；200	全部商品售后之后，订单取消；250	未付款用户主动取消或超时未付款订单自动取消；
+            if(originOrder.getStatus() == 10){
+                orderStatus = 21;
+                refundStatus = 1;
+            } else if (originOrder.getStatus() == 20 || originOrder.getStatus() == 21) {
+                orderStatus = 1;
+                refundStatus = 1;
+            } else if (originOrder.getStatus() == 30) {
+                orderStatus = 2;
+                refundStatus = 1;
+            } else if (originOrder.getStatus() == 100) {
+                orderStatus = 3;
+                refundStatus = 1;
+            }else if (originOrder.getStatus() == 200 || originOrder.getStatus() == 250) {
+                orderStatus = 11;
+                refundStatus = 4;
+            }
+
+            update.setRefundStatus(refundStatus);
+            update.setOrderStatus(orderStatus);
+//            long time = originOrder.getCreateTime().longValue() * 1000;
+//            update.setOrderTime(new Date(time));
+//            update.setGoodsAmount(originOrder.getOrderAmount().doubleValue()/100);
+//            update.setPostFee(originOrder.getPostAmount().doubleValue()/100);
+//            update.setAmount(originOrder.getOrderAmount().doubleValue()/100);
+//            update.setPayment(originOrder.getPayAmount().doubleValue()/100);
+            update.setReceiverName(originOrder.getUserName());
+            update.setReceiverPhone(originOrder.getTelNumber());
+            update.setAddress(originOrder.getDetailInfo());
+            update.setUpdateTime(new Date());
+            update.setUpdateBy("ORDER_MESSAGE");
+            orderMapper.updateById(update);
+
+            // 删除orderItem
+            orderItemMapper.delete(new LambdaQueryWrapper<ErpSaleOrderItem>().eq(ErpSaleOrderItem::getOrderId,update.getId()));
+            // 插入orderItem
+            addWeiOrderItem(update.getId(),originOrder.getOrderId(),update.getShopId(),orderStatus,refundStatus);
+        }
+        return ResultVo.success();
+    }
+
+    private void addWeiOrderItem(String oOrderId,String originOrderId,Integer shopId,Integer orderStatus,Integer refundStatus){
+        List<OmsWeiOrderItem> originOrderItems = weiOrderItemMapper.selectList(new LambdaQueryWrapper<OmsWeiOrderItem>().eq(OmsWeiOrderItem::getOrderId, originOrderId));
+        if(originOrderItems!=null && originOrderItems.size()>0) {
+            for (var item : originOrderItems) {
+//                OOrderItem orderItem = new OOrderItem();
+//                orderItem.setOrderId(oOrderId);
+//                orderItem.setOrderNum(item.getParentOrderId());
+//                orderItem.setSubOrderNum(item.getOrderId());
+                ErpSaleOrderItem orderItem = new ErpSaleOrderItem();
+                orderItem.setOrderId(Long.parseLong(oOrderId));
+                orderItem.setOriginalOrderId(item.getOrderId());
+                orderItem.setOriginalOrderItemId(item.getId().toString());
+                orderItem.setOriginalSkuId(item.getSkuId().toString());
+                orderItem.setShopId(shopId);
+                orderItem.setShipStatus(0);
+                // 这里将订单商品skuid转换成erp系统的skuid
+                Long erpGoodsId = 0L;
+                Long erpSkuId = 0L;
+                String skuAttr = "";
+                List<OmsWeiGoodsSku> weiGoodsSkuList = weiGoodsSkuMapper.selectList(new LambdaQueryWrapper<OmsWeiGoodsSku>().eq(OmsWeiGoodsSku::getSkuId,item.getSkuId()));
+                if (weiGoodsSkuList != null && weiGoodsSkuList.size()>0) {
+                    erpGoodsId = weiGoodsSkuList.get(0).getErpGoodsId();
+                    erpSkuId = weiGoodsSkuList.get(0).getErpGoodsSkuId();
+                    skuAttr = weiGoodsSkuList.get(0).getSkuAttr();
+//                        orderItem.setGoodsImg(taoGoodsSku.get(0).getLogo());
+//                        orderItem.setGoodsSpec(jdGoodsSkus.get(0).getSkuName());
+//                    orderItem.setSkuNum(taoGoodsSku.get(0).getOuterId());
+                }
+
+                orderItem.setGoodsId(erpGoodsId);
+                orderItem.setSpecId(erpSkuId);
+                orderItem.setGoodsImg(item.getThumbImg());
+                orderItem.setGoodsSpec(org.springframework.util.StringUtils.hasText(skuAttr)?skuAttr:item.getSkuAttrs());
+
+                orderItem.setGoodsTitle(item.getTitle());
+                orderItem.setGoodsPrice(item.getSalePrice()!=null?item.getSalePrice().doubleValue()/100:0.0);
+                orderItem.setItemAmount(item.getSalePrice()!=null?item.getSalePrice().doubleValue()/100:0.0);
+                orderItem.setQuantity(item.getSkuCnt());
+                orderItem.setOrderStatus(orderStatus);
+                orderItem.setRefundStatus(refundStatus);
+                orderItem.setRefundCount(0);
+                orderItem.setCreateTime(new Date());
+                orderItem.setCreateBy("ORDER_MESSAGE");
+                orderItemMapper.insert(orderItem);
+            }
+        }
+    }
 
     @Override
     public List<ErpSaleOrder> getList(ErpSaleOrder order) {

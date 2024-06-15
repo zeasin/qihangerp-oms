@@ -11,7 +11,7 @@
  Target Server Version : 80032
  File Encoding         : 65001
 
- Date: 13/06/2024 16:35:52
+ Date: 15/06/2024 10:14:13
 */
 
 SET NAMES utf8mb4;
@@ -332,7 +332,7 @@ CREATE TABLE `erp_sale_after_refund`  (
   `update_time` datetime(0) DEFAULT NULL COMMENT '更新时间',
   `update_by` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '更新人',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1800733684087050243 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '售后退款表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1800733684087050242 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '售后退款表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for erp_sale_order
@@ -349,10 +349,12 @@ CREATE TABLE `erp_sale_order`  (
   `tag` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL COMMENT '标签',
   `refund_status` int(0) NOT NULL COMMENT '售后状态 1：无售后或售后关闭，2：售后处理中，3：退款中，4： 退款成功 5：全部',
   `order_status` int(0) NOT NULL COMMENT '订单状态1：待发货，2：已发货，3：已完成，11已取消；21待付款',
-  `goods_amount` double DEFAULT NULL COMMENT '商品金额',
-  `discount_amount` double NOT NULL COMMENT '折扣金额',
-  `postage` double DEFAULT NULL COMMENT '运费',
-  `amount` double NOT NULL COMMENT '支付金额，单位：元，支付金额=商品金额-折扣金额+邮费',
+  `goods_amount` double NOT NULL COMMENT '商品金额',
+  `seller_discount` double NOT NULL DEFAULT 0 COMMENT '商家优惠金额，单位：元',
+  `platform_discount` double NOT NULL DEFAULT 0 COMMENT '平台优惠金额，单位：元',
+  `postage` double NOT NULL COMMENT '运费',
+  `order_amount` double NOT NULL COMMENT '订单金额（商家实际得到的金额），单位：元，支付金额=商品金额-折扣金额+邮费+平台优惠金额',
+  `pay_amount` double NOT NULL COMMENT '支付金额',
   `receiver_name` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL COMMENT '收件人姓名',
   `receiver_phone` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL COMMENT '收件人手机号',
   `address` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL COMMENT '收件人地址',
@@ -381,7 +383,7 @@ CREATE TABLE `erp_sale_order`  (
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `order_sn_index`(`order_num`) USING BTREE,
   INDEX `shopid_index`(`shop_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 52 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '订单表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1801197273742716930 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '订单表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for erp_sale_order_item
@@ -423,7 +425,7 @@ CREATE TABLE `erp_sale_order_item`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `goodId_index`(`goods_id`) USING BTREE,
   INDEX `order_id`(`order_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1785584827112509453 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '订单明细表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1801197275089088515 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '订单明细表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for erp_ship_logistics
@@ -811,7 +813,7 @@ CREATE TABLE `oms_dou_refund`  (
   `pull_time` datetime(0) DEFAULT NULL COMMENT '第一次拉取时间',
   `pull_last_time` datetime(0) DEFAULT NULL COMMENT '最后一次拉取时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1800783607092436995 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '抖店退款表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1800783607092436994 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '抖店退款表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for oms_jd_after_sale
@@ -1258,7 +1260,7 @@ CREATE TABLE `oms_tao_goods`  (
   `erp_supplier_id` bigint(0) DEFAULT NULL COMMENT 'erp系统供应商ID',
   `create_time` datetime(0) DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1800363757383634947 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '淘宝商品表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1800363757383634946 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '淘宝商品表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for oms_tao_goods_sku
@@ -1285,7 +1287,7 @@ CREATE TABLE `oms_tao_goods_sku`  (
   `shop_id` bigint(0) DEFAULT NULL COMMENT '店铺id',
   `create_time` datetime(0) DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1800370800777670659 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '淘宝商品SKU表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1800370800777670658 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '淘宝商品SKU表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for oms_tao_order
@@ -1307,20 +1309,20 @@ CREATE TABLE `oms_tao_order`  (
   `buyer_nick` varchar(30) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT '' COMMENT '买家昵称',
   `num_iid` varchar(55) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '商品数字编号',
   `num` int(0) DEFAULT NULL COMMENT '商品购买数量。取值范围：大于零的整数,对于一个trade对应多个order的时候（一笔主订单，对应多笔子订单），num=0，num是一个跟商品关联的属性，一笔订单对应多比子订单的时候，主订单上的num无意义。',
-  `price` float DEFAULT NULL COMMENT '商品价格。精确到2位小数；单位：元。如：200.07，表示：200元7分',
-  `total_fee` float DEFAULT NULL COMMENT '商品金额（商品价格乘以数量的总金额）。精确到2位小数;单位:元。如:200.07，表示:200元7分',
-  `adjust_fee` float DEFAULT NULL COMMENT '卖家手工调整金额，精确到2位小数，单位：元。如：200.07',
+  `price` decimal(10, 2) DEFAULT NULL COMMENT '商品价格。精确到2位小数；单位：元。如：200.07，表示：200元7分',
+  `total_fee` decimal(10, 2) DEFAULT NULL COMMENT '商品金额（商品价格乘以数量的总金额）。精确到2位小数;单位:元。如:200.07，表示:200元7分',
+  `adjust_fee` decimal(10, 2) DEFAULT NULL COMMENT '卖家手工调整金额，精确到2位小数，单位：元。如：200.07',
   `post_fee` decimal(5, 2) NOT NULL DEFAULT 0.00 COMMENT '邮费',
   `discount_fee` decimal(10, 2) NOT NULL DEFAULT 0.00 COMMENT '优惠金额',
   `payment` decimal(10, 2) NOT NULL COMMENT '实付金额',
   `received_payment` decimal(10, 2) NOT NULL DEFAULT 0.00 COMMENT '卖家实际收到的支付宝打款金额（由于子订单可以部分确认收货，这个金额会随着子订单的确认收货而不断增加，交易成功后等于买家实付款减去退款金额）。精确到2位小数;单位:元。如:200.07，表示:200元7分',
-  `available_confirm_fee` float DEFAULT NULL COMMENT '交易中剩余的确认收货金额（这个金额会随着子订单确认收货而不断减少，交易成功后会变为零）。精确到2位小数;单位:元。如:200.07，表示:200 元7分',
-  `cod_fee` float DEFAULT NULL COMMENT '货到付款服务费。',
+  `available_confirm_fee` decimal(10, 2) DEFAULT NULL COMMENT '交易中剩余的确认收货金额（这个金额会随着子订单确认收货而不断减少，交易成功后会变为零）。精确到2位小数;单位:元。如:200.07，表示:200 元7分',
+  `cod_fee` decimal(10, 2) DEFAULT NULL COMMENT '货到付款服务费。',
   `cod_status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '货到付款物流状态。初始状态 NEW_CREATED,接单成功 ACCEPTED_BY_COMPANY,接单失败 REJECTED_BY_COMPANY,接单超时 RECIEVE_TIMEOUT,揽收成功 TAKEN_IN_SUCCESS,揽收失败 TAKEN_IN_FAILED,揽收超时 TAKEN_TIMEOUT,签收成功 SIGN_IN,签收失败 REJECTED_BY_OTHER_SIDE,订单等待发送给物流公司 WAITING_TO_BE_SENT,用户取消物流订单 CANCELED',
   `buyer_cod_fee` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '买家货到付款服务费',
   `seller_cod_fee` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '卖家货到付款服务费',
   `express_agency_fee` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '快递代收款。',
-  `commission_fee` float DEFAULT NULL COMMENT '交易佣金。',
+  `commission_fee` decimal(10, 2) DEFAULT NULL COMMENT '交易佣金。',
   `shipping_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '创建交易时的物流方式（交易完成前，物流方式有可能改变，但系统里的这个字段一直不变）。可选值：free(卖家包邮),post(平邮),express(快递),ems(EMS),virtual(虚拟发货)，25(次日必达)，26(预约配送)。',
   `created` datetime(0) NOT NULL COMMENT '交易创建时间。格式:yyyy-MM-dd HH:mm:ss',
   `modified` datetime(0) DEFAULT NULL COMMENT '交易修改时间(用户对订单的任何修改都会更新此字段)。格式:yyyy-MM-dd HH:mm:ss',
@@ -1375,7 +1377,7 @@ CREATE TABLE `oms_tao_order`  (
   `audit_status` int(0) DEFAULT NULL COMMENT '订单审核状态（0待审核1已审核）',
   `audit_time` datetime(0) DEFAULT NULL COMMENT '订单审核时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1801145793522417666 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '淘宝订单表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1801155298566070275 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '淘宝订单表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for oms_tao_order_item
@@ -1422,7 +1424,7 @@ CREATE TABLE `oms_tao_order_item`  (
   `refund_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '最近退款ID',
   `remark` varchar(500) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1801145793685995522 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '淘宝订单明细表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1801155298620596227 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '淘宝订单明细表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for oms_tao_order_promotion
@@ -1493,7 +1495,7 @@ CREATE TABLE `oms_tao_refund`  (
   `pull_status` int(0) DEFAULT NULL COMMENT '推送状态（0未推送；1推送成功；2推送失败）',
   `pull_time` datetime(0) DEFAULT NULL COMMENT '订单审核时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1800733684028329987 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '淘宝退款表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1800733684028329986 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '淘宝退款表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for oms_wei_goods
@@ -2292,7 +2294,7 @@ CREATE TABLE `sys_logininfor`  (
   PRIMARY KEY (`info_id`) USING BTREE,
   INDEX `idx_sys_logininfor_s`(`status`) USING BTREE,
   INDEX `idx_sys_logininfor_lt`(`login_time`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 303 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '系统访问记录' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 302 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '系统访问记录' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for sys_menu
@@ -2348,7 +2350,7 @@ CREATE TABLE `sys_oper_log`  (
   INDEX `idx_sys_oper_log_bt`(`business_type`) USING BTREE,
   INDEX `idx_sys_oper_log_s`(`status`) USING BTREE,
   INDEX `idx_sys_oper_log_ot`(`oper_time`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 453 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '操作日志记录' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 452 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '操作日志记录' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for sys_oss
