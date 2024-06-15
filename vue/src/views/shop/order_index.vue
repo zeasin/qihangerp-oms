@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <el-tabs v-model="activeName" @tab-click="handleClick">
-      <el-tab-pane label="天猫" name="taoOrder">
+      <el-tab-pane label="淘宝天猫" name="taoOrder">
         <order-tao></order-tao>
       </el-tab-pane>
       <el-tab-pane label="京东POP" name="jdOrder" lazy>

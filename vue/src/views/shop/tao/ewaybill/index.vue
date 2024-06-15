@@ -42,7 +42,7 @@
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="goodsList" @selection-change="handleSelectionChange">
+    <el-table v-loading="loading" :data="orderList" @selection-change="handleSelectionChange">
       <!-- <el-table-column type="selection" width="55" align="center" /> -->
 <!--      <el-table-column label="ID" align="center" prop="id" />-->
       <el-table-column label="商品ID" align="center" prop="wareId" />
@@ -113,7 +113,7 @@ import {listShop} from "@/api/shop/shop";
 import {getDeliverList} from "@/api/wei/ewaybill";
 
 export default {
-  name: "printWei",
+  name: "printTao",
   data() {
     return {
       // 遮罩层
@@ -145,6 +145,7 @@ export default {
       },
       // 表单参数
       form: {},
+      orderList: [],
       printerList: [],
       deliverList: [],
       // 表单校验
@@ -171,7 +172,7 @@ export default {
     getList() {
       this.loading = true;
       listGoodsSku(this.queryParams).then(response => {
-        this.goodsList = response.rows;
+        this.orderList = response.rows;
         this.total = response.total;
         this.loading = false;
       });
@@ -199,6 +200,12 @@ export default {
       this.resetForm("queryForm");
       this.handleQuery();
     },
+    // 多选框选中数据
+    handleSelectionChange(selection) {
+      this.ids = selection.map(item => item.orderId)
+      this.single = selection.length!==1
+      this.multiple = !selection.length
+    },
     handleLink(row) {
       this.reset();
       const id = row.id || this.ids
@@ -221,27 +228,28 @@ export default {
       });
     },
     openWs() {
-      const ws = new WebSocket('ws://127.0.0.1:12705');
+      const ws = new WebSocket('ws://127.0.0.1:13528');
       ws.onopen = () => {
         console.log('与打印组件建立连接成功: ');
         // 或打印机
         ws.send(JSON.stringify({
           requestID: '12345',
-          command: 'getPrinterList'
+          cmd: 'getPrinters',
+          "version": "1.0"
         }))
       };
       let obj = this.$modal;
       ws.onmessage = (e) => {
         const resp = JSON.parse(e.data || '{}')
-        if (resp.command === 'getPrinterList') {
-          this.printerList = resp.printerList
+        if (resp.cmd === 'getPrinters') {
+          this.printerList = resp.printers
           obj.msgSuccess("打印组件连接成功！");
-          console.log('打印机列表: ', resp.printerList);
+          console.log('打印机列表: ', resp.printers);
         }
       };
       // 当发生错误时触发
       ws.onerror = function(error) {
-        obj.msgError("打印组件连接失败！请安装并启动微信视频号小店打印组件！");
+        obj.msgError("打印组件连接失败！请安装并启动菜鸟云打印打印组件！");
         console.error('WebSocket error:', error);
         // alert('WebSocket error occurred. Check the console for more details.');
       };
@@ -259,34 +267,115 @@ export default {
         this.$modal.msgError('请选择打印机！');
         return
       }
-      const ws = new WebSocket('ws://127.0.0.1:12705');
+      const ws = new WebSocket('ws://127.0.0.1:13528');
       ws.onopen = () => {
         console.log('开始打印: ');
         // 打印
-        this.ws.send(JSON.stringify({
-          command: 'print',
-          version: '2.0', // 必传
-          requestID: '1234', // String, 调用方保证唯一
-          taskList: [{
-            taskID: '1234', // String, 调用方保证唯一
-            printInfo: 'JTdCJTIycHJpbnREYXRhJTIyJTNBJTdCJTIyd2F5YmlsbElkJTIyJTNBJTIyNzM2MTE0NjI1MzgzODUlMjIlMkMlMjJwcmludFRpbWUlMjIlM0ElMjIyMDI0JTJGMDYlMkYwMyUyMDE4JTNBNDUlMjIlMkMlMjJzZXJ2aWNlcyUyMiUzQSU1QiU1RCUyQyUyMnJlY2VpdmVyTmFtZSUyMiUzQSUyMiVFNSVBRSVBMyoqJTIyJTJDJTIycmVjZWl2ZXJQaG9uZSUyMiUzQSUyMjEzNyoqKiozODQwJTIyJTJDJTIycmVjZWl2ZXJBZGRyZXNzJTIyJTNBJTIyJUU0JUI4JThBJUU2JUI1JUI3JUU1JUI4JTgyJUU0JUI4JThBJUU2JUI1JUI3JUU1JUI4JTgyJUU2JUI1JUE2JUU0JUI4JTlDJUU2JTk2JUIwJUU1JThDJUJBJUU1JUJDJUEwJUU2JUIxJTlGJUU5JTk1JTg3JUU1JUFEJTk5JUU2JUExJUE1JUU4JUI3JUFGMjM4JUU1JUJDJTg0MzAlRTUlOEYlQjcyMDIlRTUlQUUlQTQlMjIlMkMlMjJzZW5kZXJOYW1lJTIyJTNBJTIyJUU0JUI4JTgzJUU5JTg3JThDJUU1JTlEJUFBJTIyJTJDJTIyc2VuZGVyUGhvbmUlMjIlM0ElMjIxNTgxODU5MDExOSUyMiUyQyUyMnNlbmRlckFkZHJlc3MlMjIlM0ElMjIlRTUlQjklQkYlRTQlQjglOUMlRTclOUMlODElRTYlQjclQjElRTUlOUMlQjMlRTUlQjglODIlRTUlQUUlOUQlRTUlQUUlODklRTUlOEMlQkF4eHh4eDElRTUlOEYlQjclRTUlOEMlOTclRTklOTclQTglMjIlMkMlMjJzaXRlQ29kZSUyMiUzQSUyMjU1ODMwJTIyJTJDJTIyZXdheWJpbGxPcmRlcklkJTIyJTNBJTIyMzQ4NjYxMzA5Mzg5ODE0MTY5OSUyMiUyQyUyMmJhZ0FkZHIlMjIlM0ElMjIlRTYlQjIlQUElRTQlQjglOUMlMjIlMkMlMjJtYXJrJTIyJTNBJTIyMzEwLSUyMFA2JTIwMDMxJTIwJTVCQjMxJTVEJTIyJTJDJTIyc3RvcmVOYW1lJTIyJTNBJTIyJUU5JUFBJTg0JUU5JUI5JUJGJUU2JTlDJTlCJUU1JUIxJUIxJUU0JUI4JTkzJUU1JThEJTk2JUU1JUJBJTk3JTIyJTJDJTIyY3VzdG9tZXJOb3RlcyUyMiUzQSUyMiUyMiUyQyUyMm1lcmNoYW50Tm90ZXMlMjIlM0ElMjIlMjIlMkMlMjJvcmRlcklkJTIyJTNBJTIyMzcyMDI5MzQxNTUwOTk1NDgxNiUyMiU3RCUyQyUyMnRlbXBsYXRlJTIyJTNBJTdCJTIydGVtcGxhdGVJZCUyMiUzQSUyMnNpbmdsZSUyMiUyQyUyMnRlbXBsYXRlTmFtZSUyMiUzQSUyMiVFOSVCQiU5OCVFOCVBRSVBNCVFNyVBOSVCQSVFNiVBOCVBMSVFNiU5RCVCRiUyMiUyQyUyMnRlbXBsYXRlRGVzYyUyMiUzQSUyMiVFNCVCOCU4MCVFOCU4MSU5NCVFNSU4RCU5NSVFNiVBMCU4NyVFNSU4NyU4NiVFNiVBOCVBMSVFNiU5RCVCRiUyMiUyQyUyMnRlbXBsYXRlVHlwZSUyMiUzQSUyMnNpbmdsZSUyMiUyQyUyMm9wdGlvbkxpc3QlMjIlM0ElN0IlN0QlMkMlMjJvcHRpb25zJTIyJTNBJTVCJTVEJTJDJTIyY29kZSUyMiUzQTAlMkMlMjJkZWxpdmVyeUlkJTIyJTNBJTIyWlRPJTIyJTJDJTIydGVtcGxhdGVVcmwlMjIlM0ElMjJodHRwcyUzQSUyRiUyRm1tZWMtc2hvcC0xMjU4MzQ0NzA3LmNvcy5hcC1zaGFuZ2hhaS5teXFjbG91ZC5jb20lMkZzaG9wJTJGcHVibGljJTJGMjAyMy0xMC0yNSUyRjNlY2JiM2FhLTViY2YtNDA0ZC05NzJhLThhMDhhODE2MjIzYy5odG1sJTIyJTJDJTIyY3VzdG9tQ29uZmlnJTIyJTNBJTdCJTIyd2lkdGglMjIlM0E2NTYlMkMlMjJoZWlnaHQlMjIlM0EzMDAlMkMlMjJsZWZ0JTIyJTNBNjAlMkMlMjJ0b3AlMjIlM0E5MzAlN0QlMkMlMjJ3aWR0aCUyMiUzQTc2JTJDJTIyaGVpZ2h0JTIyJTNBMTMwJTdEJTdE', // String, [获取打印报文]接口返回的print_info
-            printNum: {
-              curNum: 1, // 打印计数-当前张数
-              sumNum: 2, // 打印计数-总张数
-            },
-            splitControl: 0 ,// 可不传， 默认为0， 根据自定义内容自动分页；1，禁止分页；2；强制分页， 内容打印在第二页
-            showDeliveryLogo: 0, // 可不传， 默认为1， 传0时不展示快递公司logo
-            // 自定义模板信息，没有自定义模板需求可不传
-
-            // 面单补充信息，用来覆盖寄件人信息，没有这种需求可以不传
-
-          }],
-          printType: 1, // Number 打印类型，默认为 1，打印固定高度的面单；如果为2，则打印任意自定义内容，需要传递 size 参数指定纸张尺寸，printInfo 改为传递 base64 格式的 html
-          size: {
-            width: 76, // 纸张尺寸，单位毫米，printType 为 2 时必传
-            height: 130
-          },
-          printer: this.printParams.printer, // 选中的打印机，printer.name
+        ws.send(JSON.stringify({
+          "cmd": "print",
+          "requestID": "123458976",
+          "version": "1.0",
+          "task": {
+            "taskID": "7293666",
+            "preview": false,
+            "printer": this.printParams.printer,
+            "previewType": "pdf",
+            "firstDocumentNumber": 10,
+            "totalDocumentCount": 100,
+            "documents": [{
+              "documentID": "0123456789",
+              "contents": [{
+                "data": {
+                  "_dataFrom": "waybill",
+                  "_page_config": {
+                    "REQUEST_LAYERED_IMAGE": false
+                  },
+                  "adsInfo": {
+                    "adId": "3",
+                    "advertisementType": "DEFAULT",
+                    "bannerUrl": "https://ad-cdn.cainiao.com/img/3/1672122736541.png",
+                    "miniBannerUrl": "https://ad-cdn.cainiao.com/img/3/1672122733813.png",
+                    "useCustomArea": false
+                  },
+                  "cpCode": "CP446881",
+                  "extraInfo": {
+                    "appKey": "12175777",
+                    "encryptWaybillCode": "zG7MEOejeVDcuQt6QsjCsA%3D%3D",
+                    "templateAdDisplayUp": true
+                  },
+                  "needEncrypt": false,
+                  "orderChannelLogo": "https://cdn-cloudprint.cainiao.com/waybill-print/templateImages/tao.png",
+                  "orderChannelsType": "TB",
+                  "packageInfo": {
+                    "goodValue": 34.3,
+                    "goodsDescription": "服装",
+                    "height": 50,
+                    "id": "1",
+                    "items": [
+                      {
+                        "count": 1,
+                        "name": "衣服"
+                      }
+                    ],
+                    "length": 30,
+                    "packagingDescription": "5纸3木2拖",
+                    "totalPackagesCount": 10,
+                    "volume": 1,
+                    "weight": 1,
+                    "width": 30
+                  },
+                  "parent": false,
+                  "realCpCode": "CP446881",
+                  "recipient": {
+                    "address": {
+                      "city": "北京市",
+                      "detail": "AES:RomTZ9FHeg4LOQTx2lyM17d9fJHmOF3PGgsIV0mH13Eb0dd50rNzcNYT4ypTQzqghI04MdngeEM6JEDwnSFgHA==",
+                      "district": "朝阳区",
+                      "province": "北京",
+                      "town": "望京街道"
+                    },
+                    "caid": "As268woscee",
+                    "mobile": "13260469442-4846",
+                    "name": "李*",
+                    "secretConsigneeMobile": "13260469442-4846",
+                    "tid": "3719055060544802021"
+                  },
+                  "routingExtraInfo": {},
+                  "routingInfo": {
+                    "consolidation": {},
+                    "origin": {
+                      "code": "660605",
+                      "name": "南海区站点"
+                    },
+                    "receiveBranch": {},
+                    "sortation": {},
+                    "startCenter": {},
+                    "terminalCenter": {}
+                  },
+                  "secretWaybillType": "recipientSecret",
+                  "sender": {
+                    "address": {
+                      "city": "佛山市",
+                      "detail": "九江镇九江大道珠银库房A1栋（京东仓）",
+                      "district": "南海区",
+                      "province": "广东省"
+                    },
+                    "mobile": "1326443654",
+                    "name": "Bar",
+                    "phone": "057123222"
+                  },
+                  "shippingOption": {
+                    "code": "STANDARD_EXPRESS",
+                    "title": "标准快递"
+                  },
+                  "waybillCode": "700059605746"
+                },
+                "signature": "MD:Aznc5rkMLD16KZwMbdWBtQ==",
+                "templateURL": "http://cloudprint.cainiao.com/template/standard/101",
+                "ver": "waybill_print_secret_version_1"
+              }]
+            }]
+          }
         }))
       };
       let obj = this.$modal;
