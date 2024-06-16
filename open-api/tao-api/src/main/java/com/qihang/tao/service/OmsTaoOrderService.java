@@ -25,5 +25,5 @@ public interface OmsTaoOrderService extends IService<OmsTaoOrder> {
     PageResult<OmsTaoOrder> queryPageList(TaoOrderBo bo, PageQuery pageQuery);
 
     OmsTaoOrder queryDetailById(Long id);
-
+    OmsTaoOrder queryDetailByTid(String tid);
 }

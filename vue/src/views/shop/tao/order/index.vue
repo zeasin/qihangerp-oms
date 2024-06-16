@@ -107,9 +107,9 @@
           </template>
       </el-table-column>
       <el-table-column label="总金额" align="center" prop="payment" :formatter="amountFormatter" />
-      <el-table-column label="订单创建时间" align="center" prop="orderCreateTime" width="180">
+      <el-table-column label="下单时间" align="center" prop="orderCreateTime" width="180">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.created, '{y}-{m}-{d} {h}:{m}:{s}') }}</span>
+          <span>{{ parseTime(scope.row.created) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="买家留言" align="center" prop="buyerMessage" />

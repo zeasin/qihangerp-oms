@@ -11,4 +11,5 @@ public class TaoOrderBo implements Serializable {
     private Long erpGoodsSkuId;
     private Long shopId;
     private String status;
+    private Integer erpSendStatus;
 }

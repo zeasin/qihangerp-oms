@@ -1,84 +1,172 @@
 <template>
   <div class="app-container">
-    <el-form :model="printParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="108px">
+    <el-row>
+      <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+        <el-form-item label="订单号" prop="tid">
+          <el-input
+            v-model="queryParams.tid"
+            placeholder="请输入订单号"
+            clearable
+            @keyup.enter.native="handleQuery"
+          />
+        </el-form-item>
+        <el-form-item label="店铺" prop="shopId">
+          <el-select v-model="queryParams.shopId" placeholder="请选择店铺" clearable @change="handleQuery">
+            <el-option
+              v-for="item in shopList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
+          <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+        </el-form-item>
+        <el-form-item>
+          <el-select v-model="printParams.printer" placeholder="请选择打印机" clearable>
+            <el-option
+              v-for="item in printerList"
+              :key="item.name"
+              :label="item.name"
+              :value="item.name">
+            </el-option>
+          </el-select>
 
-      <el-form-item label="快递公司" prop="deliver">
-        <el-select v-model="printParams.deliver" placeholder="请选择快递公司" clearable>
-          <el-option
-            v-for="item in deliverList"
-            :key="item.delivery_id"
-            :label="item.delivery_name"
-            :value="item.delivery_id">
-          </el-option>
-        </el-select>
-        <el-button  @click="getDeliverList"> 获取 </el-button>
-      </el-form-item>
-      <el-form-item label="打印机" prop="printer">
-        <el-select v-model="printParams.printer" placeholder="请选择打印机" clearable>
-         <el-option
-            v-for="item in printerList"
-            :key="item.name"
-            :label="item.name"
-            :value="item.name">
-          </el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item>
-<!--        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>-->
+        </el-form-item>
+      </el-form>
 
-      </el-form-item>
-    </el-form>
+    </el-row>
+
 
     <el-row :gutter="10" class="mb8">
+<!--      <el-form :model="printParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="108px">-->
+
+<!--        <el-form-item label="快递公司" prop="deliver">-->
+<!--          <el-select v-model="printParams.deliver" placeholder="请选择快递公司" clearable>-->
+<!--            <el-option-->
+<!--              v-for="item in deliverList"-->
+<!--              :key="item.delivery_id"-->
+<!--              :label="item.delivery_name"-->
+<!--              :value="item.delivery_id">-->
+<!--            </el-option>-->
+<!--          </el-select>-->
+<!--          <el-button  @click="getDeliverList"> 获取 </el-button>-->
+<!--        </el-form-item>-->
+<!--        <el-form-item label="打印机" prop="printer">-->
+<!--          <el-select v-model="printParams.printer" placeholder="请选择打印机" clearable>-->
+<!--            <el-option-->
+<!--              v-for="item in printerList"-->
+<!--              :key="item.name"-->
+<!--              :label="item.name"-->
+<!--              :value="item.name">-->
+<!--            </el-option>-->
+<!--          </el-select>-->
+<!--        </el-form-item>-->
+<!--        <el-form-item>-->
+<!--          &lt;!&ndash;        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>&ndash;&gt;-->
+
+<!--        </el-form-item>-->
+<!--      </el-form>-->
+      <el-col :span="1.5">
+        <el-button
+          type="primary"
+          plain
+          icon="el-icon-time"
+          size="mini"
+          :disabled="multiple"
+          @click="handleGetEwaybillCode"
+        >取号</el-button>
+      </el-col>
+
+      <el-col :span="1.5">
+
+        <el-button
+          type="success"
+          plain
+          :disabled="multiple"
+          icon="el-icon-printer"
+          size="mini"
+          @click="handlePrintEwaybill"
+        >打印电子面单</el-button>
+      </el-col>
       <el-col :span="1.5">
         <el-button
           type="danger"
           plain
-          icon="el-icon-download"
+          icon="el-icon-d-arrow-right"
           size="mini"
-          @click="handlePrintEwaybill"
-        >打印电子面单</el-button>
+          :disabled="multiple"
+          @click="handleShipSend"
+        >发货</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="orderList" @selection-change="handleSelectionChange">
-      <!-- <el-table-column type="selection" width="55" align="center" /> -->
+       <el-table-column type="selection" width="55" align="center" />
 <!--      <el-table-column label="ID" align="center" prop="id" />-->
-      <el-table-column label="商品ID" align="center" prop="wareId" />
-      <el-table-column label="Sku Id" align="center" prop="skuId" />
-      <el-table-column label="sku名称" align="center" prop="skuName" />
-      <el-table-column label="图片" align="center" prop="logo" width="100">
+      <el-table-column label="订单号" align="center" prop="tid" >
         <template slot-scope="scope">
-          <image-preview :src="scope.row.logo" :width="50" :height="50"/>
+          <p>{{scope.row.tid}}</p>
+          <el-tag  effect="plain">{{shopList.find(x=>x.id === scope.row.shopId).name}}</el-tag>
         </template>
       </el-table-column>
+      <el-table-column label="商品" width="550">
+        <template slot-scope="scope">
+          <el-table :data="scope.row.items" :show-header="false">
+            <el-table-column label="商品" align="center" prop="title" />
+            <el-table-column label="规格" align="center" prop="skuPropertiesName" />
+            <el-table-column label="数量" align="center" prop="num" width="60">
+              <template slot-scope="scope">
+                <el-tag size="small">x {{scope.row.num}}</el-tag>
+              </template>
+            </el-table-column>
+          </el-table>
+<!--          <el-row v-for="item in scope.row.items" :key="item.id" :gutter="20">-->
+
+<!--            <div style="float: left;display: flex;align-items: center;" >-->
+
+<!--              <div style="margin-left:10px">-->
+<!--                <p>{{item.title}}</p>-->
+<!--                <p>{{item.skuPropertiesName}}&nbsp;-->
+<!--                  <el-tag size="small">x {{item.num}}</el-tag>-->
+<!--                </p>-->
+
+<!--              </div>-->
+<!--            </div>-->
+<!--          </el-row>-->
+        </template>
+      </el-table-column>
+      <el-table-column label="下单时间" align="center" prop="orderCreateTime" width="180">
+        <template slot-scope="scope">
+          <span>{{ parseTime(scope.row.created) }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="买家留言" align="center" prop="buyerMessage" />
+      <el-table-column label="卖家备注" align="center" prop="sellerMemo" />
 
 <!--      <el-table-column label="店铺" align="center" prop="categoryId" >-->
 <!--        <template slot-scope="scope">-->
 <!--          <el-tag size="small">{{categoryList.find(x=>x.id === scope.row.categoryId).name}}</el-tag>-->
 <!--        </template>-->
 <!--      </el-table-column>-->
-       <el-table-column label="商家编码" align="center" prop="outerId" />
-      <el-table-column label="京东价" align="center" prop="jdPrice" />
-      <el-table-column label="ERP SKU ID" align="center" prop="erpSkuId" />
-      <el-table-column label="状态" align="center" prop="status" >
-        <template slot-scope="scope">
-          <el-tag size="small" v-if="scope.row.status === 1">销售中</el-tag>
-          <el-tag size="small" v-if="scope.row.status === 2">已下架</el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
-        <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-edit"
-            @click="handleLink(scope.row)"
-          >关联ERP</el-button>
 
+      <el-table-column label="收件信息" align="left" prop="receiverState" >
+        <template slot-scope="scope">
+          <p>
+            {{scope.row.receiverName}}&nbsp;{{scope.row.receiverMobile}}
+          </p>
+          <p>
+            {{scope.row.receiverState}} &nbsp;{{scope.row.receiverCity}}&nbsp;{{scope.row.receiverDistrict}}&nbsp;{{scope.row.receiverTown}}
+          </p>
+          <p>
+            {{scope.row.receiverAddress}}
+          </p>
         </template>
       </el-table-column>
+      <el-table-column label="面单号" align="center" prop="erpSendCode" />
     </el-table>
 
     <pagination
@@ -88,18 +176,26 @@
       :limit.sync="queryParams.pageSize"
       @pagination="getList"
     />
-
-
-    <!-- 添加或修改商品管理对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
+    <!-- 取号 -->
+    <el-dialog title="取号" :visible.sync="getCodeOpen" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="120px">
-        <el-form-item label="ERP商品SkuId" prop="erpSkuId">
-          <el-input v-model.number="form.erpSkuId" placeholder="请输入ERP商品SkuId" />
+        <el-form-item label="电子面单账户" prop="accountId">
+            <el-select v-model="form.accountId" placeholder="请选择电子面单账户" clearable>
+              <el-option
+                v-for="item in deliverList"
+                :key="item.id"
+                :label="item.cpCode"
+                :value="item.id">
+                <span style="float: left">{{ item.cpCode }}</span>
+                <span style="float: right; color: #8492a6; font-size: 13px" >{{item.branchName}}:{{item.quantity}}</span>
+              </el-option>
+            </el-select>
+          <el-button type="success" plain @click="updateWaybillAccount" >更新电子面单账户信息</el-button>
         </el-form-item>
 
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm">确 定</el-button>
+        <el-button type="primary" @click="getCodeOpenForm">确 定</el-button>
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
@@ -110,7 +206,14 @@
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 
 import {listShop} from "@/api/shop/shop";
-import {getDeliverList} from "@/api/wei/ewaybill";
+import {listOrder} from "@/api/tao/order";
+import {
+  getWaybillAccountList,
+  pullWaybillAccount,
+  getWaybillCode,
+  getWaybillPrintData,
+  pushWaybillPrintSuccess
+} from "@/api/tao/ewaybill";
 
 export default {
   name: "printTao",
@@ -120,6 +223,7 @@ export default {
       loading: true,
       // 选中数组
       ids: [],
+      shopList: [],
       // 非单个禁用
       single: true,
       // 非多个禁用
@@ -130,13 +234,15 @@ export default {
       total: 0,
       // 弹出层标题
       title: "",
-      // 是否显示弹出层
-      open: false,
+      // 取号弹出
+      getCodeOpen: false,
       // 查询参数
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        name: null
+        status: 'WAIT_SELLER_SEND_GOODS',
+        erpSendStatus:0,
+        shopId: null
       },
       // 打印参数
       printParams: {
@@ -149,29 +255,26 @@ export default {
       printerList: [],
       deliverList: [],
       // 表单校验
-      rules: {}
+      rules: {
+        accountId: [{ required: true, message: '请选择电子面单账户' }],
+      }
     };
   },
   created() {
     this.openWs()
-    // listShop({platform:3}).then(response => {
-    //   this.shopList = response.rows;
-    // });
-    // this.getList();
-    this.loading = false;
+    listShop({platform: 4}).then(response => {
+      this.shopList = response.rows;
+      if (this.shopList && this.shopList.length > 0) {
+        this.queryParams.shopId = this.shopList[0].id
+      }
+      this.getList();
+    });
   },
   methods: {
-    /** getDeliverList获取开通的快递公司 */
-    getDeliverList(){
-      getDeliverList({shopId:2}).then(response => {
-        this.deliverList = response.data;
-      });
-
-    },
     /** 查询商品管理列表 */
     getList() {
       this.loading = true;
-      listGoodsSku(this.queryParams).then(response => {
+      listOrder(this.queryParams).then(response => {
         this.orderList = response.rows;
         this.total = response.total;
         this.loading = false;
@@ -179,7 +282,7 @@ export default {
     },
     // 取消按钮
     cancel() {
-      this.open = false;
+      this.getCodeOpen = false;
       this.reset();
     },
     // 表单重置
@@ -202,30 +305,9 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.orderId)
-      this.single = selection.length!==1
+      this.ids = selection.map(item => item.tid)
+      this.single = selection.length !== 1
       this.multiple = !selection.length
-    },
-    handleLink(row) {
-      this.reset();
-      const id = row.id || this.ids
-      getGoodsSku(id).then(response => {
-        console.log('=====00000000============',response)
-        this.form = response.data;
-        this.open = true;
-      });
-    },
-    /** 提交按钮 */
-    submitForm() {
-      this.$refs["form"].validate(valid => {
-        if (valid) {
-          linkErpGoodsSkuId(this.form).then(response => {
-            this.$modal.msgSuccess("关联成功");
-            this.open = false;
-            this.getList();
-          });
-        }
-      });
     },
     openWs() {
       const ws = new WebSocket('ws://127.0.0.1:13528');
@@ -248,11 +330,52 @@ export default {
         }
       };
       // 当发生错误时触发
-      ws.onerror = function(error) {
+      ws.onerror = function (error) {
         obj.msgError("打印组件连接失败！请安装并启动菜鸟云打印打印组件！");
         console.error('WebSocket error:', error);
         // alert('WebSocket error occurred. Check the console for more details.');
       };
+    },
+    // 取号弹窗
+    handleGetEwaybillCode() {
+      const ids = this.ids;
+      if (ids) {
+        getWaybillAccountList({shopId: this.queryParams.shopId}).then(response => {
+          this.deliverList = response.data;
+          this.getCodeOpen = true
+        });
+      } else {
+        this.$modal.msgError("请选择订单")
+      }
+    },
+    // 更新电子面单信息
+    updateWaybillAccount() {
+      pullWaybillAccount({shopId: this.queryParams.shopId}).then(response => {
+        this.deliverList = response.data;
+      });
+    },
+    /** 取号提交按钮 */
+    getCodeOpenForm() {
+      this.$refs["form"].validate(valid => {
+        if (valid) {
+          const ids = this.ids;
+          console.log('=========3333========', ids)
+          if (ids) {
+            console.log('===请求参数=====', {shopId: this.queryParams.shopId, ids: ids, accountId: this.form.accountId})
+            getWaybillCode({
+              shopId: this.queryParams.shopId,
+              ids: ids,
+              accountId: this.form.accountId
+            }).then(response => {
+              this.$modal.msgSuccess("取号成功")
+              this.getList()
+              this.getCodeOpen = false
+            });
+          } else {
+            this.$modal.msgError("请选择订单")
+          }
+        }
+      });
     },
     handlePrintEwaybill() {
       // if (!this.ws) {
@@ -263,138 +386,82 @@ export default {
       //   this.$modal.msgError('请选择快递公司！');
       //   return
       // }
-      if(!this.printParams.printer){
+      if (!this.printParams.printer) {
         this.$modal.msgError('请选择打印机！');
         return
       }
-      const ws = new WebSocket('ws://127.0.0.1:13528');
-      ws.onopen = () => {
-        console.log('开始打印: ');
-        // 打印
-        ws.send(JSON.stringify({
-          "cmd": "print",
-          "requestID": "123458976",
-          "version": "1.0",
-          "task": {
-            "taskID": "7293666",
-            "preview": false,
-            "printer": this.printParams.printer,
-            "previewType": "pdf",
-            "firstDocumentNumber": 10,
-            "totalDocumentCount": 100,
-            "documents": [{
-              "documentID": "0123456789",
-              "contents": [{
-                "data": {
-                  "_dataFrom": "waybill",
-                  "_page_config": {
-                    "REQUEST_LAYERED_IMAGE": false
-                  },
-                  "adsInfo": {
-                    "adId": "3",
-                    "advertisementType": "DEFAULT",
-                    "bannerUrl": "https://ad-cdn.cainiao.com/img/3/1672122736541.png",
-                    "miniBannerUrl": "https://ad-cdn.cainiao.com/img/3/1672122733813.png",
-                    "useCustomArea": false
-                  },
-                  "cpCode": "CP446881",
-                  "extraInfo": {
-                    "appKey": "12175777",
-                    "encryptWaybillCode": "zG7MEOejeVDcuQt6QsjCsA%3D%3D",
-                    "templateAdDisplayUp": true
-                  },
-                  "needEncrypt": false,
-                  "orderChannelLogo": "https://cdn-cloudprint.cainiao.com/waybill-print/templateImages/tao.png",
-                  "orderChannelsType": "TB",
-                  "packageInfo": {
-                    "goodValue": 34.3,
-                    "goodsDescription": "服装",
-                    "height": 50,
-                    "id": "1",
-                    "items": [
-                      {
-                        "count": 1,
-                        "name": "衣服"
-                      }
-                    ],
-                    "length": 30,
-                    "packagingDescription": "5纸3木2拖",
-                    "totalPackagesCount": 10,
-                    "volume": 1,
-                    "weight": 1,
-                    "width": 30
-                  },
-                  "parent": false,
-                  "realCpCode": "CP446881",
-                  "recipient": {
-                    "address": {
-                      "city": "北京市",
-                      "detail": "AES:RomTZ9FHeg4LOQTx2lyM17d9fJHmOF3PGgsIV0mH13Eb0dd50rNzcNYT4ypTQzqghI04MdngeEM6JEDwnSFgHA==",
-                      "district": "朝阳区",
-                      "province": "北京",
-                      "town": "望京街道"
-                    },
-                    "caid": "As268woscee",
-                    "mobile": "13260469442-4846",
-                    "name": "李*",
-                    "secretConsigneeMobile": "13260469442-4846",
-                    "tid": "3719055060544802021"
-                  },
-                  "routingExtraInfo": {},
-                  "routingInfo": {
-                    "consolidation": {},
-                    "origin": {
-                      "code": "660605",
-                      "name": "南海区站点"
-                    },
-                    "receiveBranch": {},
-                    "sortation": {},
-                    "startCenter": {},
-                    "terminalCenter": {}
-                  },
-                  "secretWaybillType": "recipientSecret",
-                  "sender": {
-                    "address": {
-                      "city": "佛山市",
-                      "detail": "九江镇九江大道珠银库房A1栋（京东仓）",
-                      "district": "南海区",
-                      "province": "广东省"
-                    },
-                    "mobile": "1326443654",
-                    "name": "Bar",
-                    "phone": "057123222"
-                  },
-                  "shippingOption": {
-                    "code": "STANDARD_EXPRESS",
-                    "title": "标准快递"
-                  },
-                  "waybillCode": "700059605746"
-                },
-                "signature": "MD:Aznc5rkMLD16KZwMbdWBtQ==",
-                "templateURL": "http://cloudprint.cainiao.com/template/standard/101",
-                "ver": "waybill_print_secret_version_1"
-              }]
-            }]
-          }
-        }))
-      };
-      let obj = this.$modal;
-      ws.onmessage = (e) => {
-        const resp = JSON.parse(e.data || '{}')
-        if (resp.command === 'print') {
-          console.log('打印结果: ', resp);
-          obj.msgError("打印结果！"+JSON.stringify(resp));
+      const ids = this.ids;
+      getWaybillPrintData({shopId: this.queryParams.shopId, ids: ids}).then(response => {
+        console.log("======打印======", response.data)
+        if (response.data) {
+          const ws = new WebSocket('ws://127.0.0.1:13528');
+          ws.onopen = () => {
+            let printData = []
+            response.data.forEach(x => printData.push(JSON.parse(x.printData)))
+            console.log('开始打印: 组合打印数据：', printData);
+            // 打印
+            ws.send(JSON.stringify({
+              "cmd": "print",
+              "requestID": this.getUUID(8, 16),
+              "version": "1.0",
+              "task": {
+                "taskID": this.getUUID(8,10),
+                "preview": false,
+                "printer": this.printParams.printer,
+                "previewType": "pdf",
+                "firstDocumentNumber": 10,
+                "totalDocumentCount": 100,
+                "documents": [{
+                  "documentID": this.getUUID(8,10),
+                  "contents": printData
+                }]
+              }
+            }))
+          };
+          let obj = this.$modal;
+          ws.onmessage = (e) => {
+            const resp = JSON.parse(e.data || '{}')
+            if (resp.cmd === 'print') {
+              console.log('打印结果: ', resp);
+              obj.msgSuccess("打印成功！" + JSON.stringify(resp));
+              // 请求回调
+              return pushWaybillPrintSuccess({shopId: this.queryParams.shopId, ids: ids})
+            }
+          };
+
+
+          // 当发生错误时触发
+          ws.onerror = function (error) {
+            obj.msgError("打印失败！");
+            console.error('WebSocket error:', error);
+            // alert('WebSocket error occurred. Check the console for more details.');
+          };
         }
-      };
+      });
 
 
-      // 当发生错误时触发
-      ws.onerror = function(error) {
-        obj.msgError("打印失败！");
-        console.error('WebSocket error:', error);
-        // alert('WebSocket error occurred. Check the console for more details.');
-      };
-
+    },
+    handleShipSend(){
+      this.$modal.msgError("开源版本未实现平台发货！请自行对接发货");
+    },
+    getUUID(len, radix) {
+      var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('');
+      var uuid = [], i;
+      radix = radix || chars.length;
+      if (len) {
+        for (i = 0; i < len; i++) uuid[i] = chars[0 | Math.random() * radix];
+      } else {
+        var r;
+        uuid[8] = uuid[13] = uuid[18] = uuid[23] = '-';
+        uuid[14] = '4';
+        for (i = 0; i < 36; i++) {
+          if (!uuid[i]) {
+            r = 0 | Math.random() * 16;
+            uuid[i] = chars[(i == 19) ? (r & 0x3) | 0x8 : r];
+          }
+        }
+      }
+      return uuid.join('');
     }
   }
 };

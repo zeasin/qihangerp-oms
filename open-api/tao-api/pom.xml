@@ -26,9 +26,9 @@
         <dependency>
             <groupId>cn.qihangerp.open.tao</groupId>
             <artifactId>tao-api2</artifactId>
-            <version>1.5.4</version>
+            <version>1.6.16</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/libs/tao-api2-1.5.4.jar</systemPath>
+            <systemPath>${project.basedir}/libs/tao-api2-1.6.16.jar</systemPath>
         </dependency>
     </dependencies>
 <!--    <dependencyManagement>-->

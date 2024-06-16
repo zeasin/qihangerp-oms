@@ -50,9 +50,9 @@ public class ApiCommon {
 //        if(!StringUtils.hasText(platform.getServerUrl())) {
 //            return ResultVo.error(HttpStatus.PARAMS_ERROR, "第三方平台配置错误，没有找到ApiRequestUrl");
 //        }
-//        if(shop.getSellerId() == null || shop.getSellerId() <= 0) {
-//            return ResultVo.error(HttpStatus.PARAMS_ERROR,  "第三方平台配置错误，没有找到SellerUserId");
-//        }
+        if(shop.getSellerShopId() == null || shop.getSellerShopId() <= 0) {
+            return ResultVo.error(HttpStatus.PARAMS_ERROR,  "第三方平台配置错误，没有找到SellerShopId");
+        }
 
         ShopApiParams params = new ShopApiParams();
         params.setAppKey(platform.getAppKey());
@@ -60,7 +60,7 @@ public class ApiCommon {
         params.setAccessToken(shop.getAccessToken());
         params.setRedirectUrl(platform.getRedirectUrl());
         params.setServerUrl(platform.getServerUrl());
-
+        params.setSellerShopId(shop.getSellerShopId());
         if (!StringUtils.hasText(shop.getAccessToken())) {
 
             return ResultVo.error(HttpStatus.UNAUTHORIZED, "Token已过期，请重新授权", params);
