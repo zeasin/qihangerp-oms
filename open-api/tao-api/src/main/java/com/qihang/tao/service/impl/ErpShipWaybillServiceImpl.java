@@ -106,6 +106,12 @@ public class ErpShipWaybillServiceImpl extends ServiceImpl<ErpShipWaybillMapper,
                 orderUpdate.setErpSendStatus(update.getStatus());
 
                 orderMapper.update(orderUpdate,new LambdaQueryWrapper<OmsTaoOrder>().eq(OmsTaoOrder::getTid,w.getOrderId()));
+
+                //TODO: 打印成功之后 加入备货清单
+
+
+
+
             }
         }
         return ResultVo.success();
