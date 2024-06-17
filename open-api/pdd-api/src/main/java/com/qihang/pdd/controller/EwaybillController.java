@@ -214,29 +214,29 @@ public class EwaybillController extends BaseController {
         return success();
     }
 
-//    @PostMapping("/get_print_data")
-//    @ResponseBody
-//    public AjaxResult getPrintData(@RequestBody TaoWaybillGetBo req) {
-//        if (req.getShopId() == null || req.getShopId() <= 0) {
-//            return AjaxResult.error(HttpStatus.PARAMS_ERROR, "参数错误，没有店铺Id");
-//        }
-//        if (req.getIds() == null || req.getIds().length <= 0) {
-//            return AjaxResult.error(HttpStatus.PARAMS_ERROR, "参数错误，没有选择订单");
-//        }
-//        List<ErpShipWaybill> listByOrderIds = erpShipWaybillService.getListByOrderIds(req.getShopId(), req.getIds());
-//        return AjaxResult.success(listByOrderIds);
-//    }
-//
-//    @PostMapping("/push_print_success")
-//    @ResponseBody
-//    public AjaxResult pushPrintSuccess(@RequestBody TaoWaybillGetBo req) {
-//        if (req.getShopId() == null || req.getShopId() <= 0) {
-//            return AjaxResult.error(HttpStatus.PARAMS_ERROR, "参数错误，没有店铺Id");
-//        }
-//        if (req.getIds() == null || req.getIds().length <= 0) {
-//            return AjaxResult.error(HttpStatus.PARAMS_ERROR, "参数错误，没有选择订单");
-//        }
-//        erpShipWaybillService.printSuccess(req.getShopId(), req.getIds());
-//        return AjaxResult.success();
-//    }
+    @PostMapping("/get_print_data")
+    @ResponseBody
+    public AjaxResult getPrintData(@RequestBody PddWaybillGetBo req) {
+        if (req.getShopId() == null || req.getShopId() <= 0) {
+            return AjaxResult.error(HttpStatus.PARAMS_ERROR, "参数错误，没有店铺Id");
+        }
+        if (req.getIds() == null || req.getIds().length <= 0) {
+            return AjaxResult.error(HttpStatus.PARAMS_ERROR, "参数错误，没有选择订单");
+        }
+        List<ErpShipWaybill> listByOrderIds = erpShipWaybillService.getListByOrderIds(req.getShopId(), req.getIds());
+        return AjaxResult.success(listByOrderIds);
+    }
+
+    @PostMapping("/push_print_success")
+    @ResponseBody
+    public AjaxResult pushPrintSuccess(@RequestBody PddWaybillGetBo req) {
+        if (req.getShopId() == null || req.getShopId() <= 0) {
+            return AjaxResult.error(HttpStatus.PARAMS_ERROR, "参数错误，没有店铺Id");
+        }
+        if (req.getIds() == null || req.getIds().length <= 0) {
+            return AjaxResult.error(HttpStatus.PARAMS_ERROR, "参数错误，没有选择订单");
+        }
+        erpShipWaybillService.printSuccess(req.getShopId(), req.getIds());
+        return AjaxResult.success();
+    }
 }
