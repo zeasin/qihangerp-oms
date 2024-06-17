@@ -2,15 +2,22 @@ package com.qihang.pdd.controller;
 
 
 import cn.qihangerp.open.pdd.WaybillAccountApiHelper;
+import cn.qihangerp.open.pdd.WaybillApiHelper;
 import cn.qihangerp.open.pdd.common.ApiResultVo;
 import cn.qihangerp.open.pdd.model.WaybillAccount;
+import cn.qihangerp.open.pdd.model.WaybillCodeModule;
+import cn.qihangerp.open.pdd.request.*;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.qihang.common.common.AjaxResult;
 import com.qihang.common.enums.HttpStatus;
+import com.qihang.pdd.domain.ErpShipWaybill;
+import com.qihang.pdd.domain.OmsPddOrder;
 import com.qihang.pdd.domain.OmsPddWaybillAccount;
+import com.qihang.pdd.domain.bo.PddWaybillGetBo;
 import com.qihang.pdd.openapi.ApiCommon;
 import com.qihang.pdd.openapi.PullRequest;
 import com.qihang.pdd.service.ErpShipWaybillService;
+import com.qihang.pdd.service.OmsPddOrderService;
 import com.qihang.pdd.service.OmsPddWaybillAccountService;
 import com.qihang.security.common.BaseController;
 import lombok.AllArgsConstructor;
@@ -28,7 +35,7 @@ import java.util.List;
 public class EwaybillController extends BaseController {
     private final ApiCommon apiCommon;
     private final OmsPddWaybillAccountService waybillAccountService;
-//    private final OmsTaoOrderService orderService;
+    private final OmsPddOrderService orderService;
     private final ErpShipWaybillService erpShipWaybillService;
 
     @GetMapping(value = "/get_waybill_account_list")
@@ -99,112 +106,114 @@ public class EwaybillController extends BaseController {
         return AjaxResult.success(list);
     }
 
-//    @PostMapping("/get_waybill_code")
-//    @ResponseBody
-//    public AjaxResult getWaybillCode(@RequestBody TaoWaybillGetBo req) {
-//        if (req.getAccountId() == null || req.getAccountId() <= 0) {
-//            return AjaxResult.error(HttpStatus.PARAMS_ERROR, "参数错误，请选择电子面单账户");
-//        }
-//        if (req.getShopId() == null || req.getShopId() <= 0) {
-//            return AjaxResult.error(HttpStatus.PARAMS_ERROR, "参数错误，没有店铺Id");
-//        }
-//        if(req.getIds()==null || req.getIds().length<=0) {
-//            return AjaxResult.error(HttpStatus.PARAMS_ERROR, "参数错误，没有选择订单");
-//        }
-//        var checkResult = apiCommon.checkBefore(req.getShopId());
-//        if (checkResult.getCode() != HttpStatus.SUCCESS) {
-//            return AjaxResult.error(checkResult.getCode(), checkResult.getMsg(), checkResult.getData());
-//        }
-//        String accessToken = checkResult.getData().getAccessToken();
-//        String appKey = checkResult.getData().getAppKey();
-//        String appSecret = checkResult.getData().getAppSecret();
-//        Long sellerShopId = checkResult.getData().getSellerShopId();
-//
-//        // 获取电子面单账户信息(包含了发货地址信息)
-//        OmsTaoWaybillAccount account = waybillAccountService.getById(req.getAccountId());
-//
-//        WaybillCloudPrintApplyNewRequest request = new WaybillCloudPrintApplyNewRequest();
-//        request.setCp_code(account.getCpCode());
-//
-//        WaybillCloudPrintApplyNewRequestSender sender = new WaybillCloudPrintApplyNewRequestSender();
-//        sender.setName(account.getName());
-//        sender.setMobile(account.getMobile());
-//        WaybillCloudPrintApplyNewRequestSender.AddressDTO addressDTO = new WaybillCloudPrintApplyNewRequestSender.AddressDTO();
-//        addressDTO.setCity(account.getCity());
-//        addressDTO.setProvince(account.getProvince());
-//        addressDTO.setDistrict(account.getArea());
-//        addressDTO.setTown("");
-//        addressDTO.setDetail(account.getAddressDetail());
-//        sender.setAddress(addressDTO);
-//        request.setSender(sender);
-//
-//        // 组合取号的订单信息trade_order_info_dtos
-//        List<WaybillCloudPrintApplyNewRequestTradeOrderInfoDto> orderList = new ArrayList<>();
-//
-//        for(String orderId:req.getIds()){
-//            if(StringUtils.hasText(orderId)){
-//                OmsTaoOrder omsTaoOrder = orderService.queryDetailByTid(orderId);
-//                if(omsTaoOrder!=null) {
-//                    WaybillCloudPrintApplyNewRequestTradeOrderInfoDto dto = new WaybillCloudPrintApplyNewRequestTradeOrderInfoDto();
-//                    dto.setObjectId(omsTaoOrder.getTid());
-//                    dto.setTemplateUrl("http://cloudprint.cainiao.com/template/standard/101");
-//                    dto.setUserId(sellerShopId.intValue());
-//
-//                    WaybillCloudPrintApplyNewRequestTradeOrderInfoDto.OrderInfoDTO orderInfoDTO = new WaybillCloudPrintApplyNewRequestTradeOrderInfoDto.OrderInfoDTO();
-//                    orderInfoDTO.setOrderChannelsType("TB");
-//                    orderInfoDTO.setTradeOrderList(omsTaoOrder.getTid());
-//                    dto.setOrderInfo(orderInfoDTO);
-//
-//                    WaybillCloudPrintApplyNewRequestTradeOrderInfoDto.PackageInfoDTO packageInfoDTO = new WaybillCloudPrintApplyNewRequestTradeOrderInfoDto.PackageInfoDTO();
-//                    List<WaybillCloudPrintApplyNewRequestTradeOrderInfoDto.PackageInfoDTO.ItemsDTO> items = new ArrayList<>();
-//                    for (var orderItem : omsTaoOrder.getItems()) {
-//                        WaybillCloudPrintApplyNewRequestTradeOrderInfoDto.PackageInfoDTO.ItemsDTO itemsDTO = new WaybillCloudPrintApplyNewRequestTradeOrderInfoDto.PackageInfoDTO.ItemsDTO();
-//                        itemsDTO.setCount(orderItem.getNum());
-//                        itemsDTO.setName(orderItem.getTitle());
-//                        items.add(itemsDTO);
-//                    }
-//                    packageInfoDTO.setItems(items);
-//                    dto.setPackageInfo(packageInfoDTO);
-//
-//                    WaybillCloudPrintApplyNewRequestTradeOrderInfoDto.RecipientDTO recipientDTO = new WaybillCloudPrintApplyNewRequestTradeOrderInfoDto.RecipientDTO();
-//                    WaybillCloudPrintApplyNewRequestTradeOrderInfoDto.RecipientDTO.AddressDTO addressDTO1 = new WaybillCloudPrintApplyNewRequestTradeOrderInfoDto.RecipientDTO.AddressDTO();
-//                    addressDTO1.setCity(omsTaoOrder.getReceiverCity());
-//                    addressDTO1.setTown(omsTaoOrder.getReceiverTown());
-//                    addressDTO1.setProvince(omsTaoOrder.getReceiverState());
-//                    addressDTO1.setDistrict(omsTaoOrder.getReceiverDistrict());
-//                    addressDTO1.setDetail(omsTaoOrder.getReceiverAddress());
-//                    recipientDTO.setAddress(addressDTO1);
-//                    recipientDTO.setName(omsTaoOrder.getReceiverName());
-//                    recipientDTO.setOaid(omsTaoOrder.getOaid());
-//                    recipientDTO.setTid(omsTaoOrder.getTid());
-//                    dto.setRecipient(recipientDTO);
-//                    orderList.add(dto);
-//                }
-//            }
-//        }
-//
-//        request.setTrade_order_info_dtos(orderList);
-//
-//        ApiResultVo<WaybillCloudPrint> apiResultVo = WaybillApiHelper.waybillCloudPrintApplyNew(appKey, appSecret, accessToken, request);
-//        if(apiResultVo.getCode()==0){
-//            // 保持数据
-//            for(var result: apiResultVo.getList()){
-//                ErpShipWaybill waybill = new ErpShipWaybill();
-//                waybill.setShopId(req.getShopId());
-//                waybill.setOrderId(result.getObjectId());
-//                waybill.setWaybillCode(result.getWaybillCode());
-//                waybill.setLogisticsCode(result.getCpCode());
-//                waybill.setPrintData(result.getPrintData());
-//                erpShipWaybillService.waybillUpdate(waybill);
-//                log.info("====保存電子面單信息========"+result.getObjectId());
-//            }
-//        }else{
-//            return AjaxResult.error(apiResultVo.getMsg());
-//        }
-//
-//        return success();
-//    }
-//
+    @PostMapping("/get_waybill_code")
+    @ResponseBody
+    public AjaxResult getWaybillCode(@RequestBody PddWaybillGetBo req) {
+        if (req.getAccountId() == null || req.getAccountId() <= 0) {
+            return AjaxResult.error(HttpStatus.PARAMS_ERROR, "参数错误，请选择电子面单账户");
+        }
+        if (req.getShopId() == null || req.getShopId() <= 0) {
+            return AjaxResult.error(HttpStatus.PARAMS_ERROR, "参数错误，没有店铺Id");
+        }
+        if(req.getIds()==null || req.getIds().length<=0) {
+            return AjaxResult.error(HttpStatus.PARAMS_ERROR, "参数错误，没有选择订单");
+        }
+        var checkResult = apiCommon.checkBefore(req.getShopId());
+        if (checkResult.getCode() != HttpStatus.SUCCESS) {
+            return AjaxResult.error(checkResult.getCode(), checkResult.getMsg(), checkResult.getData());
+        }
+        String accessToken = checkResult.getData().getAccessToken();
+        String appKey = checkResult.getData().getAppKey();
+        String appSecret = checkResult.getData().getAppSecret();
+        Long sellerShopId = checkResult.getData().getSellerShopId();
+
+        // 获取电子面单账户信息(包含了发货地址信息)
+        OmsPddWaybillAccount account = waybillAccountService.getById(req.getAccountId());
+
+        WaybillCloudPrintApplyNewRequest request = new WaybillCloudPrintApplyNewRequest();
+        request.setWp_code(account.getCpCode());
+        request.setNeed_encrypt(true);
+
+        WaybillCloudPrintApplyNewRequestContact sender = new WaybillCloudPrintApplyNewRequestContact();
+        sender.setName(account.getName());
+        sender.setMobile(account.getMobile());
+        WaybillCloudPrintApplyNewRequestContactAddress addressDTO = new WaybillCloudPrintApplyNewRequestContactAddress();
+        addressDTO.setCity(account.getCity());
+        addressDTO.setProvince(account.getProvince());
+        addressDTO.setDistrict(account.getArea());
+        addressDTO.setTown("");
+        addressDTO.setDetail(account.getAddressDetail());
+        sender.setAddress(addressDTO);
+        request.setSender(sender);
+
+        // 组合取号的订单信息trade_order_info_dtos
+        List<WaybillCloudPrintApplyNewRequestTradeOrderInfoDto> orderList = new ArrayList<>();
+
+        for(String orderSn:req.getIds()){
+            if(StringUtils.hasText(orderSn)){
+                OmsPddOrder order = orderService.queryDetailByOrderSn(orderSn);
+                if(order!=null) {
+                    WaybillCloudPrintApplyNewRequestTradeOrderInfoDto dto = new WaybillCloudPrintApplyNewRequestTradeOrderInfoDto();
+                    dto.setObject_id(order.getOrderSn());
+                    dto.setTemplate_url("https://file-link.pinduoduo.com/yunda_std");
+                    dto.setUser_id(sellerShopId);
+
+                    OrderInfo orderInfo = new OrderInfo();
+                    orderInfo.setOrder_channels_type("PDD");
+                    orderInfo.setTrade_order_list(new String[] {order.getOrderSn()});
+                    dto.setOrder_info(orderInfo);
+
+
+                    PackageInfo packageInfo = new PackageInfo();
+                    List<PackageInfoItem> items = new ArrayList<>();
+                    for (var orderItem : order.getItemList()) {
+                        PackageInfoItem item = new PackageInfoItem();
+                        item.setName(orderItem.getGoodsName());
+                        item.setCount(orderItem.getGoodsCount());
+                        items.add(item);
+                    }
+                    packageInfo.setItems(items);
+                    dto.setPackage_info(packageInfo);
+
+
+                    WaybillCloudPrintApplyNewRequestContact recipient = new WaybillCloudPrintApplyNewRequestContact();
+                    recipient.setName("启航");
+                    recipient.setMobile("15818590112");
+                    WaybillCloudPrintApplyNewRequestContactAddress recipientAddress = new WaybillCloudPrintApplyNewRequestContactAddress();
+                    recipientAddress.setProvince(order.getProvince());
+                    recipientAddress.setCity(order.getCity());
+                    recipientAddress.setDistrict(order.getTown());
+                    recipientAddress.setDetail(order.getAddress());
+                    recipient.setAddress(recipientAddress);
+                    dto.setRecipient(recipient);
+
+                    orderList.add(dto);
+                }
+            }
+        }
+
+        request.setTrade_order_info_dtos(orderList);
+
+        ApiResultVo<WaybillCodeModule> apiResultVo = WaybillApiHelper.getWaybillCode(appKey, appSecret, accessToken, request);
+        if(apiResultVo.getCode()==0){
+            // 保持数据
+            for(var result: apiResultVo.getList()){
+                ErpShipWaybill waybill = new ErpShipWaybill();
+                waybill.setShopId(req.getShopId());
+                waybill.setOrderId(result.getObject_id());
+                waybill.setWaybillCode(result.getWaybill_code());
+                waybill.setLogisticsCode(account.getCpCode());
+                waybill.setPrintData(result.getPrint_data());
+                erpShipWaybillService.waybillUpdate(waybill);
+                log.info("====保存電子面單信息========"+result.getObject_id());
+            }
+        }else{
+            return AjaxResult.error(apiResultVo.getMsg());
+        }
+
+        return success();
+    }
+
 //    @PostMapping("/get_print_data")
 //    @ResponseBody
 //    public AjaxResult getPrintData(@RequestBody TaoWaybillGetBo req) {

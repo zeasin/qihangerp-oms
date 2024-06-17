@@ -11,7 +11,7 @@
         <print-pdd></print-pdd>
       </el-tab-pane>
       <el-tab-pane label="抖店" name="printDou" lazy>
-        <el-col style="color:red">抖店电子面单打印后续开放</el-col>
+        <print-dou></print-dou>
       </el-tab-pane>
       <el-tab-pane label="视频号小店" name="printWei" lazy>
         <print-wei></print-wei>
@@ -26,11 +26,12 @@
 import printWei  from "@/views/shop/wei/ewaybill/index.vue";
 import printTao from "@/views/shop/tao/ewaybill/index.vue";
 import printPdd from "@/views/shop/pdd/ewaybill/index.vue";
+import printDou from "@/views/shop/dou/ewaybill/index.vue";
 
 
 export default {
   name: "print",
-  components:{printWei,printTao,printPdd},
+  components:{printWei,printTao,printPdd,printDou},
   data() {
     return {
       activeName: 'printTao'

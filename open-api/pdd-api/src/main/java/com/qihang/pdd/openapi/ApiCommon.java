@@ -49,16 +49,15 @@ public class ApiCommon {
 //            return ResultVo.error(HttpStatus.PARAMS_ERROR, "第三方平台配置错误，没有找到ServerUrl");
 //        }
 
-//        if(shop.getSellerId() == null || shop.getSellerId() <= 0) {
-//            return com.qihang.tao.common.ApiResult.build(HttpStatus.PARAMS_ERROR,  "第三方平台配置错误，没有找到SellerUserId");
-//        }
+        if(shop.getSellerShopId() == null || shop.getSellerShopId() <= 0) {
+            return ResultVo.error(HttpStatus.PARAMS_ERROR,  "店铺配置错误，没有找到SellerShopId");
+        }
 
         ShopApiParams params = new ShopApiParams();
         params.setAppKey(platform.getAppKey());
         params.setAppSecret(platform.getAppSecret());
         params.setAccessToken(shop.getAccessToken());
         params.setRedirectUrl(platform.getRedirectUrl());
-
         params.setServerUrl(platform.getServerUrl());
         params.setSellerShopId(shop.getSellerShopId());
         if (!StringUtils.hasText(shop.getAccessToken())) {

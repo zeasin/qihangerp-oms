@@ -14,4 +14,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface OmsPddOrderService extends IService<OmsPddOrder> {
     PageResult<OmsPddOrder> queryPageList(OmsPddOrder bo, PageQuery pageQuery);
     ResultVo<Integer> saveOrder(Long shopId, OmsPddOrder order);
+
+    OmsPddOrder queryDetailByOrderSn(String orderSn);
 }

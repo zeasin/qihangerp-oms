@@ -158,6 +158,16 @@ public class OmsPddOrderServiceImpl extends ServiceImpl<OmsPddOrderMapper, OmsPd
         }
 
     }
+
+    @Override
+    public OmsPddOrder queryDetailByOrderSn(String orderSn) {
+        List<OmsPddOrder> omsTaoOrders = orderMapper.selectList(new LambdaQueryWrapper<OmsPddOrder>().eq(OmsPddOrder::getOrderSn, orderSn));
+        if(omsTaoOrders == null) return null;
+
+        OmsPddOrder order = omsTaoOrders.get(0);
+        order.setItemList(orderItemMapper.selectList(new LambdaQueryWrapper<OmsPddOrderItem>().eq(OmsPddOrderItem::getOrderSn,orderSn)));
+        return order;
+    }
 }
 
 
