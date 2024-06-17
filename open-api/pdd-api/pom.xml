@@ -26,9 +26,9 @@
         <dependency>
             <groupId>pdd</groupId>
             <artifactId>pop-api</artifactId>
-            <version>0.3</version>
+            <version>0.6.17</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/libs/pdd-api-0.3.jar</systemPath>
+            <systemPath>${project.basedir}/libs/pdd-api-0.6.17.jar</systemPath>
         </dependency>
 
     </dependencies>
