@@ -113,7 +113,7 @@ import {listShop} from "@/api/shop/shop";
 import {getDeliverList} from "@/api/wei/ewaybill";
 
 export default {
-  name: "ewaybillWei",
+  name: "printWei",
   data() {
     return {
       // 遮罩层
@@ -241,7 +241,7 @@ export default {
       };
       // 当发生错误时触发
       ws.onerror = function(error) {
-        obj.msgError("打印组件连接失败！请安装并启动微信视频号小单打印组件！");
+        obj.msgError("打印组件连接失败！请安装并启动微信视频号小店打印组件！");
         console.error('WebSocket error:', error);
         // alert('WebSocket error occurred. Check the console for more details.');
       };

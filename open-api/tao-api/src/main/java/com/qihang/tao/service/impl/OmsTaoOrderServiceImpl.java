@@ -165,6 +165,7 @@ public class OmsTaoOrderServiceImpl extends ServiceImpl<OmsTaoOrderMapper, OmsTa
                 .eq(bo.getShopId()!=null,OmsTaoOrder::getShopId,bo.getShopId())
                 .eq(StringUtils.hasText(bo.getTid()),OmsTaoOrder::getTid,bo.getTid())
                 .eq(StringUtils.hasText(bo.getStatus()),OmsTaoOrder::getStatus,bo.getStatus())
+                .eq(bo.getErpSendStatus()!=null,OmsTaoOrder::getErpSendStatus,bo.getErpSendStatus())
                 ;
 
         Page<OmsTaoOrder> taoGoodsPage = mapper.selectPage(pageQuery.build(), queryWrapper);
@@ -179,6 +180,15 @@ public class OmsTaoOrderServiceImpl extends ServiceImpl<OmsTaoOrderMapper, OmsTa
     @Override
     public OmsTaoOrder queryDetailById(Long id) {
         OmsTaoOrder omsTaoOrder = mapper.selectById(id);
+        omsTaoOrder.setItems(itemMapper.selectList(new LambdaQueryWrapper<OmsTaoOrderItem>().eq(OmsTaoOrderItem::getTid,omsTaoOrder.getTid())));
+        return omsTaoOrder;
+    }
+    @Override
+    public OmsTaoOrder queryDetailByTid(String tid) {
+        List<OmsTaoOrder> omsTaoOrders = mapper.selectList(new LambdaQueryWrapper<OmsTaoOrder>().eq(OmsTaoOrder::getTid, tid));
+        if(omsTaoOrders == null) return null;
+
+        OmsTaoOrder omsTaoOrder = omsTaoOrders.get(0);
         omsTaoOrder.setItems(itemMapper.selectList(new LambdaQueryWrapper<OmsTaoOrderItem>().eq(OmsTaoOrderItem::getTid,omsTaoOrder.getTid())));
         return omsTaoOrder;
     }
