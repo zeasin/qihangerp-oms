@@ -353,6 +353,21 @@ public class OmsPddOrder implements Serializable {
      */
     private Date updateTime;
 
+    /**
+     * erp发货快递公司
+     */
+    private String erpSendCompany;
+
+    /**
+     * erp发货快递单号
+     */
+    private String erpSendCode;
+
+    /**
+     * erp发货状态
+     */
+    private Integer erpSendStatus;
+
     @TableField(exist = false)
     private List<OmsPddOrderItem> itemList;
 

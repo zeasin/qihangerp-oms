@@ -36,12 +36,16 @@ public class OmsPddOrderServiceImpl extends ServiceImpl<OmsPddOrderMapper, OmsPd
     @Override
     public PageResult<OmsPddOrder> queryPageList(OmsPddOrder bo, PageQuery pageQuery) {
         LambdaQueryWrapper<OmsPddOrder> queryWrapper = new LambdaQueryWrapper<OmsPddOrder>()
-                .eq(bo.getShopId()!=null,OmsPddOrder::getShopId,bo.getShopId());
+                .eq(bo.getShopId() != null, OmsPddOrder::getShopId, bo.getShopId())
+                .eq(StringUtils.hasText(bo.getOrderSn()), OmsPddOrder::getOrderSn, bo.getOrderSn())
+                .eq(bo.getOrderStatus() != null, OmsPddOrder::getOrderStatus, bo.getOrderStatus())
+                .eq(bo.getRefundStatus() != null, OmsPddOrder::getRefundStatus, bo.getRefundStatus())
+                .eq(bo.getErpSendStatus() != null, OmsPddOrder::getErpSendStatus, bo.getErpSendStatus());
 
         Page<OmsPddOrder> goodsPage = orderMapper.selectPage(pageQuery.build(), queryWrapper);
-        if(goodsPage.getRecords()!=null){
-            for (var o: goodsPage.getRecords()) {
-                o.setItemList(orderItemMapper.selectList(new LambdaQueryWrapper<OmsPddOrderItem>().eq(OmsPddOrderItem::getOrderSn,o.getOrderSn())));
+        if (goodsPage.getRecords() != null) {
+            for (var o : goodsPage.getRecords()) {
+                o.setItemList(orderItemMapper.selectList(new LambdaQueryWrapper<OmsPddOrderItem>().eq(OmsPddOrderItem::getOrderSn, o.getOrderSn())));
             }
         }
         return PageResult.build(goodsPage);

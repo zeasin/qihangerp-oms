@@ -2,9 +2,9 @@
   <div class="app-container">
     <el-row>
       <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-        <el-form-item label="订单号" prop="tid">
+        <el-form-item label="订单号" prop="orderSn">
           <el-input
-            v-model="queryParams.tid"
+            v-model="queryParams.orderSn"
             placeholder="请输入订单号"
             clearable
             @keyup.enter.native="handleQuery"
@@ -41,6 +41,7 @@
 
 
     <el-row :gutter="10" class="mb8">
+
       <el-col :span="1.5">
         <el-button
           type="primary"
@@ -79,20 +80,20 @@
     <el-table v-loading="loading" :data="orderList" @selection-change="handleSelectionChange">
        <el-table-column type="selection" width="55" align="center" />
 <!--      <el-table-column label="ID" align="center" prop="id" />-->
-      <el-table-column label="订单号" align="center" prop="tid" >
+      <el-table-column label="订单号" align="center" prop="orderSn" >
         <template slot-scope="scope">
-          <p>{{scope.row.tid}}</p>
+          <p>{{scope.row.orderSn}}</p>
           <el-tag  effect="plain">{{shopList.find(x=>x.id === scope.row.shopId).name}}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="商品" width="550">
+      <el-table-column label="商品" width="450">
         <template slot-scope="scope">
-          <el-table :data="scope.row.items" :show-header="false">
-            <el-table-column label="商品" align="center" prop="title" />
-            <el-table-column label="规格" align="center" prop="skuPropertiesName" />
-            <el-table-column label="数量" align="center" prop="num" width="60">
+          <el-table :data="scope.row.itemList" :show-header="false">
+            <el-table-column label="商品" align="center" prop="outerId" />
+            <el-table-column label="规格" align="center" prop="goodsSpec" />
+            <el-table-column label="数量" align="center" prop="goodsCount" width="60">
               <template slot-scope="scope">
-                <el-tag size="small">x {{scope.row.num}}</el-tag>
+                <el-tag size="small">x {{scope.row.goodsCount}}</el-tag>
               </template>
             </el-table-column>
           </el-table>
@@ -113,11 +114,11 @@
       </el-table-column>
       <el-table-column label="下单时间" align="center" prop="orderCreateTime" width="180">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.created) }}</span>
+          <span>{{ parseTime(scope.row.createdTime) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="买家留言" align="center" prop="buyerMessage" />
-      <el-table-column label="卖家备注" align="center" prop="sellerMemo" />
+      <el-table-column label="买家留言" align="center" prop="buyerMemo" />
+      <el-table-column label="备注" align="center" prop="remark" />
 
 <!--      <el-table-column label="店铺" align="center" prop="categoryId" >-->
 <!--        <template slot-scope="scope">-->
@@ -128,13 +129,13 @@
       <el-table-column label="收件信息" align="left" prop="receiverState" >
         <template slot-scope="scope">
           <p>
-            {{scope.row.receiverName}}&nbsp;{{scope.row.receiverMobile}}
+            {{scope.row.receiverNameMask}}&nbsp;{{scope.row.receiverPhoneMask}}
           </p>
           <p>
-            {{scope.row.receiverState}} &nbsp;{{scope.row.receiverCity}}&nbsp;{{scope.row.receiverDistrict}}&nbsp;{{scope.row.receiverTown}}
+            {{scope.row.province}} &nbsp;{{scope.row.city}}&nbsp;{{scope.row.town}}&nbsp;
           </p>
           <p>
-            {{scope.row.receiverAddress}}
+            {{scope.row.receiverAddressMask}}
           </p>
         </template>
       </el-table-column>
@@ -178,17 +179,17 @@
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 
 import {listShop} from "@/api/shop/shop";
-import {listOrder} from "@/api/tao/order";
+import {listOrder} from "@/api/pdd/order";
 import {
   getWaybillAccountList,
   pullWaybillAccount,
   getWaybillCode,
   getWaybillPrintData,
   pushWaybillPrintSuccess
-} from "@/api/tao/ewaybill";
+} from "@/api/pdd/ewaybill";
 
 export default {
-  name: "printTao",
+  name: "printPdd",
   data() {
     return {
       // 遮罩层
@@ -212,7 +213,8 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        status: 'WAIT_SELLER_SEND_GOODS',
+        orderStatus: 1,
+        refundStatus: 1,
         erpSendStatus:0,
         shopId: null
       },
@@ -234,7 +236,7 @@ export default {
   },
   created() {
     this.openWs()
-    listShop({platform: 4}).then(response => {
+    listShop({platform: 5}).then(response => {
       this.shopList = response.rows;
       if (this.shopList && this.shopList.length > 0) {
         this.queryParams.shopId = this.shopList[0].id
@@ -277,17 +279,17 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.tid)
+      this.ids = selection.map(item => item.orderSn)
       this.single = selection.length !== 1
       this.multiple = !selection.length
     },
     openWs() {
-      const ws = new WebSocket('ws://127.0.0.1:13528');
+      const ws = new WebSocket('ws://127.0.0.1:5000');
       ws.onopen = () => {
         console.log('与打印组件建立连接成功: ');
         // 或打印机
         ws.send(JSON.stringify({
-          requestID: '12345',
+          requestID: '1234554',
           cmd: 'getPrinters',
           "version": "1.0"
         }))
@@ -303,7 +305,7 @@ export default {
       };
       // 当发生错误时触发
       ws.onerror = function (error) {
-        obj.msgError("打印组件连接失败！请安装并启动菜鸟云打印组件！");
+        obj.msgError("打印组件连接失败！请安装并启动拼多多打印组件！");
         console.error('WebSocket error:', error);
         // alert('WebSocket error occurred. Check the console for more details.');
       };
@@ -366,7 +368,7 @@ export default {
       getWaybillPrintData({shopId: this.queryParams.shopId, ids: ids}).then(response => {
         console.log("======打印======", response.data)
         if (response.data) {
-          const ws = new WebSocket('ws://127.0.0.1:13528');
+          const ws = new WebSocket('ws://127.0.0.1:5000');
           ws.onopen = () => {
             let printData = []
             response.data.forEach(x => printData.push(JSON.parse(x.printData)))

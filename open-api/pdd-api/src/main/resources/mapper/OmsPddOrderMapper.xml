@@ -73,11 +73,14 @@
             <result property="auditTime" column="audit_time" jdbcType="TIMESTAMP"/>
             <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
             <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="erpSendCompany" column="erp_send_company" jdbcType="VARCHAR"/>
+        <result property="erpSendCode" column="erp_send_code" jdbcType="VARCHAR"/>
+        <result property="erpSendStatus" column="erp_send_status" jdbcType="INTEGER"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         id,shop_id,order_sn,
-        trade_type,free_sf,is_lucky_flag,
+        trade_type,free_sf,is_lucky_flag,erp_send_company,erp_send_code,erp_send_status,
         group_status,confirm_status,order_status,
         refund_status,capital_free_discount,seller_discount,
         platform_discount,goods_amount,discount_amount,
