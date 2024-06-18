@@ -40,7 +40,14 @@ public class OmsPddOrderServiceImpl extends ServiceImpl<OmsPddOrderMapper, OmsPd
                 .eq(StringUtils.hasText(bo.getOrderSn()), OmsPddOrder::getOrderSn, bo.getOrderSn())
                 .eq(bo.getOrderStatus() != null, OmsPddOrder::getOrderStatus, bo.getOrderStatus())
                 .eq(bo.getRefundStatus() != null, OmsPddOrder::getRefundStatus, bo.getRefundStatus())
-                .eq(bo.getErpSendStatus() != null, OmsPddOrder::getErpSendStatus, bo.getErpSendStatus());
+        ;
+        if(bo.getErpSendStatus()!=null){
+            if(bo.getErpSendStatus()==-1) {
+                queryWrapper.lt(OmsPddOrder::getErpSendStatus,3);
+            }else {
+                queryWrapper.eq(OmsPddOrder::getErpSendStatus, bo.getErpSendStatus());
+            }
+        }
 
         Page<OmsPddOrder> goodsPage = orderMapper.selectPage(pageQuery.build(), queryWrapper);
         if (goodsPage.getRecords() != null) {

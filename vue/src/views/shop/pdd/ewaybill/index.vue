@@ -97,28 +97,21 @@
               </template>
             </el-table-column>
           </el-table>
-<!--          <el-row v-for="item in scope.row.items" :key="item.id" :gutter="20">-->
-
-<!--            <div style="float: left;display: flex;align-items: center;" >-->
-
-<!--              <div style="margin-left:10px">-->
-<!--                <p>{{item.title}}</p>-->
-<!--                <p>{{item.skuPropertiesName}}&nbsp;-->
-<!--                  <el-tag size="small">x {{item.num}}</el-tag>-->
-<!--                </p>-->
-
-<!--              </div>-->
-<!--            </div>-->
-<!--          </el-row>-->
         </template>
       </el-table-column>
-      <el-table-column label="下单时间" align="center" prop="orderCreateTime" width="180">
+      <el-table-column label="下单时间" align="center" prop="confirmTime" width="180">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.createdTime) }}</span>
+          <span>{{ parseTime(scope.row.confirmTime) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="买家留言" align="center" prop="buyerMemo" />
-      <el-table-column label="备注" align="center" prop="remark" />
+      <el-table-column label="备注" align="center" prop="buyerMemo" >
+        <template slot-scope="scope">
+          <span v-if="scope.row.buyerMemo">买家备注:{{ scope.row.buyerMemo }}</span>
+          <span v-if="scope.row.remark">备注:{{ scope.row.remark }}</span>
+        </template>
+      </el-table-column>
+<!--      <el-table-column label="买家留言" align="center" prop="buyerMemo" />-->
+<!--      <el-table-column label="备注" align="center" prop="remark" />-->
 
 <!--      <el-table-column label="店铺" align="center" prop="categoryId" >-->
 <!--        <template slot-scope="scope">-->
@@ -140,6 +133,15 @@
         </template>
       </el-table-column>
       <el-table-column label="面单号" align="center" prop="erpSendCode" />
+      <el-table-column label="状态" align="center" prop="erpSendStatus" >
+        <template slot-scope="scope">
+          <el-tag size="small" v-if="scope.row.erpSendStatus==0">未取号</el-tag>
+          <el-tag size="small" v-if="scope.row.erpSendStatus==1">已取号</el-tag>
+          <el-tag size="small" v-if="scope.row.erpSendStatus==2">已打印</el-tag>
+          <el-tag size="small" v-if="scope.row.erpSendStatus==3">已发货</el-tag>
+          <el-tag size="small" v-if="scope.row.erpSendStatus==10">手动发货</el-tag>
+        </template>
+      </el-table-column>
     </el-table>
 
     <pagination
@@ -215,7 +217,7 @@ export default {
         pageSize: 10,
         orderStatus: 1,
         refundStatus: 1,
-        erpSendStatus:0,
+        erpSendStatus:-1,
         shopId: null
       },
       // 打印参数
