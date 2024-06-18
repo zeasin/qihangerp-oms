@@ -10,6 +10,7 @@
             <result property="saleOrderItemId" column="sale_order_item_id" jdbcType="BIGINT"/>
             <result property="orderNum" column="order_num" jdbcType="VARCHAR"/>
             <result property="originalSkuId" column="original_sku_id" jdbcType="VARCHAR"/>
+            <result property="shopId" column="shop_id" jdbcType="BIGINT"/>
             <result property="goodsId" column="goods_id" jdbcType="BIGINT"/>
             <result property="specId" column="spec_id" jdbcType="BIGINT"/>
             <result property="goodsTitle" column="goods_title" jdbcType="VARCHAR"/>
@@ -26,7 +27,7 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,sale_order_id,sale_order_item_id,
+        id,sale_order_id,sale_order_item_id,shop_id,
         order_num,original_sku_id,goods_id,
         spec_id,goods_title,goods_img,
         goods_spec,goods_num,spec_num,

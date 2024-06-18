@@ -112,14 +112,4 @@ public class ShopController extends BaseController {
         return toAjax(shopService.removeBatchByIds(Arrays.stream(ids).toList()));
     }
 
-
-    /**
-     * 查询店铺列表logistics
-     */
-    @GetMapping("/logistics")
-    public TableDataInfo logisticsList(Integer platform, Integer shopId, PageQuery pageQuery)
-    {
-        PageResult<SysLogisticsCompany> result = logisticsCompanyService.queryPageList(platform, shopId, pageQuery);
-        return getDataTable(result);
-    }
 }

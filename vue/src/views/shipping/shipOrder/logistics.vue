@@ -1,10 +1,19 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="订单编号" prop="orderNum">
+      <el-form-item label="订单编号" prop="orderId">
         <el-input
-          v-model="queryParams.orderNum"
+          v-model="queryParams.orderId"
           placeholder="请输入订单编号"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+
+      <el-form-item label="快递单号" prop="waybillCode">
+        <el-input
+          v-model="queryParams.waybillCode"
+          placeholder="请输入快递单号"
           clearable
           @keyup.enter.native="handleQuery"
         />
@@ -17,68 +26,18 @@
             :label="item.name"
             :value="item.id">
             <span style="float: left">{{ item.name }}</span>
-            <span style="float: right; color: #8492a6; font-size: 13px"  v-if="item.type === 4">淘宝天猫</span>
-            <span style="float: right; color: #8492a6; font-size: 13px"  v-if="item.type === 5">拼多多</span>
-            <span style="float: right; color: #8492a6; font-size: 13px"  v-if="item.type === 6">抖店</span>
-            <span style="float: right; color: #8492a6; font-size: 13px"  v-if="item.type === 7">小红书</span>
-            <span style="float: right; color: #8492a6; font-size: 13px"  v-if="item.type === 13">快手小店</span>
-            <span style="float: right; color: #8492a6; font-size: 13px"  v-if="item.type === 99">其他</span>
+            <span style="float: right; color: #8492a6; font-size: 13px"  v-if="item.platform === 1">1688</span>
+            <span style="float: right; color: #8492a6; font-size: 13px"  v-if="item.platform === 2">视频号小店</span>
+            <span style="float: right; color: #8492a6; font-size: 13px"  v-if="item.platform === 3">京东</span>
+            <span style="float: right; color: #8492a6; font-size: 13px"  v-if="item.platform === 4">淘宝天猫</span>
+            <span style="float: right; color: #8492a6; font-size: 13px"  v-if="item.platform === 5">拼多多</span>
+            <span style="float: right; color: #8492a6; font-size: 13px"  v-if="item.platform === 6">抖店</span>
+            <span style="float: right; color: #8492a6; font-size: 13px"  v-if="item.platform === 7">小红书</span>
+            <span style="float: right; color: #8492a6; font-size: 13px"  v-if="item.platform === 8">快手</span>
+            <span style="float: right; color: #8492a6; font-size: 13px"  v-if="item.platform === 99">其他渠道</span>
           </el-option>
         </el-select>
       </el-form-item>
-      <!--
-        <el-form-item label="标签" prop="tag">
-          <el-input
-            v-model="queryParams.tag"
-            placeholder="请输入标签"
-            clearable
-            @keyup.enter.native="handleQuery"
-          />
-        </el-form-item>
-        -->
-      <el-form-item label="收件人" prop="receiverName">
-        <el-input
-          v-model="queryParams.receiverName"
-          placeholder="请输入收件人"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="手机号" prop="receiverPhone">
-        <el-input
-          v-model="queryParams.receiverPhone"
-          placeholder="请输入手机号"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-
-      <!--  <el-form-item label="城市" prop="city">
-         <el-input
-           v-model="queryParams.city"
-           placeholder="请输入城市"
-           clearable
-           @keyup.enter.native="handleQuery"
-         />
-       </el-form-item>
-       <el-form-item label="省份" prop="province">
-         <el-input
-           v-model="queryParams.province"
-           placeholder="请输入省份"
-           clearable
-           @keyup.enter.native="handleQuery"
-         />
-       </el-form-item> -->
-
-      <el-form-item label="快递单号" prop="shippingNumber">
-        <el-input
-          v-model="queryParams.shippingNumber"
-          placeholder="请输入快递单号"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -101,31 +60,27 @@
 
     <el-table v-loading="loading" :data="orderList" @selection-change="handleSelectionChange">
 <!--      <el-table-column type="selection" width="55" align="center" />-->
-<!--      <el-table-column label="订单ID" align="center" prop="id" />-->
-      <el-table-column label="订单号" align="center" prop="orderNum" />
-       <el-table-column label="物流公司" align="center" prop="logisticsCompany" />
-       <el-table-column label="物流单号" align="center" prop="logisticsCode" />
-       <el-table-column label="发货时间" align="center" prop="shipTime" />
-       <el-table-column label="运费" align="center" prop="logisticsFee" />
-       <el-table-column label="发货人" align="center" prop="shippingMan" />
-
-
-      <el-table-column label="收件信息" align="center" prop="receiverName" >
+      <el-table-column label="订单ID" align="left" prop="orderId" width="220"/>
+      <el-table-column label="订单号" prop="orderId" align="left"  >
         <template slot-scope="scope">
-          {{scope.row.receiverName}}   {{scope.row.receiverPhone}}<br />
-          {{scope.row.address}}
+          <el-tag  effect="plain">{{shopList.find(x=>x.id === scope.row.shopId).name}}</el-tag>
         </template>
       </el-table-column>
-      <!-- <el-table-column label="手机号" align="center" prop="receiverPhone" /> -->
-      <!-- <el-table-column label="${comment}" align="center" prop="address" /> -->
-      <!-- <el-table-column label="${comment}" align="center" prop="town" /> -->
-      <!-- <el-table-column label="省" align="center" prop="province" /> -->
-      <!-- <el-table-column label="市" align="center" prop="city" /> -->
-      <el-table-column label="包裹信息" align="center" >
-        <template slot-scope="scope">
-          长：{{scope.row.length}}mm   宽：{{scope.row.width}}mm  高：{{scope.row.height}}mm<br />
-          重量：{{scope.row.weight}}g
 
+       <el-table-column label="物流公司" align="center" prop="logisticsCode" />
+       <el-table-column label="物流单号" align="center" prop="waybillCode" />
+      <el-table-column label="发货时间" align="center" prop="updateTime" >
+        <template slot-scope="scope">
+          <span>{{ parseTime(scope.row.updateTime, '{y}-{m}-{d} {h}:{m}:{s}') }}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column label="状态" align="center" prop="status" >
+        <template slot-scope="scope">
+          <el-tag size="small" v-if="scope.row.status === 0">待备货</el-tag>
+          <el-tag size="small" v-if="scope.row.status === 1">备货中</el-tag>
+          <el-tag size="small" v-if="scope.row.status === 2">已出库</el-tag>
+          <el-tag size="small" v-if="scope.row.status === 3">已发货</el-tag>
         </template>
       </el-table-column>
 <!--      <el-table-column label="快递单号" align="center" prop="shippingNumber" />-->
@@ -172,11 +127,11 @@
 </template>
 
 <script>
-import {listShipOrder} from "@/api/shipping/shipOrder";
+import {listShipOrderWaybill} from "@/api/shipping/shipOrder";
 import { listShop } from "@/api/shop/shop";
-import { listLogistics } from "@/api/shipping/logistics";
+
 export default {
-  name: "Order",
+  name: "ShipOrderLogistics",
   data() {
     return {
       // 遮罩层
@@ -226,16 +181,13 @@ export default {
     listShop({}).then(response => {
       this.shopList = response.rows;
     });
-    listLogistics({}).then(resp=>{
-      this.logisticsList = resp.rows
-    })
     this.getList();
   },
   methods: {
     /** 查询店铺订单列表 */
     getList() {
       this.loading = true;
-      listShipOrder(this.queryParams).then(response => {
+      listShipOrderWaybill(this.queryParams).then(response => {
         this.orderList = response.rows;
         this.total = response.total;
         this.loading = false;

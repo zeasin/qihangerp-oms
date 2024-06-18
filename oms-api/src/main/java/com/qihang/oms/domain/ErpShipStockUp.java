@@ -23,6 +23,7 @@ public class ErpShipStockUp implements Serializable {
      * erp订单id
      */
     private Long saleOrderId;
+    private Long shopId;
 
     /**
      * erp订单itemid

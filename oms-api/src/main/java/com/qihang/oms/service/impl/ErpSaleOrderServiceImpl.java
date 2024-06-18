@@ -911,6 +911,7 @@ public class ErpSaleOrderServiceImpl extends ServiceImpl<ErpSaleOrderMapper, Erp
                     List<ErpShipStockUp> erpShipStockUps = shipStockUpMapper.selectList(new LambdaQueryWrapper<ErpShipStockUp>().eq(ErpShipStockUp::getSaleOrderItemId, item.getId()));
                     if(erpShipStockUps==null || erpShipStockUps.size()==0) {
                         ErpShipStockUp shipStockUp = new ErpShipStockUp();
+                        shipStockUp.setShopId(erpSaleOrders.get(0).getShopId().longValue());
                         shipStockUp.setSaleOrderId(item.getOrderId());
                         shipStockUp.setSaleOrderItemId(item.getId());
                         shipStockUp.setOrderNum(erpSaleOrders.get(0).getOrderNum());
