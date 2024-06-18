@@ -57,4 +57,26 @@ public class KafkaMQConsumer {
     public void onRefundMessage(ConsumerRecord<String,Object> message) {
         logger.info("收到kafka消息REFUND============"+message.topic()+"====="+message.partition()+"======"+message.value());
     }
+
+    /**
+     * 监听备货消息
+     * @param message
+     */
+    @KafkaListener(topics = {MqType.SHIP_STOCK_UP_MQ})
+    public void onSHIP_STOCK_UP_MQ(ConsumerRecord<String,Object> message) {
+        logger.info("收到kafka消息 SHIP_STOCK_UP_MQ ============"+message.topic()+"====="+message.partition()+"======"+message.value());
+        MqMessage vo = JSON.parseObject(message.value().toString(), MqMessage.class);
+        orderService.orderShipStockUp(vo.getShopId(),vo.getKeyId());
+    }
+
+    /**
+     * 监听发货完成消息
+     * @param message
+     */
+    @KafkaListener(topics = {MqType.SHIP_SEND_MQ})
+    public void onSHIP_SEND_MQ(ConsumerRecord<String,Object> message) {
+        logger.info("收到kafka消息 SHIP_SEND_MQ ============"+message.topic()+"====="+message.partition()+"======"+message.value());
+        MqMessage vo = JSON.parseObject(message.value().toString(), MqMessage.class);
+        orderService.orderSendConfirm(vo.getShopId(),vo.getKeyId(),vo.getLogisticsCompanyCode(),vo.getWaybillCode());
+    }
 }

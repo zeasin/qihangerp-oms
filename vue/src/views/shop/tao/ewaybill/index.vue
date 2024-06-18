@@ -49,7 +49,7 @@
           size="mini"
           :disabled="multiple"
           @click="handleGetEwaybillCode"
-        >取号</el-button>
+        >电子面单取号</el-button>
       </el-col>
 
       <el-col :span="1.5">
@@ -61,7 +61,7 @@
           icon="el-icon-printer"
           size="mini"
           @click="handlePrintEwaybill"
-        >打印电子面单</el-button>
+        >电子面单打印</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -71,7 +71,7 @@
           size="mini"
           :disabled="multiple"
           @click="handleShipSend"
-        >发货</el-button>
+        >电子面单发货</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
@@ -79,7 +79,7 @@
     <el-table v-loading="loading" :data="orderList" @selection-change="handleSelectionChange">
        <el-table-column type="selection" width="55" align="center" />
 <!--      <el-table-column label="ID" align="center" prop="id" />-->
-      <el-table-column label="订单号" align="center" prop="tid" >
+      <el-table-column label="订单号" align="left" prop="tid" width="180">
         <template slot-scope="scope">
           <p>{{scope.row.tid}}</p>
           <el-tag  effect="plain">{{shopList.find(x=>x.id === scope.row.shopId).name}}</el-tag>
@@ -116,8 +116,14 @@
           <span>{{ parseTime(scope.row.created) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="买家留言" align="center" prop="buyerMessage" />
-      <el-table-column label="卖家备注" align="center" prop="sellerMemo" />
+      <el-table-column label="备注" align="center" prop="buyerMessage" >
+        <template slot-scope="scope">
+          <span v-if="scope.row.buyerMessage">买家留言:{{ scope.row.buyerMessage }}</span>
+          <span v-if="scope.row.sellerMemo">卖家备注:{{ scope.row.sellerMemo }}</span>
+        </template>
+      </el-table-column>
+<!--      <el-table-column label="买家留言" align="center" prop="buyerMessage" />-->
+<!--      <el-table-column label="卖家备注" align="center" prop="sellerMemo" />-->
 
 <!--      <el-table-column label="店铺" align="center" prop="categoryId" >-->
 <!--        <template slot-scope="scope">-->
@@ -127,18 +133,27 @@
 
       <el-table-column label="收件信息" align="left" prop="receiverState" >
         <template slot-scope="scope">
-          <p>
+          <div>
             {{scope.row.receiverName}}&nbsp;{{scope.row.receiverMobile}}
-          </p>
-          <p>
+          </div>
+          <div>
             {{scope.row.receiverState}} &nbsp;{{scope.row.receiverCity}}&nbsp;{{scope.row.receiverDistrict}}&nbsp;{{scope.row.receiverTown}}
-          </p>
-          <p>
+          </div>
+          <div>
             {{scope.row.receiverAddress}}
-          </p>
+          </div>
         </template>
       </el-table-column>
       <el-table-column label="面单号" align="center" prop="erpSendCode" />
+      <el-table-column label="状态" align="center" prop="erpSendStatus" >
+        <template slot-scope="scope">
+          <el-tag size="small" v-if="scope.row.erpSendStatus==0">未取号</el-tag>
+          <el-tag size="small" v-if="scope.row.erpSendStatus==1">已取号</el-tag>
+          <el-tag size="small" v-if="scope.row.erpSendStatus==2">已打印</el-tag>
+          <el-tag size="small" v-if="scope.row.erpSendStatus==3">已发货</el-tag>
+          <el-tag size="small" v-if="scope.row.erpSendStatus==10">手动发货</el-tag>
+        </template>
+      </el-table-column>
     </el-table>
 
     <pagination
@@ -184,7 +199,7 @@ import {
   pullWaybillAccount,
   getWaybillCode,
   getWaybillPrintData,
-  pushWaybillPrintSuccess
+  pushWaybillPrintSuccess, pushShipSend
 } from "@/api/tao/ewaybill";
 
 export default {
@@ -213,7 +228,7 @@ export default {
         pageNum: 1,
         pageSize: 10,
         status: 'WAIT_SELLER_SEND_GOODS',
-        erpSendStatus:0,
+        erpSendStatus:null,
         shopId: null
       },
       // 打印参数
@@ -360,6 +375,7 @@ export default {
       // }
       if (!this.printParams.printer) {
         this.$modal.msgError('请选择打印机！');
+        return pushWaybillPrintSuccess({shopId: this.queryParams.shopId, ids: this.ids})
         return
       }
       const ids = this.ids;
@@ -414,7 +430,11 @@ export default {
 
     },
     handleShipSend(){
-      this.$modal.msgError("开源版本未实现平台发货！请自行对接发货");
+      // this.$modal.msgError("开源版本未实现平台发货！请自行对接发货");
+      pushShipSend({shopId: this.queryParams.shopId, ids: ids}).then(response => {
+        this.$modal.msgSuccess("发货成功！");
+        this.getList()
+      })
     },
     getUUID(len, radix) {
       var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('');

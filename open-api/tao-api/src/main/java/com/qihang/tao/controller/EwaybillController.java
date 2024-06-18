@@ -29,6 +29,7 @@ import com.qihang.tao.service.OmsTaoOrderService;
 import com.qihang.tao.service.OmsTaoWaybillAccountService;
 import lombok.AllArgsConstructor;
 import lombok.extern.java.Log;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,6 +46,7 @@ public class EwaybillController extends BaseController {
     private final OmsTaoWaybillAccountService waybillAccountService;
     private final OmsTaoOrderService orderService;
     private final ErpShipWaybillService erpShipWaybillService;
+    private final KafkaTemplate<String,Object> kafkaTemplate;
 
     @RequestMapping(value = "/get_waybill_account_list", method = RequestMethod.POST)
     public AjaxResult getWaybillAccountList(@RequestBody TaoRequest params) throws Exception {
@@ -208,6 +210,7 @@ public class EwaybillController extends BaseController {
                 waybill.setWaybillCode(result.getWaybillCode());
                 waybill.setLogisticsCode(result.getCpCode());
                 waybill.setPrintData(result.getPrintData());
+                waybill.setStatus(1);//1已取号
                 erpShipWaybillService.waybillUpdate(waybill);
                 log.info("====保存電子面單信息========"+result.getObjectId());
             }
@@ -241,6 +244,26 @@ public class EwaybillController extends BaseController {
             return AjaxResult.error(HttpStatus.PARAMS_ERROR, "参数错误，没有选择订单");
         }
         erpShipWaybillService.printSuccess(req.getShopId(), req.getIds());
+
+        return AjaxResult.success();
+    }
+
+    /**
+     * 发货
+     * @param req
+     * @return
+     */
+    @PostMapping("/push_ship_send")
+    @ResponseBody
+    public AjaxResult pushShipSend(@RequestBody TaoWaybillGetBo req) {
+        if (req.getShopId() == null || req.getShopId() <= 0) {
+            return AjaxResult.error(HttpStatus.PARAMS_ERROR, "参数错误，没有店铺Id");
+        }
+        if (req.getIds() == null || req.getIds().length <= 0) {
+            return AjaxResult.error(HttpStatus.PARAMS_ERROR, "参数错误，没有选择订单");
+        }
+        erpShipWaybillService.pushShipSend(req.getShopId(), req.getIds());
+
         return AjaxResult.success();
     }
 }

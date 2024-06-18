@@ -54,6 +54,8 @@ public class ErpSaleOrderServiceImpl extends ServiceImpl<ErpSaleOrderMapper, Erp
     private final OmsWeiOrderItemMapper weiOrderItemMapper;
     private final OmsWeiGoodsSkuMapper weiGoodsSkuMapper;
 
+    // 备货
+    private final ErpShipStockUpMapper shipStockUpMapper;
 
     @Transactional
     @Override
@@ -855,6 +857,81 @@ public class ErpSaleOrderServiceImpl extends ServiceImpl<ErpSaleOrderMapper, Erp
             erpSaleOrder.setItemList(orderItemMapper.selectList(new LambdaQueryWrapper<ErpSaleOrderItem>().eq(ErpSaleOrderItem::getOrderId, id)));
         }
         return erpSaleOrder;
+    }
+
+    @Transactional
+    @Override
+    public ResultVo<Integer> orderSendConfirm(Long shopId, String orderId,String logisticsCompanyCode,String waybillCode) {
+        List<ErpSaleOrder> erpSaleOrders = orderMapper.selectList(new LambdaQueryWrapper<ErpSaleOrder>().eq(ErpSaleOrder::getShopId, shopId).eq(ErpSaleOrder::getOrderNum, orderId));
+        if(erpSaleOrders!=null && erpSaleOrders.size()>0){
+            // 更新erp sale order 订单表发货状态
+            if(erpSaleOrders.get(0).getShipStatus()!=3){
+                //2是已发货
+                ErpSaleOrder update = new ErpSaleOrder();
+                update.setId(erpSaleOrders.get(0).getId());
+                update.setOrderStatus(2);
+                update.setShippingCompany(logisticsCompanyCode);
+                update.setShippingNumber(waybillCode);
+                update.setShippingCost(BigDecimal.ZERO);
+                update.setShippingMan("消息通知发货完成");
+                update.setShippingTime(new Date());
+                update.setShipStatus(3);
+
+                update.setUpdateTime(new Date());
+                update.setUpdateBy("消息通知发货完成");
+                orderMapper.updateById(update);
+            }
+            // 更新备货表相关订单状态erp_ship_stock_up
+            ErpShipStockUp shipStockUp = new ErpShipStockUp();
+            shipStockUp.setUpdateBy("消息通知发货完成");
+            shipStockUp.setUpdateTime(new Date());
+            shipStockUp.setStatus(3);//状态0待备货1备货中2已出库3已发货
+            shipStockUpMapper.update(shipStockUp,new LambdaQueryWrapper<ErpShipStockUp>().eq(ErpShipStockUp::getSaleOrderId,erpSaleOrders.get(0).getId()));
+
+        }
+
+        return ResultVo.success();
+    }
+
+    /**
+     * 订单备货
+     *
+     * @param shopId
+     * @param orderId
+     * @return
+     */
+    @Override
+    public ResultVo<Integer> orderShipStockUp(Long shopId, String orderId) {
+        List<ErpSaleOrder> erpSaleOrders = orderMapper.selectList(new LambdaQueryWrapper<ErpSaleOrder>().eq(ErpSaleOrder::getShopId, shopId).eq(ErpSaleOrder::getOrderNum, orderId));
+        if(erpSaleOrders!=null && erpSaleOrders.size()>0){
+            // 查处item
+            List<ErpSaleOrderItem> items = orderItemMapper.selectList(new LambdaQueryWrapper<ErpSaleOrderItem>().eq(ErpSaleOrderItem::getOrderId, erpSaleOrders.get(0).getId()));
+            if(items!=null&& items.size()>0){
+                for (var item:items) {
+                    List<ErpShipStockUp> erpShipStockUps = shipStockUpMapper.selectList(new LambdaQueryWrapper<ErpShipStockUp>().eq(ErpShipStockUp::getSaleOrderItemId, item.getId()));
+                    if(erpShipStockUps==null || erpShipStockUps.size()==0) {
+                        ErpShipStockUp shipStockUp = new ErpShipStockUp();
+                        shipStockUp.setSaleOrderId(item.getOrderId());
+                        shipStockUp.setSaleOrderItemId(item.getId());
+                        shipStockUp.setOrderNum(erpSaleOrders.get(0).getOrderNum());
+                        shipStockUp.setOriginalSkuId(item.getOriginalSkuId());
+                        shipStockUp.setGoodsId(item.getGoodsId());
+                        shipStockUp.setSpecId(item.getSpecId());
+                        shipStockUp.setGoodsTitle(item.getGoodsTitle());
+                        shipStockUp.setGoodsImg(item.getGoodsImg());
+                        shipStockUp.setGoodsSpec(item.getGoodsSpec());
+                        shipStockUp.setGoodsNum(item.getGoodsNum());
+                        shipStockUp.setSpecNum(item.getSpecNum());
+                        shipStockUp.setQuantity(item.getQuantity());
+                        shipStockUp.setStatus(0);//状态0待备货1备货中2已出库3已发货
+                        shipStockUp.setCreateBy("消息通知备货");
+                        shipStockUp.setCreateTime(new Date());
+                        shipStockUpMapper.insert(shipStockUp);
+                    }
+                }
+            }
+        }
+        return ResultVo.success();
     }
 }
 

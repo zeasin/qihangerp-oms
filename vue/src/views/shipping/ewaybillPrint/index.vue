@@ -5,7 +5,7 @@
         <print-tao></print-tao>
       </el-tab-pane>
       <el-tab-pane label="京东POP" name="printJd" lazy>
-        <el-col style="color:red">京东POP电子面单打印暂不支持</el-col>
+        <print-jd></print-jd>
       </el-tab-pane>
       <el-tab-pane label="拼多多" name="printPdd" lazy>
         <print-pdd></print-pdd>
@@ -27,11 +27,12 @@ import printWei  from "@/views/shop/wei/ewaybill/index.vue";
 import printTao from "@/views/shop/tao/ewaybill/index.vue";
 import printPdd from "@/views/shop/pdd/ewaybill/index.vue";
 import printDou from "@/views/shop/dou/ewaybill/index.vue";
+import PrintJd from "@/views/shop/jd/ewaybill/index.vue";
 
 
 export default {
   name: "print",
-  components:{printWei,printTao,printPdd,printDou},
+  components:{PrintJd, printWei,printTao,printPdd,printDou},
   data() {
     return {
       activeName: 'printTao'

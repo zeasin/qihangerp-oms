@@ -44,3 +44,12 @@ export function pushWaybillPrintSuccess(data) {
     data: data
   })
 }
+
+
+export function pushShipSend(data) {
+  return request({
+    url: '/api/tao-api/ewaybill/push_ship_send',
+    method: 'post',
+    data: data
+  })
+}

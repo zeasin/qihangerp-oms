@@ -1,15 +1,19 @@
 package com.qihang.tao.service.impl;
 
+import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.qihang.common.common.ResultVo;
 import com.qihang.common.enums.EnumShopType;
+import com.qihang.common.mq.MqMessage;
+import com.qihang.common.mq.MqType;
 import com.qihang.tao.domain.ErpShipWaybill;
 import com.qihang.tao.domain.OmsTaoOrder;
 import com.qihang.tao.mapper.OmsTaoOrderMapper;
 import com.qihang.tao.service.ErpShipWaybillService;
 import com.qihang.tao.mapper.ErpShipWaybillMapper;
 import lombok.AllArgsConstructor;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +32,7 @@ public class ErpShipWaybillServiceImpl extends ServiceImpl<ErpShipWaybillMapper,
     implements ErpShipWaybillService{
     private final ErpShipWaybillMapper mapper;
     private final OmsTaoOrderMapper orderMapper;
+    private final KafkaTemplate<String,Object> kafkaTemplate;
 
     /**
      * 更新电子面单信息
@@ -94,24 +99,57 @@ public class ErpShipWaybillServiceImpl extends ServiceImpl<ErpShipWaybillMapper,
                         .in(ErpShipWaybill::getOrderId, Arrays.stream(orderIds).toList()));
         if(erpShipWaybills!=null){
             for (var w : erpShipWaybills){
-                ErpShipWaybill update = new ErpShipWaybill();
-                update.setId(erpShipWaybills.get(0).getId());
-                update.setStatus(2);
-                update.setUpdateTime(new Date());
-                update.setUpdateBy("打印面单");
-                mapper.updateById(update);
+                if(w.getStatus()==1) {
+                    ErpShipWaybill update = new ErpShipWaybill();
+                    update.setId(erpShipWaybills.get(0).getId());
+                    update.setStatus(2);
+                    update.setUpdateTime(new Date());
+                    update.setUpdateBy("打印面单");
+                    mapper.updateById(update);
 
-                // 更新关联订单erp_send_status状态
-                OmsTaoOrder orderUpdate = new OmsTaoOrder();
-                orderUpdate.setErpSendStatus(update.getStatus());
+                    // 更新关联订单erp_send_status状态
+                    OmsTaoOrder orderUpdate = new OmsTaoOrder();
+                    orderUpdate.setErpSendStatus(update.getStatus());
 
-                orderMapper.update(orderUpdate,new LambdaQueryWrapper<OmsTaoOrder>().eq(OmsTaoOrder::getTid,w.getOrderId()));
+                    orderMapper.update(orderUpdate, new LambdaQueryWrapper<OmsTaoOrder>().eq(OmsTaoOrder::getTid, w.getOrderId()));
 
-                //TODO: 打印成功之后 加入备货清单
+                    //TODO: 打印成功之后 加入备货清单 采用kafka推送消息处理
 
+                    // 打印完成，通知备货
+                    kafkaTemplate.send(MqType.SHIP_STOCK_UP_MQ, JSONObject.toJSONString(MqMessage.build(w.getShopId(), w.getOrderId())));
+                }
+            }
+        }
+        return ResultVo.success();
+    }
 
+    @Transactional
+    @Override
+    public ResultVo<Integer> pushShipSend(Long shopId, String[] orderIds) {
+        List<ErpShipWaybill> erpShipWaybills = mapper.selectList(
+                new LambdaQueryWrapper<ErpShipWaybill>()
+                        .eq(ErpShipWaybill::getShopId,shopId)
+                        .in(ErpShipWaybill::getOrderId, Arrays.stream(orderIds).toList()));
+        if(erpShipWaybills!=null){
+            for (var w : erpShipWaybills){
+                if(w.getStatus() > 0 && w.getStatus()<3) {
+                    ErpShipWaybill update = new ErpShipWaybill();
+                    update.setId(erpShipWaybills.get(0).getId());
+                    update.setStatus(3);// 已发货
+                    update.setUpdateTime(new Date());
+                    update.setUpdateBy("电子面单发货");
+                    mapper.updateById(update);
 
+                    // 更新关联订单erp_send_status状态
+                    OmsTaoOrder orderUpdate = new OmsTaoOrder();
+                    orderUpdate.setErpSendStatus(update.getStatus());
 
+                    orderMapper.update(orderUpdate, new LambdaQueryWrapper<OmsTaoOrder>().eq(OmsTaoOrder::getTid, w.getOrderId()));
+
+                    // 更新erp_sale_order发货状态(controller层采用kafka推送消息处理)
+                    // 发货完成，通知发货出库
+                    kafkaTemplate.send(MqType.SHIP_SEND_MQ, JSONObject.toJSONString(MqMessage.build(w.getShopId(),w.getOrderId(),w.getLogisticsCode(),w.getWaybillCode())));
+                }
             }
         }
         return ResultVo.success();

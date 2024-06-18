@@ -24,4 +24,16 @@ public interface ErpSaleOrderService extends IService<ErpSaleOrder> {
     PageResult<ErpSaleOrder> queryPageList(ErpSaleOrder bo, PageQuery pageQuery);
 
     ErpSaleOrder queryDetailById(Long id);
+
+    ResultVo<Integer> orderSendConfirm(Long shopId,String orderId,String logisticsCompanyCode,String waybillCode);
+
+    /**
+     * 订单备货
+     * @param shopId
+     * @param orderId
+     * @param
+     * @param
+     * @return
+     */
+    ResultVo<Integer> orderShipStockUp(Long shopId,String orderId);
 }

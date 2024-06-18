@@ -16,4 +16,5 @@ public interface ErpShipWaybillService extends IService<ErpShipWaybill> {
     List<ErpShipWaybill> getListByOrderIds(Long shopId,String[] orderIds);
 
     ResultVo<Integer> printSuccess(Long shopId,String[] orderIds);
+    ResultVo<Integer> pushShipSend(Long shopId,String[] orderIds);
 }
