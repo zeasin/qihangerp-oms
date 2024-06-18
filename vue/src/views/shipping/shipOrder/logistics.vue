@@ -60,15 +60,20 @@
 
     <el-table v-loading="loading" :data="orderList" @selection-change="handleSelectionChange">
 <!--      <el-table-column type="selection" width="55" align="center" />-->
-      <el-table-column label="订单ID" align="left" prop="orderId" width="220"/>
-      <el-table-column label="订单号" prop="orderId" align="left"  >
+      <el-table-column label="订单号" align="left" prop="orderId" width="220"/>
+      <el-table-column label="店铺" prop="orderId" align="left"  >
         <template slot-scope="scope">
-          <el-tag  effect="plain">{{shopList.find(x=>x.id === scope.row.shopId).name}}</el-tag>
+         {{shopList.find(x=>x.id === scope.row.shopId).name}}
         </template>
       </el-table-column>
 
        <el-table-column label="物流公司" align="center" prop="logisticsCode" />
        <el-table-column label="物流单号" align="center" prop="waybillCode" />
+      <el-table-column label="取号时间" align="center" prop="createTime" >
+        <template slot-scope="scope">
+          <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d} {h}:{m}:{s}') }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="发货时间" align="center" prop="updateTime" >
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.updateTime, '{y}-{m}-{d} {h}:{m}:{s}') }}</span>
