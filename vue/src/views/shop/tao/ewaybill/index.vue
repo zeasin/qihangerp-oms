@@ -375,7 +375,6 @@ export default {
       // }
       if (!this.printParams.printer) {
         this.$modal.msgError('请选择打印机！');
-        return pushWaybillPrintSuccess({shopId: this.queryParams.shopId, ids: this.ids})
         return
       }
       const ids = this.ids;
