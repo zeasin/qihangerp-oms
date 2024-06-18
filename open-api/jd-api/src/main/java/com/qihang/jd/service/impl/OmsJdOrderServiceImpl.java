@@ -43,6 +43,13 @@ public class OmsJdOrderServiceImpl extends ServiceImpl<OmsJdOrderMapper, OmsJdOr
                 .eq(StringUtils.hasText(bo.getOrderId()),OmsJdOrder::getOrderId,bo.getOrderId())
                 .eq(StringUtils.hasText(bo.getOrderState()),OmsJdOrder::getOrderState,bo.getOrderState())
                 ;
+        if(bo.getErpSendStatus()!=null){
+            if(bo.getErpSendStatus()==-1) {
+                queryWrapper.lt(OmsJdOrder::getErpSendStatus,3);
+            }else {
+                queryWrapper.eq(OmsJdOrder::getErpSendStatus, bo.getErpSendStatus());
+            }
+        }
 
         Page<OmsJdOrder> page = mapper.selectPage(pageQuery.build(), queryWrapper);
         if(page.getRecords()!=null){

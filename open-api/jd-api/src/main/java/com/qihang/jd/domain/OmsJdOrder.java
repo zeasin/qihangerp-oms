@@ -262,6 +262,20 @@ public class OmsJdOrder implements Serializable {
      * 订单审核时间
      */
     private Date auditTime;
+    /**
+     * erp发货快递公司
+     */
+    private String erpSendCompany;
+
+    /**
+     * erp发货快递单号
+     */
+    private String erpSendCode;
+
+    /**
+     * erp发货状态
+     */
+    private Integer erpSendStatus;
 
     @TableField(exist = false)
     private List<OmsJdOrderItem> itemList;

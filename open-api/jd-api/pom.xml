@@ -27,7 +27,7 @@
             <artifactId>jd-api</artifactId>
             <version>1.5.4</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/libs/jd-api-1.5.4.jar</systemPath>
+            <systemPath>${project.basedir}/libs/jd-api-1.6.17.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>org.codehaus.jackson</groupId>

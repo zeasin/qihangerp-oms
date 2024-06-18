@@ -165,8 +165,14 @@ public class OmsTaoOrderServiceImpl extends ServiceImpl<OmsTaoOrderMapper, OmsTa
                 .eq(bo.getShopId()!=null,OmsTaoOrder::getShopId,bo.getShopId())
                 .eq(StringUtils.hasText(bo.getTid()),OmsTaoOrder::getTid,bo.getTid())
                 .eq(StringUtils.hasText(bo.getStatus()),OmsTaoOrder::getStatus,bo.getStatus())
-                .eq(bo.getErpSendStatus()!=null,OmsTaoOrder::getErpSendStatus,bo.getErpSendStatus())
                 ;
+        if(bo.getErpSendStatus()!=null){
+            if(bo.getErpSendStatus()==-1) {
+                queryWrapper.lt(OmsTaoOrder::getErpSendStatus,3);
+            }else {
+            queryWrapper.eq(OmsTaoOrder::getErpSendStatus, bo.getErpSendStatus());
+            }
+        }
 
         Page<OmsTaoOrder> taoGoodsPage = mapper.selectPage(pageQuery.build(), queryWrapper);
         if(taoGoodsPage.getRecords()!=null){

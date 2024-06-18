@@ -9,4 +9,5 @@ public class JdOrderBo implements Serializable {
     private String orderId;
     private Integer shopId;
     private String orderState;
+    private Integer erpSendStatus;
 }

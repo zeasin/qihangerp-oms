@@ -228,7 +228,7 @@ export default {
         pageNum: 1,
         pageSize: 10,
         status: 'WAIT_SELLER_SEND_GOODS',
-        erpSendStatus:null,
+        erpSendStatus:-1,//-1代表未发货的
         shopId: null
       },
       // 打印参数

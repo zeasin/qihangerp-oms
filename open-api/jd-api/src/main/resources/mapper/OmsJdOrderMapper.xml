@@ -55,6 +55,9 @@
             <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
             <result property="auditStatus" column="audit_status" jdbcType="INTEGER"/>
             <result property="auditTime" column="audit_time" jdbcType="TIMESTAMP"/>
+        <result property="erpSendCompany" column="erp_send_company" jdbcType="VARCHAR"/>
+        <result property="erpSendCode" column="erp_send_code" jdbcType="VARCHAR"/>
+        <result property="erpSendStatus" column="erp_send_status" jdbcType="INTEGER"/>
     </resultMap>
 
     <sql id="Base_Column_List">
@@ -66,7 +69,8 @@
         invoice_code,order_remark,order_start_time,
         order_end_time,fullname,telephone,
         mobile,full_address,province,
-        city,county,town,
+        city,county,town,erp_send_company,
+        erp_send_code,erp_send_status,create_time,
         province_id,city_id,county_id,
         town_id,vender_remark,balance_used,
         pin,return_order,payment_confirm_time,

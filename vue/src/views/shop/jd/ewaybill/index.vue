@@ -79,68 +79,52 @@
     <el-table v-loading="loading" :data="orderList" @selection-change="handleSelectionChange">
        <el-table-column type="selection" width="55" align="center" />
 <!--      <el-table-column label="ID" align="center" prop="id" />-->
-      <el-table-column label="订单号" align="left" prop="tid" width="180">
+      <el-table-column label="订单号" align="left" prop="orderId" >
         <template slot-scope="scope">
-          <p>{{scope.row.tid}}</p>
-          <el-tag  effect="plain">{{shopList.find(x=>x.id === scope.row.shopId).name}}</el-tag>
+          <p>{{scope.row.orderId}}</p>
+          <el-tag size="small">{{shopList.find(x=>x.id === scope.row.shopId).name}}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="商品" width="550">
+      <el-table-column label="商品" width="350">
         <template slot-scope="scope">
-          <el-table :data="scope.row.items" :show-header="false">
-            <el-table-column label="商品" align="center" prop="title" />
-            <el-table-column label="规格" align="center" prop="skuPropertiesName" />
-            <el-table-column label="数量" align="center" prop="num" width="60">
-              <template slot-scope="scope">
-                <el-tag size="small">x {{scope.row.num}}</el-tag>
-              </template>
-            </el-table-column>
-          </el-table>
-<!--          <el-row v-for="item in scope.row.items" :key="item.id" :gutter="20">-->
+          <el-row v-for="item in scope.row.itemList" :key="item.id" :gutter="20">
 
-<!--            <div style="float: left;display: flex;align-items: center;" >-->
-
-<!--              <div style="margin-left:10px">-->
-<!--                <p>{{item.title}}</p>-->
-<!--                <p>{{item.skuPropertiesName}}&nbsp;-->
-<!--                  <el-tag size="small">x {{item.num}}</el-tag>-->
-<!--                </p>-->
-
-<!--              </div>-->
-<!--            </div>-->
-<!--          </el-row>-->
+            <div style="float: left;display: flex;align-items: center;" >
+              <!--              <el-image  style="width: 70px; height: 70px;" :src="item.picPath"></el-image>-->
+              <div style="margin-left:10px">
+                <p>{{item.skuName}}</p>
+                <p>{{item.outerSkuId}}&nbsp;
+                  <el-tag size="small">x {{item.itemTotal}}</el-tag>
+                </p>
+                <p v-if="scope.row.refundStatus === 0">
+                  <el-button type="text" size="mini" round @click="handleRefund(scope.row,item)">售后</el-button>
+                </p>
+              </div>
+            </div>
+          </el-row>
         </template>
       </el-table-column>
-      <el-table-column label="下单时间" align="center" prop="orderCreateTime" width="180">
+      <el-table-column label="下单时间" align="center" prop="orderStartTime" width="180">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.created) }}</span>
+          <span>{{ parseTime(scope.row.orderStartTime) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="备注" align="center" prop="buyerMessage" >
         <template slot-scope="scope">
-          <span v-if="scope.row.buyerMessage">买家留言:{{ scope.row.buyerMessage }}</span>
-          <span v-if="scope.row.sellerMemo">卖家备注:{{ scope.row.sellerMemo }}</span>
+          <span v-if="scope.row.orderRemark">买家备注:{{ scope.row.orderRemark }}</span>
+          <span v-if="scope.row.venderRemark">商家备注:{{ scope.row.venderRemark }}</span>
         </template>
       </el-table-column>
-<!--      <el-table-column label="买家留言" align="center" prop="buyerMessage" />-->
-<!--      <el-table-column label="卖家备注" align="center" prop="sellerMemo" />-->
-
-<!--      <el-table-column label="店铺" align="center" prop="categoryId" >-->
-<!--        <template slot-scope="scope">-->
-<!--          <el-tag size="small">{{categoryList.find(x=>x.id === scope.row.categoryId).name}}</el-tag>-->
-<!--        </template>-->
-<!--      </el-table-column>-->
-
       <el-table-column label="收件信息" align="left" prop="receiverState" >
         <template slot-scope="scope">
           <div>
-            {{scope.row.receiverName}}&nbsp;{{scope.row.receiverMobile}}
+            {{scope.row.fullname}}&nbsp;{{scope.row.mobile}}
           </div>
           <div>
-            {{scope.row.receiverState}} &nbsp;{{scope.row.receiverCity}}&nbsp;{{scope.row.receiverDistrict}}&nbsp;{{scope.row.receiverTown}}
+            {{scope.row.province}} &nbsp;{{scope.row.city}}&nbsp;{{scope.row.county}}&nbsp;{{scope.row.town}}
           </div>
           <div>
-            {{scope.row.receiverAddress}}
+            {{scope.row.fullAddress}}
           </div>
         </template>
       </el-table-column>
@@ -171,10 +155,10 @@
               <el-option
                 v-for="item in deliverList"
                 :key="item.id"
-                :label="item.cpCode"
+                :label="item.providerName"
                 :value="item.id">
-                <span style="float: left">{{ item.cpCode }}</span>
-                <span style="float: right; color: #8492a6; font-size: 13px" >{{item.branchName}}:{{item.quantity}}</span>
+                <span style="float: left">{{ item.providerName }}</span>
+                <span style="float: right; color: #8492a6; font-size: 13px" >{{item.branchName}}:{{item.amount}}</span>
               </el-option>
             </el-select>
           <el-button type="success" plain @click="updateWaybillAccount" >更新电子面单账户信息</el-button>
@@ -193,14 +177,14 @@
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 
 import {listShop} from "@/api/shop/shop";
-import {listOrder} from "@/api/tao/order";
+import {listOrder} from "@/api/jd/order";
 import {
   getWaybillAccountList,
   pullWaybillAccount,
   getWaybillCode,
   getWaybillPrintData,
   pushWaybillPrintSuccess, pushShipSend
-} from "@/api/tao/ewaybill";
+} from "@/api/jd/ewaybill";
 
 export default {
   name: "printJd",
@@ -227,8 +211,8 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        status: 'WAIT_SELLER_SEND_GOODS',
-        erpSendStatus:null,
+        orderState: 'WAIT_SELLER_STOCK_OUT',
+        erpSendStatus:-1,
         shopId: null
       },
       // 打印参数
@@ -249,7 +233,7 @@ export default {
   },
   created() {
     this.openWs()
-    listShop({platform: 4}).then(response => {
+    listShop({platform: 3}).then(response => {
       this.shopList = response.rows;
       if (this.shopList && this.shopList.length > 0) {
         this.queryParams.shopId = this.shopList[0].id
@@ -292,12 +276,12 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.tid)
+      this.ids = selection.map(item => item.orderId)
       this.single = selection.length !== 1
       this.multiple = !selection.length
     },
     openWs() {
-      const ws = new WebSocket('ws://127.0.0.1:13528');
+      const ws = new WebSocket('ws://127.0.0.1:9113');
       ws.onopen = () => {
         console.log('与打印组件建立连接成功: ');
         // 或打印机
@@ -318,7 +302,7 @@ export default {
       };
       // 当发生错误时触发
       ws.onerror = function (error) {
-        obj.msgError("打印组件连接失败！请安装并启动菜鸟云打印组件！");
+        obj.msgError("打印组件连接失败！请安装并启动京东云打印组件！");
         console.error('WebSocket error:', error);
         // alert('WebSocket error occurred. Check the console for more details.');
       };
@@ -375,14 +359,13 @@ export default {
       // }
       if (!this.printParams.printer) {
         this.$modal.msgError('请选择打印机！');
-        return pushWaybillPrintSuccess({shopId: this.queryParams.shopId, ids: this.ids})
         return
       }
       const ids = this.ids;
       getWaybillPrintData({shopId: this.queryParams.shopId, ids: ids}).then(response => {
         console.log("======打印======", response.data)
         if (response.data) {
-          const ws = new WebSocket('ws://127.0.0.1:13528');
+          const ws = new WebSocket('ws://127.0.0.1:9113');
           ws.onopen = () => {
             let printData = []
             response.data.forEach(x => printData.push(JSON.parse(x.printData)))

@@ -11,7 +11,7 @@
  Target Server Version : 80032
  File Encoding         : 65001
 
- Date: 18/06/2024 16:00:44
+ Date: 18/06/2024 19:59:12
 */
 
 SET NAMES utf8mb4;
@@ -551,6 +551,7 @@ CREATE TABLE `erp_ship_order_fee`  (
 DROP TABLE IF EXISTS `erp_ship_stock_up`;
 CREATE TABLE `erp_ship_stock_up`  (
   `id` bigint(0) NOT NULL AUTO_INCREMENT,
+  `shop_id` bigint(0) DEFAULT NULL COMMENT '店铺id',
   `sale_order_id` bigint(0) DEFAULT NULL COMMENT 'erp订单id',
   `sale_order_item_id` bigint(0) DEFAULT NULL COMMENT 'erp订单itemid',
   `order_num` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '订单编号',
@@ -1041,6 +1042,9 @@ CREATE TABLE `oms_jd_order`  (
   `create_time` datetime(0) DEFAULT NULL,
   `audit_status` int(0) DEFAULT NULL COMMENT '订单审核状态（0待审核1已审核）',
   `audit_time` datetime(0) DEFAULT NULL COMMENT '订单审核时间',
+  `erp_send_company` varchar(20) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL COMMENT 'erp发货快递公司',
+  `erp_send_code` varchar(30) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL COMMENT 'erp发货快递单号',
+  `erp_send_status` int(0) DEFAULT 0 COMMENT 'erp发货状态（1已取号2已打印3已发货10手动发货）',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '京东订单表' ROW_FORMAT = Dynamic;
 
@@ -1076,6 +1080,39 @@ CREATE TABLE `oms_jd_order_item`  (
   `new_store_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '京东订单明细表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for oms_jd_waybill_account
+-- ----------------------------
+DROP TABLE IF EXISTS `oms_jd_waybill_account`;
+CREATE TABLE `oms_jd_waybill_account`  (
+  `id` bigint(0) NOT NULL AUTO_INCREMENT,
+  `shop_id` bigint(0) NOT NULL COMMENT '店铺id',
+  `seller_id` bigint(0) DEFAULT NULL COMMENT '商家ID',
+  `provider_id` int(0) DEFAULT NULL COMMENT '承运商id',
+  `provider_code` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '承运商编码',
+  `provider_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '承运商名称',
+  `provider_type` int(0) DEFAULT NULL COMMENT '承运商类型,1-快递公司 2-物流公司 3-安装公司 4-生鲜冷链公司',
+  `amount` int(0) DEFAULT NULL COMMENT '可用单数',
+  `support_cod` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '是否支持货到付款',
+  `branch_code` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '网点ID',
+  `branch_name` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '网点名称',
+  `settlement_code` varchar(55) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '财务结算编码',
+  `province_id` int(0) DEFAULT NULL,
+  `province_name` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '省名称（一级地址）',
+  `city_id` int(0) DEFAULT NULL,
+  `city_name` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '市名称（二级地址）',
+  `country_id` int(0) DEFAULT NULL COMMENT '区名称（三级地址）',
+  `country_name` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `countryside_id` int(0) DEFAULT NULL,
+  `countryside_name` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '区名称（三级地址）',
+  `address` varchar(55) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '详细地址',
+  `name` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '发货人',
+  `mobile` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '发货手机号',
+  `phone` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '发货固定电话',
+  `is_show` int(0) DEFAULT NULL COMMENT '是否前台显示1显示0不显示',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '京东电子面单账户信息表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for oms_pdd_goods
