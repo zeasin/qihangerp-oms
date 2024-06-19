@@ -272,7 +272,7 @@
 </template>
 
 <script>
-import { listReturned, getReturned, delReturned, addReturned, updateReturned } from "@/api/api/returned";
+import { listReturned, getReturned, delReturned, addReturned, updateReturned } from "@/api/refund/refund";
 import {listShop} from "@/api/shop/shop";
 
 export default {

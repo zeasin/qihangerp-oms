@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qihang.oms.mapper.ErpSaleAfterRefundMapper">
+
+    <resultMap id="BaseResultMap" type="com.qihang.oms.domain.ErpSaleAfterRefund">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="refundNum" column="refund_num" jdbcType="VARCHAR"/>
+            <result property="refundType" column="refund_type" jdbcType="INTEGER"/>
+            <result property="shopId" column="shop_id" jdbcType="INTEGER"/>
+            <result property="shopType" column="shop_type" jdbcType="INTEGER"/>
+            <result property="refundFee" column="refund_fee" jdbcType="FLOAT"/>
+            <result property="refundReason" column="refund_reason" jdbcType="VARCHAR"/>
+            <result property="originalOrderId" column="original_order_id" jdbcType="VARCHAR"/>
+            <result property="originalOrderItemId" column="original_order_item_id" jdbcType="VARCHAR"/>
+            <result property="originalSkuId" column="original_sku_id" jdbcType="VARCHAR"/>
+            <result property="erpGoodsId" column="erp_goods_id" jdbcType="BIGINT"/>
+            <result property="erpGoodsSkuId" column="erp_goods_sku_id" jdbcType="BIGINT"/>
+            <result property="specNum" column="spec_num" jdbcType="VARCHAR"/>
+            <result property="hasGoodReturn" column="has_good_return" jdbcType="INTEGER"/>
+            <result property="goodsName" column="goods_name" jdbcType="VARCHAR"/>
+            <result property="goodsSku" column="goods_sku" jdbcType="VARCHAR"/>
+            <result property="goodsImage" column="goods_image" jdbcType="VARCHAR"/>
+            <result property="quantity" column="quantity" jdbcType="BIGINT"/>
+            <result property="returnLogisticsCompany" column="return_logistics_company" jdbcType="VARCHAR"/>
+            <result property="returnLogisticsCode" column="return_logistics_code" jdbcType="VARCHAR"/>
+            <result property="receiveTime" column="receive_time" jdbcType="TIMESTAMP"/>
+            <result property="remark" column="remark" jdbcType="VARCHAR"/>
+            <result property="contactPerson" column="contact_person" jdbcType="VARCHAR"/>
+            <result property="mobile" column="mobile" jdbcType="VARCHAR"/>
+            <result property="address" column="address" jdbcType="VARCHAR"/>
+            <result property="status" column="status" jdbcType="INTEGER"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
+            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+            <result property="updateBy" column="update_by" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,refund_num,refund_type,
+        shop_id,shop_type,refund_fee,
+        refund_reason,original_order_id,original_order_item_id,
+        original_sku_id,erp_goods_id,erp_goods_sku_id,
+        spec_num,has_good_return,goods_name,
+        goods_sku,goods_image,quantity,
+        return_logistics_company,return_logistics_code,receive_time,
+        remark,contact_person,mobile,
+        address,status,create_time,
+        create_by,update_time,update_by
+    </sql>
+</mapper>
