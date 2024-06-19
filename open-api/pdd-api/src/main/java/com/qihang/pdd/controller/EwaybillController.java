@@ -239,4 +239,23 @@ public class EwaybillController extends BaseController {
         erpShipWaybillService.printSuccess(req.getShopId(), req.getIds());
         return AjaxResult.success();
     }
+
+    /**
+     * 发货
+     * @param req
+     * @return
+     */
+    @PostMapping("/push_ship_send")
+    @ResponseBody
+    public AjaxResult pushShipSend(@RequestBody PddWaybillGetBo req) {
+        if (req.getShopId() == null || req.getShopId() <= 0) {
+            return AjaxResult.error(HttpStatus.PARAMS_ERROR, "参数错误，没有店铺Id");
+        }
+        if (req.getIds() == null || req.getIds().length <= 0) {
+            return AjaxResult.error(HttpStatus.PARAMS_ERROR, "参数错误，没有选择订单");
+        }
+        erpShipWaybillService.pushShipSend(req.getShopId(), req.getIds());
+
+        return AjaxResult.success();
+    }
 }

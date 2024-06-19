@@ -50,7 +50,7 @@
           size="mini"
           :disabled="multiple"
           @click="handleGetEwaybillCode"
-        >取号</el-button>
+        >电子面单取号</el-button>
       </el-col>
 
       <el-col :span="1.5">
@@ -62,7 +62,7 @@
           icon="el-icon-printer"
           size="mini"
           @click="handlePrintEwaybill"
-        >打印电子面单</el-button>
+        >电子面单打印</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -72,7 +72,7 @@
           size="mini"
           :disabled="multiple"
           @click="handleShipSend"
-        >发货</el-button>
+        >电子面单发货</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
@@ -187,8 +187,9 @@ import {
   pullWaybillAccount,
   getWaybillCode,
   getWaybillPrintData,
-  pushWaybillPrintSuccess
+  pushWaybillPrintSuccess,pushShipSend
 } from "@/api/pdd/ewaybill";
+
 
 export default {
   name: "printPdd",
@@ -418,8 +419,13 @@ export default {
 
     },
     handleShipSend(){
-      this.$modal.msgError("开源版本未实现平台发货！请自行对接发货");
+      // this.$modal.msgError("开源版本未实现平台发货！请自行对接发货");
+      pushShipSend({shopId: this.queryParams.shopId, ids: this.ids}).then(response => {
+        this.$modal.msgSuccess("发货成功！");
+        this.getList()
+      })
     },
+
     getUUID(len, radix) {
       var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('');
       var uuid = [], i;
