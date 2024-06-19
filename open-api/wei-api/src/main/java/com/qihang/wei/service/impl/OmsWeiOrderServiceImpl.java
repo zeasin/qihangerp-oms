@@ -44,7 +44,15 @@ public class OmsWeiOrderServiceImpl extends ServiceImpl<OmsWeiOrderMapper, OmsWe
         LambdaQueryWrapper<OmsWeiOrder> queryWrapper = new LambdaQueryWrapper<OmsWeiOrder>()
                 .eq(bo.getShopId()!=null,OmsWeiOrder::getShopId,bo.getShopId())
                 .eq(StringUtils.hasText(bo.getOrderId()),OmsWeiOrder::getOrderId,bo.getOrderId())
+                .eq(bo.getStatus()!=null,OmsWeiOrder::getStatus,bo.getStatus())
                 ;
+        if(bo.getErpSendStatus()!=null){
+            if(bo.getErpSendStatus()==-1) {
+                queryWrapper.lt(OmsWeiOrder::getErpSendStatus,3);
+            }else {
+                queryWrapper.eq(OmsWeiOrder::getErpSendStatus, bo.getErpSendStatus());
+            }
+        }
 
         Page<OmsWeiOrder> page = mapper.selectPage(pageQuery.build(), queryWrapper);
         if(page.getRecords()!=null){

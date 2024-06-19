@@ -37,6 +37,9 @@
             <result property="settleInfo" column="settle_info" jdbcType="VARCHAR"/>
             <result property="auditStatus" column="audit_status" jdbcType="INTEGER"/>
             <result property="auditTime" column="audit_time" jdbcType="TIMESTAMP"/>
+        <result property="erpSendCompany" column="erp_send_company" jdbcType="VARCHAR"/>
+        <result property="erpSendCode" column="erp_send_code" jdbcType="VARCHAR"/>
+        <result property="erpSendStatus" column="erp_send_status" jdbcType="INTEGER"/>
     </resultMap>
 
     <sql id="Base_Column_List">
@@ -50,6 +53,6 @@
         house_number,virtual_order_tel_number,tel_number_ext_info,
         use_tel_number,hash_code,delivery_product_info,
         ship_done_time,ewaybill_order_code,settle_info,
-        audit_status,audit_time
+        audit_status,audit_time,erp_send_company,erp_send_code,erp_send_status
     </sql>
 </mapper>

@@ -160,6 +160,7 @@ public class WeiOrder implements Serializable {
      */
     private String settleInfo;
 
+
     @TableField(exist = false)
     private List<WeiOrderItem> items;
 

@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <el-tabs v-model="activeName" @tab-click="handleClick">
-      <el-tab-pane label="淘宝天猫" name="printTao" >
+      <el-tab-pane label="淘宝天猫" name="printTao" lazy>
         <print-tao></print-tao>
       </el-tab-pane>
       <el-tab-pane label="京东POP" name="printJd" lazy>
@@ -35,7 +35,7 @@ export default {
   components:{PrintJd, printWei,printTao,printPdd,printDou},
   data() {
     return {
-      activeName: 'printTao'
+      activeName: 'printWei'
     };
   },
   created() {

@@ -11,7 +11,7 @@
  Target Server Version : 80032
  File Encoding         : 65001
 
- Date: 19/06/2024 16:16:35
+ Date: 19/06/2024 17:33:05
 */
 
 SET NAMES utf8mb4;
@@ -1755,6 +1755,9 @@ CREATE TABLE `oms_wei_order`  (
   `settle_info` varchar(2550) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '结算信息json',
   `audit_status` int(0) DEFAULT NULL COMMENT '订单审核状态（0待审核1已审核）',
   `audit_time` datetime(0) DEFAULT NULL COMMENT '订单审核时间',
+  `erp_send_company` varchar(20) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL COMMENT 'erp发货快递公司',
+  `erp_send_code` varchar(30) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL COMMENT 'erp发货快递单号',
+  `erp_send_status` int(0) DEFAULT 0 COMMENT 'erp发货状态',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
@@ -1827,6 +1830,36 @@ CREATE TABLE `oms_wei_refund`  (
   `pull_time` datetime(0) DEFAULT NULL COMMENT '订单审核时间',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '视频号小店退款' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for oms_wei_waybill_account
+-- ----------------------------
+DROP TABLE IF EXISTS `oms_wei_waybill_account`;
+CREATE TABLE `oms_wei_waybill_account`  (
+  `id` bigint(0) NOT NULL AUTO_INCREMENT,
+  `shop_id` bigint(0) NOT NULL COMMENT '店铺id',
+  `seller_shop_id` bigint(0) DEFAULT NULL COMMENT '平台店铺id，全局唯一，一个店铺分配一个shop_id',
+  `delivery_id` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '快递公司编码',
+  `company_type` int(0) DEFAULT NULL COMMENT '快递公司类型1：加盟型 2：直营型',
+  `acct_id` bigint(0) DEFAULT NULL COMMENT '电子面单账号id，每绑定一个网点分配一个acct_id',
+  `acct_type` int(0) DEFAULT NULL COMMENT '面单账号类型0：普通账号 1：共享账号',
+  `status` int(0) DEFAULT NULL COMMENT '面单账号状态',
+  `available` int(0) DEFAULT NULL COMMENT '面单余额',
+  `allocated` int(0) DEFAULT NULL COMMENT '累积已取单',
+  `cancel` int(0) DEFAULT NULL COMMENT '累计已取消',
+  `recycled` int(0) DEFAULT NULL COMMENT '累积已回收',
+  `monthly_card` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '月结账号，company_type 为直营型时有效',
+  `site_info` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci COMMENT '网点信息JSON',
+  `sender_province` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '省名称（一级地址）',
+  `sender_city` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '市名称（二级地址）',
+  `sender_county` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `sender_address` varchar(55) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '详细地址',
+  `name` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '发货人',
+  `mobile` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '发货手机号',
+  `phone` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '发货固定电话',
+  `is_show` int(0) DEFAULT NULL COMMENT '是否前台显示1显示0不显示',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '视频号小店电子面单账户信息表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for s_kwai_order

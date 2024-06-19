@@ -1,30 +1,37 @@
 <template>
   <div class="app-container">
     <el-form :model="printParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="108px">
-
-      <el-form-item label="快递公司" prop="deliver">
-        <el-select v-model="printParams.deliver" placeholder="请选择快递公司" clearable>
+      <el-form-item label="订单号" prop="orderId">
+        <el-input
+          v-model="queryParams.orderId"
+          placeholder="请输入订单号"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="店铺" prop="shopId">
+        <el-select v-model="queryParams.shopId" placeholder="请选择店铺" clearable @change="handleQuery">
           <el-option
-            v-for="item in deliverList"
-            :key="item.delivery_id"
-            :label="item.delivery_name"
-            :value="item.delivery_id">
+            v-for="item in shopList"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id">
           </el-option>
         </el-select>
-        <el-button  @click="getDeliverList"> 获取 </el-button>
       </el-form-item>
-      <el-form-item label="打印机" prop="printer">
+      <el-form-item>
+        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
+        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+      </el-form-item>
+      <el-form-item>
         <el-select v-model="printParams.printer" placeholder="请选择打印机" clearable>
-         <el-option
+          <el-option
             v-for="item in printerList"
             :key="item.name"
             :label="item.name"
             :value="item.name">
           </el-option>
         </el-select>
-      </el-form-item>
-      <el-form-item>
-<!--        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>-->
 
       </el-form-item>
     </el-form>
@@ -32,51 +39,95 @@
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
         <el-button
-          type="danger"
+          type="primary"
           plain
-          icon="el-icon-download"
+          icon="el-icon-time"
+          size="mini"
+          :disabled="multiple"
+          @click="handleGetEwaybillCode"
+        >电子面单取号</el-button>
+      </el-col>
+
+      <el-col :span="1.5">
+
+        <el-button
+          type="success"
+          plain
+          :disabled="multiple"
+          icon="el-icon-printer"
           size="mini"
           @click="handlePrintEwaybill"
-        >打印电子面单</el-button>
+        >电子面单打印</el-button>
       </el-col>
+      <el-col :span="1.5">
+        <el-button
+          type="danger"
+          plain
+          icon="el-icon-d-arrow-right"
+          size="mini"
+          :disabled="multiple"
+          @click="handleShipSend"
+        >电子面单发货</el-button>
+      </el-col>
+
+<!--      <el-col :span="1.5">-->
+<!--        <el-button-->
+<!--          type="danger"-->
+<!--          plain-->
+<!--          icon="el-icon-download"-->
+<!--          size="mini"-->
+<!--          @click="handlePrintEwaybill"-->
+<!--        >打印电子面单</el-button>-->
+<!--      </el-col>-->
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="goodsList" @selection-change="handleSelectionChange">
-      <!-- <el-table-column type="selection" width="55" align="center" /> -->
-<!--      <el-table-column label="ID" align="center" prop="id" />-->
-      <el-table-column label="商品ID" align="center" prop="wareId" />
-      <el-table-column label="Sku Id" align="center" prop="skuId" />
-      <el-table-column label="sku名称" align="center" prop="skuName" />
-      <el-table-column label="图片" align="center" prop="logo" width="100">
+    <el-table v-loading="loading" :data="orderList" @selection-change="handleSelectionChange">
+       <el-table-column type="selection" width="55" align="center" />
+
+      <el-table-column label="订单号" align="left" prop="orderId" width="180">
         <template slot-scope="scope">
-          <image-preview :src="scope.row.logo" :width="50" :height="50"/>
+          <p>{{scope.row.orderId}}</p>
+          <el-tag  effect="plain">{{shopList.find(x=>x.id === scope.row.shopId).name}}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column label="商品" width="550">
+        <template slot-scope="scope">
+          <el-table :data="scope.row.items" :show-header="false">
+            <el-table-column label="商品" align="center" prop="title" />
+            <el-table-column label="SKU编码" align="center" prop="skuCode" />
+            <el-table-column label="数量" align="center" prop="num" width="60">
+              <template slot-scope="scope">
+                <el-tag size="small">x {{scope.row.skuCnt}}</el-tag>
+              </template>
+            </el-table-column>
+          </el-table>
+        </template>
+      </el-table-column>
+      <el-table-column label="下单时间" align="center" prop="createTime" width="180">
+        <template slot-scope="scope">
+          <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d} {h}:{m}:{s}') }}</span>
         </template>
       </el-table-column>
 
-<!--      <el-table-column label="店铺" align="center" prop="categoryId" >-->
-<!--        <template slot-scope="scope">-->
-<!--          <el-tag size="small">{{categoryList.find(x=>x.id === scope.row.categoryId).name}}</el-tag>-->
-<!--        </template>-->
-<!--      </el-table-column>-->
-       <el-table-column label="商家编码" align="center" prop="outerId" />
-      <el-table-column label="京东价" align="center" prop="jdPrice" />
-      <el-table-column label="ERP SKU ID" align="center" prop="erpSkuId" />
-      <el-table-column label="状态" align="center" prop="status" >
+      <el-table-column label="收件信息" align="left" prop="userName" >
         <template slot-scope="scope">
-          <el-tag size="small" v-if="scope.row.status === 1">销售中</el-tag>
-          <el-tag size="small" v-if="scope.row.status === 2">已下架</el-tag>
+          <span>{{scope.row.userName}} {{scope.row.telNumber}}</span><br />
+          <span> {{scope.row.provinceName}} {{scope.row.cityName}} {{scope.row.countyName}}
+            </span>
+          <p>
+            {{scope.row.maskPostAddress}}
+          </p>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column label="面单号" align="center" prop="erpSendCode" />
+      <el-table-column label="状态" align="center" prop="erpSendStatus" >
         <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-edit"
-            @click="handleLink(scope.row)"
-          >关联ERP</el-button>
-
+          <el-tag size="small" v-if="scope.row.erpSendStatus==0">未取号</el-tag>
+          <el-tag size="small" v-if="scope.row.erpSendStatus==1">已取号</el-tag>
+          <el-tag size="small" v-if="scope.row.erpSendStatus==2">已打印</el-tag>
+          <el-tag size="small" v-if="scope.row.erpSendStatus==3">已发货</el-tag>
+          <el-tag size="small" v-if="scope.row.erpSendStatus==10">手动发货</el-tag>
         </template>
       </el-table-column>
     </el-table>
@@ -89,20 +140,30 @@
       @pagination="getList"
     />
 
-
-    <!-- 添加或修改商品管理对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
+    <!-- 取号 -->
+    <el-dialog title="取号" :visible.sync="getCodeOpen" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="120px">
-        <el-form-item label="ERP商品SkuId" prop="erpSkuId">
-          <el-input v-model.number="form.erpSkuId" placeholder="请输入ERP商品SkuId" />
+        <el-form-item label="电子面单账户" prop="accountId">
+          <el-select v-model="form.accountId" placeholder="请选择电子面单账户" clearable>
+            <el-option
+              v-for="item in deliverList"
+              :key="item.id"
+              :label="item.deliveryId"
+              :value="item.id">
+              <span style="float: left">{{ item.deliveryId }}</span>
+              <span style="float: right; color: #8492a6; font-size: 13px" >{{item.senderProvince}}{{item.senderCity}}{{item.senderCounty}}{{item.senderAddress}}:{{item.available}}</span>
+            </el-option>
+          </el-select>
+          <el-button type="success" plain @click="updateWaybillAccount" >更新电子面单账户信息</el-button>
         </el-form-item>
 
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm">确 定</el-button>
+        <el-button type="primary" @click="getCodeOpenForm">确 定</el-button>
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
+
   </div>
 </template>
 
@@ -110,7 +171,8 @@
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 
 import {listShop} from "@/api/shop/shop";
-import {getDeliverList} from "@/api/wei/ewaybill";
+import {getWaybillAccountList,pullWaybillAccount,getWaybillCode} from "@/api/wei/ewaybill";
+import {listOrder} from "@/api/wei/order";
 
 export default {
   name: "printWei",
@@ -118,8 +180,11 @@ export default {
     return {
       // 遮罩层
       loading: true,
+      getCodeOpen: false,
       // 选中数组
       ids: [],
+      shopList: [],
+      orderList: [],
       // 非单个禁用
       single: true,
       // 非多个禁用
@@ -136,7 +201,8 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        name: null
+        status: 20,
+        erpSendStatus: -1,
       },
       // 打印参数
       printParams: {
@@ -153,32 +219,76 @@ export default {
   },
   created() {
     this.openWs()
-    // listShop({platform:3}).then(response => {
-    //   this.shopList = response.rows;
-    // });
-    // this.getList();
-    this.loading = false;
+    this.openWs()
+    listShop({platform: 2}).then(response => {
+      this.shopList = response.rows;
+      if (this.shopList && this.shopList.length > 0) {
+        this.queryParams.shopId = this.shopList[0].id
+      }
+      this.getList();
+    });
   },
   methods: {
-    /** getDeliverList获取开通的快递公司 */
-    getDeliverList(){
-      getDeliverList({shopId:2}).then(response => {
-        this.deliverList = response.data;
-      });
-
-    },
-    /** 查询商品管理列表 */
+    /** 查询列表 */
     getList() {
       this.loading = true;
-      listGoodsSku(this.queryParams).then(response => {
-        this.goodsList = response.rows;
+      listOrder(this.queryParams).then(response => {
+        this.orderList = response.rows;
         this.total = response.total;
         this.loading = false;
+      });
+    },
+    // 多选框选中数据
+    handleSelectionChange(selection) {
+      this.ids = selection.map(item => item.orderId)
+      this.single = selection.length !== 1
+      this.multiple = !selection.length
+    },
+    // 取号弹窗
+    handleGetEwaybillCode() {
+      const ids = this.ids;
+      if (ids) {
+        getWaybillAccountList({shopId: this.queryParams.shopId}).then(response => {
+          this.deliverList = response.data;
+          this.getCodeOpen = true
+        });
+      } else {
+        this.$modal.msgError("请选择订单")
+      }
+    },
+    // 更新电子面单信息
+    updateWaybillAccount() {
+      pullWaybillAccount({shopId: this.queryParams.shopId}).then(response => {
+        this.deliverList = response.data;
+      });
+    },
+    /** 取号提交按钮 */
+    getCodeOpenForm() {
+      this.$refs["form"].validate(valid => {
+        if (valid) {
+          const ids = this.ids;
+          console.log('=========3333========', ids)
+          if (ids) {
+            console.log('===请求参数=====', {shopId: this.queryParams.shopId, ids: ids, accountId: this.form.accountId})
+            getWaybillCode({
+              shopId: this.queryParams.shopId,
+              ids: ids,
+              accountId: this.form.accountId
+            }).then(response => {
+              this.$modal.msgSuccess("取号成功")
+              this.getList()
+              this.getCodeOpen = false
+            });
+          } else {
+            this.$modal.msgError("请选择订单")
+          }
+        }
       });
     },
     // 取消按钮
     cancel() {
       this.open = false;
+      this.getCodeOpen = false;
       this.reset();
     },
     // 表单重置

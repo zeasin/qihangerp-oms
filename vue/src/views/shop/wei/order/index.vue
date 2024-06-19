@@ -103,12 +103,15 @@
           <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d} {h}:{m}:{s}') }}</span>
         </template>
       </el-table-column>
+
       <el-table-column label="收件人信息" align="center" prop="userName" >
         <template slot-scope="scope">
           <span>{{scope.row.userName}}</span><br />
           <span> {{scope.row.provinceName}} {{scope.row.cityName}} {{scope.row.countyName}}
             </span>
-
+          <p>
+          {{scope.row.detailInfo}}
+        </p>
         </template>
       </el-table-column>
 
