@@ -65,10 +65,18 @@ public class OmsDouOrderServiceImpl extends ServiceImpl<OmsDouOrderMapper, OmsDo
         LambdaQueryWrapper<OmsDouOrder> queryWrapper = new LambdaQueryWrapper<OmsDouOrder>()
                 .eq(bo.getShopId()!=null,OmsDouOrder::getShopId,bo.getShopId())
                 .eq(StringUtils.hasText(bo.getOrderId()),OmsDouOrder::getOrderId,bo.getOrderId())
-                .eq(StringUtils.hasText(bo.getOrderStatus()),OmsDouOrder::getOrderStatus,bo.getOrderStatus())
+                .eq(bo.getOrderStatus()!=null,OmsDouOrder::getOrderStatus,bo.getOrderStatus())
                 .ge(StringUtils.hasText(bo.getStartTime()),OmsDouOrder::getCreateTime, startTimeStamp)
                 .le(StringUtils.hasText(bo.getEndTime()),OmsDouOrder::getCreateTime,endTimeStamp)
                 ;
+        if(bo.getErpSendStatus()!=null){
+            if(bo.getErpSendStatus()==-1) {
+                queryWrapper.lt(OmsDouOrder::getErpSendStatus,3);
+            }else {
+                queryWrapper.eq(OmsDouOrder::getErpSendStatus, bo.getErpSendStatus());
+            }
+        }
+
         pageQuery.setOrderByColumn("create_time");
         pageQuery.setIsAsc("desc");
         Page<OmsDouOrder> taoGoodsPage = mapper.selectPage(pageQuery.build(), queryWrapper);
@@ -82,7 +90,20 @@ public class OmsDouOrderServiceImpl extends ServiceImpl<OmsDouOrderMapper, OmsDo
 
     @Override
     public OmsDouOrder queryDetailById(Long id) {
-        return mapper.selectById(id);
+        var order = mapper.selectById(id);
+        if(order!=null){
+            order.setItems(itemMapper.selectList(new LambdaQueryWrapper<OmsDouOrderItem>().eq(OmsDouOrderItem::getParentOrderId,order.getOrderId())));
+        }
+        return order;
+    }
+
+    @Override
+    public OmsDouOrder queryDetailByOrderId(String orderId) {
+        var orders = mapper.selectList(new LambdaQueryWrapper<OmsDouOrder>().eq(OmsDouOrder::getOrderId,orderId));
+        if(orders!=null&&orders.size()>0){
+            orders.get(0).setItems(itemMapper.selectList(new LambdaQueryWrapper<OmsDouOrderItem>().eq(OmsDouOrderItem::getParentOrderId,orders.get(0).getOrderId())));
+            return orders.get(0);
+        }else return null;
     }
 
     @Transactional

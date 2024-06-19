@@ -12,6 +12,7 @@ public class SysShop implements Serializable {
     /**
      * 主键
      */
+    @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
     /**

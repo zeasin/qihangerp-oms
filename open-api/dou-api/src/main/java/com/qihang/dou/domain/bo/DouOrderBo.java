@@ -10,7 +10,8 @@ public class DouOrderBo implements Serializable {
     private Long skuId;
     private Long erpGoodsSkuId;
     private Integer shopId;
-    private String orderStatus;
+    private Integer orderStatus;
+    private Integer erpSendStatus;
     private String startTime;
     private String endTime;
 }

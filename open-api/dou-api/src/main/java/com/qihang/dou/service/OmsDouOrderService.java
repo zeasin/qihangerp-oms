@@ -16,6 +16,7 @@ public interface OmsDouOrderService extends IService<OmsDouOrder> {
     PageResult<OmsDouOrder> queryPageList(DouOrderBo bo, PageQuery pageQuery);
 
     OmsDouOrder queryDetailById(Long id);
+    OmsDouOrder queryDetailByOrderId(String orderId);
     /**
      * 保存店铺订单
      * @param shopId

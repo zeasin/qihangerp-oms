@@ -116,7 +116,7 @@ public class OrderApiController {
         }
 
         //获取
-        ApiResultVo<Order> resultVo = DouOrderApiHelper.pullOrderList(startTimestamp, endTimestamp, 1, 20, appKey, appSecret, accessToken);
+        ApiResultVo<Order> resultVo = DouOrderApiHelper.pullOrderList(startTimestamp, endTimestamp, 0, 20, appKey, appSecret, accessToken);
 
         if(resultVo.getCode() !=0 ){
             SShopPullLogs logs = new SShopPullLogs();
@@ -215,7 +215,7 @@ public class OrderApiController {
         logs.setDuration(System.currentTimeMillis() - currTimeMillis);
         pullLogsService.save(logs);
 
-        String msg = "成功{startTime:"+startTime.format(df)+",endTime:"+endTime.format(df)+"}总共找到：" + resultVo.getTotalRecords() + "条订单，新增：" + insertSuccess + "条，添加错误：" + totalError + "条，更新：" + hasExistOrder + "条";
+        String msg = "成功{startTime:"+startTimeStr+",endTime:"+endTimeStr+"}总共找到：" + resultVo.getTotalRecords() + "条订单，新增：" + insertSuccess + "条，添加错误：" + totalError + "条，更新：" + hasExistOrder + "条";
         log.info("/**************主动更新DOU订单：END：" + msg + "****************/");
         return AjaxResult.success(msg);
     }

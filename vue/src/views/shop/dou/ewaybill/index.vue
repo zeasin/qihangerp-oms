@@ -4,7 +4,7 @@
       <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
         <el-form-item label="订单号" prop="orderId">
           <el-input
-            v-model="queryParams.orderSn"
+            v-model="queryParams.orderId"
             placeholder="请输入订单号"
             clearable
             @keyup.enter.native="handleQuery"
@@ -50,7 +50,7 @@
           size="mini"
           :disabled="multiple"
           @click="handleGetEwaybillCode"
-        >取号</el-button>
+        >电子面单取号</el-button>
       </el-col>
 
       <el-col :span="1.5">
@@ -62,7 +62,7 @@
           icon="el-icon-printer"
           size="mini"
           @click="handlePrintEwaybill"
-        >打印电子面单</el-button>
+        >电子面单打印</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -72,7 +72,7 @@
           size="mini"
           :disabled="multiple"
           @click="handleShipSend"
-        >发货</el-button>
+        >电子面单发货</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
@@ -82,18 +82,18 @@
 <!--      <el-table-column label="ID" align="center" prop="id" />-->
       <el-table-column label="订单号" align="center" prop="orderId" >
         <template slot-scope="scope">
-          <p>{{scope.row.orderSn}}</p>
+          <p>{{scope.row.orderId}}</p>
           <el-tag  effect="plain">{{shopList.find(x=>x.id === scope.row.shopId).name}}</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="商品" width="450">
         <template slot-scope="scope">
-          <el-table :data="scope.row.itemList" :show-header="false">
-            <el-table-column label="商品" align="center" prop="outerId" />
-            <el-table-column label="规格" align="center" prop="goodsSpec" />
-            <el-table-column label="数量" align="center" prop="goodsCount" width="60">
+          <el-table :data="scope.row.items" :show-header="false">
+            <el-table-column label="商品" align="center" prop="productName" />
+            <el-table-column label="SKU编码" align="center" prop="code" />
+            <el-table-column label="数量" align="center" prop="itemNum" width="60">
               <template slot-scope="scope">
-                <el-tag size="small">x {{scope.row.goodsCount}}</el-tag>
+                <el-tag size="small">x {{scope.row.itemNum}}</el-tag>
               </template>
             </el-table-column>
           </el-table>
@@ -112,34 +112,41 @@
 <!--          </el-row>-->
         </template>
       </el-table-column>
-      <el-table-column label="下单时间" align="center" prop="orderCreateTime" width="180">
+      <el-table-column label="下单时间" align="center" prop="createTime" width="180">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.createdTime) }}</span>
+          <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="买家留言" align="center" prop="buyerMemo" />
-      <el-table-column label="备注" align="center" prop="remark" />
-
-<!--      <el-table-column label="店铺" align="center" prop="categoryId" >-->
-<!--        <template slot-scope="scope">-->
-<!--          <el-tag size="small">{{categoryList.find(x=>x.id === scope.row.categoryId).name}}</el-tag>-->
-<!--        </template>-->
-<!--      </el-table-column>-->
+      <el-table-column label="备注" align="center" prop="buyerMemo" >
+        <template slot-scope="scope">
+          <span v-if="scope.row.buyerMemo">买家备注:{{ scope.row.buyerWords }}</span>
+          <span v-if="scope.row.remark">卖家备注:{{ scope.row.sellerWords }}</span>
+        </template>
+      </el-table-column>
 
       <el-table-column label="收件信息" align="left" prop="receiverState" >
         <template slot-scope="scope">
           <p>
-            {{scope.row.receiverNameMask}}&nbsp;{{scope.row.receiverPhoneMask}}
+            {{scope.row.maskPostReceiver}}&nbsp;{{scope.row.maskPostTel}}
           </p>
           <p>
-            {{scope.row.province}} &nbsp;{{scope.row.city}}&nbsp;{{scope.row.town}}&nbsp;
+            {{scope.row.provinceName}} &nbsp;{{scope.row.cityName}}&nbsp;{{scope.row.townName}} {{scope.row.streetName}}&nbsp;
           </p>
           <p>
-            {{scope.row.receiverAddressMask}}
+            {{scope.row.maskPostAddress}}
           </p>
         </template>
       </el-table-column>
       <el-table-column label="面单号" align="center" prop="erpSendCode" />
+      <el-table-column label="状态" align="center" prop="erpSendStatus" >
+        <template slot-scope="scope">
+          <el-tag size="small" v-if="scope.row.erpSendStatus==0">未取号</el-tag>
+          <el-tag size="small" v-if="scope.row.erpSendStatus==1">已取号</el-tag>
+          <el-tag size="small" v-if="scope.row.erpSendStatus==2">已打印</el-tag>
+          <el-tag size="small" v-if="scope.row.erpSendStatus==3">已发货</el-tag>
+          <el-tag size="small" v-if="scope.row.erpSendStatus==10">手动发货</el-tag>
+        </template>
+      </el-table-column>
     </el-table>
 
     <pagination
@@ -157,10 +164,10 @@
               <el-option
                 v-for="item in deliverList"
                 :key="item.id"
-                :label="item.cpCode"
+                :label="item.company"
                 :value="item.id">
-                <span style="float: left">{{ item.cpCode }}</span>
-                <span style="float: right; color: #8492a6; font-size: 13px" >{{item.branchName}}:{{item.quantity}}</span>
+                <span style="float: left">{{ item.company }}</span>
+                <span style="float: right; color: #8492a6; font-size: 13px" >{{item.netsiteName}}:{{item.amount}}</span>
               </el-option>
             </el-select>
           <el-button type="success" plain @click="updateWaybillAccount" >更新电子面单账户信息</el-button>
@@ -179,14 +186,14 @@
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 
 import {listShop} from "@/api/shop/shop";
-import {listOrder} from "@/api/pdd/order";
+import {listOrder} from "@/api/dou/order";
 import {
   getWaybillAccountList,
   pullWaybillAccount,
   getWaybillCode,
   getWaybillPrintData,
   pushWaybillPrintSuccess
-} from "@/api/pdd/ewaybill";
+} from "@/api/dou/ewaybill";
 
 export default {
   name: "printDou",
@@ -213,9 +220,8 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        orderStatus: 1,
-        refundStatus: 1,
-        erpSendStatus:0,
+        orderStatus: 2,
+        erpSendStatus:-1,
         shopId: null
       },
       // 打印参数
@@ -236,7 +242,7 @@ export default {
   },
   created() {
     this.openWs()
-    listShop({platform: 5}).then(response => {
+    listShop({platform: 6}).then(response => {
       this.shopList = response.rows;
       if (this.shopList && this.shopList.length > 0) {
         this.queryParams.shopId = this.shopList[0].id
@@ -279,7 +285,7 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.orderSn)
+      this.ids = selection.map(item => item.orderId)
       this.single = selection.length !== 1
       this.multiple = !selection.length
     },

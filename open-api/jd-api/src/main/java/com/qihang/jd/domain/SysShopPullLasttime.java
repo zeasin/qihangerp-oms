@@ -1,5 +1,7 @@
 package com.qihang.jd.domain;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 import java.io.Serializable;
@@ -15,6 +17,7 @@ public class SysShopPullLasttime implements Serializable {
     /**
      * 
      */
+    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     /**

@@ -12,6 +12,7 @@ public class SysPlatform implements Serializable {
     /**
      * 
      */
+    @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
     /**

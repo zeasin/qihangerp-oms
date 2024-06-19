@@ -1,51 +1,50 @@
-package com.qihang.pdd.controller;
+package com.qihang.dou.controller;
 
 
-import cn.qihangerp.open.pdd.WaybillAccountApiHelper;
-import cn.qihangerp.open.pdd.WaybillApiHelper;
-import cn.qihangerp.open.pdd.common.ApiResultVo;
-import cn.qihangerp.open.pdd.model.WaybillAccount;
-import cn.qihangerp.open.pdd.model.WaybillCodeModule;
-import cn.qihangerp.open.pdd.request.*;
+import cn.qihangerp.open.dou.DouTokenApiHelper;
+import cn.qihangerp.open.dou.WaybillAccountApiHelper;
+import cn.qihangerp.open.dou.WaybillApiHelper;
+import cn.qihangerp.open.dou.common.ApiResultVo;
+import cn.qihangerp.open.dou.model.Token;
+import cn.qihangerp.open.dou.model.WaybillAccount;
+import cn.qihangerp.open.dou.model.WaybillCode;
+import cn.qihangerp.open.dou.model.WaybillPrintData;
+import cn.qihangerp.open.dou.request.*;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.qihang.common.common.AjaxResult;
+import com.qihang.common.common.ResultVoEnum;
 import com.qihang.common.enums.HttpStatus;
-import com.qihang.pdd.domain.ErpShipWaybill;
-import com.qihang.pdd.domain.OmsPddOrder;
-import com.qihang.pdd.domain.OmsPddWaybillAccount;
-import com.qihang.pdd.domain.bo.PddWaybillGetBo;
-import com.qihang.pdd.openapi.ApiCommon;
-import com.qihang.pdd.openapi.PullRequest;
-import com.qihang.pdd.service.ErpShipWaybillService;
-import com.qihang.pdd.service.OmsPddOrderService;
-import com.qihang.pdd.service.OmsPddWaybillAccountService;
+import com.qihang.dou.domain.ErpShipWaybill;
+import com.qihang.dou.domain.OmsDouOrder;
+import com.qihang.dou.domain.OmsDouWaybillAccount;
+import com.qihang.dou.domain.bo.DouRequest;
+import com.qihang.dou.domain.bo.DouWaybillGetBo;
+import com.qihang.dou.service.ErpShipWaybillService;
+import com.qihang.dou.service.OmsDouOrderService;
+import com.qihang.dou.service.OmsDouWaybillAccountService;
 import com.qihang.security.common.BaseController;
 import lombok.AllArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Log
 @AllArgsConstructor
 @RestController
 @RequestMapping("/ewaybill")
 public class EwaybillController extends BaseController {
-    private final ApiCommon apiCommon;
-    private final OmsPddWaybillAccountService waybillAccountService;
-    private final OmsPddOrderService orderService;
+    private final DouApiHelper apiCommon;
+    private final OmsDouWaybillAccountService waybillAccountService;
+    private final OmsDouOrderService orderService;
     private final ErpShipWaybillService erpShipWaybillService;
 
     @GetMapping(value = "/get_waybill_account_list")
     public AjaxResult getWaybillAccountList(@RequestParam Long shopId) throws Exception {
-//        if (params.getShopId() == null || params.getShopId() <= 0) {
-//            return AjaxResult.error(HttpStatus.PARAMS_ERROR, "参数错误，没有店铺Id");
-//        }
-        List<OmsPddWaybillAccount> list = waybillAccountService.list(
-                new LambdaQueryWrapper<OmsPddWaybillAccount>().eq(OmsPddWaybillAccount::getShopId, shopId)
-                        .eq(OmsPddWaybillAccount::getIsShow, 1));
+        List<OmsDouWaybillAccount> list = waybillAccountService.list(
+                new LambdaQueryWrapper<OmsDouWaybillAccount>().eq(OmsDouWaybillAccount::getShopId, shopId)
+                        .eq(OmsDouWaybillAccount::getIsShow, 1));
         return AjaxResult.success(list);
     }
 
@@ -56,59 +55,61 @@ public class EwaybillController extends BaseController {
          * @throws Exception
          */
     @RequestMapping(value = "/pull_waybill_account", method = RequestMethod.POST)
-    public AjaxResult pullWaybillAccount(@RequestBody PullRequest params) throws Exception {
+    public AjaxResult pullWaybillAccount(@RequestBody DouRequest params) throws Exception {
         if (params.getShopId() == null || params.getShopId() <= 0) {
             return AjaxResult.error(HttpStatus.PARAMS_ERROR, "参数错误，没有店铺Id");
         }
 
         var checkResult = apiCommon.checkBefore(params.getShopId());
-        if (checkResult.getCode() != HttpStatus.SUCCESS) {
+        if (checkResult.getCode() != ResultVoEnum.SUCCESS.getIndex()) {
             return AjaxResult.error(checkResult.getCode(), checkResult.getMsg(), checkResult.getData());
         }
         String accessToken = checkResult.getData().getAccessToken();
         String appKey = checkResult.getData().getAppKey();
         String appSecret = checkResult.getData().getAppSecret();
         Long sellId = checkResult.getData().getSellerShopId();
+        ApiResultVo<Token> token = DouTokenApiHelper.getToken(appKey, appSecret,checkResult.getData().getSellerShopId());
+        if(token.getCode()==0) {
+            accessToken = token.getData().getAccessToken();
+        }else{
+            return AjaxResult.error(token.getMsg());
+        }
+        ApiResultVo<WaybillAccount> apiResultVo = WaybillAccountApiHelper.listWaybillAccount(appKey, appSecret, accessToken);
+        List<OmsDouWaybillAccount> list  = new ArrayList<>();
+        if(apiResultVo.getCode()==0) {
+            for (var item : apiResultVo.getList()) {
 
-        ApiResultVo<WaybillAccount> apiResultVo = WaybillAccountApiHelper.pullWaybillBranchAccountList(appKey, appSecret, accessToken);
-        List<OmsPddWaybillAccount> list  = new ArrayList<>();
-        if(apiResultVo.getCode()==0){
-            for (var item : apiResultVo.getList()){
-                for(var acc:item.getBranchAccountCols()){
-                    OmsPddWaybillAccount vo = new OmsPddWaybillAccount();
-                    vo.setShopId(params.getShopId());
-                    vo.setSellerId(sellId);
-                    vo.setIsShow(1);
-                    vo.setCpCode(item.getWpCode());
-                    vo.setCpType(item.getWpType());
-                    vo.setAllocatedQuantity(acc.getAllocatedQuantity());
-                    vo.setBranchCode(acc.getBranchCode());
-                    vo.setBranchName(acc.getBranchName());
-                    vo.setCancelQuantity(acc.getCancelQuantity());
-//                    vo.setPrintQuantity(acc.getPrintQuantity());
-                    vo.setQuantity(acc.getQuantity());
-                    if(acc.getShippAddressCols().size()>0) {
-                        vo.setAddressDetail(acc.getShippAddressCols().get(0).getDetail());
-                        vo.setArea(acc.getShippAddressCols().get(0).getDistrict());
-                        vo.setCity(acc.getShippAddressCols().get(0).getCity());
-                        vo.setProvince(acc.getShippAddressCols().get(0).getProvince());
-//                        vo.setWaybillAddressId(acc.getShippAddressCols().get(0).getWaybillAddressId().longValue());
-                        list.add(vo);
-                    }
-
-                    waybillAccountService.save(vo);
-                    log.info("========添加pdd电子面单账户信息==========");
+                OmsDouWaybillAccount vo = new OmsDouWaybillAccount();
+                vo.setShopId(params.getShopId());
+                vo.setSellerId(sellId);
+                vo.setIsShow(1);
+                vo.setCompany(item.getCompany());
+                vo.setCompanyType(item.getCompanyType());
+                vo.setAmount(Integer.parseInt(item.getAmount()));
+                vo.setAllocatedQuantity(item.getAllocatedQuantity());
+                vo.setCancelledQuantity(item.getCancelledQuantity());
+                vo.setRecycledQuantity(item.getRecycledQuantity());
+                vo.setNetsiteCode(item.getNetsiteCode());
+                vo.setNetsiteName(item.getNetsiteName());
+                if (item.getSenderAddress() != null && item.getSenderAddress().size() > 0) {
+                    vo.setProvinceName(item.getSenderAddress().get(0).getProvinceName());
+                    vo.setDistrictName(item.getSenderAddress().get(0).getDistrictName());
+                    vo.setCityName(item.getSenderAddress().get(0).getCityName());
+                    vo.setStreetName(item.getSenderAddress().get(0).getStreetName());
+                    vo.setDetailAddress(item.getSenderAddress().get(0).getDetailAddress());
                 }
+                list.add(vo);
+                waybillAccountService.save(vo);
+                log.info("========添加dou电子面单账户信息==========");
+
             }
         }
-
-
         return AjaxResult.success(list);
     }
 
     @PostMapping("/get_waybill_code")
     @ResponseBody
-    public AjaxResult getWaybillCode(@RequestBody PddWaybillGetBo req) {
+    public AjaxResult getWaybillCode(@RequestBody DouWaybillGetBo req) {
         if (req.getAccountId() == null || req.getAccountId() <= 0) {
             return AjaxResult.error(HttpStatus.PARAMS_ERROR, "参数错误，请选择电子面单账户");
         }
@@ -119,7 +120,7 @@ public class EwaybillController extends BaseController {
             return AjaxResult.error(HttpStatus.PARAMS_ERROR, "参数错误，没有选择订单");
         }
         var checkResult = apiCommon.checkBefore(req.getShopId());
-        if (checkResult.getCode() != HttpStatus.SUCCESS) {
+        if (checkResult.getCode() != ResultVoEnum.SUCCESS.getIndex()) {
             return AjaxResult.error(checkResult.getCode(), checkResult.getMsg(), checkResult.getData());
         }
         String accessToken = checkResult.getData().getAccessToken();
@@ -127,85 +128,99 @@ public class EwaybillController extends BaseController {
         String appSecret = checkResult.getData().getAppSecret();
         Long sellerShopId = checkResult.getData().getSellerShopId();
 
+        ApiResultVo<Token> token = DouTokenApiHelper.getToken(appKey, appSecret,checkResult.getData().getSellerShopId());
+        if(token.getCode()==0) {
+            accessToken = token.getData().getAccessToken();
+        }else{
+            return AjaxResult.error(token.getMsg());
+        }
+
         // 获取电子面单账户信息(包含了发货地址信息)
-        OmsPddWaybillAccount account = waybillAccountService.getById(req.getAccountId());
+        OmsDouWaybillAccount waybillAccount = waybillAccountService.getById(req.getAccountId());
 
-        WaybillCloudPrintApplyNewRequest request = new WaybillCloudPrintApplyNewRequest();
-        request.setWp_code(account.getCpCode());
-        request.setNeed_encrypt(true);
+        WaybillCodeRequest request = new WaybillCodeRequest();
+        request.setLogistics_code(waybillAccount.getCompany());
+        request.setOrder_channel("1");
 
-        WaybillCloudPrintApplyNewRequestContact sender = new WaybillCloudPrintApplyNewRequestContact();
-        sender.setName(account.getName());
-        sender.setMobile(account.getMobile());
-        WaybillCloudPrintApplyNewRequestContactAddress addressDTO = new WaybillCloudPrintApplyNewRequestContactAddress();
-        addressDTO.setCity(account.getCity());
-        addressDTO.setProvince(account.getProvince());
-        addressDTO.setDistrict(account.getArea());
-        addressDTO.setTown("");
-        addressDTO.setDetail(account.getAddressDetail());
-        sender.setAddress(addressDTO);
-        request.setSender(sender);
+        WaybillAddressInfo sender = new WaybillAddressInfo();
+        WaybillAddress address = new WaybillAddress();
+        address.setCountry_code("CHN");
+        address.setProvince_name(waybillAccount.getProvinceName());
+        address.setCity_name(waybillAccount.getCityName());
+        address.setDistrict_name(waybillAccount.getDistrictName());
+        address.setStreet_name(waybillAccount.getStreetName());
+        address.setDetail_address(waybillAccount.getDetailAddress());
+        sender.setAddress(address);
 
-        // 组合取号的订单信息trade_order_info_dtos
-        List<WaybillCloudPrintApplyNewRequestTradeOrderInfoDto> orderList = new ArrayList<>();
+        WaybillContact contact = new WaybillContact();
+        contact.setName(waybillAccount.getName());
+        contact.setMobile(waybillAccount.getMobile());
 
-        for(String orderSn:req.getIds()){
-            if(StringUtils.hasText(orderSn)){
-                OmsPddOrder order = orderService.queryDetailByOrderSn(orderSn);
+        sender.setContact(contact);
+
+        request.setSender_info(sender);
+
+
+        // 开始组装订单
+        List<WaybillOrderInfo> orderInfos=new ArrayList<>();
+
+        for(String orderId:req.getIds()){
+            if(StringUtils.hasText(orderId)){
+                OmsDouOrder order = orderService.queryDetailByOrderId(orderId);
                 if(order!=null) {
-                    WaybillCloudPrintApplyNewRequestTradeOrderInfoDto dto = new WaybillCloudPrintApplyNewRequestTradeOrderInfoDto();
-                    dto.setObject_id(order.getOrderSn());
-                    dto.setTemplate_url("https://file-link.pinduoduo.com/yunda_std");
-                    dto.setUser_id(sellerShopId);
 
-                    OrderInfo orderInfo = new OrderInfo();
-                    orderInfo.setOrder_channels_type("PDD");
-                    orderInfo.setTrade_order_list(new String[] {order.getOrderSn()});
-                    dto.setOrder_info(orderInfo);
+                    WaybillOrderInfo orderInfo = new WaybillOrderInfo();
+                    orderInfo.setOrder_id(order.getOrderId());
 
+                    WaybillAddressInfo receiver = new WaybillAddressInfo();
+                    WaybillAddress address1 = new WaybillAddress();
+                    address1.setCountry_code("CHN");
+                    address1.setProvince_name(order.getProvinceName());
+                    address1.setCity_name(order.getCityName());
+                    address1.setDistrict_name(order.getTownName());
+                    address1.setStreet_name(order.getStreetName());
+                    address1.setDetail_address(order.getMaskPostAddress());
+                    receiver.setAddress(address1);
 
-                    PackageInfo packageInfo = new PackageInfo();
-                    List<PackageInfoItem> items = new ArrayList<>();
-                    for (var orderItem : order.getItemList()) {
-                        PackageInfoItem item = new PackageInfoItem();
-                        item.setName(orderItem.getGoodsName());
-                        item.setCount(orderItem.getGoodsCount());
-                        items.add(item);
+                    WaybillContact contact1 = new WaybillContact();
+                    contact1.setName(order.getMaskPostReceiver());
+                    contact1.setMobile("-");
+                    receiver.setContact(contact1);
+
+                    orderInfo.setReceiver_info(receiver);
+
+                    //
+                    List<WaybillOrderItem> items=new ArrayList<>();
+                    if(order.getItems()!=null&&order.getItems().size()>0) {
+                        for (var it: order.getItems()) {
+                            WaybillOrderItem item = new WaybillOrderItem();
+                            item.setItem_count(it.getItemNum());
+                            item.setItem_name(it.getProductName());
+                            item.setItem_specs(it.getSpec());
+                            items.add(item);
+                        }
+                        orderInfo.setItems(items);
                     }
-                    packageInfo.setItems(items);
-                    dto.setPackage_info(packageInfo);
 
-
-                    WaybillCloudPrintApplyNewRequestContact recipient = new WaybillCloudPrintApplyNewRequestContact();
-                    recipient.setName("启航");
-                    recipient.setMobile("15818590112");
-                    WaybillCloudPrintApplyNewRequestContactAddress recipientAddress = new WaybillCloudPrintApplyNewRequestContactAddress();
-                    recipientAddress.setProvince(order.getProvince());
-                    recipientAddress.setCity(order.getCity());
-                    recipientAddress.setDistrict(order.getTown());
-                    recipientAddress.setDetail(order.getAddress());
-                    recipient.setAddress(recipientAddress);
-                    dto.setRecipient(recipient);
-
-                    orderList.add(dto);
+                    orderInfos.add(orderInfo);
                 }
             }
         }
 
-        request.setTrade_order_info_dtos(orderList);
+        request.setOrder_infos(orderInfos);
+        ApiResultVo<WaybillCode> apiResultVo = WaybillApiHelper.getWaybillCode(appKey, appSecret, token.getData().getAccessToken(), request);
 
-        ApiResultVo<WaybillCodeModule> apiResultVo = WaybillApiHelper.getWaybillCode(appKey, appSecret, accessToken, request);
         if(apiResultVo.getCode()==0){
             // 保持数据
             for(var result: apiResultVo.getList()){
                 ErpShipWaybill waybill = new ErpShipWaybill();
                 waybill.setShopId(req.getShopId());
-                waybill.setOrderId(result.getObject_id());
-                waybill.setWaybillCode(result.getWaybill_code());
-                waybill.setLogisticsCode(account.getCpCode());
-                waybill.setPrintData(result.getPrint_data());
+                waybill.setOrderId(result.getOrderId());
+                waybill.setWaybillCode(result.getTrackNo());
+                waybill.setLogisticsCode(result.getCompany());
+//                waybill.setPrintData(result.getPrint_data());
                 erpShipWaybillService.waybillUpdate(waybill);
-                log.info("====保存電子面單信息========"+result.getObject_id());
+                log.info("====保存電子面單信息========"+result.getOrderId());
             }
         }else{
             return AjaxResult.error(apiResultVo.getMsg());
@@ -214,22 +229,69 @@ public class EwaybillController extends BaseController {
         return success();
     }
 
-    @PostMapping("/get_print_data")
-    @ResponseBody
-    public AjaxResult getPrintData(@RequestBody PddWaybillGetBo req) {
-        if (req.getShopId() == null || req.getShopId() <= 0) {
-            return AjaxResult.error(HttpStatus.PARAMS_ERROR, "参数错误，没有店铺Id");
-        }
-        if (req.getIds() == null || req.getIds().length <= 0) {
-            return AjaxResult.error(HttpStatus.PARAMS_ERROR, "参数错误，没有选择订单");
-        }
-        List<ErpShipWaybill> listByOrderIds = erpShipWaybillService.getListByOrderIds(req.getShopId(), req.getIds());
-        return AjaxResult.success(listByOrderIds);
+@PostMapping("/get_print_data")
+@ResponseBody
+public AjaxResult getPrintData(@RequestBody DouWaybillGetBo req) {
+    if (req.getShopId() == null || req.getShopId() <= 0) {
+        return AjaxResult.error(HttpStatus.PARAMS_ERROR, "参数错误，没有店铺Id");
     }
+    if (req.getIds() == null || req.getIds().length <= 0) {
+        return AjaxResult.error(HttpStatus.PARAMS_ERROR, "参数错误，没有选择订单");
+    }
+    var checkResult = apiCommon.checkBefore(req.getShopId());
+    if (checkResult.getCode() != 0) {
+        return AjaxResult.error(checkResult.getCode(), checkResult.getMsg(), checkResult.getData());
+    }
+    String accessToken = checkResult.getData().getAccessToken();
+    String appKey = checkResult.getData().getAppKey();
+    String appSecret = checkResult.getData().getAppSecret();
+    Long sellerShopId = checkResult.getData().getSellerShopId();
+    ApiResultVo<Token> token = DouTokenApiHelper.getToken(appKey, appSecret,checkResult.getData().getSellerShopId());
+    if(token.getCode()==0) {
+        accessToken = token.getData().getAccessToken();
+    }else{
+        return AjaxResult.error(token.getMsg());
+    }
+
+    List<ErpShipWaybill> list = erpShipWaybillService.getListByOrderIds(req.getShopId(), req.getIds());
+    WaybillApplyRequest request = new WaybillApplyRequest();
+    List<WaybillApply> waybillApplyList = new ArrayList<>();
+    if(list!=null && list.size()>0) {
+        for (var ship:list) {
+            if(!StringUtils.hasText(ship.getPrintData())) {
+                WaybillApply dto = new WaybillApply();
+                dto.setLogistics_code(ship.getLogisticsCode());
+                dto.setTrack_no(ship.getWaybillCode());
+                waybillApplyList.add(dto);
+            }
+        }
+    }
+    request.setWaybill_applies(waybillApplyList);
+    ApiResultVo<WaybillPrintData> apiResultVo = WaybillApiHelper.pullWaybillPrintData(appKey, appSecret, accessToken, request);
+    if(apiResultVo.getCode()==0){
+        // 更新数据
+        for (var item:apiResultVo.getList()) {
+            ErpShipWaybill waybillNew = new ErpShipWaybill();
+            waybillNew.setPrintData(item.getPrintData());
+            waybillNew.setUpdateBy("获取打印数据");
+            waybillNew.setUpdateTime(new Date());
+            erpShipWaybillService.update(waybillNew,new LambdaQueryWrapper<ErpShipWaybill>().eq(ErpShipWaybill::getWaybillCode,item.getTrackNo()));
+            log.info("====保存電子面單打印信息jd========"+item.getOrderId());
+            ErpShipWaybill list1 =  list.stream().filter(x -> x.getWaybillCode().equals(item.getTrackNo())).findFirst().get();
+            if(list1!=null){
+                list1.setPrintData(item.getPrintData());
+            }
+        }
+
+    }else{
+        return AjaxResult.error(apiResultVo.getMsg());
+    }
+    return AjaxResult.success(list);
+}
 
     @PostMapping("/push_print_success")
     @ResponseBody
-    public AjaxResult pushPrintSuccess(@RequestBody PddWaybillGetBo req) {
+    public AjaxResult pushPrintSuccess(@RequestBody DouWaybillGetBo req) {
         if (req.getShopId() == null || req.getShopId() <= 0) {
             return AjaxResult.error(HttpStatus.PARAMS_ERROR, "参数错误，没有店铺Id");
         }
@@ -247,7 +309,7 @@ public class EwaybillController extends BaseController {
      */
     @PostMapping("/push_ship_send")
     @ResponseBody
-    public AjaxResult pushShipSend(@RequestBody PddWaybillGetBo req) {
+    public AjaxResult pushShipSend(@RequestBody DouWaybillGetBo req) {
         if (req.getShopId() == null || req.getShopId() <= 0) {
             return AjaxResult.error(HttpStatus.PARAMS_ERROR, "参数错误，没有店铺Id");
         }

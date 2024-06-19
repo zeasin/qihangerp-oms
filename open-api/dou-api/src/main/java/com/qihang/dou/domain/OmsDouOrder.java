@@ -16,7 +16,7 @@ public class OmsDouOrder implements Serializable {
     /**
      * 
      */
-    private Long id;
+    private String id;
 
     /**
      * 店铺父订单号，抖店平台生成，平台下唯一；
@@ -407,7 +407,20 @@ public class OmsDouOrder implements Serializable {
     private Date lastPullTime;
     private Integer auditStatus;
     private Date auditTime;
+    /**
+     * erp发货快递公司
+     */
+    private String erpSendCompany;
 
+    /**
+     * erp发货快递单号
+     */
+    private String erpSendCode;
+
+    /**
+     * erp发货状态
+     */
+    private Integer erpSendStatus;
     @TableField(exist = false)
     private List<OmsDouOrderItem> items;
     private static final long serialVersionUID = 1L;

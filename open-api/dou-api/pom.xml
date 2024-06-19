@@ -29,9 +29,9 @@
         <dependency>
             <groupId>doudian</groupId>
             <artifactId>dou-api</artifactId>
-            <version>0.3</version>
+            <version>0.6.18</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/libs/dou-api-0.3.jar</systemPath>
+            <systemPath>${project.basedir}/libs/dou-api-0.6.18.jar</systemPath>
         </dependency>
         <!-- https://mvnrepository.com/artifact/net.logstash.logback/logstash-logback-encoder -->
         <dependency>
