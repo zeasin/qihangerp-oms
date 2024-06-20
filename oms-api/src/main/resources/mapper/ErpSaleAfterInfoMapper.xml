@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qihang.oms.mapper.ErpSaleAfterInfoMapper">
+
+    <resultMap id="BaseResultMap" type="com.qihang.oms.domain.ErpSaleAfterInfo">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="type" column="type" jdbcType="INTEGER"/>
+            <result property="shopId" column="shop_id" jdbcType="INTEGER"/>
+            <result property="shopType" column="shop_type" jdbcType="INTEGER"/>
+            <result property="afterSaleOrderId" column="after_sale_order_id" jdbcType="VARCHAR"/>
+            <result property="orderId" column="order_id" jdbcType="VARCHAR"/>
+            <result property="subOrderId" column="sub_order_id" jdbcType="VARCHAR"/>
+            <result property="productId" column="product_id" jdbcType="VARCHAR"/>
+            <result property="skuId" column="sku_id" jdbcType="VARCHAR"/>
+            <result property="count" column="count" jdbcType="INTEGER"/>
+            <result property="title" column="title" jdbcType="VARCHAR"/>
+            <result property="img" column="img" jdbcType="VARCHAR"/>
+            <result property="skuInfo" column="sku_info" jdbcType="VARCHAR"/>
+            <result property="skuCode" column="sku_code" jdbcType="VARCHAR"/>
+            <result property="erpGoodsId" column="erp_goods_id" jdbcType="INTEGER"/>
+            <result property="erpSkuId" column="erp_sku_id" jdbcType="INTEGER"/>
+            <result property="returnInfo" column="return_info" jdbcType="VARCHAR"/>
+            <result property="returnWaybillCode" column="return_waybill_code" jdbcType="VARCHAR"/>
+            <result property="returnCompany" column="return_company" jdbcType="VARCHAR"/>
+            <result property="receiverName" column="receiver_name" jdbcType="VARCHAR"/>
+            <result property="receiverTel" column="receiver_tel" jdbcType="VARCHAR"/>
+            <result property="receiverProvince" column="receiver_province" jdbcType="VARCHAR"/>
+            <result property="receiverCity" column="receiver_city" jdbcType="VARCHAR"/>
+            <result property="receiverTown" column="receiver_town" jdbcType="VARCHAR"/>
+            <result property="receiverAddress" column="receiver_address" jdbcType="VARCHAR"/>
+            <result property="shipWaybillCode" column="ship_waybill_code" jdbcType="VARCHAR"/>
+            <result property="shipCompany" column="ship_company" jdbcType="VARCHAR"/>
+            <result property="status" column="status" jdbcType="INTEGER"/>
+            <result property="remark" column="remark" jdbcType="VARCHAR"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
+            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+            <result property="updateBy" column="update_by" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,type,shop_id,
+        shop_type,after_sale_order_id,order_id,
+        sub_order_id,product_id,sku_id,
+        count,title,img,
+        sku_info,sku_code,erp_goods_id,
+        erp_sku_id,return_info,return_waybill_code,
+        return_company,receiver_name,receiver_tel,
+        receiver_province,receiver_city,receiver_town,
+        receiver_address,ship_waybill_code,ship_company,
+        status,remark,create_time,
+        create_by,update_time,update_by
+    </sql>
+</mapper>
