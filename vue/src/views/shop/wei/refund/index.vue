@@ -57,23 +57,23 @@
       <el-col :span="1.5">
         <el-button
           :loading="pullLoading"
-          type="danger"
+          type="success"
           plain
           icon="el-icon-download"
           size="mini"
           @click="handlePull"
         >API拉取新退款</el-button>
       </el-col>
-<!--      <el-col :span="1.5">-->
-<!--        <el-button-->
-<!--          type="primary"-->
-<!--          plain-->
-<!--          icon="el-icon-refresh"-->
-<!--          size="mini"-->
-<!--          :disabled="multiple"-->
-<!--          @click="handlePushOms"-->
-<!--        >同步到ERP</el-button>-->
-<!--      </el-col>-->
+      <el-col :span="1.5">
+        <el-button
+          type="primary"
+          plain
+          icon="el-icon-refresh"
+          size="mini"
+          :disabled="multiple"
+          @click="handlePushOms"
+        >手动推送售后</el-button>
+      </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
@@ -231,6 +231,7 @@ import { listShop } from "@/api/shop/shop";
 import {MessageBox} from "element-ui";
 import {isRelogin} from "@/utils/request";
 import {listShopRefund, orderIntercept, pullRefund, returnedConfirm} from "@/api/wei/refund";
+import {pushOms} from "@/api/tao/taoRefund";
 export default {
   name: "RefundWei",
   data() {
@@ -284,10 +285,13 @@ export default {
     };
   },
   created() {
-    listShop({platform:2}).then(response => {
-        this.shopList = response.rows;
-      });
-    this.getList();
+    listShop({platform: 2}).then(response => {
+      this.shopList = response.rows;
+      if (this.shopList && this.shopList.length > 0) {
+        this.queryParams.shopId = this.shopList[0].id
+      }
+      this.getList();
+    });
   },
   methods: {
     /** 查询淘宝退款订单列表 */
@@ -324,9 +328,18 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.refundId)
+      this.ids = selection.map(item => item.afterSaleOrderId)
       this.single = selection.length!==1
       this.multiple = !selection.length
+    },
+    handlePushOms(row) {
+      const ids = row.id || this.ids;
+      this.$modal.confirm('是否手动推送到OMS？').then(function() {
+        return pushOms({ids:ids});
+      }).then(() => {
+        // this.getList();
+        this.$modal.msgSuccess("推送成功");
+      }).catch(() => {});
     },
     handlePull() {
       if(this.queryParams.shopId){
