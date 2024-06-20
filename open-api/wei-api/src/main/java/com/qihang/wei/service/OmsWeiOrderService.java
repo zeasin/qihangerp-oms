@@ -16,5 +16,5 @@ public interface OmsWeiOrderService extends IService<OmsWeiOrder> {
     PageResult<OmsWeiOrder> queryPageList(OmsWeiOrder bo, PageQuery pageQuery);
     ResultVo<Integer> saveOrder(Long shopId, OmsWeiOrder order);
     OmsWeiOrder queryDetailById(Long id);
-
+    OmsWeiOrder queryDetailByOrderId(String orderId);
 }

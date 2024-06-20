@@ -32,9 +32,9 @@
         <dependency>
             <groupId>wei-api</groupId>
             <artifactId>wei-api</artifactId>
-            <version>1.6.3</version>
+            <version>1.6.20</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/libs/wei-api-1.6.3.jar</systemPath>
+            <systemPath>${project.basedir}/libs/wei-api-1.6.20.jar</systemPath>
         </dependency>
     </dependencies>
 </project>

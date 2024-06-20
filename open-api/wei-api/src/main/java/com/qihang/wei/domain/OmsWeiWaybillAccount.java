@@ -39,6 +39,16 @@ public class OmsWeiWaybillAccount implements Serializable {
     private Integer companyType;
 
     /**
+     * 网点编码
+     */
+    private String siteCode;
+
+    /**
+     * 网点名称
+     */
+    private String siteName;
+
+    /**
      * 电子面单账号id，每绑定一个网点分配一个acct_id
      */
     private String acctId;
@@ -97,6 +107,11 @@ public class OmsWeiWaybillAccount implements Serializable {
      * 
      */
     private String senderCounty;
+
+    /**
+     * 
+     */
+    private String senderStreet;
 
     /**
      * 详细地址

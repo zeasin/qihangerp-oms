@@ -123,7 +123,14 @@ public class OmsWeiOrderServiceImpl extends ServiceImpl<OmsWeiOrderMapper, OmsWe
         }
         return weiOrder;
     }
-
+    @Override
+    public OmsWeiOrder queryDetailByOrderId(String orderId) {
+        List<OmsWeiOrder> weiOrders = mapper.selectList(new LambdaQueryWrapper<OmsWeiOrder>().eq(OmsWeiOrder::getOrderId,orderId));
+        if(weiOrders!=null&&weiOrders.size()>0){
+            weiOrders.get(0).setItems(itemMapper.selectList(new LambdaQueryWrapper<OmsWeiOrderItem>().eq(OmsWeiOrderItem::getOrderId,orderId)));
+            return weiOrders.get(0);
+        }else return null;
+    }
 }
 
 

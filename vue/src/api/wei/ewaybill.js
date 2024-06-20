@@ -39,7 +39,7 @@ export function getWaybillPrintData(data) {
 // 打印成功
 export function pushWaybillPrintSuccess(data) {
   return request({
-    url: '/api/tao-api/ewaybill/push_print_success',
+    url: '/api/wei-api/ewaybill/push_print_success',
     method: 'post',
     data: data
   })
@@ -48,7 +48,7 @@ export function pushWaybillPrintSuccess(data) {
 
 export function pushShipSend(data) {
   return request({
-    url: '/api/tao-api/ewaybill/push_ship_send',
+    url: '/api/wei-api/ewaybill/push_ship_send',
     method: 'post',
     data: data
   })

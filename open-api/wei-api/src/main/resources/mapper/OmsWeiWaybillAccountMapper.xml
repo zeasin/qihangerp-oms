@@ -10,6 +10,8 @@
             <result property="sellerShopId" column="seller_shop_id" jdbcType="BIGINT"/>
             <result property="deliveryId" column="delivery_id" jdbcType="VARCHAR"/>
             <result property="companyType" column="company_type" jdbcType="INTEGER"/>
+            <result property="siteCode" column="site_code" jdbcType="VARCHAR"/>
+            <result property="siteName" column="site_name" jdbcType="VARCHAR"/>
             <result property="acctId" column="acct_id" jdbcType="BIGINT"/>
             <result property="acctType" column="acct_type" jdbcType="INTEGER"/>
             <result property="status" column="status" jdbcType="INTEGER"/>
@@ -22,6 +24,7 @@
             <result property="senderProvince" column="sender_province" jdbcType="VARCHAR"/>
             <result property="senderCity" column="sender_city" jdbcType="VARCHAR"/>
             <result property="senderCounty" column="sender_county" jdbcType="VARCHAR"/>
+            <result property="senderStreet" column="sender_street" jdbcType="VARCHAR"/>
             <result property="senderAddress" column="sender_address" jdbcType="VARCHAR"/>
             <result property="name" column="name" jdbcType="VARCHAR"/>
             <result property="mobile" column="mobile" jdbcType="VARCHAR"/>
@@ -31,11 +34,12 @@
 
     <sql id="Base_Column_List">
         id,shop_id,seller_shop_id,
-        delivery_id,company_type,acct_id,
-        acct_type,status,available,
-        allocated,cancel,recycled,
-        monthly_card,site_info,sender_province,
-        sender_city,sender_county,sender_address,
+        delivery_id,company_type,site_code,
+        site_name,acct_id,acct_type,
+        status,available,allocated,
+        cancel,recycled,monthly_card,
+        site_info,sender_province,sender_city,
+        sender_county,sender_street,sender_address,
         name,mobile,phone,
         is_show
     </sql>
