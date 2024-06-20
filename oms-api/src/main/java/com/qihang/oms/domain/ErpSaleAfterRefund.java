@@ -53,7 +53,7 @@ public class ErpSaleAfterRefund implements Serializable {
     /**
      * 原始子订单号（来自于第三方平台）
      */
-    private String originalOrderItemId;
+//    private String originalOrderItemId;
 
     /**
      * 原始子订单skuId

@@ -20,6 +20,7 @@ public interface ErpSaleOrderService extends IService<ErpSaleOrder> {
     ResultVo<Integer> douOrderMessage(String orderId);
     ResultVo<Integer> weiOrderMessage(String orderId);
 
+
     List<ErpSaleOrder> getList(ErpSaleOrder order);
     PageResult<ErpSaleOrder> queryPageList(ErpSaleOrder bo, PageQuery pageQuery);
 

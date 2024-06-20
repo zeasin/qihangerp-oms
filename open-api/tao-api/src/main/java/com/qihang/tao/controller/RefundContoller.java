@@ -1,5 +1,6 @@
 package com.qihang.tao.controller;
 
+import com.alibaba.fastjson2.JSONObject;
 import com.qihang.common.common.AjaxResult;
 import com.qihang.common.common.PageQuery;
 import com.qihang.common.common.PageResult;
@@ -16,6 +17,7 @@ import com.qihang.tao.domain.bo.TaoRefundBo;
 import com.qihang.tao.service.OmsTaoRefundService;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -24,7 +26,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/refund")
 public class RefundContoller extends BaseController {
     private final OmsTaoRefundService refundService;
-    private final MqUtils mqUtils;
+//    private final MqUtils mqUtils;
+    private final KafkaTemplate<String,Object> kafkaTemplate;
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public TableDataInfo goodsList(TaoRefundBo bo, PageQuery pageQuery) throws Exception {
 //        OmsTaoRefund refund = new OmsTaoRefund();
@@ -44,7 +47,8 @@ public class RefundContoller extends BaseController {
         // TODO:需要优化消息格式
         if(bo!=null && bo.getIds()!=null) {
             for(String id: bo.getIds()) {
-                mqUtils.sendApiMessage(MqMessage.build(EnumShopType.TAO, MqType.REFUND_MESSAGE, id));
+//                mqUtils.sendApiMessage(MqMessage.build(EnumShopType.TAO, MqType.REFUND_MESSAGE, id));
+                kafkaTemplate.send(MqType.REFUND_MQ, JSONObject.toJSONString(MqMessage.build(EnumShopType.TAO, MqType.REFUND_MESSAGE,id)));
             }
         }
         return success();

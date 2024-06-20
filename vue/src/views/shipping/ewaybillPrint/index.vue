@@ -35,7 +35,7 @@ export default {
   components:{PrintJd, printWei,printTao,printPdd,printDou},
   data() {
     return {
-      activeName: 'printWei'
+      activeName: 'printTao'
     };
   },
   created() {

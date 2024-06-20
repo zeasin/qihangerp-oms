@@ -25,15 +25,15 @@
             :label="item.name"
             :value="item.id">
             <span style="float: left">{{ item.name }}</span>
-            <span style="float: right; color: #8492a6; font-size: 13px"  v-if="item.type === 1">1688</span>
-            <span style="float: right; color: #8492a6; font-size: 13px"  v-if="item.type === 2">视频号小店</span>
-            <span style="float: right; color: #8492a6; font-size: 13px"  v-if="item.type === 3">京东</span>
-            <span style="float: right; color: #8492a6; font-size: 13px"  v-if="item.type === 4">淘宝天猫</span>
-            <span style="float: right; color: #8492a6; font-size: 13px"  v-if="item.type === 5">拼多多</span>
-            <span style="float: right; color: #8492a6; font-size: 13px"  v-if="item.type === 6">抖店</span>
-            <span style="float: right; color: #8492a6; font-size: 13px"  v-if="item.type === 7">小红书</span>
-            <span style="float: right; color: #8492a6; font-size: 13px"  v-if="item.type === 8">快手小店</span>
-            <span style="float: right; color: #8492a6; font-size: 13px"  v-if="item.type === 99">其他</span>
+            <span style="float: right; color: #8492a6; font-size: 13px"  v-if="item.platform === 1">1688</span>
+            <span style="float: right; color: #8492a6; font-size: 13px"  v-if="item.platform === 2">视频号小店</span>
+            <span style="float: right; color: #8492a6; font-size: 13px"  v-if="item.platform === 3">京东</span>
+            <span style="float: right; color: #8492a6; font-size: 13px"  v-if="item.platform === 4">淘宝天猫</span>
+            <span style="float: right; color: #8492a6; font-size: 13px"  v-if="item.platform === 5">拼多多</span>
+            <span style="float: right; color: #8492a6; font-size: 13px"  v-if="item.platform === 6">抖店</span>
+            <span style="float: right; color: #8492a6; font-size: 13px"  v-if="item.platform === 7">小红书</span>
+            <span style="float: right; color: #8492a6; font-size: 13px"  v-if="item.platform === 8">快手小店</span>
+            <span style="float: right; color: #8492a6; font-size: 13px"  v-if="item.platform === 99">其他</span>
           </el-option>
         </el-select>
       </el-form-item>
@@ -117,10 +117,15 @@
       <el-table-column label="退款单号" align="center" prop="refundNum" />
       <el-table-column label="类型" align="center" prop="refundType" >
         <template slot-scope="scope">
-          <el-tag size="small" v-if="scope.row.refundType === 10"> 退货</el-tag>
-          <el-tag size="small" v-if="scope.row.refundType === 20"> 换货</el-tag>
-          <el-tag size="small" v-if="scope.row.refundType === 30"> 维修</el-tag>
-          <el-tag size="small" v-if="scope.row.refundType === 11"> 仅退款</el-tag>
+          <el-tag size="small" v-if="scope.row.refundType === 1"> 售前退款</el-tag>
+          <el-tag size="small" v-if="scope.row.refundType === 2"> 退货</el-tag>
+          <el-tag size="small" v-if="scope.row.refundType === 3"> 换货</el-tag>
+          <el-tag size="small" v-if="scope.row.refundType === 4"> 维修</el-tag>
+          <el-tag size="small" v-if="scope.row.refundType === 5"> 补发</el-tag>
+          <el-tag size="small" v-if="scope.row.refundType === 6"> 上门服务</el-tag>
+          <el-tag size="small" v-if="scope.row.refundType === 8"> 退差价</el-tag>
+          <el-tag size="small" v-if="scope.row.refundType === 9"> 仅退款</el-tag>
+          <el-tag size="small" v-if="scope.row.refundType === 10"> 其他</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="原始订单号" align="center" prop="originalOrderId" />
