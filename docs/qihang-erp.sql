@@ -11,7 +11,7 @@
  Target Server Version : 80032
  File Encoding         : 65001
 
- Date: 19/06/2024 17:33:05
+ Date: 20/06/2024 10:49:27
 */
 
 SET NAMES utf8mb4;
@@ -581,6 +581,7 @@ CREATE TABLE `erp_ship_waybill`  (
   `order_id` varchar(35) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '订单号',
   `shop_id` bigint(0) NOT NULL COMMENT '店铺id',
   `shop_type` int(0) NOT NULL COMMENT '店铺类型',
+  `waybill_order_id` varchar(35) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '电子面单订单id(仅视频号)',
   `waybill_code` varchar(35) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '快递单号',
   `logistics_code` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '快递公司编码',
   `print_data` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci COMMENT '打印数据',
@@ -1143,7 +1144,7 @@ CREATE TABLE `oms_jd_waybill_account`  (
   `phone` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '发货固定电话',
   `is_show` int(0) DEFAULT NULL COMMENT '是否前台显示1显示0不显示',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '京东电子面单账户信息表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '京东电子面单账户信息表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for oms_pdd_goods
@@ -1841,6 +1842,8 @@ CREATE TABLE `oms_wei_waybill_account`  (
   `seller_shop_id` bigint(0) DEFAULT NULL COMMENT '平台店铺id，全局唯一，一个店铺分配一个shop_id',
   `delivery_id` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '快递公司编码',
   `company_type` int(0) DEFAULT NULL COMMENT '快递公司类型1：加盟型 2：直营型',
+  `site_code` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '网点编码',
+  `site_name` varchar(55) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '网点名称',
   `acct_id` bigint(0) DEFAULT NULL COMMENT '电子面单账号id，每绑定一个网点分配一个acct_id',
   `acct_type` int(0) DEFAULT NULL COMMENT '面单账号类型0：普通账号 1：共享账号',
   `status` int(0) DEFAULT NULL COMMENT '面单账号状态',
@@ -1853,6 +1856,7 @@ CREATE TABLE `oms_wei_waybill_account`  (
   `sender_province` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '省名称（一级地址）',
   `sender_city` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '市名称（二级地址）',
   `sender_county` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `sender_street` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `sender_address` varchar(55) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '详细地址',
   `name` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '发货人',
   `mobile` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '发货手机号',
