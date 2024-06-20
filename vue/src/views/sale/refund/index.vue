@@ -9,9 +9,9 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="原始订单号" prop="orderNum">
+      <el-form-item label="原始订单号" prop="originalOrderId">
         <el-input
-          v-model="queryParams.orderNum"
+          v-model="queryParams.originalOrderId"
           placeholder="请输入原始订单号"
           clearable
           @keyup.enter.native="handleQuery"

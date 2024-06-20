@@ -57,7 +57,7 @@
       <el-col :span="1.5">
         <el-button
           :loading="pullLoading"
-          type="danger"
+          type="success"
           plain
           icon="el-icon-download"
           size="mini"
@@ -72,7 +72,7 @@
           size="mini"
           :disabled="multiple"
           @click="handlePushOms"
-        >手动将选中退款推送到OMS</el-button>
+        >手动推送退款</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
@@ -265,10 +265,13 @@ export default {
     };
   },
   created() {
-    listShop({platform:1}).then(response => {
-        this.shopList = response.rows;
-      });
-    this.getList();
+    listShop({platform: 4}).then(response => {
+      this.shopList = response.rows;
+      if (this.shopList && this.shopList.length > 0) {
+        this.queryParams.shopId = this.shopList[0].id
+      }
+      this.getList();
+    });
   },
   methods: {
     /** 查询淘宝退款订单列表 */

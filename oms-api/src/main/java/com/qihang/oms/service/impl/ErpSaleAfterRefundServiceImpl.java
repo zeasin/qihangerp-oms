@@ -12,6 +12,7 @@ import com.qihang.oms.service.ErpSaleAfterRefundService;
 import com.qihang.oms.mapper.ErpSaleAfterRefundMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 /**
 * @author TW
@@ -27,6 +28,8 @@ public class ErpSaleAfterRefundServiceImpl extends ServiceImpl<ErpSaleAfterRefun
     public PageResult<ErpSaleAfterRefund> queryPageList(ErpSaleAfterRefund bo, PageQuery pageQuery) {
         LambdaQueryWrapper<ErpSaleAfterRefund> queryWrapper = new LambdaQueryWrapper<ErpSaleAfterRefund>()
                 .eq(bo.getShopId()!=null,ErpSaleAfterRefund::getShopId,bo.getShopId())
+                .eq(StringUtils.hasText(bo.getRefundNum()),ErpSaleAfterRefund::getRefundNum,bo.getRefundNum())
+                .eq(StringUtils.hasText(bo.getOriginalOrderId()),ErpSaleAfterRefund::getOriginalOrderId,bo.getOriginalOrderId())
                 ;
         Page<ErpSaleAfterRefund> pages = mapper.selectPage(pageQuery.build(), queryWrapper);
 

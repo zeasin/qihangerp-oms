@@ -33,9 +33,8 @@ public class RefundController extends BaseController
     private final KafkaTemplate<String,Object> kafkaTemplate;
 
     /**
-     * 查询店铺订单列表
+     * 列表
      */
-    @PreAuthorize("@ss.hasPermi('shop:order:list')")
     @GetMapping("/list")
     public TableDataInfo list(ErpSaleAfterRefund bo, PageQuery pageQuery)
     {

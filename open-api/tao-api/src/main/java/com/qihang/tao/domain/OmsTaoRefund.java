@@ -14,7 +14,7 @@ public class OmsTaoRefund implements Serializable {
     /**
      * 
      */
-    private Long id;
+    private String id;
 
     /**
      * 退款id
