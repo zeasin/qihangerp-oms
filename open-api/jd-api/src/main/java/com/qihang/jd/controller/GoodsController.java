@@ -6,12 +6,8 @@ import com.qihang.common.common.AjaxResult;
 import com.qihang.common.common.PageQuery;
 import com.qihang.common.common.PageResult;
 import com.qihang.common.common.TableDataInfo;
-import com.qihang.jd.domain.JdGoods;
-import com.qihang.jd.domain.JdGoodsSku;
 import com.qihang.jd.domain.OmsJdGoodsSku;
 import com.qihang.jd.domain.bo.JdGoodsBo;
-import com.qihang.jd.service.JdGoodsService;
-import com.qihang.jd.service.JdGoodsSkuService;
 import com.qihang.jd.service.OmsJdGoodsSkuService;
 import com.qihang.security.common.BaseController;
 import lombok.AllArgsConstructor;
@@ -21,14 +17,14 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @AllArgsConstructor
 public class GoodsController extends BaseController {
-    private final JdGoodsService goodsService;
+//    private final JdGoodsService goodsService;
     private final OmsJdGoodsSkuService skuService;
-    @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public TableDataInfo goodsList(JdGoodsBo bo, PageQuery pageQuery) {
-        PageResult<JdGoods> result = goodsService.queryPageList(bo, pageQuery);
-
-        return getDataTable(result);
-    }
+//    @RequestMapping(value = "/list", method = RequestMethod.GET)
+//    public TableDataInfo goodsList(JdGoodsBo bo, PageQuery pageQuery) {
+//        PageResult<JdGoods> result = goodsService.queryPageList(bo, pageQuery);
+//
+//        return getDataTable(result);
+//    }
 
     @RequestMapping(value = "/skuList", method = RequestMethod.GET)
     public TableDataInfo skuList(OmsJdGoodsSku bo, PageQuery pageQuery) {

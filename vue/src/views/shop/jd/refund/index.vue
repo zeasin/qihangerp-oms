@@ -74,7 +74,7 @@
       <el-col :span="1.5">
         <el-button
           :loading="pullLoading"
-          type="danger"
+          type="success"
           plain
           icon="el-icon-download"
           size="mini"
@@ -89,7 +89,7 @@
           size="mini"
           :disabled="multiple"
           @click="handlePushOms"
-        >手动将选中退款推送到OMS</el-button>
+        >手动推送售后</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
@@ -116,7 +116,11 @@
 
       <el-table-column label="状态" align="center" prop="serviceStatusName" >
         <template slot-scope="scope">
-          <el-tag size="small" > {{ scope.row.serviceStatusName }}</el-tag>
+          <el-tag size="small" v-if="scope.row.customerExpect !== 1"> {{ scope.row.serviceStatusName }}</el-tag>
+          <el-tag size="small" v-if="scope.row.customerExpect === 1 && (scope.row.refundStatus === 3 || scope.row.refundStatus === 1)"> 审核通过</el-tag>
+          <el-tag size="small" v-if="scope.row.customerExpect === 1 && (scope.row.refundStatus === 2 || scope.row.refundStatus === 4)"> 审核不通过</el-tag>
+          <el-tag size="small" v-if="scope.row.customerExpect === 1 && (scope.row.refundStatus === 0)"> 未审核</el-tag>
+
         </template>
       </el-table-column>
       <el-table-column label="申请时间" align="center" prop="applyTime" width="180">
@@ -126,6 +130,11 @@
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
+          <el-button
+            size="mini"
+            icon="el-icon-refresh"
+            @click="handleUpdateRefund(scope.row)"
+          >更新状态</el-button>
           <el-button
           v-if="scope.row.auditStatus === 0 && scope.row.afterSalesType === 1 "
             size="mini"
@@ -220,6 +229,7 @@ export default {
       multiple: true,
       // 显示搜索条件
       showSearch: true,
+      pullLoading: false,
       // 总条数
       total: 0,
       // 淘宝退款订单表格数据
@@ -284,10 +294,13 @@ export default {
     };
   },
   created() {
-    listShop({platform:2}).then(response => {
-        this.shopList = response.rows;
-      });
-    this.getList();
+    listShop({platform: 3}).then(response => {
+      this.shopList = response.rows;
+      if (this.shopList && this.shopList.length > 0) {
+        this.queryParams.shopId = this.shopList[0].id
+      }
+      this.getList();
+    });
   },
   methods: {
     /** 查询淘宝退款订单列表 */
@@ -345,7 +358,7 @@ export default {
       if(this.queryParams.shopId){
         this.pullLoading = true
         pullRefund({shopId:this.queryParams.shopId,updType:0}).then(response => {
-          console.log('拉取淘宝订单接口返回=====',response)
+          console.log('拉取JD售后接口返回=====',response)
           if(response.code === 1401) {
             MessageBox.confirm('Token已过期，需要重新授权', '系统提示', { confirmButtonText: '重新授权', cancelButtonText: '取消', type: 'warning' }).then(() => {
               isRelogin.show = false;

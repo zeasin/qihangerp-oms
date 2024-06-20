@@ -12,14 +12,14 @@ export function listRefund(query) {
 // 查询退款订单详细
 export function getRefund(id) {
   return request({
-    url: '/tao/taoRefund/' + id,
+    url: '/api/jd-api/after/' + id,
     method: 'get'
   })
 }
 
 export function pullRefund(data) {
   return request({
-    url: '/api/jd-api/refund/pull_list',
+    url: '/api/jd-api/after/pull_after_list',
     method: 'post',
     data: data
   })

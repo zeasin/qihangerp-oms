@@ -11,7 +11,7 @@
  Target Server Version : 80032
  File Encoding         : 65001
 
- Date: 20/06/2024 10:49:27
+ Date: 20/06/2024 16:17:21
 */
 
 SET NAMES utf8mb4;
@@ -303,13 +303,13 @@ DROP TABLE IF EXISTS `erp_sale_after_refund`;
 CREATE TABLE `erp_sale_after_refund`  (
   `id` bigint(0) NOT NULL AUTO_INCREMENT,
   `refund_num` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL DEFAULT '' COMMENT '退货单号',
-  `refund_type` int(0) DEFAULT NULL COMMENT '类型(10-退货 20-换货 30-维修 40-大家电安装 50-大家电移机 60-大家电增值服务 70-上门维修 90-优鲜赔 80-补发商品 100-试用收回 11-仅退款)',
+  `refund_type` int(0) DEFAULT NULL COMMENT '售后类型：1-售前退款 2-退货退款 3-换货 4-维修 5-补发 6-上门服务 8-退差价 9-仅退款 10其他',
   `shop_id` int(0) DEFAULT NULL COMMENT '店铺id',
   `shop_type` int(0) DEFAULT NULL COMMENT '店铺类型',
   `refund_fee` float NOT NULL COMMENT '退款金额',
   `refund_reason` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '退款原因',
   `original_order_id` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL DEFAULT '' COMMENT '原始订单号（来自于第三方平台）',
-  `original_order_item_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '原始子订单号（来自于第三方平台）',
+  `original_order_item_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '原始子订单号（来自于第三方平台）',
   `original_sku_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '原始子订单skuId',
   `erp_goods_id` bigint(0) DEFAULT NULL COMMENT 'erp商品id',
   `erp_goods_sku_id` bigint(0) DEFAULT NULL COMMENT 'erp sku id',
@@ -326,13 +326,13 @@ CREATE TABLE `erp_sale_after_refund`  (
   `contact_person` varchar(20) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT '' COMMENT '发货人',
   `mobile` varchar(20) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT '' COMMENT '发货人手机号',
   `address` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT '' COMMENT '发货地址',
-  `status` int(0) NOT NULL COMMENT '状态（10001待审核10002等待买家退货10005等待卖家收货14000拒绝退款10011退款关闭10010退款完成）',
+  `status` int(0) NOT NULL COMMENT '状态（10001-待审核 10002-等待买家退货 10003-待买家处理 10005-等待卖家收货 10006-补寄待商家发货 10007-待商家处理 10008-商家处理中 14000-拒绝退款 10011-退款关闭 10010-退款完成 10020-平台处理中 10021-平台处理失败 10030-售后成功 10031-售后失败 10091-换货成功）',
   `create_time` datetime(0) NOT NULL COMMENT '订单创建时间',
   `create_by` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '创建人',
   `update_time` datetime(0) DEFAULT NULL COMMENT '更新时间',
   `update_by` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '更新人',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1800733684087050242 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '售后退款表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1800733684087050243 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '售后退款表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for erp_sale_order
@@ -383,7 +383,7 @@ CREATE TABLE `erp_sale_order`  (
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `order_sn_index`(`order_num`) USING BTREE,
   INDEX `shopid_index`(`shop_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1801809140794216450 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '订单表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1803324847759515651 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '订单表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for erp_sale_order_item
@@ -425,7 +425,7 @@ CREATE TABLE `erp_sale_order_item`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `goodId_index`(`goods_id`) USING BTREE,
   INDEX `order_id`(`order_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1801809144007053314 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '订单明细表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1803324848011173890 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '订单明细表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for erp_ship_logistics
@@ -591,7 +591,7 @@ CREATE TABLE `erp_ship_waybill`  (
   `update_time` datetime(0) DEFAULT NULL COMMENT '更新时间',
   `update_by` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '更新人',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '发货电子面单记录表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '发货电子面单记录表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for oms_dou_goods
@@ -864,7 +864,7 @@ CREATE TABLE `oms_dou_refund`  (
   `pull_time` datetime(0) DEFAULT NULL COMMENT '第一次拉取时间',
   `pull_last_time` datetime(0) DEFAULT NULL COMMENT '最后一次拉取时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1800783607092436994 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '抖店退款表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1800783607092436995 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '抖店退款表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for oms_dou_waybill_account
@@ -892,7 +892,7 @@ CREATE TABLE `oms_dou_waybill_account`  (
   `phone` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '发货固定电话',
   `is_show` int(0) DEFAULT NULL COMMENT '是否前台显示1显示0不显示',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '抖店电子面单账户信息表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '抖店电子面单账户信息表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for oms_jd_after_sale
@@ -1406,7 +1406,7 @@ CREATE TABLE `oms_tao_goods`  (
   `erp_supplier_id` bigint(0) DEFAULT NULL COMMENT 'erp系统供应商ID',
   `create_time` datetime(0) DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1800363757383634946 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '淘宝商品表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1800363757383634947 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '淘宝商品表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for oms_tao_goods_sku
@@ -1433,7 +1433,7 @@ CREATE TABLE `oms_tao_goods_sku`  (
   `shop_id` bigint(0) DEFAULT NULL COMMENT '店铺id',
   `create_time` datetime(0) DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1800370800777670658 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '淘宝商品SKU表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1800370800777670659 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci COMMENT = '淘宝商品SKU表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for oms_tao_order
@@ -1570,7 +1570,7 @@ CREATE TABLE `oms_tao_order_item`  (
   `refund_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '最近退款ID',
   `remark` varchar(500) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1801155298620596226 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '淘宝订单明细表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1801155298620596227 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '淘宝订单明细表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for oms_tao_order_promotion
@@ -1641,7 +1641,7 @@ CREATE TABLE `oms_tao_refund`  (
   `pull_status` int(0) DEFAULT NULL COMMENT '推送状态（0未推送；1推送成功；2推送失败）',
   `pull_time` datetime(0) DEFAULT NULL COMMENT '订单审核时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1800733684028329986 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '淘宝退款表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1803592791513006083 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '淘宝退款表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for oms_tao_waybill_account
@@ -1669,7 +1669,7 @@ CREATE TABLE `oms_tao_waybill_account`  (
   `phone` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '发货固定电话',
   `is_show` int(0) DEFAULT NULL COMMENT '是否前台显示1显示0不显示',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '淘宝电子面单账户信息表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '淘宝电子面单账户信息表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for oms_wei_goods
@@ -1979,7 +1979,7 @@ CREATE TABLE `s_shop_pull_lasttime`  (
   `create_time` datetime(0) DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime(0) DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2128068611 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '店铺更新最后时间记录' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2128068612 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '店铺更新最后时间记录' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for s_shop_pull_logs
@@ -2504,7 +2504,7 @@ CREATE TABLE `sys_logininfor`  (
   PRIMARY KEY (`info_id`) USING BTREE,
   INDEX `idx_sys_logininfor_s`(`status`) USING BTREE,
   INDEX `idx_sys_logininfor_lt`(`login_time`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 303 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '系统访问记录' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 305 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '系统访问记录' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for sys_menu
@@ -2560,7 +2560,7 @@ CREATE TABLE `sys_oper_log`  (
   INDEX `idx_sys_oper_log_bt`(`business_type`) USING BTREE,
   INDEX `idx_sys_oper_log_s`(`status`) USING BTREE,
   INDEX `idx_sys_oper_log_ot`(`oper_time`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 452 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '操作日志记录' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 453 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '操作日志记录' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for sys_oss

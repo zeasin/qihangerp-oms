@@ -25,7 +25,7 @@
 
 <script>
 import TaoRefund  from "@/views/shop/tao/refund/index";
-import RefundJd  from "@/views/jd/refund/index";
+import RefundJd  from "@/views/shop/jd/refund/index";
 import RefundWei  from "@/views/shop/wei/refund/index";
 import DouRefund from "@/views/dou/refund/index.vue";
 import PddRefund from "@/views/pdd/refund/index.vue";
