@@ -1,5 +1,6 @@
 package com.qihang.tao;
 
+
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -15,7 +16,7 @@ import org.springframework.context.annotation.ComponentScan;
 //@EnableWebSecurity
 
 @EnableDiscoveryClient
-@ComponentScan(basePackages={"com.qihang","tech.qihangec.open.tao"})
+@ComponentScan(basePackages={"com.qihang","cn.qihangerp.open.tao"})
 //@MapperScan(basePackages ={"tech.qihangec.open.tao.mapper","com.qihang.tao.mapper"})
 @SpringBootApplication
 public class TaoApi
