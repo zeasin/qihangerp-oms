@@ -15,11 +15,16 @@
     <module>core</module>
     <module>oms-api</module>
     <module>open-api</module>
+    <module>eureka-server</module>
+    <module>offline-api</module>
+      <module>gateway</module>
   </modules>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <spring-boot.version>3.0.2</spring-boot.version>
+    <spring-cloud.version>2022.0.0</spring-cloud.version>
+    <spring-cloud-alibaba.version>2022.0.0.0</spring-cloud-alibaba.version>
     <jwt.version>0.11.5</jwt.version>
   </properties>
 
