@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 查询列表
 export function listGoodsSku(query) {
   return request({
-    url: '/dou-api/goods/skuList',
+    url: '/api/open-api/dou/goods/skuList',
     method: 'get',
     params: query
   })
@@ -12,7 +12,7 @@ export function listGoodsSku(query) {
 
 export function getGoodsSku(id) {
   return request({
-    url: '/dou-api/goods/sku/'+id,
+    url: '/api/open-api/dou/goods/sku/'+id,
     method: 'get',
   })
 }
@@ -20,7 +20,7 @@ export function getGoodsSku(id) {
 
 export function linkErpGoodsSkuId(data) {
   return request({
-    url: '/dou-api/goods/sku/linkErp',
+    url: '/api/open-api/dou/goods/sku/linkErp',
     method: 'post',
     data: data
   })
@@ -29,7 +29,7 @@ export function linkErpGoodsSkuId(data) {
 // 接口拉取淘宝商品
 export function pullGoodsList(data) {
   return request({
-    url: '/dou-api/goods/pull_goods',
+    url: '/api/open-api/dou/goods/pull_goods',
     method: 'post',
     data: data
   })

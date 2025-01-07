@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 查询淘宝订单列表
 export function listLogisticsCompanies(query) {
   return request({
-    url: '/api/tao-api/goods/skuList',
+    url: '/api/open-api/tao/goods/skuList',
     method: 'get',
     params: query
   })
@@ -12,7 +12,7 @@ export function listLogisticsCompanies(query) {
 // 接口拉取淘宝
 export function pullLogisticsTao(data) {
   return request({
-    url: '/api/tao-api/shopApi/pull_logistics_companies',
+    url: '/api/open-api/tao/shopApi/pull_logistics_companies',
     method: 'post',
     data: data
   })

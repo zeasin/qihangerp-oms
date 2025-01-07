@@ -29,6 +29,14 @@ spring:
             - Path=/api/oms-api/**
           filters:
             - StripPrefix=2
+
+        - id: open_api_route
+          uri: lb://open-api
+          predicates:
+            - Path=/api/open-api/**
+          filters:
+            - StripPrefix=2
+
         - id: tao_api_route
           uri: lb://tao-api
           predicates:

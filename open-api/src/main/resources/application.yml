@@ -1,0 +1,58 @@
+spring:
+  cloud:
+    nacos:
+#      serverAddr: 127.0.0.1:8848
+      discovery:
+        server-addr: 127.0.0.1:8848
+      config:
+        server-addr: 127.0.0.1:8848
+  config:
+    import:
+      - nacos:qihang-oms.yaml?refresh=true
+  application:
+    name: open-api
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      batch-size: 16384 #批量大小
+      acks: -1 #应答级别:多少个分区副本备份完成时向生产者发送ack确认(可选0、1、all/-1)
+      retries: 10 # 消息发送重试次数
+      #      transaction-id-prefix:  tx_1 #事务id前缀
+      buffer-memory: 33554432
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      properties:
+        linger:
+          ms: 2000 #提交延迟
+      #        partitioner: #指定分区器
+      #          class: com.example.kafkademo.config.CustomizePartitioner
+    consumer:
+      group-id: testGroup #默认的消费组ID
+      enable-auto-commit: true #是否自动提交offset
+      auto-commit-interval: 2000 #提交offset延时
+      # 当kafka中没有初始offset或offset超出范围时将自动重置offset
+      # earliest:重置为分区中最小的offset;
+      # latest:重置为分区中最新的offset(消费分区中新产生的数据);
+      # none:只要有一个分区不存在已提交的offset,就抛出异常;
+      auto-offset-reset: latest
+      max-poll-records: 500 #单次拉取消息的最大条数
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      properties:
+        session:
+          timeout:
+            ms: 120000 # 消费会话超时时间（超过这个时间 consumer 没有发送心跳，就会触发 rebalance 操作）
+        request:
+          timeout:
+            ms: 18000 # 消费请求的超时时间
+
+
+server:
+  port: 8089
+
+
+mybatis-plus:
+  mapper-locations: classpath*:mapper/**/*Mapper.xml
+  type-aliases-package: cn.qihangerp.open.tao.domain;cn.qihangerp.open.domain;com.qihang.security.entity;
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl # 开启sql日志
