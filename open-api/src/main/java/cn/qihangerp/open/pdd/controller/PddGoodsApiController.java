@@ -1,11 +1,14 @@
 package cn.qihangerp.open.pdd.controller;
 
+import cn.qihangerp.open.common.ApiResultVo;
 import cn.qihangerp.open.pdd.PddApiCommon;
 import cn.qihangerp.open.pdd.GoodsApiHelper;
+import cn.qihangerp.open.pdd.PddGoodsApiHelper;
 import cn.qihangerp.open.pdd.PddPullRequest;
-import cn.qihangerp.open.pdd.common.ApiResultVo;
+
 import cn.qihangerp.open.pdd.domain.OmsPddGoods;
 import cn.qihangerp.open.pdd.domain.OmsPddGoodsSku;
+
 import cn.qihangerp.open.pdd.model.GoodsResultVo;
 import cn.qihangerp.open.pdd.service.OmsPddGoodsService;
 import com.qihang.common.common.AjaxResult;
@@ -64,7 +67,7 @@ public class PddGoodsApiController extends BaseController {
         int insertSuccess = 0;//新增成功的订单
         int totalError = 0;
         int hasExistOrder = 0;//已存在的订单数
-        ApiResultVo<GoodsResultVo> apiResultVo = GoodsApiHelper.pullGoodsList(appKey, appSecret, accessToken, 1, 20);
+        ApiResultVo<GoodsResultVo> apiResultVo = PddGoodsApiHelper.pullGoodsList(appKey, appSecret, accessToken, 1, 20);
         if(apiResultVo.getCode() == 10019) return AjaxResult.error(HttpStatus.UNAUTHORIZED1,"Token已过期");
         if (apiResultVo.getCode() != 0) return AjaxResult.error(apiResultVo.getCode(), apiResultVo.getMsg());
         //成功
