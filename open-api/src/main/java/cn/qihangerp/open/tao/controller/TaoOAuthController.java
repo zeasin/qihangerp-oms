@@ -54,12 +54,7 @@ public class TaoOAuthController {
         return AjaxResult.success("SUCCESS",url);
     }
 
-    /**
-     * 淘宝授权回调
-     * @param
-     * @param
-     * @return
-     */
+
     @PostMapping("/tokenCreate")
     public AjaxResult callback(@RequestBody TaoTokenCreateBo bo) {
         log.info("tao授权返回code");

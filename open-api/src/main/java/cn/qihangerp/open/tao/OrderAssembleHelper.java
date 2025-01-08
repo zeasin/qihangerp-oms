@@ -2,8 +2,9 @@ package cn.qihangerp.open.tao;
 
 import cn.qihangerp.open.tao.domain.OmsTaoOrder;
 import cn.qihangerp.open.tao.domain.OmsTaoOrderItem;
-import cn.qihangerp.open.tao.model.TradeList;
 
+
+import cn.qihangerp.open.tao.response.TaoOrderListResponse;
 import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
@@ -16,7 +17,7 @@ public class OrderAssembleHelper {
      * @param trade
      * @return
      */
-    public static OmsTaoOrder assembleOrder(TradeList trade) {
+    public static OmsTaoOrder assembleOrder(TaoOrderListResponse trade) {
 
         OmsTaoOrder order = new OmsTaoOrder();
         order.setTid(trade.getTid());

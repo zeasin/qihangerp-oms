@@ -1,17 +1,19 @@
 package cn.qihangerp.open.tao.controller;
 
+import cn.qihangerp.open.common.ApiResultVo;
 import cn.qihangerp.open.domain.SysShopPullLasttime;
 import cn.qihangerp.open.domain.SysShopPullLogs;
 import cn.qihangerp.open.service.SysShopPullLasttimeService;
 import cn.qihangerp.open.service.SysShopPullLogsService;
-import cn.qihangerp.open.tao.TaoApiCommon;
-import cn.qihangerp.open.tao.OrderApiHelper;
 import cn.qihangerp.open.tao.OrderAssembleHelper;
+import cn.qihangerp.open.tao.TaoApiCommon;
+import cn.qihangerp.open.tao.TaoOrderApiHelper;
 import cn.qihangerp.open.tao.TaoRequest;
-import cn.qihangerp.open.tao.common.ApiResultVo;
 import cn.qihangerp.open.tao.domain.OmsTaoOrder;
 import cn.qihangerp.open.tao.model.TradeDetail1;
 import cn.qihangerp.open.tao.model.TradeList;
+import cn.qihangerp.open.tao.response.TaoOrderDetailResponse;
+import cn.qihangerp.open.tao.response.TaoOrderListResponse;
 import cn.qihangerp.open.tao.service.OmsTaoOrderService;
 import com.alibaba.fastjson2.JSONObject;
 import com.qihang.common.common.AjaxResult;
@@ -101,7 +103,8 @@ public class TaoOrderApiController {
         int insertSuccess = 0;//新增成功的订单
         int totalError = 0;
         int hasExistOrder = 0;//已存在的订单数
-        ApiResultVo<TradeList> tradeBeanApiResultVo = OrderApiHelper.pullTradeList(startTime,endTime,appKey, appSecret, sessionKey);
+        ApiResultVo<TaoOrderListResponse> tradeBeanApiResultVo = TaoOrderApiHelper.pullTradeList(startTime,endTime,appKey, appSecret, sessionKey);
+//        ApiResultVo<TradeList> tradeBeanApiResultVo = OrderApiHelper.pullTradeList(startTime,endTime,appKey, appSecret, sessionKey);
         if (tradeBeanApiResultVo.getCode()== ResultVoEnum.SUCCESS.getIndex()){
             //循环插入订单数据到数据库
             for (var trade : tradeBeanApiResultVo.getList()) {
@@ -193,7 +196,7 @@ public class TaoOrderApiController {
         String appKey = checkResult.getData().getAppKey();
         String appSecret = checkResult.getData().getAppSecret();
 
-        ApiResultVo<TradeDetail1> apiResultVo = OrderApiHelper.pullOrderDetail(taoRequest.getOrderId(), appKey, appSecret, sessionKey);
+        ApiResultVo<TaoOrderDetailResponse> apiResultVo = TaoOrderApiHelper.pullOrderDetail(taoRequest.getOrderId(), appKey, appSecret, sessionKey);
 
 
 

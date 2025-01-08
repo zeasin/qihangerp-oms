@@ -46,7 +46,7 @@ public class OmsTaoGoods implements Serializable {
     /**
      * 商品所属的叶子类目 id
      */
-    private Integer cid;
+    private Long cid;
 
     /**
      * 商品所属的店铺内卖家自定义类目列表

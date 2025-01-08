@@ -1,15 +1,17 @@
 package cn.qihangerp.open.tao.controller;
 
+import cn.qihangerp.open.common.ApiResultVo;
 import cn.qihangerp.open.domain.SysShopPullLasttime;
 import cn.qihangerp.open.domain.SysShopPullLogs;
 import cn.qihangerp.open.service.SysShopPullLasttimeService;
 import cn.qihangerp.open.service.SysShopPullLogsService;
 import cn.qihangerp.open.tao.TaoApiCommon;
 import cn.qihangerp.open.tao.RefundApiHelper;
+import cn.qihangerp.open.tao.TaoRefundApiHelper;
 import cn.qihangerp.open.tao.TaoRequest;
-import cn.qihangerp.open.tao.common.ApiResultVo;
 import cn.qihangerp.open.tao.domain.OmsTaoRefund;
 import cn.qihangerp.open.tao.model.Refund;
+import cn.qihangerp.open.tao.response.TaoRefundResponse;
 import cn.qihangerp.open.tao.service.OmsTaoRefundService;
 import com.alibaba.fastjson2.JSONObject;
 import com.qihang.common.common.AjaxResult;
@@ -99,7 +101,8 @@ public class TaoRefundApiController {
 ////            return new ApiResult<>(EnumResultVo.SystemException.getIndex(), upResult.getMsg());
 //            return AjaxResult.error(HttpStatus.ERROR ,resultVo.getMsg());
 //        }
-        ApiResultVo<Refund> refundApiResultVo = RefundApiHelper.pullRefund(startTime, endTime, appKey, appSecret, sessionKey);
+//        ApiResultVo<Refund> refundApiResultVo = RefundApiHelper.pullRefund(startTime, endTime, appKey, appSecret, sessionKey);
+        ApiResultVo<TaoRefundResponse> refundApiResultVo = TaoRefundApiHelper.pullRefund(startTime, endTime, appKey, appSecret, sessionKey);
         log.info("/**************主动更新tao退货订单：第一次获取结果：总记录数" + refundApiResultVo.getTotalRecords() + "****************/");
         int insertSuccess = 0;//新增成功的订单
         int totalError = 0;
@@ -193,7 +196,8 @@ public class TaoRefundApiController {
         String appKey = checkResult.getData().getAppKey();
         String appSecret = checkResult.getData().getAppSecret();
 
-        ApiResultVo<Refund> refundApiResultVo = RefundApiHelper.pullRefundDetail(taoRequest.getRefundId(), appKey, appSecret, sessionKey);
+//        ApiResultVo<Refund> refundApiResultVo = RefundApiHelper.pullRefundDetail(taoRequest.getRefundId(), appKey, appSecret, sessionKey);
+        ApiResultVo<TaoRefundResponse> refundApiResultVo = TaoRefundApiHelper.pullRefundDetail(taoRequest.getRefundId(), appKey, appSecret, sessionKey);
         if(refundApiResultVo.getCode()==0) {
             OmsTaoRefund taoRefund = new OmsTaoRefund();
             BeanUtils.copyProperties(refundApiResultVo.getData(), taoRefund);

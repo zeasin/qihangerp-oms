@@ -4,12 +4,14 @@ import cn.qihangerp.open.domain.SysShopPullLogs;
 import cn.qihangerp.open.service.SysShopPullLogsService;
 import cn.qihangerp.open.tao.TaoApiCommon;
 import cn.qihangerp.open.tao.GoodsApiHelper;
+import cn.qihangerp.open.tao.TaoGoodsApiHelper;
 import cn.qihangerp.open.tao.TaoRequest;
 import cn.qihangerp.open.tao.common.ApiResultVo;
 import cn.qihangerp.open.tao.common.ApiResultVoEnum;
 import cn.qihangerp.open.tao.domain.OmsTaoGoods;
 import cn.qihangerp.open.tao.domain.OmsTaoGoodsSku;
 import cn.qihangerp.open.tao.model.GoodsItem;
+import cn.qihangerp.open.tao.response.TaoGoodsResponse;
 import cn.qihangerp.open.tao.service.OmsTaoGoodsService;
 import cn.qihangerp.open.tao.utils.DateUtil;
 import com.qihang.common.api.ShopApiParams;
@@ -75,7 +77,9 @@ public class TaoGoodsApiController extends BaseController {
         int totalError = 0;
         int hasExistOrder = 0;//已存在的订单数
         try {
-            ApiResultVo<GoodsItem> goodsItemApiResultVo = GoodsApiHelper.pullGoodsList(appKey, appSecret, sessionKey);
+            cn.qihangerp.open.common.ApiResultVo<TaoGoodsResponse> goodsItemApiResultVo = TaoGoodsApiHelper.pullGoodsList(appKey, appSecret, sessionKey);
+//            ApiResultVo<GoodsItem> goodsItemApiResultVo = GoodsApiHelper.pullGoodsList(appKey, appSecret, sessionKey);
+
             if (goodsItemApiResultVo.getCode() == ApiResultVoEnum.SUCCESS.getIndex()) {
                 //成功
                 if (goodsItemApiResultVo.getList() != null) {
