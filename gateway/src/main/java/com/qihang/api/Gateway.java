@@ -3,7 +3,6 @@ package com.qihang.api;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
-import org.springframework.context.annotation.Bean;
 
 /**
  * Hello world!
@@ -11,12 +10,12 @@ import org.springframework.context.annotation.Bean;
  */
 @EnableDiscoveryClient
 @SpringBootApplication
-public class Api
+public class Gateway
 {
     public static void main( String[] args )
     {
         System.out.println( "Hello api! " );
-        SpringApplication.run(Api.class, args);
+        SpringApplication.run(Gateway.class, args);
     }
 
 //    @Bean

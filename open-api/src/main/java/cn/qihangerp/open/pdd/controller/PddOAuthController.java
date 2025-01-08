@@ -1,6 +1,9 @@
 package cn.qihangerp.open.pdd.controller;
 
+import cn.qihangerp.open.common.ApiResultVo;
+import cn.qihangerp.open.pdd.PddTokenApiHelper;
 import cn.qihangerp.open.pdd.domain.bo.TokenCreateBo;
+import cn.qihangerp.open.pdd.model.Token;
 import cn.qihangerp.open.service.SShopPlatformService;
 import cn.qihangerp.open.service.SShopService;
 import com.qihang.common.common.AjaxResult;
@@ -46,29 +49,16 @@ public class PddOAuthController {
     @PostMapping("/getToken")
     public AjaxResult getToken(@RequestBody TokenCreateBo bo) throws IOException, InterruptedException {
         log.info("/**********获取拼多多授权token*********/");
-//        var shop = shopService.selectShopById(bo.getShopId());
+        var shop = shopService.selectShopById(bo.getShopId());
         var platform = platformService.getById(EnumShopType.PDD.getIndex());
         String appKey = platform.getAppKey();
         String appSercet = platform.getAppSecret();
-
-//        PopAccessTokenClient accessTokenClient = new PopAccessTokenClient(appKey, appSercet);
-//
-//        // 生成AccessToken
-//        try {
-//            AccessTokenResponse response = accessTokenClient.generate(bo.getCode());
-//            if(response.getErrorResponse()!=null){
-//                log.info("/***************获取拼多多授权token错误："+response.getErrorResponse().getErrorMsg()+"**************/");
-//            }else{
-//                //保存accessToken
-//                shopService.updateSessionKey(bo.getShopId(),response.getAccessToken());
-//
-//            }
-//        } catch (Exception e) {
-//
-//            e.printStackTrace();
-//
-//        }
-        return AjaxResult.success("SUCCESS");
+        ApiResultVo<Token> token = PddTokenApiHelper.getToken(appKey, appSercet, bo.getCode());
+        if(token.getCode()==0){
+            shopService.updateSessionKey(shop.getId(),token.getData().getAccess_token());
+            return AjaxResult.success("SUCCESS");
+        }else
+            return AjaxResult.error(token.getMsg());
     }
 
 //    /**

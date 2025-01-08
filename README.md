@@ -119,7 +119,7 @@ graph TD
 
 + `security`:公共权限验证模块
 
-#### 2.2 api
+#### 2.2 gateway
 网关项目，负责微服务接口转发，前端统一通过网关调用其他微服务接口；
 
 采用`gateway`进行api分发，引入Sentinel进行流量治理。

@@ -2,7 +2,7 @@ server:
   port: 8080
 spring:
   application:
-    name: api-service
+    name: gateway
 #  security:
 #    user:
 #      name: admin
@@ -37,42 +37,13 @@ spring:
           filters:
             - StripPrefix=2
 
-        - id: tao_api_route
-          uri: lb://tao-api
-          predicates:
-            - Path=/api/tao-api/**
-          filters:
-            - StripPrefix=2
-        - id: jd_api_route
-          uri: lb://jd-api
-          predicates:
-            - Path=/api/jd-api/**
-          filters:
-            - StripPrefix=2
         - id: sys_api_route
           uri: lb://sys-api
           predicates:
             - Path=/api/sys-api/**
           filters:
             - StripPrefix=2
-        - id: dou_api_route
-          uri: lb://dou-api
-          predicates:
-            - Path=/api/dou-api/**
-          filters:
-            - StripPrefix=2
-        - id: pdd_api_route
-          uri: lb://pdd-api
-          predicates:
-            - Path=/api/pdd-api/**
-          filters:
-            - StripPrefix=2
-        - id: wei_api_route
-          uri: lb://wei-api
-          predicates:
-            - Path=/api/wei-api/**
-          filters:
-            - StripPrefix=2
+
 #            - TokenFilter
 #      default-filters:
 #        - TokenFilter
