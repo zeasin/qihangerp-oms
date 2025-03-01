@@ -24,4 +24,17 @@ export function pullLogisticsJd(data) {
     data: data
   })
 }
-
+export function getTaoOAuthUrl(query) {
+  return request({
+    url: '/api/tao-api/tao/oauth',
+    method: 'get',
+    params: query
+  })
+}
+export function saveSessionKey(data) {
+  return request({
+    url: '/api/open-api/tao/saveSessionKey',
+    method: 'post',
+    data: data
+  })
+}

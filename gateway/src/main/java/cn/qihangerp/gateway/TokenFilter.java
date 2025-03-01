@@ -1,6 +1,6 @@
-package com.qihang.api;
+package cn.qihangerp.gateway;
 
-import com.alibaba.nacos.common.model.RestResult;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;

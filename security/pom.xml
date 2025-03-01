@@ -2,12 +2,11 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.qihang</groupId>
-        <artifactId>core</artifactId>
+        <groupId>cn.qihangerp</groupId>
+        <artifactId>qihangerp-cloud</artifactId>
         <version>2.0.6</version>
     </parent>
 
-<!--    <groupId>com.qihang</groupId>-->
     <artifactId>security</artifactId>
     <packaging>jar</packaging>
 
@@ -70,7 +69,7 @@
         </dependency>
 
         <dependency>
-            <groupId>com.qihang</groupId>
+            <groupId>cn.qihangerp</groupId>
             <artifactId>common</artifactId>
             <version>2.0.6</version>
         </dependency>

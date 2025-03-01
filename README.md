@@ -166,13 +166,13 @@ oms主功能微服务，主要功能包括：
 1. 启动MySQL8
 2. 启动Redis7
 3. 启动Sentinel1.8.7控制台
-4. 启动Nacos2.2.0
+4. 启动Nacos
 5. 启动Kafka
 
 #### 3.2、导入数据库
-+ 创建数据库`qihang-erp`
-  + 1、导入数据库结构：sql脚本`docs\qihang-erp.sql`
-  + 2、导入系统数据：sql脚本`docs\qihang-erp-sys.sql`
++ 创建数据库`qihang-oms`
+  + 导入数据库结构：sql脚本`docs\qihang-oms.sql`
+
 
 #### 3.3、启动服务(项目)
 1.  启动开放平台微服务（open-api）
