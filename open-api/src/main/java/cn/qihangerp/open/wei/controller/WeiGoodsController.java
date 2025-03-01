@@ -1,12 +1,12 @@
 package cn.qihangerp.open.wei.controller;
 
 
-import com.qihang.common.bo.LinkErpGoodsSkuBo;
-import com.qihang.common.common.AjaxResult;
-import com.qihang.common.common.PageQuery;
-import com.qihang.common.common.PageResult;
-import com.qihang.common.common.TableDataInfo;
-import com.qihang.security.common.BaseController;
+import cn.qihangerp.common.bo.LinkErpGoodsSkuBo;
+import cn.qihangerp.common.common.AjaxResult;
+import cn.qihangerp.common.PageQuery;
+import cn.qihangerp.common.PageResult;
+import cn.qihangerp.common.common.TableDataInfo;
+import cn.qihangerp.security.common.BaseController;
 import cn.qihangerp.open.wei.domain.OmsWeiGoodsSku;
 import cn.qihangerp.open.wei.service.OmsWeiGoodsSkuService;
 import lombok.AllArgsConstructor;

@@ -51,7 +51,7 @@
       <el-col :span="1.5">
         <el-button
           :loading="pullLoading"
-          type="success"
+          type="danger"
           plain
           icon="el-icon-download"
           size="mini"
@@ -66,7 +66,7 @@
           size="mini"
           :disabled="multiple"
           @click="handlePushOms"
-        >手动推送售后</el-button>
+        >手动将选中退款推送到售后中心</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
@@ -184,13 +184,15 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
-      pullLoading: false,
       // 查询参数
       queryParams: {
         pageNum: 1,
         pageSize: 10,
         refundId: null,
-        afterSalesType: null
+        afterSalesType: null,
+        tid: null,
+        oid: null,
+
       },
       // 表单参数
       form: {},
@@ -212,13 +214,14 @@ export default {
     };
   },
   created() {
-    listShop({platform: 6}).then(response => {
+    listShop({type: 400}).then(response => {
       this.shopList = response.rows;
       if (this.shopList && this.shopList.length > 0) {
         this.queryParams.shopId = this.shopList[0].id
       }
       this.getList();
     });
+    // this.getList();
   },
   methods: {
     amountFormatter(row, column, cellValue, index) {

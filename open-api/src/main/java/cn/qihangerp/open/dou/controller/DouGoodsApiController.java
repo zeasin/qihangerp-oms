@@ -10,9 +10,9 @@ import cn.qihangerp.open.dou.domain.OmsDouGoodsSku;
 import cn.qihangerp.open.dou.model.GoodsListResultVo;
 import cn.qihangerp.open.dou.model.Token;
 import cn.qihangerp.open.dou.service.OmsDouGoodsService;
-import com.qihang.common.common.AjaxResult;
-import com.qihang.common.common.ResultVoEnum;
-import com.qihang.common.enums.HttpStatus;
+import cn.qihangerp.common.common.AjaxResult;
+import cn.qihangerp.common.ResultVoEnum;
+import cn.qihangerp.common.enums.HttpStatus;
 
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;

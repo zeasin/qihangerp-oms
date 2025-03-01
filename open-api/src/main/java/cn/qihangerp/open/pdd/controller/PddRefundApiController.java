@@ -9,8 +9,8 @@ import cn.qihangerp.open.pdd.domain.OmsPddOrder;
 import cn.qihangerp.open.pdd.model.AfterSale;
 import cn.qihangerp.open.pdd.service.OmsPddGoodsService;
 import cn.qihangerp.open.pdd.service.OmsPddOrderService;
-import com.qihang.common.common.AjaxResult;
-import com.qihang.common.enums.HttpStatus;
+import cn.qihangerp.common.common.AjaxResult;
+import cn.qihangerp.common.enums.HttpStatus;
 
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;

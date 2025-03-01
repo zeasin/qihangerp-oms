@@ -7,9 +7,9 @@ import cn.qihangerp.open.wei.TokenApiHelper;
 import cn.qihangerp.open.wei.common.ApiResultVo;
 import cn.qihangerp.open.wei.vo.ShopApiParams;
 import cn.qihangerp.open.wei.vo.Token;
-import com.qihang.common.common.ResultVo;
-import com.qihang.common.enums.EnumShopType;
-import com.qihang.common.enums.HttpStatus;
+import cn.qihangerp.common.ResultVo;
+import cn.qihangerp.common.enums.EnumShopType;
+import cn.qihangerp.common.enums.HttpStatus;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;

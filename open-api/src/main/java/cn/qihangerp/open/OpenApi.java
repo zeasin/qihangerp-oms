@@ -9,7 +9,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 //@EnableDiscoveryClient
 //@MapperScan("com.qihang.oms.mapper")
-@ComponentScan(basePackages={"cn.qihangerp.open","com.qihang"})
+@ComponentScan(basePackages={"cn.qihangerp.open","cn.qihangerp"})
 @SpringBootApplication
 public class OpenApi {
     public static void main( String[] args )

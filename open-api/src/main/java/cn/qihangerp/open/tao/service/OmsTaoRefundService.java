@@ -4,9 +4,9 @@ package cn.qihangerp.open.tao.service;
 import cn.qihangerp.open.tao.domain.OmsTaoRefund;
 import cn.qihangerp.open.tao.domain.bo.TaoRefundBo;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.qihang.common.common.PageQuery;
-import com.qihang.common.common.PageResult;
-import com.qihang.common.common.ResultVo;
+import cn.qihangerp.common.PageQuery;
+import cn.qihangerp.common.PageResult;
+import cn.qihangerp.common.ResultVo;
 
 
 /**

@@ -1,0 +1,18 @@
+package cn.qihangerp.oms.controller;
+
+import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@AllArgsConstructor
+@RestController
+public class HomeController {
+
+
+    @GetMapping("/")
+    public String home(){
+        return "{'code':0,'msg':'oms-api请通过api访问'}";
+    }
+}

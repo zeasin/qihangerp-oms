@@ -3,10 +3,10 @@ package cn.qihangerp.open.jd;
 import cn.qihangerp.open.domain.SShopPlatform;
 import cn.qihangerp.open.service.SShopPlatformService;
 import cn.qihangerp.open.service.SShopService;
-import com.qihang.common.api.ShopApiParams;
-import com.qihang.common.common.ResultVo;
-import com.qihang.common.enums.EnumShopType;
-import com.qihang.common.enums.HttpStatus;
+import cn.qihangerp.common.api.ShopApiParams;
+import cn.qihangerp.common.ResultVo;
+import cn.qihangerp.common.enums.EnumShopType;
+import cn.qihangerp.common.enums.HttpStatus;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;

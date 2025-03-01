@@ -14,12 +14,12 @@ import cn.qihangerp.open.dou.service.OmsDouOrderService;
 import cn.qihangerp.open.service.SysShopPullLasttimeService;
 import cn.qihangerp.open.service.SysShopPullLogsService;
 import com.alibaba.fastjson2.JSONObject;
-import com.qihang.common.common.AjaxResult;
-import com.qihang.common.common.ResultVoEnum;
-import com.qihang.common.enums.EnumShopType;
-import com.qihang.common.enums.HttpStatus;
-import com.qihang.common.mq.MqMessage;
-import com.qihang.common.mq.MqType;
+import cn.qihangerp.common.common.AjaxResult;
+import cn.qihangerp.common.ResultVoEnum;
+import cn.qihangerp.common.enums.EnumShopType;
+import cn.qihangerp.common.enums.HttpStatus;
+import cn.qihangerp.common.mq.MqMessage;
+import cn.qihangerp.common.mq.MqType;
 
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;

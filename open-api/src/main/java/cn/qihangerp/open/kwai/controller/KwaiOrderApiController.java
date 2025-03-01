@@ -9,10 +9,10 @@ import com.kuaishou.merchant.open.api.KsMerchantApiException;
 import com.kuaishou.merchant.open.api.client.AccessTokenKsMerchantClient;
 import com.kuaishou.merchant.open.api.request.KsMerchantOrderListRequest;
 import com.kuaishou.merchant.open.api.response.KsMerchantOrderListResponse;
-import com.qihang.common.common.AjaxResult;
-import com.qihang.common.common.ResultVo;
-import com.qihang.common.common.ResultVoEnum;
-import com.qihang.common.enums.EnumShopType;
+import cn.qihangerp.common.common.AjaxResult;
+import cn.qihangerp.common.ResultVo;
+import cn.qihangerp.common.ResultVoEnum;
+import cn.qihangerp.common.enums.EnumShopType;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

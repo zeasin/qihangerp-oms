@@ -1,14 +1,19 @@
 server:
   port: 8083
 spring:
-  cloud:
-    nacos:
-#      serverAddr: 127.0.0.1:8848
-      discovery:
-        server-addr: 127.0.0.1:8848
-
   application:
     name: oms-api
+  cloud:
+    loadbalancer:
+      nacos:
+        enabled: true
+    nacos:
+      #      serverAddr: 127.0.0.1:8848
+      discovery:
+        server-addr: 127.0.0.1:8848
+        username: nacos
+        password: nacos
+
   data:
     # redis 配置
     redis:
@@ -79,6 +84,6 @@ spring:
 
 mybatis-plus:
   mapper-locations: classpath*:mapper/**/*Mapper.xml
-  type-aliases-package: com.qihang.oms.domain;com.qihang.security.entity;
+  type-aliases-package: cn.qihangerp.oms.domain;cn.qihangerp.module.domain;cn.qihangerp.security.entity;
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl # 开启sql日志

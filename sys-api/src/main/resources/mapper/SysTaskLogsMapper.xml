@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.qihang.sys.api.mapper.SysTaskLogsMapper">
+<mapper namespace="cn.qihangerp.sys.mapper.SysTaskLogsMapper">
 
-    <resultMap id="BaseResultMap" type="com.qihang.sys.api.domain.SysTaskLogs">
+    <resultMap id="BaseResultMap" type="cn.qihangerp.sys.domain.SysTaskLogs">
             <id property="id" column="id" jdbcType="BIGINT"/>
             <result property="taskId" column="task_id" jdbcType="INTEGER"/>
             <result property="result" column="result" jdbcType="VARCHAR"/>

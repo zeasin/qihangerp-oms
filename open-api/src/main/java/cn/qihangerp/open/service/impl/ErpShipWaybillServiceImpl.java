@@ -8,10 +8,10 @@ import cn.qihangerp.open.tao.mapper.OmsTaoOrderMapper;
 import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.qihang.common.common.ResultVo;
-import com.qihang.common.enums.EnumShopType;
-import com.qihang.common.mq.MqMessage;
-import com.qihang.common.mq.MqType;
+import cn.qihangerp.common.ResultVo;
+import cn.qihangerp.common.enums.EnumShopType;
+import cn.qihangerp.common.mq.MqMessage;
+import cn.qihangerp.common.mq.MqType;
 
 import lombok.AllArgsConstructor;
 import org.springframework.kafka.core.KafkaTemplate;

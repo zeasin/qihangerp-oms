@@ -6,8 +6,8 @@ import cn.qihangerp.open.pdd.domain.bo.TokenCreateBo;
 import cn.qihangerp.open.pdd.model.Token;
 import cn.qihangerp.open.service.SShopPlatformService;
 import cn.qihangerp.open.service.SShopService;
-import com.qihang.common.common.AjaxResult;
-import com.qihang.common.enums.EnumShopType;
+import cn.qihangerp.common.common.AjaxResult;
+import cn.qihangerp.common.enums.EnumShopType;
 
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;

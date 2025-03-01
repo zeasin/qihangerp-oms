@@ -1,6 +1,6 @@
 package cn.qihangerp.open.mapper;
 
-import com.qihang.security.entity.SysUser;
+import cn.qihangerp.security.entity.SysUser;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

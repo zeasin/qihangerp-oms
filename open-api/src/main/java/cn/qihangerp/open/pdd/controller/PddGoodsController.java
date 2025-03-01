@@ -5,13 +5,13 @@ import cn.qihangerp.open.pdd.domain.OmsPddGoods;
 import cn.qihangerp.open.pdd.domain.OmsPddGoodsSku;
 import cn.qihangerp.open.pdd.service.OmsPddGoodsService;
 import cn.qihangerp.open.pdd.service.OmsPddGoodsSkuService;
-import com.qihang.common.bo.LinkErpGoodsSkuBo;
-import com.qihang.common.common.AjaxResult;
-import com.qihang.common.common.PageQuery;
-import com.qihang.common.common.PageResult;
-import com.qihang.common.common.TableDataInfo;
+import cn.qihangerp.common.bo.LinkErpGoodsSkuBo;
+import cn.qihangerp.common.common.AjaxResult;
+import cn.qihangerp.common.PageQuery;
+import cn.qihangerp.common.PageResult;
+import cn.qihangerp.common.common.TableDataInfo;
 
-import com.qihang.security.common.BaseController;
+import cn.qihangerp.security.common.BaseController;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

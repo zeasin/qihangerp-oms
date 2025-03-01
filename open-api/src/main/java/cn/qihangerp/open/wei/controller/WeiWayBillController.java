@@ -14,9 +14,9 @@ import cn.qihangerp.open.wei.vo.ewaybill.AccountVo;
 import cn.qihangerp.open.wei.vo.ewaybill.EwaybillOrderCreateVo;
 import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.qihang.common.common.AjaxResult;
-import com.qihang.common.common.ResultVoEnum;
-import com.qihang.common.enums.HttpStatus;
+import cn.qihangerp.common.common.AjaxResult;
+import cn.qihangerp.common.ResultVoEnum;
+import cn.qihangerp.common.enums.HttpStatus;
 
 import cn.qihangerp.open.wei.bo.WeiWaybillGetBo;
 

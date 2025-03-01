@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8088
 spring:
   application:
     name: gateway
@@ -13,8 +13,8 @@ spring:
     nacos:
       discovery:
         server-addr: 127.0.0.1:8848
-#        username: nacos
-#        password: nacos
+        username: nacos
+        password: nacos
     sentinel:
       transport:
         dashboard: 127.0.0.1:8888 # sentinel控制台地址

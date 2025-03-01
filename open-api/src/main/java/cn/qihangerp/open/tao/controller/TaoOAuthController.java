@@ -3,8 +3,8 @@ package cn.qihangerp.open.tao.controller;
 
 import cn.qihangerp.open.service.SShopPlatformService;
 import cn.qihangerp.open.tao.domain.bo.TaoTokenCreateBo;
-import com.qihang.common.common.AjaxResult;
-import com.qihang.common.enums.EnumShopType;
+import cn.qihangerp.common.common.AjaxResult;
+import cn.qihangerp.common.enums.EnumShopType;
 
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;

@@ -4,8 +4,8 @@ import cn.qihangerp.open.tao.domain.OmsTaoGoods;
 import cn.qihangerp.open.tao.domain.OmsTaoGoodsSku;
 import cn.qihangerp.open.tao.domain.vo.TaoGoodsSkuListVo;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.qihang.common.common.PageQuery;
-import com.qihang.common.common.PageResult;
+import cn.qihangerp.common.PageQuery;
+import cn.qihangerp.common.PageResult;
 
 
 /**

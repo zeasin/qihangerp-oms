@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.qihangerp.module.goods.mapper.OGoodsCategoryAttributeValueMapper">
+
+    <resultMap id="BaseResultMap" type="cn.qihangerp.module.goods.domain.OGoodsCategoryAttributeValue">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="categoryAttributeId" column="category_attribute_id" jdbcType="INTEGER"/>
+            <result property="value" column="value" jdbcType="VARCHAR"/>
+            <result property="skuCode" column="sku_code" jdbcType="VARCHAR"/>
+            <result property="ordernum" column="orderNum" jdbcType="INTEGER"/>
+            <result property="isdelete" column="isDelete" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,category_attribute_id,value,
+        sku_code,orderNum,isDelete
+    </sql>
+</mapper>

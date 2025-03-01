@@ -4,8 +4,8 @@ import cn.qihangerp.open.domain.SShopPlatform;
 import cn.qihangerp.open.jd.domain.bo.JdTokenCreateBo;
 import cn.qihangerp.open.service.SShopPlatformService;
 import com.alibaba.fastjson2.JSONObject;
-import com.qihang.common.common.AjaxResult;
-import com.qihang.common.enums.EnumShopType;
+import cn.qihangerp.common.common.AjaxResult;
+import cn.qihangerp.common.enums.EnumShopType;
 
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;

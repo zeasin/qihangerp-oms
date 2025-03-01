@@ -5,7 +5,7 @@ import cn.qihangerp.open.service.SShopService;
 import com.kuaishou.merchant.open.api.KsMerchantApiException;
 import com.kuaishou.merchant.open.api.client.oauth.OauthAccessTokenKsClient;
 import com.kuaishou.merchant.open.api.response.KsAccessTokenResponse;
-import com.qihang.common.enums.EnumShopType;
+import cn.qihangerp.common.enums.EnumShopType;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;

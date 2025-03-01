@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.qihang.oms.mapper.OmsWeiRefundMapper">
+<mapper namespace="cn.qihangerp.oms.mapper.OmsWeiRefundMapper">
 
-    <resultMap id="BaseResultMap" type="com.qihang.oms.domain.OmsWeiRefund">
+    <resultMap id="BaseResultMap" type="cn.qihangerp.oms.domain.OmsWeiRefund">
             <id property="id" column="id" jdbcType="BIGINT"/>
             <result property="shopId" column="shop_id" jdbcType="INTEGER"/>
             <result property="afterSaleOrderId" column="after_sale_order_id" jdbcType="VARCHAR"/>

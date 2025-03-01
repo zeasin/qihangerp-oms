@@ -7,8 +7,8 @@ import cn.qihangerp.open.tao.mapper.OmsTaoGoodsSkuMapper;
 import cn.qihangerp.open.tao.service.OmsTaoGoodsSkuService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.qihang.common.common.PageQuery;
-import com.qihang.common.common.PageResult;
+import cn.qihangerp.common.PageQuery;
+import cn.qihangerp.common.PageResult;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;

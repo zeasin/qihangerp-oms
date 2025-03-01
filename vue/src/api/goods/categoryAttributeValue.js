@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 查询商品分类属性值列表
 export function listCategoryAttributeValue(query) {
   return request({
-    url: '/goods/categoryAttributeValue/list',
+    url: '/api/oms-api/goods_category/attribute_value_list',
     method: 'get',
     params: query
   })
@@ -12,7 +12,7 @@ export function listCategoryAttributeValue(query) {
 // 查询商品分类属性值详细
 export function getCategoryAttributeValue(id) {
   return request({
-    url: '/goods/categoryAttributeValue/' + id,
+    url: '/api/oms-api/goods_category/attribute_value/' + id,
     method: 'get'
   })
 }
@@ -20,7 +20,7 @@ export function getCategoryAttributeValue(id) {
 // 新增商品分类属性值
 export function addCategoryAttributeValue(data) {
   return request({
-    url: '/goods/categoryAttributeValue',
+    url: '/api/oms-api/goods_category/attribute_value',
     method: 'post',
     data: data
   })
@@ -29,7 +29,7 @@ export function addCategoryAttributeValue(data) {
 // 修改商品分类属性值
 export function updateCategoryAttributeValue(data) {
   return request({
-    url: '/goods/categoryAttributeValue',
+    url: '/api/oms-api/goods_category/attribute_value',
     method: 'put',
     data: data
   })
@@ -38,7 +38,7 @@ export function updateCategoryAttributeValue(data) {
 // 删除商品分类属性值
 export function delCategoryAttributeValue(id) {
   return request({
-    url: '/goods/categoryAttributeValue/' + id,
+    url: '/api/oms-api/goods_category/attribute_value/' + id,
     method: 'delete'
   })
 }

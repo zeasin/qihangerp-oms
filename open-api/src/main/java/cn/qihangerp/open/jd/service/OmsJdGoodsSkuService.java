@@ -2,9 +2,9 @@ package cn.qihangerp.open.jd.service;
 
 import cn.qihangerp.open.jd.domain.OmsJdGoodsSku;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.qihang.common.common.PageQuery;
-import com.qihang.common.common.PageResult;
-import com.qihang.common.common.ResultVo;
+import cn.qihangerp.common.PageQuery;
+import cn.qihangerp.common.PageResult;
+import cn.qihangerp.common.ResultVo;
 
 
 /**

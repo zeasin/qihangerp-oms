@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import cn.qihangerp.open.wei.domain.OmsWeiGoods;
 import cn.qihangerp.open.wei.mapper.OmsWeiGoodsMapper;
 import cn.qihangerp.open.wei.service.OmsWeiGoodsService;
-import com.qihang.common.common.ResultVoEnum;
+import cn.qihangerp.common.ResultVoEnum;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 

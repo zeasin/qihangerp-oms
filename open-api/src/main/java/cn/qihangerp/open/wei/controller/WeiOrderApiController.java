@@ -6,10 +6,10 @@ import cn.qihangerp.open.wei.common.ApiResultVo;
 import cn.qihangerp.open.wei.model.Order;
 import cn.qihangerp.open.wei.model.OrderDetailDeliverInfoAddress;
 import com.alibaba.fastjson2.JSONObject;
-import com.qihang.common.common.AjaxResult;
-import com.qihang.common.common.ResultVoEnum;
-import com.qihang.common.enums.HttpStatus;
-import com.qihang.security.common.BaseController;
+import cn.qihangerp.common.common.AjaxResult;
+import cn.qihangerp.common.ResultVoEnum;
+import cn.qihangerp.common.enums.HttpStatus;
+import cn.qihangerp.security.common.BaseController;
 
 import cn.qihangerp.open.wei.domain.OmsWeiOrder;
 import cn.qihangerp.open.wei.domain.OmsWeiOrderItem;

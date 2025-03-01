@@ -10,10 +10,10 @@ import cn.qihangerp.open.jd.model.GoodsSku;
 import cn.qihangerp.open.jd.service.OmsJdGoodsSkuService;
 import cn.qihangerp.open.jd.utils.DateUtil;
 import com.alibaba.fastjson2.JSON;
-import com.qihang.common.common.AjaxResult;
-import com.qihang.common.enums.HttpStatus;
+import cn.qihangerp.common.common.AjaxResult;
+import cn.qihangerp.common.enums.HttpStatus;
 
-import com.qihang.security.common.BaseController;
+import cn.qihangerp.security.common.BaseController;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.RequestBody;

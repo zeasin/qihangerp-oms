@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.qihangerp.module.goods.mapper.OGoodsInventoryMapper">
+
+    <resultMap id="BaseResultMap" type="cn.qihangerp.module.goods.domain.OGoodsInventory">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="goodsId" column="goods_id" jdbcType="BIGINT"/>
+            <result property="goodsNum" column="goods_num" jdbcType="VARCHAR"/>
+            <result property="skuId" column="sku_id" jdbcType="BIGINT"/>
+            <result property="skuCode" column="sku_code" jdbcType="VARCHAR"/>
+            <result property="quantity" column="quantity" jdbcType="BIGINT"/>
+            <result property="isDelete" column="is_delete" jdbcType="TINYINT"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
+            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+            <result property="updateBy" column="update_by" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,goods_id,goods_num,
+        sku_id,sku_code,quantity,
+        is_delete,create_time,create_by,
+        update_time,update_by
+    </sql>
+    <select id="getAllInventoryQuantity" resultType="Long">
+        SELECT IFNULL(SUM(quantity),0) as count FROM o_goods_inventory where is_delete=0
+    </select>
+</mapper>

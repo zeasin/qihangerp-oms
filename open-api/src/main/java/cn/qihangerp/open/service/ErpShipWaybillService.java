@@ -2,7 +2,7 @@ package cn.qihangerp.open.service;
 
 import cn.qihangerp.open.domain.ErpShipWaybill;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.qihang.common.common.ResultVo;
+import cn.qihangerp.common.ResultVo;
 
 
 import java.util.List;

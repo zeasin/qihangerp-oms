@@ -110,6 +110,11 @@ graph TD
 
   `java -Dserver.port=8888 -Dcsp.sentinel.dashboard.server=localhost:8888 -Dproject.name=sentinel-dashboard -jar sentinel-dashboard.jar`
 
+#### 启动KRaft模式kafka
++ 0 进入kafka解压目录
++ 1 生成UUID`bin\windows\kafka-storage.bat random-uuid`
++ 2 格式化`bin\windows\kafka-storage.bat format -t ujpyXZx-S9-jGlwxgORmow -c config\kraft\server.properties`
++ 3 启动`bin\windows\kafka-server-start.bat config\kraft\server.properties`
 
 ### 2、项目结构
 #### 2.1 core

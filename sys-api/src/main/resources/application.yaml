@@ -15,7 +15,7 @@ spring:
 #      serverAddr: 127.0.0.1:8848
       discovery:
         server-addr: 127.0.0.1:8848
-        usename: nacos
+        username: nacos
         passowrd: nacos
   data:
     # redis 配置
@@ -52,7 +52,7 @@ spring:
 
 mybatis-plus:
   mapper-locations: classpath*:mapper/**/*Mapper.xml
-  type-aliases-package: com.qihang.sys.api.domain;com.qihang.security.entity;
+  type-aliases-package: cn.qihangerp.sys.domain;cn.qihangerp.security.entity;
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl # 开启sql日志
 #mybatis:

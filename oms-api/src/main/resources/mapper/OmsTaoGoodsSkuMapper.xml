@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.qihang.oms.mapper.OmsTaoGoodsSkuMapper">
+<mapper namespace="cn.qihangerp.oms.mapper.OmsTaoGoodsSkuMapper">
 
-    <resultMap id="BaseResultMap" type="com.qihang.oms.domain.OmsTaoGoodsSku">
+    <resultMap id="BaseResultMap" type="cn.qihangerp.oms.domain.OmsTaoGoodsSku">
             <id property="id" column="id" jdbcType="BIGINT"/>
             <result property="numIid" column="num_iid" jdbcType="BIGINT"/>
             <result property="iid" column="iid" jdbcType="VARCHAR"/>

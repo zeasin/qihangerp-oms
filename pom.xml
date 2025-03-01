@@ -16,6 +16,7 @@
     <module>security</module>
     <module>oms-api</module>
     <module>open-api</module>
+    <module>goods</module>
   </modules>
 
   <properties>

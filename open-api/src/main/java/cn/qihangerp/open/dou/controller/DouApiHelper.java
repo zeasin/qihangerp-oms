@@ -3,9 +3,9 @@ package cn.qihangerp.open.dou.controller;
 import cn.qihangerp.open.dou.common.ApiResultVo;
 import cn.qihangerp.open.service.SShopPlatformService;
 import cn.qihangerp.open.service.SShopService;
-import com.qihang.common.api.ShopApiParams;
-import com.qihang.common.common.ResultVoEnum;
-import com.qihang.common.enums.EnumShopType;
+import cn.qihangerp.common.api.ShopApiParams;
+import cn.qihangerp.common.ResultVoEnum;
+import cn.qihangerp.common.enums.EnumShopType;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.java.Log;

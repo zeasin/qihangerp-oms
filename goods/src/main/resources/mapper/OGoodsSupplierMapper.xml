@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.qihangerp.module.goods.mapper.OGoodsSupplierMapper">
+
+    <resultMap id="BaseResultMap" type="cn.qihangerp.module.goods.domain.OGoodsSupplier">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="name" column="name" jdbcType="VARCHAR"/>
+            <result property="number" column="number" jdbcType="VARCHAR"/>
+            <result property="taxrate" column="taxRate" jdbcType="DOUBLE"/>
+            <result property="amount" column="amount" jdbcType="DOUBLE"/>
+            <result property="periodmoney" column="periodMoney" jdbcType="DOUBLE"/>
+            <result property="difmoney" column="difMoney" jdbcType="DOUBLE"/>
+            <result property="begindate" column="beginDate" jdbcType="DATE"/>
+            <result property="remark" column="remark" jdbcType="VARCHAR"/>
+            <result property="place" column="place" jdbcType="VARCHAR"/>
+            <result property="linkman" column="linkMan" jdbcType="VARCHAR"/>
+            <result property="contact" column="contact" jdbcType="VARCHAR"/>
+            <result property="province" column="province" jdbcType="VARCHAR"/>
+            <result property="city" column="city" jdbcType="VARCHAR"/>
+            <result property="county" column="county" jdbcType="VARCHAR"/>
+            <result property="address" column="address" jdbcType="VARCHAR"/>
+            <result property="pinyin" column="pinYin" jdbcType="VARCHAR"/>
+            <result property="disable" column="disable" jdbcType="TINYINT"/>
+            <result property="isdelete" column="isDelete" jdbcType="TINYINT"/>
+            <result property="purchasername" column="purchaserName" jdbcType="VARCHAR"/>
+            <result property="createtime" column="createTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,name,number,
+        taxRate,amount,periodMoney,
+        difMoney,beginDate,remark,
+        place,linkMan,contact,
+        province,city,county,
+        address,pinYin,disable,
+        isDelete,purchaserName,createTime
+    </sql>
+</mapper>

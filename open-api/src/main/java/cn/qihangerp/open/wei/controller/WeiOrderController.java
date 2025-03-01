@@ -1,14 +1,14 @@
 package cn.qihangerp.open.wei.controller;
 
 import com.alibaba.fastjson2.JSONObject;
-import com.qihang.common.common.AjaxResult;
-import com.qihang.common.common.PageQuery;
-import com.qihang.common.common.PageResult;
-import com.qihang.common.common.TableDataInfo;
-import com.qihang.common.enums.EnumShopType;
-import com.qihang.common.mq.MqMessage;
-import com.qihang.common.mq.MqType;
-import com.qihang.security.common.BaseController;
+import cn.qihangerp.common.common.AjaxResult;
+import cn.qihangerp.common.PageQuery;
+import cn.qihangerp.common.PageResult;
+import cn.qihangerp.common.common.TableDataInfo;
+import cn.qihangerp.common.enums.EnumShopType;
+import cn.qihangerp.common.mq.MqMessage;
+import cn.qihangerp.common.mq.MqType;
+import cn.qihangerp.security.common.BaseController;
 import cn.qihangerp.open.wei.bo.WeiOrderPushBo;
 import cn.qihangerp.open.wei.domain.OmsWeiOrder;
 import cn.qihangerp.open.wei.service.OmsWeiOrderService;

@@ -1,11 +1,11 @@
 package cn.qihangerp.open.service.impl;
 
 import cn.qihangerp.open.mapper.SysUserMapper;
-import com.qihang.common.common.ServiceException;
-import com.qihang.common.constant.UserConstants;
-import com.qihang.common.utils.StringUtils;
-import com.qihang.security.entity.SysUser;
-import com.qihang.security.service.ISysUserService;
+import cn.qihangerp.common.common.ServiceException;
+import cn.qihangerp.common.constant.UserConstants;
+import cn.qihangerp.common.utils.StringUtils;
+import cn.qihangerp.security.entity.SysUser;
+import cn.qihangerp.security.service.ISysUserService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

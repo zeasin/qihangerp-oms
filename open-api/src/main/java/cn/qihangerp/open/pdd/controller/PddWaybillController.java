@@ -17,10 +17,10 @@ import cn.qihangerp.open.pdd.service.OmsPddOrderService;
 import cn.qihangerp.open.pdd.service.OmsPddWaybillAccountService;
 import cn.qihangerp.open.service.ErpShipWaybillService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.qihang.common.common.AjaxResult;
-import com.qihang.common.enums.HttpStatus;
+import cn.qihangerp.common.common.AjaxResult;
+import cn.qihangerp.common.enums.HttpStatus;
 
-import com.qihang.security.common.BaseController;
+import cn.qihangerp.security.common.BaseController;
 import lombok.AllArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.util.StringUtils;

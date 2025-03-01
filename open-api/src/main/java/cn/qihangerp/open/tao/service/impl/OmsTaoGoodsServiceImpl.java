@@ -9,9 +9,9 @@ import cn.qihangerp.open.tao.service.OmsTaoGoodsService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.qihang.common.common.PageQuery;
-import com.qihang.common.common.PageResult;
-import com.qihang.common.common.ResultVoEnum;
+import cn.qihangerp.common.PageQuery;
+import cn.qihangerp.common.PageResult;
+import cn.qihangerp.common.ResultVoEnum;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;

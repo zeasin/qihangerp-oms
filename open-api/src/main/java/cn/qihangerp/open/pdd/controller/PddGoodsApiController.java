@@ -2,7 +2,6 @@ package cn.qihangerp.open.pdd.controller;
 
 import cn.qihangerp.open.common.ApiResultVo;
 import cn.qihangerp.open.pdd.PddApiCommon;
-import cn.qihangerp.open.pdd.GoodsApiHelper;
 import cn.qihangerp.open.pdd.PddGoodsApiHelper;
 import cn.qihangerp.open.pdd.PddPullRequest;
 
@@ -11,11 +10,11 @@ import cn.qihangerp.open.pdd.domain.OmsPddGoodsSku;
 
 import cn.qihangerp.open.pdd.model.GoodsResultVo;
 import cn.qihangerp.open.pdd.service.OmsPddGoodsService;
-import com.qihang.common.common.AjaxResult;
-import com.qihang.common.common.ResultVoEnum;
-import com.qihang.common.enums.HttpStatus;
+import cn.qihangerp.common.common.AjaxResult;
+import cn.qihangerp.common.ResultVoEnum;
+import cn.qihangerp.common.enums.HttpStatus;
 
-import com.qihang.security.common.BaseController;
+import cn.qihangerp.security.common.BaseController;
 import lombok.AllArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.beans.BeanUtils;

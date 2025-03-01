@@ -6,13 +6,13 @@ import cn.qihangerp.open.tao.domain.OmsTaoGoodsSku;
 import cn.qihangerp.open.tao.domain.vo.TaoGoodsSkuListVo;
 import cn.qihangerp.open.tao.service.OmsTaoGoodsService;
 import cn.qihangerp.open.tao.service.OmsTaoGoodsSkuService;
-import com.qihang.common.bo.LinkErpGoodsSkuBo;
-import com.qihang.common.common.AjaxResult;
-import com.qihang.common.common.PageQuery;
-import com.qihang.common.common.PageResult;
-import com.qihang.common.common.TableDataInfo;
+import cn.qihangerp.common.bo.LinkErpGoodsSkuBo;
+import cn.qihangerp.common.common.AjaxResult;
+import cn.qihangerp.common.PageQuery;
+import cn.qihangerp.common.PageResult;
+import cn.qihangerp.common.common.TableDataInfo;
 
-import com.qihang.security.common.BaseController;
+import cn.qihangerp.security.common.BaseController;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
