@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.qihangerp.module.order.mapper.OfflineOrderItemMapper">
+
+    <resultMap id="BaseResultMap" type="cn.qihangerp.module.order.domain.OfflineOrderItem">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="orderId" column="order_id" jdbcType="BIGINT"/>
+            <result property="orderNum" column="order_num" jdbcType="VARCHAR"/>
+            <result property="subOrderNum" column="sub_order_num" jdbcType="VARCHAR"/>
+            <result property="skuId" column="sku_id" jdbcType="VARCHAR"/>
+            <result property="goodsId" column="goods_id" jdbcType="BIGINT"/>
+            <result property="goodsSkuId" column="goods_sku_id" jdbcType="BIGINT"/>
+            <result property="goodsTitle" column="goods_title" jdbcType="VARCHAR"/>
+            <result property="goodsImg" column="goods_img" jdbcType="VARCHAR"/>
+            <result property="goodsNum" column="goods_num" jdbcType="VARCHAR"/>
+            <result property="goodsSpec" column="goods_spec" jdbcType="VARCHAR"/>
+            <result property="skuNum" column="sku_num" jdbcType="VARCHAR"/>
+            <result property="goodsPrice" column="goods_price" jdbcType="DOUBLE"/>
+            <result property="itemAmount" column="item_amount" jdbcType="DOUBLE"/>
+            <result property="payment" column="payment" jdbcType="DOUBLE"/>
+            <result property="quantity" column="quantity" jdbcType="INTEGER"/>
+            <result property="remark" column="remark" jdbcType="VARCHAR"/>
+            <result property="refundCount" column="refund_count" jdbcType="INTEGER"/>
+            <result property="refundStatus" column="refund_status" jdbcType="INTEGER"/>
+            <result property="orderStatus" column="order_status" jdbcType="INTEGER"/>
+            <result property="hasPushErp" column="has_push_erp" jdbcType="INTEGER"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
+            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+            <result property="updateBy" column="update_by" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,order_id,order_num,
+        sub_order_num,sku_id,goods_id,
+        goods_sku_id,goods_title,goods_img,
+        goods_num,goods_spec,sku_num,
+        goods_price,item_amount,payment,
+        quantity,remark,refund_count,
+        refund_status,order_status,has_push_erp,
+        create_time,create_by,update_time,
+        update_by
+    </sql>
+</mapper>

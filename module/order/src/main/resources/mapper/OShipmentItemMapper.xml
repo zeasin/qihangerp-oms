@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.qihangerp.module.order.mapper.OShipmentItemMapper">
+
+    <resultMap id="BaseResultMap" type="cn.qihangerp.module.order.domain.OShipmentItem">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="shippingId" column="shipping_id" jdbcType="BIGINT"/>
+            <result property="orderId" column="order_id" jdbcType="BIGINT"/>
+            <result property="orderItemId" column="order_item_id" jdbcType="BIGINT"/>
+            <result property="orderNum" column="order_num" jdbcType="VARCHAR"/>
+            <result property="subOrderNum" column="sub_order_num" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,shipping_id,order_id,
+        order_item_id,order_num,sub_order_num
+    </sql>
+</mapper>

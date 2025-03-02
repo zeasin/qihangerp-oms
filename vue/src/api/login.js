@@ -18,6 +18,18 @@ export function login(username, password, code, uuid) {
   })
 }
 
+// 获取验证码
+export function getCodeImg() {
+  return request({
+    url: '/api/sys-api/captchaImage',
+    headers: {
+      isToken: false
+    },
+    method: 'get',
+    timeout: 20000
+  })
+}
+
 
 
 // 获取用户详细信息

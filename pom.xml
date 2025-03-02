@@ -10,13 +10,9 @@
   <name>qihangerp-cloud</name>
   <url>http://maven.apache.org</url>
   <modules>
-    <module>sys-api</module>
-    <module>gateway</module>
-    <module>common</module>
-    <module>security</module>
-    <module>oms-api</module>
-    <module>open-api</module>
-    <module>goods</module>
+    <module>api</module>
+    <module>core</module>
+    <module>module</module>
   </modules>
 
   <properties>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.qihangerp.module.open.pdd.mapper.PddOrderItemMapper">
+
+    <resultMap id="BaseResultMap" type="cn.qihangerp.module.open.pdd.domain.PddOrderItem">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="orderSn" column="order_sn" jdbcType="VARCHAR"/>
+            <result property="goodsId" column="goods_id" jdbcType="BIGINT"/>
+            <result property="skuId" column="sku_id" jdbcType="BIGINT"/>
+            <result property="goodsName" column="goods_name" jdbcType="VARCHAR"/>
+            <result property="goodsImg" column="goods_img" jdbcType="VARCHAR"/>
+            <result property="goodsSpec" column="goods_spec" jdbcType="VARCHAR"/>
+            <result property="goodsPrice" column="goods_price" jdbcType="DOUBLE"/>
+            <result property="outerGoodsId" column="outer_goods_id" jdbcType="VARCHAR"/>
+            <result property="outerId" column="outer_id" jdbcType="VARCHAR"/>
+            <result property="goodsCount" column="goods_count" jdbcType="INTEGER"/>
+        <result property="oGoodsId" column="o_goods_id" jdbcType="BIGINT"/>
+        <result property="oGoodsSkuId" column="o_goods_sku_id" jdbcType="BIGINT"/>
+            <result property="remark" column="remark" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,order_sn,goods_id,o_goods_id,o_goods_sku_id,
+        sku_id,goods_name,goods_img,
+        goods_spec,goods_price,outer_goods_id,
+        outer_id,goods_count,remark
+    </sql>
+</mapper>

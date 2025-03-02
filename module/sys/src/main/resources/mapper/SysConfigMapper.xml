@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.qihangerp.module.mapper.SysConfigMapper">
+
+    <resultMap id="BaseResultMap" type="cn.qihangerp.module.domain.SysConfig">
+            <id property="configId" column="config_id" jdbcType="INTEGER"/>
+            <result property="configName" column="config_name" jdbcType="VARCHAR"/>
+            <result property="configKey" column="config_key" jdbcType="VARCHAR"/>
+            <result property="configValue" column="config_value" jdbcType="VARCHAR"/>
+            <result property="configType" column="config_type" jdbcType="CHAR"/>
+            <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="updateBy" column="update_by" jdbcType="VARCHAR"/>
+            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+            <result property="remark" column="remark" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        config_id,config_name,config_key,
+        config_value,config_type,create_by,
+        create_time,update_by,update_time,
+        remark
+    </sql>
+</mapper>

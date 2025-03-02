@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.qihangerp.module.order.mapper.OOrderMapper">
+
+    <resultMap id="BaseResultMap" type="cn.qihangerp.module.order.domain.OOrder">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="orderNum" column="order_num" jdbcType="VARCHAR"/>
+            <result property="shopType" column="shop_type" jdbcType="INTEGER"/>
+            <result property="shopId" column="shop_id" jdbcType="INTEGER"/>
+            <result property="remark" column="remark" jdbcType="VARCHAR"/>
+            <result property="buyerMemo" column="buyer_memo" jdbcType="VARCHAR"/>
+            <result property="sellerMemo" column="seller_memo" jdbcType="VARCHAR"/>
+            <result property="tag" column="tag" jdbcType="VARCHAR"/>
+            <result property="refundStatus" column="refund_status" jdbcType="INTEGER"/>
+            <result property="orderStatus" column="order_status" jdbcType="INTEGER"/>
+            <result property="goodsAmount" column="goods_amount" jdbcType="DOUBLE"/>
+            <result property="postFee" column="post_fee" jdbcType="DOUBLE"/>
+            <result property="amount" column="amount" jdbcType="DOUBLE"/>
+            <result property="payment" column="payment" jdbcType="DOUBLE"/>
+            <result property="platformDiscount" column="platform_discount" jdbcType="DOUBLE"/>
+            <result property="sellerDiscount" column="seller_discount" jdbcType="DOUBLE"/>
+            <result property="receiverName" column="receiver_name" jdbcType="VARCHAR"/>
+            <result property="receiverMobile" column="receiver_mobile" jdbcType="VARCHAR"/>
+            <result property="address" column="address" jdbcType="VARCHAR"/>
+            <result property="province" column="province" jdbcType="VARCHAR"/>
+            <result property="city" column="city" jdbcType="VARCHAR"/>
+            <result property="town" column="town" jdbcType="VARCHAR"/>
+            <result property="orderTime" column="order_time" jdbcType="TIMESTAMP"/>
+            <result property="shipType" column="ship_type" jdbcType="INTEGER"/>
+            <result property="shippingTime" column="shipping_time" jdbcType="TIMESTAMP"/>
+            <result property="shippingNumber" column="shipping_number" jdbcType="VARCHAR"/>
+            <result property="shippingCompany" column="shipping_company" jdbcType="VARCHAR"/>
+            <result property="shippingMan" column="shipping_man" jdbcType="VARCHAR"/>
+            <result property="shippingCost" column="shipping_cost" jdbcType="DECIMAL"/>
+            <result property="length" column="length" jdbcType="FLOAT"/>
+            <result property="width" column="width" jdbcType="FLOAT"/>
+            <result property="height" column="height" jdbcType="FLOAT"/>
+            <result property="weight" column="weight" jdbcType="FLOAT"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
+            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+            <result property="updateBy" column="update_by" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <resultMap id="DiscountResultMap" type="cn.qihangerp.module.order.domain.vo.OrderDiscountVo">
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="discountAmount" column="discount_amount" jdbcType="VARCHAR"/>
+        <result property="description" column="description" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id,order_num,shop_type,
+        shop_id,remark,buyer_memo,
+        seller_memo,tag,refund_status,
+        order_status,goods_amount,amount,platform_discount,seller_discount,payment,post_fee,
+        receiver_name,receiver_mobile,address,
+        province,city,town,
+        order_time,ship_type,shipping_time,
+        shipping_number,shipping_company,shipping_man,
+        shipping_cost,length,width,
+        height,weight,create_time,
+        create_by,update_time,update_by
+    </sql>
+    <select id="getTaoOrderDiscount" parameterType="String" resultMap="DiscountResultMap">
+        select promotion_name as name,discount_fee as discount_amount,promotion_desc as description from tao_order_promotion
+        where id = #{tid}
+    </select>
+
+    <select id="getJdOrderDiscount" parameterType="String" resultMap="DiscountResultMap">
+        select coupon_type as name,coupon_price as discount_amount from jd_order_coupon
+        where order_id = #{orderId}
+    </select>
+    <select id="salesDaily" resultType="cn.qihangerp.module.order.domain.vo.SalesDailyVo">
+        SELECT
+            DATE(order_time) AS date,
+            COUNT(*) AS count,
+            SUM(payment) AS amount
+
+        FROM
+            o_order
+
+        GROUP BY
+            date
+        ORDER BY
+            date
+
+            LIMIT 30
+    </select>
+
+    <select id="getTodaySalesDaily" resultType="cn.qihangerp.module.order.domain.vo.SalesDailyVo">
+        SELECT
+
+            COUNT(*) AS count,
+            SUM(payment) AS amount
+
+        FROM
+            o_order
+
+        WHERE DATE(`order_time`) = CURDATE();
+    </select>
+
+</mapper>

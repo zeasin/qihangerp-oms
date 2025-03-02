@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.qihangerp.module.open.jd.mapper.JdVcOrderMapper">
+
+    <resultMap id="BaseResultMap" type="cn.qihangerp.module.open.jd.domain.JdVcOrder">
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="customOrderId" column="custom_order_id" jdbcType="BIGINT"/>
+        <result property="pay" column="pay" jdbcType="DOUBLE"/>
+        <result property="operatorState" column="operator_state" jdbcType="INTEGER"/>
+        <result property="orderState" column="order_state" jdbcType="INTEGER"/>
+        <result property="consigneeName" column="consignee_name" jdbcType="VARCHAR"/>
+        <result property="telephone" column="telephone" jdbcType="VARCHAR"/>
+        <result property="phone" column="phone" jdbcType="VARCHAR"/>
+        <result property="address" column="address" jdbcType="VARCHAR"/>
+        <result property="orderRemark" column="order_remark" jdbcType="VARCHAR"/>
+        <result property="orderCreateDate" column="order_create_date" jdbcType="TIMESTAMP"/>
+        <result property="paymentCategory" column="payment_category" jdbcType="VARCHAR"/>
+        <result property="paymentCategoryDispName" column="payment_category_disp_name" jdbcType="VARCHAR"/>
+        <result property="createDate" column="create_date" jdbcType="TIMESTAMP"/>
+        <result property="pin" column="pin" jdbcType="VARCHAR"/>
+        <result property="refundSourceFlag" column="refund_source_flag" jdbcType="INTEGER"/>
+        <result property="provinceId" column="province_id" jdbcType="INTEGER"/>
+        <result property="provinceName" column="province_name" jdbcType="VARCHAR"/>
+        <result property="cityId" column="city_id" jdbcType="INTEGER"/>
+        <result property="cityName" column="city_name" jdbcType="VARCHAR"/>
+        <result property="countyId" column="county_id" jdbcType="INTEGER"/>
+        <result property="countyName" column="county_name" jdbcType="VARCHAR"/>
+        <result property="townId" column="town_id" jdbcType="INTEGER"/>
+        <result property="townName" column="town_name" jdbcType="VARCHAR"/>
+        <result property="memoByVendor" column="memo_by_vendor" jdbcType="VARCHAR"/>
+        <result property="parentOrderId" column="parent_order_id" jdbcType="BIGINT"/>
+        <result property="sku" column="sku" jdbcType="VARCHAR"/>
+        <result property="commodityName" column="commodity_name" jdbcType="VARCHAR"/>
+        <result property="commodityNum" column="commodity_num" jdbcType="INTEGER"/>
+        <result property="jdPrice" column="jd_price" jdbcType="DECIMAL"/>
+        <result property="discount" column="discount" jdbcType="DECIMAL"/>
+        <result property="reduceCount" column="reduce_count" jdbcType="DECIMAL"/>
+        <result property="totalCarriage" column="total_carriage" jdbcType="DECIMAL"/>
+        <result property="cost" column="cost" jdbcType="DECIMAL"/>
+        <result property="branchName" column="branch_name" jdbcType="VARCHAR"/>
+        <result property="updateDate" column="update_date" jdbcType="BIGINT"/>
+        <result property="shopId" column="shop_id" jdbcType="BIGINT"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,custom_order_id,pay,
+        operator_state,order_state,consignee_name,
+        telephone,phone,address,
+        order_remark,order_create_date,payment_category,
+        payment_category_disp_name,create_date,pin,
+        refund_source_flag,province_id,province_name,
+        city_id,city_name,county_id,
+        county_name,town_id,town_name,
+        memo_by_vendor,parent_order_id,sku,
+        commodity_name,commodity_num,jd_price,
+        discount,reduce_count,total_carriage,
+        cost,branch_name,update_date,
+        shop_id,create_time,update_time
+    </sql>
+</mapper>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.qihangerp.module.order.mapper.OShipmentMapper">
+
+    <resultMap id="BaseResultMap" type="cn.qihangerp.module.order.domain.OShipment">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="shopId" column="shop_id" jdbcType="INTEGER"/>
+            <result property="shippingType" column="shipping_type" jdbcType="INTEGER"/>
+            <result property="orderNums" column="order_nums" jdbcType="VARCHAR"/>
+            <result property="subOrderNums" column="sub_order_nums" jdbcType="VARCHAR"/>
+            <result property="receiverName" column="receiver_name" jdbcType="VARCHAR"/>
+            <result property="receiverMobile" column="receiver_mobile" jdbcType="VARCHAR"/>
+            <result property="province" column="province" jdbcType="VARCHAR"/>
+            <result property="city" column="city" jdbcType="VARCHAR"/>
+            <result property="town" column="town" jdbcType="VARCHAR"/>
+            <result property="address" column="address" jdbcType="VARCHAR"/>
+            <result property="logisticsCompany" column="logistics_company" jdbcType="VARCHAR"/>
+            <result property="logisticsCompanyCode" column="logistics_company_code" jdbcType="VARCHAR"/>
+            <result property="waybillCode" column="waybill_code" jdbcType="VARCHAR"/>
+            <result property="shippingFee" column="shipping_fee" jdbcType="DECIMAL"/>
+            <result property="shippingTime" column="shipping_time" jdbcType="TIMESTAMP"/>
+            <result property="shippingOperator" column="shipping_operator" jdbcType="VARCHAR"/>
+            <result property="shippingStatus" column="shipping_status" jdbcType="INTEGER"/>
+            <result property="packageWeight" column="package_weight" jdbcType="FLOAT"/>
+            <result property="packageLength" column="package_length" jdbcType="FLOAT"/>
+            <result property="packageWidth" column="package_width" jdbcType="FLOAT"/>
+            <result property="packageHeight" column="package_height" jdbcType="FLOAT"/>
+            <result property="packageOperator" column="package_operator" jdbcType="VARCHAR"/>
+            <result property="packageTime" column="package_time" jdbcType="TIMESTAMP"/>
+            <result property="packages" column="packages" jdbcType="VARCHAR"/>
+            <result property="remark" column="remark" jdbcType="VARCHAR"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
+            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+            <result property="updateBy" column="update_by" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,shop_id,shipping_type,
+        order_nums,sub_order_nums,receiver_name,receiver_mobile,province,city,town,address,
+          logistics_company,logistics_company_code,waybill_code,
+        shipping_fee,shipping_time,shipping_operator,
+        shipping_status,package_weight,package_length,
+        package_width,package_height,package_operator,
+        package_time,packages,remark,create_time,
+        create_by,update_time,update_by
+    </sql>
+</mapper>

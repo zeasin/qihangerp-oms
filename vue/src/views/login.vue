@@ -3,13 +3,14 @@
     <div class="layout">
       <div class="bgLeft"></div>
       <div class="bgRight"></div>
-      <h3 class="title">启航电商OMS系统</h3>
+      <h3 class="title">{{title}}</h3>
       <div class="login-form">
-        <div class="zhuce"  v-if="n !==3">登录</div>
-        <!--        <div class="tabs" v-if="n !==3">-->
-        <!--          <div class="item" :class="n==1?'on':''" @click="n=1">密码登录</div>-->
-        <!--          <div class="item" :class="n==2?'on':''" @click="n=2">验证码登录</div>-->
-        <!--        </div>-->
+        <div class="zhuce"  v-if="n !==3">
+          <div class="tabs" v-if="n !==3">
+            <div class="item" :class="n==1?'on':''" @click="n=1">后台登录</div>
+<!--            <div class="item" :class="n==2?'on':''" @click="n=2">体验申请</div>-->
+          </div>
+        </div>
         <div class="zhuce" v-else>注册</div>
         <!--star 密码登录-->
         <el-form ref="loginForm" :model="loginForm" :rules="loginRules" v-if="n==1">
@@ -65,18 +66,20 @@
         <!--end 密码登录-->
         <!--star 验证码登录-->
         <el-form :model="form" ref="form" :rules="codeRules" v-if="n==2">
-          <el-form-item prop="phone">
-            <el-input type="tel" :maxlength="11" v-model.trim="form.phone" placeholder="请输入手机号">
-              <svg-icon slot="prefix" icon-class="user" class="el-input__icon input-icon" />
-            </el-input>
-          </el-form-item>
-          <el-form-item prop="checkMove">
-            <div class="movebox">
-              <div class="movego"></div>
-              <div class="txt" id="txt">按住滑块,拖动到最右边</div>
-              <div class="move moveBefore" v-move="pull"></div> <!-- v-move 为自定义指令 -->
-            </div>
-          </el-form-item>
+<!--          <el-form-item prop="phone">-->
+<!--&lt;!&ndash;            <el-input type="tel" :maxlength="11" v-model.trim="form.phone" placeholder="请输入您的手机号">&ndash;&gt;-->
+<!--&lt;!&ndash;              <svg-icon slot="prefix" icon-class="user" class="el-input__icon input-icon" />&ndash;&gt;-->
+<!--&lt;!&ndash;            </el-input>&ndash;&gt;-->
+<!--            <span style="font-size: small;color: #8c939d">申请体验请添加作者微信：qihangec168</span>-->
+<!--            <img src="./webHome/images/kf_qrcode.jpg" width="200px">-->
+<!--          </el-form-item>-->
+<!--          <el-form-item prop="checkMove">-->
+<!--            <div class="movebox">-->
+<!--              <div class="movego"></div>-->
+<!--              <div class="txt" id="txt">按住滑块,拖动到最右边</div>-->
+<!--              <div class="move moveBefore" v-move="pull"></div> &lt;!&ndash; v-move 为自定义指令 &ndash;&gt;-->
+<!--            </div>-->
+<!--          </el-form-item>-->
           <el-form-item prop="smsCode" v-show="isCode">
             <el-input placeholder="请输入验证码" style="width: 63%" v-model.trim="form.smsCode" autocomplete="off">
               <svg-icon slot="prefix" icon-class="validCode" class="el-input__icon input-icon" />
@@ -88,18 +91,18 @@
               </el-button>
             </div>
           </el-form-item>
-          <el-form-item style="width:100%;">
-            <el-button class="btns"
-                       :loading="loading"
-                       size="medium"
-                       type="primary"
-                       style="width:100%;"
-                       @click="codeLogin('form')"
-            >
-              <span v-if="!loading">登 录</span>
-              <span v-else>登 录 中...</span>
-            </el-button>
-          </el-form-item>
+<!--          <el-form-item style="width:100%;">-->
+<!--            <el-button class="btns"-->
+<!--                       :loading="loading"-->
+<!--                       size="medium"-->
+<!--                       type="primary"-->
+<!--                       style="width:100%;"-->
+<!--                       @click="codeLogin('form')"-->
+<!--            >-->
+<!--              <span v-if="!loading">提交申请</span>-->
+<!--              <span v-else>提 交 中...</span>-->
+<!--            </el-button>-->
+<!--          </el-form-item>-->
         </el-form>
         <!--end 验证码登录-->
 
@@ -107,7 +110,7 @@
     </div>
     <!--  底部  -->
     <div class="el-login-footer">
-      <span>Copyright © 2023-2024 qihangerp.cn All Rights Reserved.</span>
+      <span>Copyright © 2023-2025 qihangerp.cn All Rights Reserved.</span>
     </div>
   </div>
 </template>
@@ -116,6 +119,7 @@
 import Cookies from "js-cookie";
 import { encrypt, decrypt } from '@/utils/jsencrypt'
 import { getCodeImg } from "@/api/login";
+import {getConfig} from "@/api/system/config";
 export default {
   name: "Login",
   data() {
@@ -129,6 +133,7 @@ export default {
         code: "",
         uuid: ""
       },
+      title:'',
       loginRules: {
         username: [
           { required: true, trigger: "blur", message: "请输入您的账号" }
@@ -184,6 +189,11 @@ export default {
     }
   },
   created() {
+    getConfig('sys.name').then(resp=>{
+      if(resp.data){
+        this.title = resp.data.configValue
+      }
+    })
     this.getCode();
     this.getCookie();
   },
@@ -269,13 +279,13 @@ export default {
       });
     },
     getCode() {
-      // getCodeImg().then(res => {
-      //   this.captchaEnabled = res.captchaEnabled === undefined ? true : res.captchaEnabled;
-      //   if (this.captchaEnabled) {
-      //     this.codeUrl = "data:image/gif;base64," + res.img;
-      //     this.loginForm.uuid = res.uuid;
-      //   }
-      // });
+      getCodeImg().then(res => {
+        this.captchaEnabled = res.captchaEnabled === undefined ? false : res.captchaEnabled;
+        if (this.captchaEnabled) {
+          this.codeUrl = "data:image/gif;base64," + res.img;
+          this.loginForm.uuid = res.uuid;
+        }
+      });
     },
 
     //
@@ -327,7 +337,16 @@ export default {
       })
 
     },
-    codeLogin() { }
+    codeLogin() {
+      if (!this.form.phone) {
+        this.$message({
+          message: '请输入手机号',
+          type: 'warning'
+        });
+        return;
+      }
+
+    }
 
   }
 };
@@ -401,7 +420,7 @@ export default {
     padding: 0 54px;
     text-align: center;
     .item{
-      width: 50%;
+      width: 100%;
       height: 20px + 12px;
       font-size: 20px;
       line-height: 20px;

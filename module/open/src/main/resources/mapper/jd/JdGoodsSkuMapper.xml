@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.qihangerp.module.open.jd.mapper.JdGoodsSkuMapper">
+
+    <resultMap id="BaseResultMap" type="cn.qihangerp.module.open.jd.domain.JdGoodsSku">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+<!--            <result property="goodsId" column="goods_id" jdbcType="BIGINT"/>-->
+            <result property="wareId" column="ware_id" jdbcType="BIGINT"/>
+            <result property="skuId" column="sku_id" jdbcType="BIGINT"/>
+            <result property="status" column="status" jdbcType="INTEGER"/>
+            <result property="jdPrice" column="jd_price" jdbcType="DECIMAL"/>
+            <result property="outerId" column="outer_id" jdbcType="VARCHAR"/>
+            <result property="barCode" column="bar_code" jdbcType="VARCHAR"/>
+            <result property="logo" column="logo" jdbcType="VARCHAR"/>
+            <result property="saleAttrs" column="sale_attrs" jdbcType="VARCHAR"/>
+            <result property="skuName" column="sku_name" jdbcType="VARCHAR"/>
+            <result property="stockNum" column="stock_num" jdbcType="INTEGER"/>
+            <result property="modified" column="modified" jdbcType="TIMESTAMP"/>
+            <result property="created" column="created" jdbcType="TIMESTAMP"/>
+            <result property="currencySpuId" column="currency_spu_id" jdbcType="VARCHAR"/>
+            <result property="oGoodsId" column="o_goods_id" jdbcType="BIGINT"/>
+            <result property="oGoodsSkuId" column="o_goods_sku_id" jdbcType="BIGINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,goods_id,ware_id,
+        sku_id,status,jd_price,
+        outer_id,bar_code,logo,
+        sale_attrs,sku_name,stock_num,
+        modified,created,currency_spu_id,
+        o_goods_id,o_goods_sku_id
+    </sql>
+    <select id="selectSkuPageList" resultType="cn.qihangerp.module.open.jd.domain.vo.JdGoodsSkuListVo">
+        SELECT sku.*,ogs.outer_erp_sku_id FROM oms_jd_goods_sku sku
+
+        LEFT JOIN o_goods_sku ogs on ogs.id = sku.o_goods_sku_id
+        WHERE 1=1
+        <if test="shopId != null and shopId != ''">
+            AND sku.shop_id = #{shopId}
+        </if>
+        <if test="wareId != null and wareId != ''">
+            AND sku.ware_id = #{wareId}
+        </if>
+        <if test="skuId != null and skuId != ''">
+            AND sku.sku_id = #{skuId}
+        </if>
+        <if test="outerId != null and outerId != ''">
+            AND sku.outer_id = #{outerId}
+        </if>
+        <if test="hasLink != null and hasLink == 0">
+            AND (sku.o_goods_sku_id is NULL or sku.o_goods_sku_id = 0)
+        </if>
+        <if test="hasLink != null and hasLink == 1">
+            AND sku.o_goods_sku_id is NOT NULL and sku.o_goods_sku_id != 0
+        </if>
+    </select>
+</mapper>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.qihangerp.module.open.jd.mapper.JdOrderCouponMapper">
+
+    <resultMap id="BaseResultMap" type="cn.qihangerp.module.open.jd.domain.JdOrderCoupon">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="orderId" column="order_id" jdbcType="BIGINT"/>
+            <result property="skuid" column="skuId" jdbcType="VARCHAR"/>
+            <result property="couponType" column="coupon_type" jdbcType="VARCHAR"/>
+            <result property="couponPrice" column="coupon_price" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,order_id,skuId,
+        coupon_type,coupon_price
+    </sql>
+</mapper>

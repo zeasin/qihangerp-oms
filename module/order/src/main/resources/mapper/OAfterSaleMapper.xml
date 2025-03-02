@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.qihangerp.module.order.mapper.OAfterSaleMapper">
+
+    <resultMap id="BaseResultMap" type="cn.qihangerp.module.order.domain.OAfterSale">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="type" column="type" jdbcType="INTEGER"/>
+            <result property="shopId" column="shop_id" jdbcType="BIGINT"/>
+            <result property="shopType" column="shop_type" jdbcType="INTEGER"/>
+            <result property="hasGoodsSend" column="has_goods_send" jdbcType="INTEGER"/>
+            <result property="refundId" column="refund_id" jdbcType="BIGINT"/>
+            <result property="refundNum" column="refund_num" jdbcType="VARCHAR"/>
+            <result property="orderNum" column="order_num" jdbcType="VARCHAR"/>
+            <result property="subOrderNum" column="sub_order_num" jdbcType="VARCHAR"/>
+            <result property="oOrderId" column="o_order_id" jdbcType="VARCHAR"/>
+            <result property="oOrderItemId" column="o_order_item_id" jdbcType="VARCHAR"/>
+            <result property="skuId" column="sku_id" jdbcType="VARCHAR"/>
+            <result property="quantity" column="quantity" jdbcType="INTEGER"/>
+            <result property="title" column="title" jdbcType="VARCHAR"/>
+            <result property="img" column="img" jdbcType="VARCHAR"/>
+            <result property="skuInfo" column="sku_info" jdbcType="VARCHAR"/>
+            <result property="skuCode" column="sku_code" jdbcType="VARCHAR"/>
+            <result property="oGoodsId" column="o_goods_id" jdbcType="INTEGER"/>
+            <result property="oGoodsSkuId" column="o_goods_sku_id" jdbcType="INTEGER"/>
+            <result property="sendLogisticsCode" column="send_logistics_code" jdbcType="VARCHAR"/>
+            <result property="returnInfo" column="return_info" jdbcType="VARCHAR"/>
+            <result property="returnLogisticsCode" column="return_logistics_code" jdbcType="VARCHAR"/>
+            <result property="returnLogisticsCompany" column="return_logistics_company" jdbcType="VARCHAR"/>
+            <result property="receiverName" column="receiver_name" jdbcType="VARCHAR"/>
+            <result property="receiverTel" column="receiver_tel" jdbcType="VARCHAR"/>
+            <result property="receiverProvince" column="receiver_province" jdbcType="VARCHAR"/>
+            <result property="receiverCity" column="receiver_city" jdbcType="VARCHAR"/>
+            <result property="receiverTown" column="receiver_town" jdbcType="VARCHAR"/>
+            <result property="receiverAddress" column="receiver_address" jdbcType="VARCHAR"/>
+            <result property="reissueLogisticsCode" column="reissue_logistics_code" jdbcType="VARCHAR"/>
+            <result property="reissueLogisticsCompany" column="reissue_logistics_company" jdbcType="VARCHAR"/>
+            <result property="status" column="status" jdbcType="INTEGER"/>
+            <result property="remark" column="remark" jdbcType="VARCHAR"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
+            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+            <result property="updateBy" column="update_by" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,type,shop_id,
+        shop_type,refund_id,order_num,refund_num,
+        sub_order_num,o_order_id,o_order_item_id,
+        sku_id,quantity,title,
+        img,sku_info,sku_code,
+        o_goods_id,o_goods_sku_id,send_logistics_code,
+        return_info,return_logistics_code,return_logistics_company,
+        receiver_name,receiver_tel,receiver_province,
+        receiver_city,receiver_town,receiver_address,
+        reissue_logistics_code,reissue_logistics_company,status,has_goods_send,
+        remark,create_time,create_by,
+        update_time,update_by
+    </sql>
+</mapper>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.qihangerp.module.order.mapper.OfflineOrderMapper">
+
+    <resultMap id="BaseResultMap" type="cn.qihangerp.module.order.domain.OfflineOrder">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="orderNum" column="order_num" jdbcType="VARCHAR"/>
+            <result property="shopId" column="shop_id" jdbcType="BIGINT"/>
+            <result property="remark" column="remark" jdbcType="VARCHAR"/>
+            <result property="buyerMemo" column="buyer_memo" jdbcType="VARCHAR"/>
+            <result property="sellerMemo" column="seller_memo" jdbcType="VARCHAR"/>
+            <result property="tag" column="tag" jdbcType="VARCHAR"/>
+            <result property="refundStatus" column="refund_status" jdbcType="INTEGER"/>
+            <result property="orderStatus" column="order_status" jdbcType="INTEGER"/>
+            <result property="goodsAmount" column="goods_amount" jdbcType="DOUBLE"/>
+            <result property="postFee" column="post_fee" jdbcType="DOUBLE"/>
+            <result property="amount" column="amount" jdbcType="DOUBLE"/>
+            <result property="sellerDiscount" column="seller_discount" jdbcType="DOUBLE"/>
+            <result property="platformDiscount" column="platform_discount" jdbcType="DOUBLE"/>
+            <result property="payment" column="payment" jdbcType="DOUBLE"/>
+            <result property="receiverName" column="receiver_name" jdbcType="VARCHAR"/>
+            <result property="receiverMobile" column="receiver_mobile" jdbcType="VARCHAR"/>
+            <result property="address" column="address" jdbcType="VARCHAR"/>
+            <result property="province" column="province" jdbcType="VARCHAR"/>
+            <result property="city" column="city" jdbcType="VARCHAR"/>
+            <result property="town" column="town" jdbcType="VARCHAR"/>
+            <result property="orderTime" column="order_time" jdbcType="TIMESTAMP"/>
+            <result property="shipType" column="ship_type" jdbcType="INTEGER"/>
+            <result property="shippingTime" column="shipping_time" jdbcType="TIMESTAMP"/>
+            <result property="shippingNumber" column="shipping_number" jdbcType="VARCHAR"/>
+            <result property="shippingCompany" column="shipping_company" jdbcType="VARCHAR"/>
+            <result property="shippingMan" column="shipping_man" jdbcType="VARCHAR"/>
+            <result property="shippingCost" column="shipping_cost" jdbcType="DECIMAL"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
+            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+            <result property="updateBy" column="update_by" jdbcType="VARCHAR"/>
+            <result property="omsPushStatus" column="oms_push_status" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,order_num,shop_id,
+        remark,buyer_memo,seller_memo,
+        tag,refund_status,order_status,
+        goods_amount,post_fee,amount,
+        seller_discount,platform_discount,payment,
+        receiver_name,receiver_mobile,address,
+        province,city,town,
+        order_time,ship_type,shipping_time,
+        shipping_number,shipping_company,shipping_man,
+        shipping_cost,create_time,create_by,
+        update_time,update_by,oms_push_status
+    </sql>
+</mapper>

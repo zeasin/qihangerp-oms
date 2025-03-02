@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.qihangerp.module.order.mapper.OfflineGoodsSkuMapper">
+
+    <resultMap id="BaseResultMap" type="cn.qihangerp.module.order.domain.OfflineGoodsSku">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <id property="shopId" column="shop_id" jdbcType="BIGINT"/>
+            <result property="oGoodsId" column="o_goods_id" jdbcType="VARCHAR"/>
+            <result property="oGoodsSkuId" column="o_goods_sku_id" jdbcType="VARCHAR"/>
+            <result property="skuId" column="sku_id" jdbcType="VARCHAR"/>
+            <result property="goodsName" column="goods_name" jdbcType="VARCHAR"/>
+            <result property="skuName" column="sku_name" jdbcType="VARCHAR"/>
+            <result property="skuCode" column="sku_code" jdbcType="VARCHAR"/>
+            <result property="colorId" column="color_id" jdbcType="INTEGER"/>
+            <result property="colorValue" column="color_value" jdbcType="VARCHAR"/>
+            <result property="colorImage" column="color_image" jdbcType="VARCHAR"/>
+            <result property="sizeId" column="size_id" jdbcType="INTEGER"/>
+            <result property="sizeValue" column="size_value" jdbcType="VARCHAR"/>
+            <result property="styleId" column="style_id" jdbcType="INTEGER"/>
+            <result property="styleValue" column="style_value" jdbcType="VARCHAR"/>
+            <result property="barCode" column="bar_code" jdbcType="VARCHAR"/>
+            <result property="salePrice" column="sale_price" jdbcType="DECIMAL"/>
+            <result property="remark" column="remark" jdbcType="VARCHAR"/>
+            <result property="status" column="status" jdbcType="TINYINT"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
+            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+            <result property="updateBy" column="update_by" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,shop_id,o_goods_id,o_goods_sku_id,sku_id,
+        goods_name,sku_name,sku_code,
+        color_id,color_value,color_image,
+        size_id,size_value,style_id,
+        style_value,bar_code,sale_price,
+        remark,status,create_time,
+        create_by,update_time,update_by
+    </sql>
+</mapper>

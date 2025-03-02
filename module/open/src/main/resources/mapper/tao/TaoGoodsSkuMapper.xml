@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.qihangerp.module.open.tao.mapper.TaoGoodsSkuMapper">
+
+    <resultMap id="BaseResultMap" type="cn.qihangerp.module.open.tao.domain.TaoGoodsSku">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="taoGoodsId" column="tao_goods_id" jdbcType="BIGINT"/>
+            <result property="numIid" column="num_iid" jdbcType="BIGINT"/>
+            <result property="iid" column="iid" jdbcType="VARCHAR"/>
+            <result property="skuId" column="sku_id" jdbcType="BIGINT"/>
+            <result property="properties" column="properties" jdbcType="VARCHAR"/>
+            <result property="propertiesName" column="properties_name" jdbcType="VARCHAR"/>
+            <result property="quantity" column="quantity" jdbcType="BIGINT"/>
+            <result property="spec" column="spec" jdbcType="VARCHAR"/>
+            <result property="price" column="price" jdbcType="DOUBLE"/>
+            <result property="outerId" column="outer_id" jdbcType="VARCHAR"/>
+            <result property="created" column="created" jdbcType="TIMESTAMP"/>
+            <result property="modified" column="modified" jdbcType="TIMESTAMP"/>
+            <result property="status" column="status" jdbcType="VARCHAR"/>
+            <result property="skuSpecId" column="sku_spec_id" jdbcType="VARCHAR"/>
+            <result property="barcode" column="barcode" jdbcType="VARCHAR"/>
+            <result property="oGoodsId" column="o_goods_id" jdbcType="BIGINT"/>
+            <result property="oGoodsSkuId" column="o_goods_sku_id" jdbcType="BIGINT"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,tao_goods_id,num_iid,
+        iid,sku_id,properties,
+        properties_name,quantity,spec,
+        price,outer_id,created,
+        modified,status,sku_spec_id,
+        barcode,o_goods_sku_id,o_goods_id,
+        create_time
+    </sql>
+
+    <select id="selectSkuPageList" resultType="cn.qihangerp.module.open.tao.domain.vo.TaoGoodsSkuListVo">
+        SELECT sku.*,g.title,g.pic_url,ogs.outer_erp_sku_id,g.shop_id FROM oms_tao_goods_sku sku
+        LEFT JOIN oms_tao_goods g on g.id = sku.tao_goods_id
+        LEFT JOIN o_goods_sku ogs on ogs.id = sku.o_goods_sku_id
+        WHERE 1=1
+        <if test="shopId != null and shopId != ''">
+            AND g.shop_id = #{shopId}
+        </if>
+        <if test="numIid != null and numIid != ''">
+            AND sku.num_iid = #{numIid}
+        </if>
+        <if test="skuId != null and skuId != ''">
+            AND sku.sku_id = #{skuId}
+        </if>
+        <if test="outerId != null and outerId != ''">
+            AND sku.outer_id = #{outerId}
+        </if>
+        <if test="hasLink != null and hasLink == 0">
+            AND (sku.o_goods_sku_id is NULL or sku.o_goods_sku_id = 0)
+        </if>
+        <if test="hasLink != null and hasLink == 1">
+            AND sku.o_goods_sku_id is NOT NULL and sku.o_goods_sku_id != 0
+        </if>
+    </select>
+</mapper>

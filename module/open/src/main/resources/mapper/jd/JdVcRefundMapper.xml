@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.qihangerp.module.open.jd.mapper.JdVcRefundMapper">
+
+    <resultMap id="BaseResultMap" type="cn.qihangerp.module.open.jd.domain.JdVcRefund">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="customOrderId" column="custom_order_id" jdbcType="BIGINT"/>
+            <result property="roApplyFee" column="ro_apply_fee" jdbcType="DOUBLE"/>
+            <result property="roApplyDate" column="ro_apply_date" jdbcType="TIMESTAMP"/>
+            <result property="orderCreateDate" column="order_create_date" jdbcType="TIMESTAMP"/>
+            <result property="modifiedDate" column="modified_date" jdbcType="TIMESTAMP"/>
+            <result property="approvalState" column="approval_state" jdbcType="INTEGER"/>
+            <result property="orderState" column="order_state" jdbcType="INTEGER"/>
+            <result property="operatorState" column="operator_state" jdbcType="INTEGER"/>
+            <result property="roPreNo" column="ro_pre_no" jdbcType="BIGINT"/>
+            <result property="roAccount" column="ro_account" jdbcType="VARCHAR"/>
+            <result property="roReason" column="ro_reason" jdbcType="VARCHAR"/>
+            <result property="approvalSuggestion" column="approval_suggestion" jdbcType="VARCHAR"/>
+            <result property="vendorStoreId" column="vendor-store_id" jdbcType="INTEGER"/>
+            <result property="vendorStoreName" column="vendor_store_name" jdbcType="VARCHAR"/>
+            <result property="orderDetailList" column="order_detail_list" jdbcType="VARCHAR"/>
+            <result property="skuId" column="sku_id" jdbcType="VARCHAR"/>
+            <result property="commodityName" column="commodity_name" jdbcType="VARCHAR"/>
+            <result property="commodityNum" column="commodity_num" jdbcType="INTEGER"/>
+            <result property="shopId" column="shop_id" jdbcType="BIGINT"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,custom_order_id,ro_apply_fee,
+        ro_apply_date,order_create_date,modified_date,
+        approval_state,order_state,operator_state,
+        ro_pre_no,ro_account,ro_reason,
+        approval_suggestion,vendor-store_id,vendor_store_name,
+        order_detail_list,sku_id,commodity_name,
+        commodity_num,shop_id,create_time,
+        update_time
+    </sql>
+</mapper>
