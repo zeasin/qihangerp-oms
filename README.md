@@ -87,20 +87,7 @@ graph TD
 + Jdk：17
 + Nodejs：v16.20.0
 
-#### 1.2 项目组件
-##### 后端核心组件
-+ SpringBoot：3.0.2
-  + spring-boot-starter-security
-+ SpringCloudAlibaba：2022.0.0.0
-  + Nacos
-  + SpringCloud Gateway
-  + spring-cloud-starter-loadbalancer
-
-##### 前端框架及组件
-+ vue2
-+ element
-
-#### 1.3、存储及中间件
+#### 1.2、存储及中间件
 
 + MySQL8
 + Redis：7.x
@@ -108,34 +95,32 @@ graph TD
 + Nacos：2.2.0（配置中心、注册中心）
 + Sentinel（分布式流量治理组件）
 
-  `java -Dserver.port=8888 -Dcsp.sentinel.dashboard.server=localhost:8888 -Dproject.name=sentinel-dashboard -jar sentinel-dashboard.jar`
 
-#### 启动KRaft模式kafka
-+ 0 进入kafka解压目录
-+ 1 生成UUID`bin\windows\kafka-storage.bat random-uuid`
-+ 2 格式化`bin\windows\kafka-storage.bat format -t ujpyXZx-S9-jGlwxgORmow -c config\kraft\server.properties`
-+ 3 启动`bin\windows\kafka-server-start.bat config\kraft\server.properties`
+
 
 ### 2、项目结构
-#### 2.1 core
-项目公共模块包括：
+#### 2.1 公共版本
++`common`
+项目公共模块
 
-+ `common`:公共类型
++ `security`
+公共权限验证模块
 
-+ `security`:公共权限验证模块
-
-#### 2.2 gateway
++ `goods`
+商品模块
+#### 2.2 微服务
++ `gateway`
 网关项目，负责微服务接口转发，前端统一通过网关调用其他微服务接口；
 
 采用`gateway`进行api分发，引入Sentinel进行流量治理。
 
-#### 2.3 sys-api
++ `sys-api`
 项目系统微服务，主要功能包括：
 
 + 用户
 + 菜单
 
-#### 2.4 oms-api
++ `oms-api`
 oms主功能微服务，主要功能包括：
 
 + 队列消息处理（订单消息、退款消息）
@@ -143,7 +128,7 @@ oms主功能微服务，主要功能包括：
 + 退款接口
 + 店铺接口
 
-#### 2.5 open-api
++ `open-api`
 各开放平台微服务
 
 + 淘宝开放平台接口api
@@ -158,7 +143,7 @@ oms主功能微服务，主要功能包括：
 + 拼多多开放平台接口api
 
 
-+微信视频号小店开放平台接口api
++ 微信小店开放平台接口api
 
 
 
@@ -169,10 +154,19 @@ oms主功能微服务，主要功能包括：
 #### 3.1、启动环境
 
 1. 启动MySQL8
+
 2. 启动Redis7
-3. 启动Sentinel1.8.7控制台
-4. 启动Nacos
-5. 启动Kafka
+
+3. 启动Sentinel1.8.7控制台(可以不需要)
+   `java -Dserver.port=8888 -Dcsp.sentinel.dashboard.server=localhost:8888 -Dproject.name=sentinel-dashboard -jar sentinel-dashboard.jar`
+4. 启动Nacos（注册中心）
+
+5. 启动Kafka（消息队列）
+`启动KRaft模式kafka`
+   + 0 进入kafka解压目录
+   + 1 生成UUID`bin\windows\kafka-storage.bat random-uuid`
+   + 2 格式化`bin\windows\kafka-storage.bat format -t ujpyXZx-S9-jGlwxgORmow -c config\kraft\server.properties`
+   + 3 启动`bin\windows\kafka-server-start.bat config\kraft\server.properties`
 
 #### 3.2、导入数据库
 + 创建数据库`qihang-oms`
@@ -180,16 +174,16 @@ oms主功能微服务，主要功能包括：
 
 
 #### 3.3、启动服务(项目)
-1.  启动开放平台微服务（open-api）
-2.  启动sys-api、oms-api微服务
-3.  启动微服务网关（api）
+1.  启动开放平台微服务（`open-api`）
+2.  启动`sys-api`、`oms-api`微服务
+3.  启动微服务网关（`gateway`）
 
 #### 3.4、运行前端
 + Nodejs版本：v16.20.0
 + 进入`vue`文件夹
 + 运行`npm install` 
 + 运行`npm run dev`
-+ 浏览网页`http://localhost`
++ 浏览网页`http://localhost:88`
 
 ### 4、项目部署
 
@@ -207,9 +201,9 @@ oms主功能微服务，主要功能包括：
 # 上传文件至远程服务器
 将打包生成在 `dist` 目录下的文件拷贝至 `/usr/share/nginx/html` 目录
 
-# nginx.cofig 配置
+# nginx.cofig 配置（主要是配置接口转发）
 server {
-	listen     80;
+	listen     88;
 	server_name  localhost;
 	location / {
 			root /usr/share/nginx/html;
@@ -217,7 +211,7 @@ server {
 	}
 	# 反向代理配置
 	location /prod-api/ {
-			proxy_pass http://127.0.0.1:8080/; # 替换成你的后端网关API地址
+			proxy_pass http://127.0.0.1:8088/; # 替换成你的后端网关API地址
 	}
 }
 ```

@@ -15,7 +15,7 @@
         <el-form-item label="商品名称" prop="name">
           <el-input v-model="form.name" placeholder="请输入商品名称" />
         </el-form-item>
-        <el-form-item label="商品图片1" prop="image">
+        <el-form-item label="商品图片" prop="image">
            <image-upload v-model="form.image" :limit="1"/>
            <el-input v-model="form.image" placeholder="请输入商品图片" />
         </el-form-item>
@@ -25,7 +25,7 @@
       <el-form-item label="外部ERP商品ID" prop="outerErpGoodsId" >
         <el-input v-model="form.outerErpGoodsId" placeholder="请输入外部ERP商品ID" style="width:220px"/>
       </el-form-item>
-         <el-form-item label="预计采购价格" prop="purPrice">
+         <el-form-item label="预计采购价" prop="purPrice">
           <el-input type="number" v-model.number="form.purPrice" placeholder="请输入预计采购价格" style="width:220px"/>
         </el-form-item>
         <!-- <el-form-item label="建议批发价" prop="wholePrice">
@@ -34,12 +34,12 @@
         <el-form-item label="建议零售价" prop="retailPrice">
           <el-input type="number" v-model.number="form.retailPrice" placeholder="请输入建议零售价" style="width:220px"/>
         </el-form-item> -->
-        <el-form-item label="单位名称" prop="unitName">
-          <el-input v-model="form.unitName" placeholder="请输入单位名称" style="width:220px" />
-        </el-form-item>
-        <el-form-item label="条码" prop="barCode">
-          <el-input v-model="form.barCode" placeholder="请输入条码" style="width:220px"/>
-        </el-form-item>
+<!--        <el-form-item label="单位名称" prop="unitName">-->
+<!--          <el-input v-model="form.unitName" placeholder="请输入单位名称" style="width:220px" />-->
+<!--        </el-form-item>-->
+<!--        <el-form-item label="条码" prop="barCode">-->
+<!--          <el-input v-model="form.barCode" placeholder="请输入条码" style="width:220px"/>-->
+<!--        </el-form-item>-->
         <el-form-item label="备注" prop="remark">
           <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
         </el-form-item>
@@ -239,7 +239,7 @@ export default {
   components: { Treeselect },
   data() {
     return {
-      uploadImgUrl: process.env.VUE_APP_BASE_API + "/api/oms-api/images/upload",
+      uploadImgUrl: process.env.VUE_APP_BASE_API + "/api/sys-api/images/upload",
       headers: {
         Authorization: "Bearer " + getToken(),
       },
