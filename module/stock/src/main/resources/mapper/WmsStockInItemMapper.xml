@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.qihangerp.module.wms.mapper.WmsStockInItemMapper">
+
+    <resultMap id="BaseResultMap" type="cn.qihangerp.module.stock.domain.WmsStockInItem">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="stockInId" column="stock_in_id" jdbcType="BIGINT"/>
+            <result property="stockInType" column="stock_in_type" jdbcType="INTEGER"/>
+            <result property="sourceNo" column="source_no" jdbcType="VARCHAR"/>
+            <result property="sourceId" column="source_id" jdbcType="BIGINT"/>
+            <result property="sourceItemId" column="source_item_id" jdbcType="BIGINT"/>
+            <result property="goodsId" column="goods_id" jdbcType="BIGINT"/>
+            <result property="goodsNum" column="goods_num" jdbcType="VARCHAR"/>
+            <result property="goodsName" column="goods_name" jdbcType="VARCHAR"/>
+            <result property="goodsImage" column="goods_image" jdbcType="VARCHAR"/>
+            <result property="skuId" column="sku_id" jdbcType="BIGINT"/>
+            <result property="skuCode" column="sku_code" jdbcType="VARCHAR"/>
+            <result property="skuName" column="sku_name" jdbcType="VARCHAR"/>
+            <result property="quantity" column="quantity" jdbcType="BIGINT"/>
+            <result property="inQuantity" column="in_quantity" jdbcType="BIGINT"/>
+            <result property="remark" column="remark" jdbcType="VARCHAR"/>
+            <result property="status" column="status" jdbcType="INTEGER"/>
+            <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="updateBy" column="update_by" jdbcType="VARCHAR"/>
+            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,stock_in_id,stock_in_type,
+        source_no,source_id,source_item_id,
+        goods_id,goods_num,goods_name,
+        goods_image,sku_id,sku_code,
+        sku_name,quantity,in_quantity,
+        remark,status,create_by,
+        create_time,update_by,update_time
+    </sql>
+</mapper>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.qihangerp.module.wms.mapper.WmsInventoryOperationMapper">
+
+    <resultMap id="BaseResultMap" type="cn.qihangerp.module.stock.domain.WmsInventoryOperation">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="goodsId" column="goods_id" jdbcType="BIGINT"/>
+            <result property="goodsNum" column="goods_num" jdbcType="VARCHAR"/>
+            <result property="skuId" column="sku_id" jdbcType="BIGINT"/>
+            <result property="skuCode" column="sku_code" jdbcType="VARCHAR"/>
+            <result property="batchId" column="batch_id" jdbcType="BIGINT"/>
+            <result property="batchNum" column="batch_num" jdbcType="VARCHAR"/>
+            <result property="type" column="type" jdbcType="INTEGER"/>
+            <result property="inventoryDetailId" column="inventory_detail_id" jdbcType="BIGINT"/>
+            <result property="quantity" column="quantity" jdbcType="INTEGER"/>
+            <result property="lockedQuantity" column="locked_quantity" jdbcType="INTEGER"/>
+            <result property="price" column="price" jdbcType="DOUBLE"/>
+            <result property="bizType" column="biz_type" jdbcType="INTEGER"/>
+            <result property="bizId" column="biz_id" jdbcType="BIGINT"/>
+            <result property="bizNum" column="biz_num" jdbcType="VARCHAR"/>
+            <result property="bizItemId" column="biz_item_id" jdbcType="BIGINT"/>
+            <result property="status" column="status" jdbcType="INTEGER"/>
+            <result property="remark" column="remark" jdbcType="VARCHAR"/>
+            <result property="warehouseId" column="warehouse_id" jdbcType="BIGINT"/>
+            <result property="positionId" column="position_id" jdbcType="BIGINT"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
+            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+            <result property="updateBy" column="update_by" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,goods_id,goods_num,
+        sku_id,sku_code,batch_id,
+        batch_num,type,inventory_detail_id,
+        quantity,locked_quantity,price,
+        biz_type,biz_id,biz_num,
+        biz_item_id,status,remark,
+        warehouse_id,position_id,create_time,
+        create_by,update_time,update_by
+    </sql>
+</mapper>

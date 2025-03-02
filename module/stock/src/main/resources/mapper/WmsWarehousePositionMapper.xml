@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.qihangerp.module.wms.mapper.WmsWarehousePositionMapper">
+
+    <resultMap id="BaseResultMap" type="cn.qihangerp.module.stock.domain.WmsWarehousePosition">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="warehouseId" column="warehouse_id" jdbcType="INTEGER"/>
+            <result property="number" column="number" jdbcType="VARCHAR"/>
+            <result property="name" column="name" jdbcType="VARCHAR"/>
+            <result property="parentId" column="parent_id" jdbcType="INTEGER"/>
+            <result property="depth" column="depth" jdbcType="INTEGER"/>
+            <result property="parentId1" column="parent_id1" jdbcType="INTEGER"/>
+            <result property="parentId2" column="parent_id2" jdbcType="INTEGER"/>
+            <result property="address" column="address" jdbcType="VARCHAR"/>
+            <result property="remark" column="remark" jdbcType="VARCHAR"/>
+            <result property="isDelete" column="is_delete" jdbcType="INTEGER"/>
+            <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="updateBy" column="update_by" jdbcType="VARCHAR"/>
+            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,warehouse_id,number,
+        name,parent_id,depth,
+        parent_id1,parent_id2,address,
+        remark,is_delete,create_by,
+        create_time,update_by,update_time
+    </sql>
+</mapper>

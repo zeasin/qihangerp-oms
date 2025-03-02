@@ -20,8 +20,8 @@
         <module>order</module>
         <module>shop</module>
         <module>open</module>
-<!--        <module>scm-module</module>-->
-<!--        <module>wms-module</module>-->
+        <module>stock</module>
+
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
