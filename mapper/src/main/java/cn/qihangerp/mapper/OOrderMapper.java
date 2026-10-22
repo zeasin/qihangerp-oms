@@ -6,6 +6,7 @@ import cn.qihangerp.model.vo.SalesDailyVo;
 import cn.qihangerp.model.vo.WaitShipReportVo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 
 import java.util.List;
@@ -17,6 +18,12 @@ import java.util.List;
 * @Entity cn.qihangerp.model.entity.OOrder
 */
 public interface OOrderMapper extends BaseMapper<OOrder> {
+    /**
+     * 行锁订单（拆单等并发操作使用）
+     */
+    @Select("SELECT * FROM o_order WHERE id = #{id} FOR UPDATE")
+    OOrder lockById(@Param("id") Long id);
+
     List<OrderDiscountVo> getTaoOrderDiscount(String tid);
     List<OrderDiscountVo> getJdOrderDiscount(String orderId);
 

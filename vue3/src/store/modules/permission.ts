@@ -90,6 +90,7 @@ const viewsMap: Record<string, () => Promise<any>> = {
   'order/index': () => import('@/views/order/index.vue'),
   'order/order_list': () => import('@/views/order/order_list.vue'),
   'order/item_list': () => import('@/views/order/item_list.vue'),
+  'order/audit/index': () => import('@/views/order/audit/index.vue'),
   'order/shopOrder/index': () => import('@/views/order/shopOrder/index.vue'),
 
   // refund

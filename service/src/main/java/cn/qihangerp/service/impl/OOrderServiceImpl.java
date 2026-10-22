@@ -14,6 +14,7 @@ import cn.qihangerp.service.msg.ErpOrderMessageService;
 import cn.qihangerp.service.OOrderService;
 import cn.qihangerp.service.ShopGoodsSkuService;
 import cn.qihangerp.service.ShopOrderService;
+import cn.qihangerp.service.SysConfigService;
 import cn.qihangerp.request.OrderSearchRequest;
 
 import cn.qihangerp.sse.SseService;
@@ -67,6 +68,8 @@ public class OOrderServiceImpl extends ServiceImpl<OOrderMapper, OOrder>
     private final OOrderStockingItemMapper orderStockingItemMapper;
 
     private final SysThirdSystemPushMapper pushMapper;
+
+    private final SysConfigService sysConfigService;
 
     /**
      * 统一店铺订单消息
@@ -151,6 +154,20 @@ public class OOrderServiceImpl extends ServiceImpl<OOrderMapper, OOrder>
                 insert.setOrderFinishTime(shopOrder.getFinishTime());
                 insert.setSalesmanId(shopOrder.getFinderId());
                 insert.setSalesmanName(shopOrder.getLiveId());
+                // 审核初始化：人工审单开关开启时进入待审核池，关闭时自动放行
+                insert.setParentOrderId(0L);
+                insert.setOrderRole(EnumOrderRole.MASTER.getCode());
+                insert.setShipStatus(EnumShipStatus.NOT.getIndex());
+                insert.setWaybillStatus(EnumWaybillStatus.NOT_TAKEN.getIndex());
+                if (sysConfigService.selectManualAuditEnabled()) {
+                    insert.setAuditStatus(EnumAuditStatus.PENDING.getCode());
+                    insert.setAuditType(EnumAuditType.MANUAL.getCode());
+                } else {
+                    insert.setAuditStatus(EnumAuditStatus.APPROVED.getCode());
+                    insert.setAuditType(EnumAuditType.AUTO.getCode());
+                    insert.setAuditTime(LocalDateTime.now());
+                    insert.setAuditBy("system");
+                }
                 orderMapper.insert(insert);
                 // 发送新订单消息
                 sseService.broadcastNewOrderMessage(EnumShopType.getByIndex(insert.getShopType()),insert.getOrderNum());
@@ -318,6 +335,8 @@ public class OOrderServiceImpl extends ServiceImpl<OOrderMapper, OOrder>
 
                 if (oOrderItems.isEmpty()) {
                     // 新增
+                    orderItem.setItemRole(EnumOrderItemRole.MASTER_ITEM.getCode());
+                    orderItem.setSortNo(i);
                     orderItem.setCreateTime(LocalDateTime.now());
                     orderItem.setCreateBy("ORDER_MESSAGE");
                     orderItemMapper.insert(orderItem);

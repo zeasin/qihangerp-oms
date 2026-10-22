@@ -34,7 +34,7 @@ public class ErpLogisticsCompanyServiceImpl extends ServiceImpl<ErpLogisticsComp
         pageQuery.setIsAsc("desc");
         LambdaQueryWrapper<ErpLogisticsCompany> queryWrapper = new LambdaQueryWrapper<ErpLogisticsCompany>()
                 .eq(StringUtils.hasText(request.getType()),ErpLogisticsCompany::getType, request.getType())
-                .eq(ErpLogisticsCompany::getPlatformId, request.getPlatformId())
+                .eq(request.getPlatformId() != null, ErpLogisticsCompany::getPlatformId, request.getPlatformId())
                 .like(StringUtils.hasText(request.getName()), ErpLogisticsCompany::getName, request.getName())
                 .eq(request.getStatus() != null, ErpLogisticsCompany::getStatus, request.getStatus());
         queryWrapper.orderByDesc(ErpLogisticsCompany::getStatus);

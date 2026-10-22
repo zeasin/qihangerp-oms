@@ -32,6 +32,15 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
             return true;
         }else return false;
     }
+
+    @Override
+    public boolean selectManualAuditEnabled() {
+        List<SysConfig> sysConfigs = configMapper.selectList(new LambdaQueryWrapper<SysConfig>().eq(SysConfig::getConfigKey, "order.manual_audit.enabled"));
+        if (sysConfigs == null || sysConfigs.isEmpty()) {
+            return true;
+        }
+        return "true".equalsIgnoreCase(sysConfigs.get(0).getConfigValue());
+    }
 }
 
 

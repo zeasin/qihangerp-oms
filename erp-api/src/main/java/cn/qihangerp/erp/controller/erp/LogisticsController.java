@@ -32,7 +32,7 @@ public class LogisticsController extends BaseController {
 //        if(configs!=null || configs.size() > 0) {
 //            request.setType("DIANSAN");
 //        }
-        if(request.getPlatformId()==280) request.setPlatformId(200);
+        if(request.getPlatformId()!=null && request.getPlatformId()==280) request.setPlatformId(200);
         PageResult<ErpLogisticsCompany> result = logisticsCompanyService.queryPageList(request, pageQuery);
         return getDataTable(result);
     }

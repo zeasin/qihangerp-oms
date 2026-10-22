@@ -25,6 +25,21 @@ public class OOrder implements Serializable {
     private String id;
 
     /**
+     * 主订单ID（父单=0；拆分子单指向主订单ID）
+     */
+    private Long parentOrderId;
+
+    /**
+     * 订单角色：0主订单 1拆分子订单
+     */
+    private Integer orderRole;
+
+    /**
+     * 来源订单ID（拆分子单追溯原始主订单）
+     */
+    private Long sourceOrderId;
+
+    /**
      * 订单编号（第三方平台订单号）
      */
     private String orderNum;
@@ -70,6 +85,31 @@ public class OOrder implements Serializable {
      * 订单状态0：新订单，1：待发货，2：已发货，3：已完成，11已取消；12退款中；13已关闭；21待付款；22锁定，29删除，31售后中，101部分发货
      */
     private Integer orderStatus;
+
+    /**
+     * 审核状态：0待审核 1已审核通过 2已转异常 3已拆单
+     */
+    private Integer auditStatus;
+
+    /**
+     * 审核类型：0自动审核 1人工审核
+     */
+    private Integer auditType;
+
+    /**
+     * 审核时间
+     */
+    private LocalDateTime auditTime;
+
+    /**
+     * 审核人
+     */
+    private String auditBy;
+
+    /**
+     * 审核备注
+     */
+    private String auditRemark;
 
     /**
      * 平台状态编码
@@ -235,6 +275,24 @@ public class OOrder implements Serializable {
     private String updateBy;
     private String waybillCode;
     private String waybillCompany;
+    private String waybillOrderId;
+    private LocalDateTime shippingTime;
+    /**
+     * 最晚发货时间（epoch 秒）
+     */
+    private Long latestDeliveryTime;
+    /**
+     * 发货快递公司编码
+     */
+    private String shippingCompanyCode;
+    /**
+     * 平台回传发货状态
+     */
+    private Integer platformShipStatus;
+    /**
+     * 平台回传发货结果
+     */
+    private String platformShipResult;
 
     private Integer hasGift;//是否有礼品0没有，大于0表示有，-1表示全是礼品
 
@@ -243,6 +301,10 @@ public class OOrder implements Serializable {
      * 取号状态：0未取号 1已取号 2已打印 3已发货 10手动发货
      */
     private Integer waybillStatus;
+    /**
+     * 电子面单账号ID（发货分配）
+     */
+    private Long waybillAccountId;
     private Integer shareStatus; // 分账状态：0未分账，1已分账
     private LocalDateTime shareTime; // 分账时间
 

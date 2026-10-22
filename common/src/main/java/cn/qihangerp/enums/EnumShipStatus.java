@@ -10,7 +10,8 @@ package cn.qihangerp.enums;
 public enum EnumShipStatus {
     BU_FEN("部分发货", 1),
     ALL("全部发货", 2),
-    NOT("未发货", 0)
+    NOT("未发货", 0),
+    NO_SHIP("无需发货", 3)
     ;
     private String name;
     private int index;

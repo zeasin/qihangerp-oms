@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 
 import java.util.List;
@@ -19,6 +20,12 @@ import java.util.List;
 * @Entity cn.qihangerp.model.entity.OOrderItem
 */
 public interface OOrderItemMapper extends BaseMapper<OOrderItem> {
+    /**
+     * 行锁订单明细（拆单等并发操作使用）
+     */
+    @Select("SELECT * FROM o_order_item WHERE order_id = #{orderId} FOR UPDATE")
+    List<OOrderItem> lockByOrderId(@Param("orderId") Long orderId);
+
     Page<OrderItemListVo> selectPageVo(@Param("page") Page<OrderItemListVo> page, @Param("qw") OrderItemQuery qw);
     List<OrderItemListVo> selectListVo( @Param("qw") OrderItemQuery qw);
     List<OrderItemListVo> selectOrderItemListByOrderId(@Param("orderId") Long orderId);

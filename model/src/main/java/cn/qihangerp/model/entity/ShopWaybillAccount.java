@@ -205,5 +205,17 @@ public class ShopWaybillAccount {
     private Long merchantId;
     private Long shopId;
     private Integer shopType;
+    /**
+     * 发货主体类型：200云仓 300供应商
+     */
+    private Integer shipperType;
+    /**
+     * 发货主体ID（云仓ID/供应商ID）
+     */
+    private Long shipperId;
+    /**
+     * 状态：0停用 1启用
+     */
+    private Integer status;
     private Integer supportOffline;//是否支持线下打单0不支持1支持
 }

@@ -20,6 +20,21 @@ public class OOrderItem implements Serializable {
     private String id;
 
     /**
+     * 来源明细行ID（子订单履约行指向主订单原始行）
+     */
+    private Long sourceOrderItemId;
+
+    /**
+     * 明细行角色：0主订单原始行 1子订单履约行
+     */
+    private Integer itemRole;
+
+    /**
+     * 排序号
+     */
+    private Integer sortNo;
+
+    /**
      * 订单ID（o_order外键）
      */
     private String orderId;

@@ -74,6 +74,8 @@ function handleCurrentChange(val: number) {
 
 <style scoped>
 .pagination-container {
+  display: flex;
+  justify-content: flex-end;
   background: #fff;
   padding: 32px 16px;
 }

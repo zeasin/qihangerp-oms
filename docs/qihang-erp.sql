@@ -4656,6 +4656,9 @@ CREATE TABLE `o_marketing_discount_rule`  (
 DROP TABLE IF EXISTS `o_order`;
 CREATE TABLE `o_order`  (
   `id` bigint NOT NULL AUTO_INCREMENT COMMENT '订单id，自增',
+  `parent_order_id` bigint NOT NULL DEFAULT 0 COMMENT '父订单ID：子订单指向主订单，主订单为0',
+  `order_role` tinyint NOT NULL DEFAULT 0 COMMENT '订单角色：0=主订单，1=子订单',
+  `source_order_id` bigint NULL DEFAULT NULL COMMENT '拆单来源订单ID：记录从哪个订单拆分而来',
   `order_mode` int NOT NULL DEFAULT 0 COMMENT '订单模式0店铺订单1手工订单',
   `order_num` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '订单编号（第三方平台订单号）',
   `shop_type` int NOT NULL COMMENT '店铺类型',
@@ -4664,8 +4667,13 @@ CREATE TABLE `o_order`  (
   `remark` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '订单备注',
   `buyer_memo` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '买家留言信息',
   `seller_memo` varchar(2550) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '卖家留言信息',
-  `tag` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '标签',
+  `tag` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '标签（逗号分隔的 o_order_tag.id）',
   `order_status` int NOT NULL COMMENT '订单状态0：新订单，1：待发货，2：已发货，3：已完成，11已取消；12退款中；13已关闭；21待付款；22锁定，29删除，31售后中，101部分发货',
+  `audit_status` tinyint NOT NULL DEFAULT 1 COMMENT '审核状态：0=待审核，1=已放行，2=已转异常，3=已拆单',
+  `audit_type` tinyint NOT NULL DEFAULT 0 COMMENT '审核类型：0=自动审核，1=人工审核',
+  `audit_time` datetime NULL DEFAULT NULL COMMENT '审核通过时间',
+  `audit_by` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '审核人用户名',
+  `audit_remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '审核备注',
   `goods_amount` double NULL DEFAULT NULL COMMENT '订单商品金额',
   `post_fee` double NULL DEFAULT NULL COMMENT '订单运费',
   `amount` double NOT NULL COMMENT '订单实际金额',
@@ -4690,9 +4698,16 @@ CREATE TABLE `o_order`  (
   `ship_status` int NOT NULL DEFAULT 0 COMMENT '发货状态 0 待发货 1部分发货 2全部发货',
   `waybill_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '取号单号',
   `waybill_company` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '取号快递公司',
+  `waybill_order_id` varchar(35) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '平台电子面单订单标识',
+  `shipping_time` datetime NULL DEFAULT NULL COMMENT '实际发货时间',
+  `latest_delivery_time` bigint NULL DEFAULT NULL COMMENT '平台最晚发货时间(epoch秒)',
+  `shipping_company_code` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '快递公司编码',
+  `platform_ship_status` int NULL DEFAULT NULL COMMENT '平台回传状态，与内部 ship_status 分离',
+  `platform_ship_result` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '平台回传结果',
   `has_gift` int NOT NULL DEFAULT 0 COMMENT '是否有礼品0没有，大于0表示有，-1表示全是礼品',
   `cancel_reason` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '取消原因',
   `waybill_status` int NULL DEFAULT 0 COMMENT '取号状态：0未取号 1已取号 2已打印 3已发货 10手动发货',
+  `waybill_account_id` bigint NULL DEFAULT NULL COMMENT '面单账号ID（oms_shop_waybill_account.id）',
   `share_status` int NULL DEFAULT 0 COMMENT '分账状态：0未分账，1已分账',
   `share_time` datetime NULL DEFAULT NULL COMMENT '分账时间',
   `settlement_status` int NULL DEFAULT 0 COMMENT '结算状态：0-未结算，1-已结算',
@@ -4708,8 +4723,13 @@ CREATE TABLE `o_order`  (
   `salesman_id` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '销售员ID',
   `salesman_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '销售员名称',
   PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `order_sn_index`(`order_num` ASC) USING BTREE,
-  INDEX `shopid_index`(`shop_id` ASC) USING BTREE
+  INDEX `shopid_index`(`shop_id` ASC) USING BTREE,
+  INDEX `idx_shop_order_num`(`shop_id` ASC, `shop_type` ASC, `order_num` ASC, `parent_order_id` ASC) USING BTREE,
+  INDEX `idx_parent_order_id`(`parent_order_id` ASC) USING BTREE,
+  INDEX `idx_source_order_id`(`source_order_id` ASC) USING BTREE,
+  INDEX `idx_audit_status`(`audit_status` ASC, `order_status` ASC) USING BTREE,
+  INDEX `idx_ship_status`(`ship_status` ASC, `audit_status` ASC) USING BTREE,
+  INDEX `idx_waybill_account_id`(`waybill_account_id` ASC) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 643 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = 'OMS订单表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -4722,6 +4742,9 @@ CREATE TABLE `o_order`  (
 DROP TABLE IF EXISTS `o_order_item`;
 CREATE TABLE `o_order_item`  (
   `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'id，自增',
+  `source_order_item_id` bigint NULL DEFAULT NULL COMMENT '来源订单明细ID：拆单前原商品行ID',
+  `item_role` tinyint NOT NULL DEFAULT 0 COMMENT '商品行角色：0=主订单原始行，1=子订单履约行',
+  `sort_no` int NOT NULL DEFAULT 0 COMMENT '商品行排序号：拆单后保持原顺序',
   `order_id` bigint NOT NULL COMMENT '订单ID（o_order外键）',
   `order_num` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '订单号（第三方平台）',
   `sub_order_num` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '子订单号（第三方平台）',
@@ -4764,11 +4787,58 @@ CREATE TABLE `o_order_item`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `goodId_index`(`goods_id` ASC) USING BTREE,
   INDEX `order_id`(`order_id` ASC) USING BTREE,
-  INDEX `order_num_index`(`order_num` ASC) USING BTREE
+  INDEX `order_num_index`(`order_num` ASC) USING BTREE,
+  INDEX `idx_source_order_item_id`(`source_order_item_id` ASC) USING BTREE,
+  INDEX `idx_order_sort`(`order_id` ASC, `sort_no` ASC) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 726 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = 'OMS订单明细表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of o_order_item
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for o_order_tag
+-- ----------------------------
+DROP TABLE IF EXISTS `o_order_tag`;
+CREATE TABLE `o_order_tag`  (
+  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '标签id，自增',
+  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '标签名称',
+  `color` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '标签颜色',
+  `merchant_id` bigint NOT NULL DEFAULT 0 COMMENT '商户ID（0=总部公共标签）',
+  `op_by` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '创建人',
+  `sort` int NOT NULL DEFAULT 0 COMMENT '排序号，越小越靠前',
+  `bind_pool` tinyint NOT NULL DEFAULT 0 COMMENT '关联状态池（0=通用标签；2=异常池分类标签）',
+  `status` tinyint NOT NULL DEFAULT 1 COMMENT '状态（0停用 1启用）',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `idx_merchant_status`(`merchant_id` ASC, `status` ASC, `sort` ASC) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '订单处理工作台-订单标签字典' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of o_order_tag
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for o_order_search_scheme
+-- ----------------------------
+DROP TABLE IF EXISTS `o_order_search_scheme`;
+CREATE TABLE `o_order_search_scheme`  (
+  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '方案id，自增',
+  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '方案名称',
+  `conditions` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '筛选条件JSON（前端筛选面板生成）',
+  `merchant_id` bigint NOT NULL DEFAULT 0 COMMENT '商户ID（0=总部公共方案）',
+  `op_by` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '创建人',
+  `sort` int NOT NULL DEFAULT 0 COMMENT '排序号，越小越靠前',
+  `status` tinyint NOT NULL DEFAULT 1 COMMENT '状态（0停用 1启用）',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `idx_merchant_status`(`merchant_id` ASC, `status` ASC, `sort` ASC) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '订单处理工作台-组合条件方案' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of o_order_search_scheme
 -- ----------------------------
 
 -- ----------------------------
@@ -6367,6 +6437,9 @@ CREATE TABLE `oms_shop_waybill_account`  (
   `shop_id` bigint NOT NULL COMMENT '店铺id',
   `shop_type` int NOT NULL COMMENT '店铺类型',
   `merchant_id` bigint NOT NULL DEFAULT 0 COMMENT '商户id',
+  `shipper_type` int NULL DEFAULT NULL COMMENT '发货主体类型：200云仓 300供应商',
+  `shipper_id` bigint NULL DEFAULT NULL COMMENT '发货主体ID（云仓ID/供应商ID）',
+  `status` tinyint NOT NULL DEFAULT 1 COMMENT '状态：0停用 1启用',
   `type` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT 'PT' COMMENT '类型：DIANSAN，PT',
   `outer_logistics_id` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '外部logistics_id（点三使用）',
   `support_offline` int NULL DEFAULT 0 COMMENT '是否支持线下打单',
@@ -6583,6 +6656,7 @@ INSERT INTO `sys_config` VALUES (1, '系统名称', 'sys.name', '启航电商ERP
 INSERT INTO `sys_config` VALUES (2, 'mms系统名称', 'sys.name.mms', 'MMS商户系统', 'Y', 'admin', NULL, '', NULL, NULL);
 INSERT INTO `sys_config` VALUES (3, 'vms系统名称', 'sys.name.vms', 'VMS供应商系统', 'Y', 'admin', NULL, '', NULL, NULL);
 INSERT INTO `sys_config` VALUES (4, '账号自助-验证码开关', 'sys.account.captchaEnabled', 'false', 'Y', 'admin', '2023-08-07 19:31:38', '', NULL, '是否开启验证码功能（true开启，false关闭）');
+INSERT INTO `sys_config` VALUES (5, '订单人工审单开关', 'order.manual_audit.enabled', 'true', 'Y', 'admin', NOW(), '', NULL, 'true=拉单进入待审核池；false=拉单自动放行');
 
 -- ----------------------------
 -- Table structure for sys_dept
@@ -6808,6 +6882,7 @@ INSERT INTO `sys_menu` VALUES (1186, '定时任务配置', 5, 50, 'sys_task', 's
 INSERT INTO `sys_menu` VALUES (2090, '角色管理', 5, 2, 'role', 'system/role/index', NULL, 1, 0, 'C', '0', '0', NULL, 'peoples', 'admin', '2024-03-31 12:40:50', '', NULL, '');
 INSERT INTO `sys_menu` VALUES (2096, '订单备货', 9, 10, 'stocking', 'shipping/stocking', NULL, 1, 0, 'C', '0', '0', '', 'email', 'admin', '2024-07-20 11:53:24', 'admin', '2025-10-10 18:15:29', '');
 INSERT INTO `sys_menu` VALUES (2108, '供应商档案', 7, 90, 'supplier_list', 'goods/supplier/index', NULL, 1, 0, 'C', '0', '0', '', 'people', 'admin', '2024-08-25 18:27:55', 'admin', '2026-07-11 19:57:34', '');
+INSERT INTO `sys_menu` VALUES (2110, '订单审核', 1, 5, 'order_audit', 'order/audit/index', NULL, 1, 0, 'C', '0', '0', 'order:audit:list', 'audit', 'admin', NOW(), '', NULL, '订单处理工作台：待审核/异常/待放行/已放行状态池');
 INSERT INTO `sys_menu` VALUES (2114, '仓库管理', 9, 90, 'warehouse', 'wms/warehouse/index.vue', NULL, 1, 0, 'C', '0', '0', '', 'cloudWarehouse', 'admin', '2024-09-21 20:07:26', 'admin', '2025-10-12 08:49:06', '');
 INSERT INTO `sys_menu` VALUES (2117, '仓位管理', 9, 91, 'position', 'wms/warehouse/position', NULL, 1, 0, 'C', '1', '0', '', '404', 'admin', '2024-09-22 11:52:18', 'admin', '2024-09-22 14:48:21', '');
 INSERT INTO `sys_menu` VALUES (2120, '采购订单', 7, 0, 'purchase_order', 'purchase/order', NULL, 1, 0, 'C', '0', '0', '', 'shopping', 'admin', '2024-12-08 16:52:18', 'admin', '2026-02-05 15:56:01', '');

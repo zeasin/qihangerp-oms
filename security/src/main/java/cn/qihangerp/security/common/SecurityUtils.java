@@ -62,6 +62,27 @@ public class SecurityUtils
     }
 
     /**
+     * 获取用户身份（EnumUserType：0总部 10仓库 20商户 30供应商 40店铺）
+     * sys_user.user_type 为字符串，空值按总部处理
+     **/
+    public static Integer getUserIdentity()
+    {
+        try
+        {
+            String userType = getLoginUser().getUser().getUserType();
+            if (userType == null || userType.trim().isEmpty())
+            {
+                return 0;
+            }
+            return Integer.parseInt(userType.trim());
+        }
+        catch (Exception e)
+        {
+            throw new ServiceException("获取用户身份异常", HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    /**
      * 获取用户
      **/
     public static LoginUser getLoginUser()

@@ -17,6 +17,7 @@ public enum EnumOOrderStatus {
     CLOSED("已关闭", 13),
     WAIT_PAY("待付款", 21),
     LOCKED("已锁定", 22),
+    DELETED("已删除", 29),
     SHIPPED_BF("部分发货", 101),
     NEW("新订单", 0)
     ;

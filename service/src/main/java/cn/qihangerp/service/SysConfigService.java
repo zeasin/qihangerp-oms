@@ -10,4 +10,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface SysConfigService extends IService<SysConfig> {
     boolean selectCaptchaEnabled();
+
+    /**
+     * 订单人工审单开关：true=拉单进入待审核池；false=拉单自动放行（配置缺失时默认 true）
+     */
+    boolean selectManualAuditEnabled();
 }
