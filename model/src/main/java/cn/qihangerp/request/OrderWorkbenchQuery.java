@@ -30,6 +30,10 @@ public class OrderWorkbenchQuery {
     private Integer shipStatus;
     /** 取号状态 */
     private Integer waybillStatus;
+    /** 面单账号ID（打单队列按账号筛选） */
+    private Long waybillAccountId;
+    /** 仅看未分配（waybill_account_id 为空），打单队列"待分配"筛选 */
+    private Boolean allocatePending;
     /** 商品关键词：匹配商品标题/规格编码/条码（模糊） */
     private String goodsKeyword;
     /** 订单时间起（yyyy-MM-dd 或 yyyy-MM-dd HH:mm:ss） */

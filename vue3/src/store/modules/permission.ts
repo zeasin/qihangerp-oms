@@ -112,8 +112,7 @@ const viewsMap: Record<string, () => Promise<any>> = {
   'shipping/ewaybillAccount/index': () => import('@/views/shipping/ewaybillAccount/index.vue'),
   'shipping/ewaybillAccount/': () => import('@/views/shipping/ewaybillAccount/index.vue'),
   'shipping/ewaybillAccount/account': () => import('@/views/shipping/ewaybillAccount/account.vue'),
-  'shipping/ewaybillPrint/index.vue': () => import('@/views/shipping/ewaybillPrint/index.vue'),
-  'shipping/ewaybillPrint/index': () => import('@/views/shipping/ewaybillPrint/index.vue'),
+  'shipping/waybillWorkbench/index': () => import('@/views/shipping/waybillWorkbench/index.vue'),
 
   // shop
   'shop/index': () => import('@/views/shop/index.vue'),

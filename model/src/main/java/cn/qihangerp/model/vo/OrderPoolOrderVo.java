@@ -70,6 +70,8 @@ public class OrderPoolOrderVo {
     private String canReleaseMsg;
     /** 面单账号ID（选填分配） */
     private Long waybillAccountId;
+    /** 面单账号名称 */
+    private String waybillAccountName;
     /** 是否已分配面单账号 */
     private Boolean allocated;
     /** 商品摘要 */

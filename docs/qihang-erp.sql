@@ -6869,7 +6869,7 @@ INSERT INTO `sys_menu` VALUES (857, '手动发货', 8, 0, 'manual_ship', 'shippi
 INSERT INTO `sys_menu` VALUES (884, '电子面单设置', 8, 80, 'ewaybill_account', 'shipping/ewaybillAccount/', NULL, 1, 0, 'C', '0', '0', '', 'ewaybillAccount', 'admin', '2024-03-21 20:05:09', 'admin', '2026-05-04 09:16:39', '');
 INSERT INTO `sys_menu` VALUES (888, '快递公司库', 5, 99, 'logistics_companp_library', 'library/logistics_company/index', NULL, 1, 0, 'C', '0', '0', '', 'logistics', 'admin', '2024-03-30 17:37:01', 'admin', '2026-05-04 09:05:52', '');
 INSERT INTO `sys_menu` VALUES (889, '发货记录', 8, 30, 'record', 'shipping/record/index', NULL, 1, 0, 'C', '0', '0', '', 'education', 'admin', '2024-03-30 17:37:42', 'admin', '2025-07-09 11:18:20', '');
-INSERT INTO `sys_menu` VALUES (894, '打单发货', 8, 11, 'print_ship', 'shipping/ewaybillPrint/index.vue', NULL, 1, 0, 'C', '0', '0', '', 'print', 'admin', '2024-07-20 11:04:54', 'admin', '2026-06-26 13:16:20', '');
+INSERT INTO `sys_menu` VALUES (894, '打单发货', 8, 11, 'print_ship', 'shipping/waybillWorkbench/index', NULL, 1, 0, 'C', '0', '0', '', 'print', 'admin', '2024-07-20 11:04:54', 'admin', '2026-06-26 13:16:20', '');
 INSERT INTO `sys_menu` VALUES (906, '入库管理', 9, 30, 'stock_in_list', 'wms/stockIn/index.vue', NULL, 1, 0, 'C', '0', '0', '', 'download', 'admin', '2024-08-25 15:56:04', 'admin', '2025-10-10 18:15:54', '');
 INSERT INTO `sys_menu` VALUES (908, '新建商品入库单', 9, 31, 'stock_in/create', 'wms/stockIn/create.vue', NULL, 1, 0, 'C', '1', '0', '', '404', 'admin', '2024-09-22 14:49:40', 'admin', '2025-10-10 18:16:01', '');
 INSERT INTO `sys_menu` VALUES (909, '入库作业', 9, 31, 'stock_in', 'wms/stockIn/stock_in.vue', NULL, 1, 0, 'C', '1', '0', '', '404', 'admin', '2024-09-22 14:49:40', 'admin', '2025-10-10 18:16:01', '');

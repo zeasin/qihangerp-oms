@@ -5,6 +5,7 @@ import cn.qihangerp.open.common.MD5Utils;
 import cn.qihangerp.open.common.OkHttpClientHelper;
 import cn.qihangerp.open.xhs.model.SenderAddress;
 import cn.qihangerp.open.xhs.model.TradeOrderInfo;
+import cn.qihangerp.open.xhs.response.EbillOrderInfo;
 import cn.qihangerp.open.xhs.response.SubscribeResponse;
 import com.alibaba.fastjson2.JSONObject;
 import lombok.extern.slf4j.Slf4j;
@@ -36,6 +37,37 @@ public class xhsWaybillCodeApiHelper {
             return ApiResultVo.error("接口请求失败");
         }
 
+    }
+
+    /**
+     * 批量取号（express.createEbillOrders），按新版面单响应结构解析单条结果列表（data.wayBillList）。
+     * 说明：旧方法 getWaybillCode 的返回模型 SubscribeResponse 实为订购关系结构，拿不到面单号；
+     * 为兼容既有调用保持原样不动，取号请统一使用本方法。
+     */
+    public static ApiResultVo<EbillOrderInfo> getWaybillOrders(String appId, String appSecret, String accessToken,
+                                                               String cpCode, String branchCode,
+                                                               SenderAddress senderAddress,
+                                                               List<TradeOrderInfo> tradeOrderInfoList) throws IOException {
+        String listResult = getWaybillCodeStr(appId, appSecret, accessToken, cpCode, branchCode, senderAddress, tradeOrderInfoList);
+        if (!StringUtils.hasText(listResult)) {
+            return ApiResultVo.error("接口请求失败");
+        }
+        JSONObject jsonObject = JSONObject.parseObject(listResult);
+        if (!Boolean.TRUE.equals(jsonObject.getBoolean("success"))) {
+            // 官方FAQ：新版框架异常场景可能返回 code/msg 而非 error_code/error_msg，做兼容透传
+            String msg = StringUtils.hasText(jsonObject.getString("error_msg"))
+                    ? jsonObject.getString("error_msg") : jsonObject.getString("msg");
+            return ApiResultVo.error(StringUtils.hasText(msg) ? msg : "小红书取号失败");
+        }
+        JSONObject data = jsonObject.getJSONObject("data");
+        List<EbillOrderInfo> list = data == null ? null : data.getList("wayBillList", EbillOrderInfo.class);
+        if (list == null) {
+            list = jsonObject.getList("wayBillList", EbillOrderInfo.class);
+        }
+        if (list == null || list.isEmpty()) {
+            return ApiResultVo.error("小红书取号未返回结果列表");
+        }
+        return ApiResultVo.success(list.size(), list);
     }
 
     protected static String getWaybillCodeStr(String appId, String appSecret, String accessToken, String cpCode, String branchCode, SenderAddress senderAddress, List<TradeOrderInfo> tradeOrderInfoList) throws IOException {

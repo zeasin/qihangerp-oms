@@ -163,6 +163,10 @@ public class OrderWorkbenchOrderServiceImpl implements OrderWorkbenchOrderServic
                 .eq(query.getShopId() != null, OOrder::getShopId, query.getShopId())
                 .eq(query.getShopType() != null, OOrder::getShopType, query.getShopType())
                 .eq(query.getMerchantId() != null, OOrder::getMerchantId, query.getMerchantId())
+                .eq(query.getWaybillStatus() != null, OOrder::getWaybillStatus, query.getWaybillStatus())
+                .eq(query.getWaybillAccountId() != null, OOrder::getWaybillAccountId, query.getWaybillAccountId())
+                // 待分配筛选：打单队列只看还没绑面单账号的发货单元
+                .isNull(Boolean.TRUE.equals(query.getAllocatePending()), OOrder::getWaybillAccountId)
                 .like(StringUtils.hasText(query.getReceiverName()), OOrder::getReceiverName, query.getReceiverName())
                 .like(StringUtils.hasText(query.getReceiverMobile()), OOrder::getReceiverMobile, query.getReceiverMobile())
                 // 省市区用 like：级联选择传全称（如"广东省"），存量拉单数据可能存简称
@@ -394,6 +398,19 @@ public class OrderWorkbenchOrderServiceImpl implements OrderWorkbenchOrderServic
                 vo.setAllocated(unit.getWaybillAccountId() != null);
             }
             rows.add(vo);
+        }
+        // 面单账号名称批量填充（打单队列展示分配到的账号）
+        Set<Long> accountIds = rows.stream().map(OrderPoolOrderVo::getWaybillAccountId)
+                .filter(Objects::nonNull).collect(Collectors.toSet());
+        if (!accountIds.isEmpty()) {
+            Map<Long, String> accountNameMap = shopWaybillAccountMapper.selectBatchIds(accountIds).stream()
+                    .collect(Collectors.toMap(ShopWaybillAccount::getId,
+                            a -> StringUtils.hasText(a.getName()) ? a.getName() : a.getBranchName(), (a, b) -> a));
+            rows.forEach(r -> {
+                if (r.getWaybillAccountId() != null) {
+                    r.setWaybillAccountName(accountNameMap.get(r.getWaybillAccountId()));
+                }
+            });
         }
         return rows;
     }

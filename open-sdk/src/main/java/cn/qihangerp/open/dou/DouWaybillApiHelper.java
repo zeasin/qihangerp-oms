@@ -119,4 +119,53 @@ public class DouWaybillApiHelper {
             return ApiResultVo.error(ApiResultVoEnum.Fail.getIndex(), "系统异常：" + e.getMessage());
         }
     }
+
+    /**
+     * 取消取号（logistics.cancelOrder）
+     * @param logisticsCode 平台物流公司编码
+     * @param trackNo 快递单号
+     */
+    public static ApiResultVo<Void> waybillCancel(String appKey, String appSercet, String accessToken, String logisticsCode, String trackNo)  {
+        String method = "logistics.cancelOrder";
+
+        JSONObject paramObj = new JSONObject();
+        paramObj.put("logistics_code", logisticsCode);
+        paramObj.put("track_no", trackNo);
+        String paramJson = paramObj.toJSONString();
+
+        long timestamp = System.currentTimeMillis()/1000;
+        String signStr = "app_key"+appKey+"method"+method+"param_json"+paramJson+"timestamp"+timestamp+"v"+"2";
+        signStr = appSercet+signStr+appSercet;
+        String sign = MD5Utils.MD5Encode(signStr);
+
+        String sendUrl = "https://openapi-fxg.jinritemai.com/logistics/cancelOrder";
+
+        Map<String, String> params = new HashMap<>();
+        params.put("method", method);
+        params.put("app_key", appKey);
+        params.put("access_token", accessToken);
+        params.put("timestamp", timestamp+"");
+        params.put("param_json", paramJson);
+        params.put("v", "2");
+        params.put("sign", sign);
+
+        try {
+            String surl = sendUrl+ "?"+ HttpUtil.map2Url(params);
+            HttpResponse<String> response = ExpressClient.doPost(surl, paramJson);
+            if (response.statusCode() == 200) {
+                String resultStr = response.body();
+
+                JSONObject resultObj = JSONObject.parseObject(resultStr);
+                if (resultObj.getInteger("code") == 10000) {
+                    return ApiResultVo.success();
+                }else{
+                    return ApiResultVo.error(ApiResultVoEnum.Fail.getIndex(), "请求API错误："+resultObj.getString("sub_msg"));
+                }
+            }else{
+                return  ApiResultVo.error(ApiResultVoEnum.NETWORK_ERROR.getIndex(), "网络请求错误");
+            }
+        } catch (Exception e) {
+            return ApiResultVo.error(ApiResultVoEnum.Fail.getIndex(), "系统异常：" + e.getMessage());
+        }
+    }
 }
