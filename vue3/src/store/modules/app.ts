@@ -15,7 +15,8 @@ interface AppState {
 export const useAppStore = defineStore('app', {
   state: (): AppState => ({
     sidebar: {
-      opened: Cookies.get('sidebarStatus') ? !!+Cookies.get('sidebarStatus')! : true,
+      // 与商业版一致：首次进入默认折叠侧栏（只显示图标 + 两字短名）
+    opened: Cookies.get('sidebarStatus') ? !!+Cookies.get('sidebarStatus')! : false,
       withoutAnimation: false,
     },
     device: 'desktop',

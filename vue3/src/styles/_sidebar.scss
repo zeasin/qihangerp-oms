@@ -55,6 +55,11 @@
     margin-right: 16px;
   }
 
+  // 展开态显示全名，短名只在折叠态出现
+  .menu-short-name {
+    display: none;
+  }
+
   .el-menu {
     border: none;
     height: 100%;
@@ -76,22 +81,60 @@
 
 .hideSidebar {
   .sidebar-container {
-    width: 54px !important;
+    width: 64px !important;
   }
 
   .main-container {
-    margin-left: 54px;
+    margin-left: 64px;
   }
 
-  .el-menu--collapse {
+  // SidebarItem 外层有 div 包裹，菜单项不是 .el-menu 的直接子节点，故用后代选择器
+  .sidebar-container .el-menu--collapse {
+    // 折叠态：图标在上、两字短名在下，整体居中
     .el-menu-item,
     .el-sub-menu__title {
-      span {
-        display: none !important;
-      }
-      .svg-icon {
-        margin-right: 0;
-      }
+      height: 62px !important;
+      line-height: 1 !important;
+      padding: 0 2px !important;
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center;
+      justify-content: center;
+    }
+
+    // 叶子项内容被 el-tooltip 包成绝对定位容器，需单独拉成竖排
+    .el-menu-item > .el-menu-tooltip__trigger {
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center;
+      justify-content: center;
+      padding: 0 !important;
+    }
+
+    .svg-icon {
+      margin: 0 0 4px !important;
+      font-size: 17px;
+    }
+
+    // 全名仍只走 hover 气泡
+    .el-sub-menu__title > span:not(.menu-short-name) {
+      height: 0;
+      width: 0;
+      overflow: hidden;
+      visibility: hidden;
+      display: inline-block;
+    }
+
+    .menu-short-name {
+      display: block !important;
+      visibility: visible !important;
+      width: 100% !important;
+      height: auto !important;
+      font-size: 12px;
+      line-height: 14px;
+      text-align: center;
+      white-space: nowrap;
+      overflow: hidden;
     }
   }
 }
@@ -116,4 +159,11 @@
 .withoutAnimation,
 .withoutAnimation .sidebar-container {
   transition: none;
+}
+
+// 折叠态浮层子菜单挂在 body 下，短名规则够不到，需单独隐藏（浮层只显示全名）
+.el-menu--popup {
+  .menu-short-name {
+    display: none !important;
+  }
 }

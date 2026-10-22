@@ -83,7 +83,7 @@ function handleClickOutside() {
 }
 
 .hideSidebar .main-container {
-  margin-left: 54px;
+  margin-left: 64px;
 }
 
 .fixed-header {
@@ -96,7 +96,7 @@ function handleClickOutside() {
 }
 
 .hideSidebar .fixed-header {
-  width: calc(100% - 54px);
+  width: calc(100% - 64px);
 }
 
 .mobile .fixed-header {

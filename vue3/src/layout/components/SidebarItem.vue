@@ -3,6 +3,7 @@
     <template v-if="hasOneShowingChild(item.children, item) && (!onlyOneChild.children || onlyOneChild.noShowingChildren) && !item.alwaysShow">
       <el-menu-item :index="resolvePath(onlyOneChild.path)" :class="{ 'submenu-title-noDropdown': !isNest }">
         <svg-icon v-if="onlyOneChild.meta?.icon || item.meta?.icon" :icon-class="onlyOneChild.meta?.icon || (item.meta?.icon as string)" />
+        <span class="menu-short-name">{{ shortName(onlyOneChild.meta?.title) }}</span>
         <template #title>
           <span>{{ onlyOneChild.meta?.title }}</span>
         </template>
@@ -11,6 +12,7 @@
     <el-sub-menu v-else :index="resolvePath(item.path)">
       <template #title>
         <svg-icon v-if="item.meta?.icon" :icon-class="item.meta.icon" />
+        <span class="menu-short-name">{{ shortName(item.meta?.title) }}</span>
         <span>{{ item.meta?.title }}</span>
       </template>
       <template #default>
@@ -44,6 +46,11 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const onlyOneChild = ref<MenuRecord>({ path: '' })
+
+// 折叠态只显示菜单名前两个字，与商业版侧栏一致
+function shortName(title?: string): string {
+  return title ? title.slice(0, 2) : ''
+}
 
 function hasOneShowingChild(children: MenuRecord[] | undefined, parent: MenuRecord): boolean {
   const showingChildren = (children || []).filter((item) => {
